@@ -34,5 +34,6 @@ jobs:
         python simplify_headers.py Dandie_helixer_Rprotein.fasta simplified.fasta
     - name: Test with pytest
       run: |
+        cd ./Part1
         conda install pytest
-        pytest ./Part1/test_simplify_headers.py
+        pytest test_simplify_headers.py

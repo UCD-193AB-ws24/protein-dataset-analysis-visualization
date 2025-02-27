@@ -6,7 +6,7 @@ def test():
     correct_lines = correct_file.readlines()
     output_lines = output_file.readlines()
     #for i in range(len(output_lines) - 1):
-    for i in range(3298):
+    for i in range(10027):
         assert correct_lines[i] == output_lines[i]
 
 test()

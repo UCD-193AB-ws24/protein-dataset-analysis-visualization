@@ -20,7 +20,15 @@ def process_fasta(input_file, output_file):
                 outfile.write(line)
 
 if __name__ == "__main__":
-    input_path = "./Dandie_helixer_Rprotein.fasta"
-    output_path = "./Dandie_helixer_Rprotein_simplified.fasta"
-    process_fasta(input_path, output_path)
-    print(f"Simplified FASTA file saved as: {output_path}")
+    #input_path = "./Dandie_helixer_Rprotein.fasta"
+    if len(sys.argv) <2:
+        raise LookupError("No file given. Please specify the input file as a command line argument.")
+    input_file = sys.argv[1]
+    #output_file = ""
+    if (len(sys.argv)) == 3:
+        output_file = sys.argv[2]
+    else:
+        output_file = sys.argv[1].split(".")[0] + "_simplified.fasta"
+    #output_path = "./Dandie_helixer_Rprotein_simplified.fasta"
+    process_fasta(input_file, output_file)
+    print(f"Simplified FASTA file saved as: {output_file}")

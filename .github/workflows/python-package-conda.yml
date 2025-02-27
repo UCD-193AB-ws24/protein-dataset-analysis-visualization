@@ -30,7 +30,7 @@ jobs:
         flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
     - name: Run simplify_headers.py
       run: |
-        conda run simplify_headers.py Dandie_helixer_Rprotein.fasta simplified.fasta
+        python simplify_headers.py Dandie_helixer_Rprotein.fasta simplified.fasta
     - name: Test with pytest
       run: |
         conda install pytest

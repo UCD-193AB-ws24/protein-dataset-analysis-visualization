@@ -15,7 +15,28 @@
     { color: 'blue',  from: { row: 0, x: 0.5 }, to: { row: 3, x: 0.5 } },
     { color: 'green', from: { row: 0, x: 0.7 }, to: { row: 2, x: 0.7 } },
     { color: 'green', from: { row: 2, x: 0.7 }, to: { row: 3, x: 0.9 } },
+  ];
 
+  const nodes = [
+    // Red nodes
+    { color: 'red', row: 0, x: 0.1, direction: 'right', metadata: 'Red node 1' },
+    { color: 'red', row: 1, x: 0.3, direction: 'right', metadata: 'Red node 2' },
+    { color: 'red', row: 2, x: 0.1, direction: 'right', metadata: 'Red node 3' },
+    { color: 'red', row: 3, x: 0.1, direction: 'right', metadata: 'Red node 4' },
+
+    // Orange nodes
+    { color: 'orange', row: 0, x: 0.3, direction: 'left', metadata: 'Orange node 1' },
+    { color: 'orange', row: 1, x: 0.1, direction: 'left', metadata: 'Orange node 2' },
+    { color: 'orange', row: 2, x: 0.3, direction: 'left', metadata: 'Orange node 3' },
+    { color: 'orange', row: 3, x: 0.3, direction: 'left', metadata: 'Orange node 4' },
+    // Blue nodes
+    { color: 'blue', row: 0, x: 0.5, direction: 'left', metadata: 'Blue node 1' },
+    { color: 'blue', row: 3, x: 0.5, direction: 'left', metadata: 'Blue node 2' },
+
+    // Green nodes
+    { color: 'green', row: 0, x: 0.7, direction: 'right', metadata: 'Green node 1' },
+    { color: 'green', row: 2, x: 0.7, direction: 'right', metadata: 'Green node 2' },
+    { color: 'green', row: 3, x: 0.9, direction: 'right', metadata: 'Green node 3' }
   ];
 
   let width = 600;
@@ -55,21 +76,7 @@
       .attr('stroke', 'black')
       .attr('stroke-width', 2);
 
-    // 4. Define an arrow marker in <defs> to use on paths
-    // svg.append('defs')
-    //   .append('marker')
-    //     .attr('id', 'arrow')
-    //     .attr('viewBox', '0 0 10 10')
-    //     .attr('refX', 5) // halfway so arrow tip sits at path's end
-    //     .attr('refY', 5)
-    //     .attr('markerWidth', 6)
-    //     .attr('markerHeight', 6)
-    //     .attr('orient', 'auto') // auto-orients the arrow with path
-    //   .append('path')
-    //     .attr('d', 'M0,0 L10,5 L0,10 Z')
-    //     .attr('fill', 'currentColor'); // so it matches stroke color
-
-    // 5. Draw connections between rows
+    // Draw connections between rows
     const lineGenerator = d3.line();
 
     svg.selectAll('path.connection')
@@ -88,19 +95,102 @@
         ];
         return lineGenerator(points);
       })
-      // attach arrow marker at the end of the path
-      .attr('marker-end', 'url(#arrow)');
+
+    // Draw each node as a "centered arrow":
+    // The node coordinate is at x=0 in the arrow path,
+    // so we translate the arrow so that x=0,y=0 lines up with the node.
+
+    // On hover, nodes will have a tooltip with additional information
+    const tooltip = d3.select('#tooltip');
+
+    svg.selectAll('path.node')
+      .data(nodes)
+      .enter()
+      .append('path')
+      .attr('class', 'node')
+      .attr('fill', d => d.color)
+      .attr('d', d => {
+        if (d.direction === 'right') {
+          /*
+            An arrow 40px wide, 20px tall, with the boundary between
+            the rectangular tail and triangular tip at x=0, so the
+            "node coordinate" is in the middle.
+
+            1) Rectangle from x=-40..0, y=-10..+10
+            2) Triangle from (0,-20) -> (40,0) -> (0,20)
+          */
+          return `
+            M -40,-10 L 0,-10 L 0,10 L -40,10 Z
+            M 0,-20 L 40,0 L 0,20 Z
+          `;
+        } else {
+          /*
+            Same shape mirrored horizontally:
+            1) Rectangle from x=0..40, y=-10..+10
+            2) Triangle from (0,-20) -> (-40,0) -> (0,20)
+          */
+          return `
+            M 40,-10 L 0,-10 L 0,10 L 40,10 Z
+            M 0,-20 L -40,0 L 0,20 Z
+          `;
+        }
+      })
+      .attr('transform', d => {
+        const px = xScale(d.x);
+        const py = yScale(d.row) + yScale.bandwidth() / 2;
+        return `translate(${px}, ${py})`;
+      })
+      // 1) Mouse over: show tooltip and set text
+      .on('mouseover', function(event, d) {
+        tooltip
+          .style('opacity', 1)
+          .style('color', d.color)
+          // .html(`<strong>${d.color}</strong><br/>${d.metadata}`);
+          .text(`${d.metadata}`);
+        // Optionally highlight the hovered arrow
+        d3.select(this).style('opacity', 0.8);
+      })
+      // 2) Mouse move: reposition tooltip near mouse
+      .on('mousemove', function(event) {
+        tooltip
+          .style('left', (event.pageX + 10) + 'px')
+          .style('top', (event.pageY + 10) + 'px');
+      })
+      // 3) Mouse out: hide tooltip
+      .on('mouseout', function() {
+        tooltip.style('opacity', 0);
+        d3.select(this).style('opacity', 1);
+      });
+
+
   });
 </script>
 
 <div id="chart"></div>
+<!-- A hidden tooltip (initially) -->
+<div
+  id="tooltip"
+  style="
+    position: absolute;
+    pointer-events: none;
+    background: white;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    padding: 6px;
+    opacity: 0;
+    transition: opacity 0.15s;
+  "
+></div>
 
-<!-- <style>
-  /* Optional styling */
-  .connection {
+<style>
+  /*
+  Using global since connections are generated dynamically;
+  svelte can't immediately recognize them
+  */
+  :global(.connection) {
     transition: 0.15s;
   }
-  .connection:hover {
-    stroke-width: 4;
+  :global(.connection:hover) {
+    stroke-width: 6;
   }
-</style> -->
+</style>

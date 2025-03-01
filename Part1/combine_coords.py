@@ -1,10 +1,11 @@
 import sys
-import pandas as pd
+import csv
 
-def parse_dataframe(df, coord_mapping):
-    for _, row in df.iterrows():
+def parse_data(data, coord_mapping):
+    for row in data:
         protein_id, start, end, domain = row
-        unique_domain = f"{protein_id},{domain}"
+        start, end = int(start), int(end)  # Convert to integers
+        unique_domain = "{},{}".format(protein_id, domain)
 
         if unique_domain not in coord_mapping:
             coord_mapping[unique_domain] = [start, end]
@@ -17,25 +18,29 @@ def parse_dataframe(df, coord_mapping):
 def combine_coords(inputfile, outputfile):
     # Determine file type and read accordingly
     if inputfile.endswith('.csv'):
-        df = pd.read_csv(inputfile, header=None, names=['protein_id', 'start', 'end', 'domain'])
-    elif inputfile.endswith('.xlsx'):
-        df = pd.read_excel(inputfile, header=None, names=['protein_id', 'start', 'end', 'domain'])
+        delimiter = ','
+    elif inputfile.endswith('.tsv'):
+        delimiter = '\t'
     else:
-        raise ValueError("Unsupported file format. Please use CSV or XLSX.")
+        raise ValueError("Unsupported file format. Please use CSV or TSV.")
 
     coord_mapping = {}
-    parse_dataframe(df, coord_mapping)
+    
+    with open(inputfile, 'r') as infile:
+        reader = csv.reader(infile, delimiter=delimiter)
+        parse_data(reader, coord_mapping)
 
-    output_lines = []
-    for key, value in coord_mapping.items():
-        protein_id, domain = key.split(',')
-        output_lines.append(f"{protein_id},{value[0]},{value[1]},{domain}\n")
-
-    with open(outputfile, 'w') as output:
-        output.writelines(output_lines)
+    with open(outputfile, 'w') as outfile:
+        writer = csv.writer(outfile)
+        for key, value in coord_mapping.items():
+            protein_id, domain = key.split(',')
+            writer.writerow([protein_id, value[0], value[1], domain])
 
 # Usage
-input_file = sys.argv[1]  # or 'your_input_file.csv'
+if len(sys.argv) != 3:
+    print("Usage: python script.py <input_file> <output_file>")
+    sys.exit(1)
+
+input_file = sys.argv[1]
 output_file = sys.argv[2]
 combine_coords(input_file, output_file)
-

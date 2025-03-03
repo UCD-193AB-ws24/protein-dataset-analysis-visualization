@@ -38,7 +38,7 @@ def combine_coords(inputfile, outputfile):
 
 # Usage
 if len(sys.argv) != 3:
-    print("Usage: python script.py <input_file> <output_file>")
+    print("Usage: python combine_coords.py <input_file> <output_file>")
     sys.exit(1)
 
 input_file = sys.argv[1]

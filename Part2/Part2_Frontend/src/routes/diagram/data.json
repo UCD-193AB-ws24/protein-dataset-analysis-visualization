@@ -26,7 +26,7 @@
     { "color": "green", "row": 3, "x": 4, "direction": "right", "metadata": "Green node 3" }
   ],
   "genomeNames": [
-    "Capitan",
+    "Capitan [REF]",
     "Iceburg",
     "Dandie",
     "GreenTowers"

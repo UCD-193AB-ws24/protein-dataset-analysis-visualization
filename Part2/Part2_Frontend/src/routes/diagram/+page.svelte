@@ -153,7 +153,7 @@
           .html(
             `<strong>Genome Name:</strong> ${d.genome_name}<br>
             <strong>Protein Name:</strong> ${d.protein_name}<br>
-            <strong>Direction:</strong> ${d.direction}<br>
+            <strong>Direction:</strong> ${((d.direction === "right") ? '+' : '-')}<br>
             <strong>Percent Similarity to Reference:</strong> ${d.percent_sim_to_ref}%`
           );
           //.text(`${d.metadata}`);

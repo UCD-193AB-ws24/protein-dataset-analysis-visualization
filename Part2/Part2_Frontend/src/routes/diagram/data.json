@@ -33,23 +33,23 @@
   ],
   "properNodeLists": [
     [
-      { "genome_name": "Capitan", "protein_name": "1234", "direction": "right", "percent_sim_to_ref": 78.5, "position": 0, "special": false, "row": 0 },
+      { "genome_name": "Capitan", "protein_name": "1234", "direction": "right", "percent_sim_to_ref": 100, "position": 0, "special": false, "row": 0 },
       { "genome_name": "Iceburg", "protein_name": "5678", "direction": "right", "percent_sim_to_ref": 82.3, "position": 1, "special": false, "row": 1 },
       { "genome_name": "Dandie", "protein_name": "9101", "direction": "right", "percent_sim_to_ref": 90.2, "position": 0, "special": false, "row": 2 },
       { "genome_name": "GreenTowers", "protein_name": "1121", "direction": "right", "percent_sim_to_ref": 65.4, "position": 0, "special": false, "row": 3 }
     ],
     [
-      { "genome_name": "Capitan", "protein_name": "3141", "direction": "left", "percent_sim_to_ref": 70.1, "position": 1, "special": false, "row": 0 },
+      { "genome_name": "Capitan", "protein_name": "3141", "direction": "left", "percent_sim_to_ref": 100, "position": 1, "special": false, "row": 0 },
       { "genome_name": "Iceburg", "protein_name": "5161", "direction": "left", "percent_sim_to_ref": 88.7, "position": 0, "special": false, "row": 1 },
       { "genome_name": "Dandie", "protein_name": "7181", "direction": "left", "percent_sim_to_ref": 92.5, "position": 1, "special": false, "row": 2 },
       { "genome_name": "GreenTowers", "protein_name": "9202", "direction": "left", "percent_sim_to_ref": 77.3, "position": 1, "special": false, "row": 3 }
     ],
     [
-      { "genome_name": "Capitan", "protein_name": "1223", "direction": "left", "percent_sim_to_ref": 85.6, "position": 2, "special": false, "row": 0 },
+      { "genome_name": "Capitan", "protein_name": "1223", "direction": "left", "percent_sim_to_ref": 100, "position": 2, "special": false, "row": 0 },
       { "genome_name": "GreenTowers", "protein_name": "3445", "direction": "left", "percent_sim_to_ref": 91.2, "position": 2, "special": false, "row": 3 }
     ],
     [
-      { "genome_name": "Capitan", "protein_name": "5667", "direction": "right", "percent_sim_to_ref": 60.9, "position": 3, "special": false, "row": 0 },
+      { "genome_name": "Capitan", "protein_name": "5667", "direction": "right", "percent_sim_to_ref": 100, "position": 3, "special": false, "row": 0 },
       { "genome_name": "Dandie", "protein_name": "7889", "direction": "right", "percent_sim_to_ref": 95.4, "position": 3, "special": false, "row": 2 },
       { "genome_name": "GreenTowers", "protein_name": "9001", "direction": "right", "percent_sim_to_ref": 68.7, "position": 4, "special": false, "row": 3 }
     ]

@@ -1,46 +1,37 @@
 <script>
   import { onMount } from 'svelte';
   import * as d3 from 'd3';
+  import data from './data.json';
 
   // we have 4 rows (0..3) and some hardcoded connections between them
   const rowCount = 4;
-  const connections = [
-    // each connection has color & from/to positions
-    { color: 'red',   from: { row: 0, x: 0.1 }, to: { row: 1, x: 0.3 } },
-    { color: 'red',   from: { row: 1, x: 0.3 }, to: { row: 2, x: 0.1 } },
-    { color: 'red',   from: { row: 2, x: 0.1 }, to: { row: 3, x: 0.1 } },
-    { color: 'orange',from: { row: 0, x: 0.3 }, to: { row: 1, x: 0.1 } },
-    { color: 'orange',from: { row: 1, x: 0.1 }, to: { row: 2, x: 0.3 } },
-    { color: 'orange',from: { row: 2, x: 0.3 }, to: { row: 3, x: 0.3 } },
-    { color: 'blue',  from: { row: 0, x: 0.5 }, to: { row: 3, x: 0.5 } },
-    { color: 'green', from: { row: 0, x: 0.7 }, to: { row: 2, x: 0.7 } },
-    { color: 'green', from: { row: 2, x: 0.7 }, to: { row: 3, x: 0.9 } },
-  ];
+  const geneCount = 5;
+  //const nodes = data.nodes;
+  //const connections = data.connections;
+  const genomeNames = data.genomeNames;
+  const nodeLists = data.properNodeLists;
+  const colors = data.colors;
 
-  const nodes = [
-    // Red nodes
-    { color: 'red', row: 0, x: 0.1, direction: 'right', metadata: 'Red node 1' },
-    { color: 'red', row: 1, x: 0.3, direction: 'right', metadata: 'Red node 2' },
-    { color: 'red', row: 2, x: 0.1, direction: 'right', metadata: 'Red node 3' },
-    { color: 'red', row: 3, x: 0.1, direction: 'right', metadata: 'Red node 4' },
+  // Generate connections between nodes
+  let connections = [];
+  nodeLists.forEach((nodeList, listIdx) => {
+    for (let i = 0; i < nodeList.length - 1; i++) {
+      connections.push({
+        from: {x: nodeList[i].position, row: nodeList[i].row},
+        to: {x: nodeList[i+1].position, row: nodeList[i+1].row},
+        color: colors[listIdx]
+      });
+    }
+  });
 
-    // Orange nodes
-    { color: 'orange', row: 0, x: 0.3, direction: 'left', metadata: 'Orange node 1' },
-    { color: 'orange', row: 1, x: 0.1, direction: 'left', metadata: 'Orange node 2' },
-    { color: 'orange', row: 2, x: 0.3, direction: 'left', metadata: 'Orange node 3' },
-    { color: 'orange', row: 3, x: 0.3, direction: 'left', metadata: 'Orange node 4' },
-    // Blue nodes
-    { color: 'blue', row: 0, x: 0.5, direction: 'left', metadata: 'Blue node 1' },
-    { color: 'blue', row: 3, x: 0.5, direction: 'left', metadata: 'Blue node 2' },
+  // Flatten nodeLists and assign colors
+  const nodes = nodeLists.flatMap((nodeList, listIdx) =>
+    nodeList.map(node => ({ ...node, color: colors[listIdx] }))
+  );
 
-    // Green nodes
-    { color: 'green', row: 0, x: 0.7, direction: 'right', metadata: 'Green node 1' },
-    { color: 'green', row: 2, x: 0.7, direction: 'right', metadata: 'Green node 2' },
-    { color: 'green', row: 3, x: 0.9, direction: 'right', metadata: 'Green node 3' }
-  ];
-
-  let width = 600;
-  let height = 200;
+  let width = 1000;
+  let height = 600;
+  let textMargin = 125;
 
   onMount(() => {
     const svg = d3
@@ -58,9 +49,10 @@
 
     // Can adjust x domain as needed (currently [0, 1]); we'll need to normalize
     // chromosome coordinates to this domain
-    const xScale = d3.scaleLinear()
-      .domain([0, 1])
-      .range([0, width]);
+    const xScale = d3.scaleBand()
+      .domain(d3.range(geneCount))
+      .range([textMargin, width])
+      .paddingInner(0.2);
 
     // Draw row lines
     svg.selectAll('line.row')
@@ -68,13 +60,26 @@
       .enter()
       .append('line')
       .attr('class', 'row')
-      .attr('x1', 0)
+      .attr('x1', textMargin)
       .attr('x2', width)
       // center each line in the band
       .attr('y1', d => yScale(d) + yScale.bandwidth()/2)
       .attr('y2', d => yScale(d) + yScale.bandwidth()/2)
       .attr('stroke', 'black')
       .attr('stroke-width', 2);
+
+    // Add text next to each row line
+    svg.selectAll('text.row-label')
+      .data(genomeNames)
+      .enter()
+      .append('text')
+      .attr('class', 'row-label')
+      .attr('x', 0) // Position text 10px to the right of the row line
+      .attr('y', (d, i) => yScale(i) + yScale.bandwidth()/2)
+      .attr('dy', '0.35em') // Vertically center the text
+      .text(d => d)
+      .attr('font-size', '20px')
+      .attr('fill', 'black');
 
     // Draw connections between rows
     const lineGenerator = d3.line();
@@ -90,8 +95,8 @@
       // Use line generator with two points [start, end].
       .attr('d', d => {
         const points = [
-          [ xScale(d.from.x), yScale(d.from.row) + yScale.bandwidth()/2 ],
-          [ xScale(d.to.x),   yScale(d.to.row)   + yScale.bandwidth()/2 ],
+          [ xScale(d.from.x) + xScale.bandwidth()/2, yScale(d.from.row) + yScale.bandwidth()/2 ],
+          [ xScale(d.to.x) + xScale.bandwidth()/2,   yScale(d.to.row)   + yScale.bandwidth()/2 ],
         ];
         return lineGenerator(points);
       })
@@ -136,7 +141,7 @@
         }
       })
       .attr('transform', d => {
-        const px = xScale(d.x);
+        const px = xScale(d.position) + xScale.bandwidth()/2;
         const py = yScale(d.row) + yScale.bandwidth() / 2;
         return `translate(${px}, ${py})`;
       })
@@ -145,8 +150,13 @@
         tooltip
           .style('opacity', 1)
           .style('color', d.color)
-          // .html(`<strong>${d.color}</strong><br/>${d.metadata}`);
-          .text(`${d.metadata}`);
+          .html(
+            `<strong>Genome Name:</strong> ${d.genome_name}<br>
+            <strong>Protein Name:</strong> ${d.protein_name}<br>
+            <strong>Direction:</strong> ${d.direction}<br>
+            <strong>Percent Similarity to Reference:</strong> ${d.percent_sim_to_ref}%`
+          );
+          //.text(`${d.metadata}`);
         // Optionally highlight the hovered arrow
         d3.select(this).style('opacity', 0.8);
       })
@@ -183,8 +193,15 @@
 ></div>
 
 <style>
+  #chart {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start; /* Align to the top */
+    padding-top: 10vh;
+    height: 100vh; /* Full viewport height */
+  }
   /*
-  Using global since connections are generated dynamically;
+  Using global here since connections are generated dynamically;
   svelte can't immediately recognize them
   */
   :global(.connection) {

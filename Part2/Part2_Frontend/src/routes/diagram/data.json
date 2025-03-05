@@ -1,0 +1,63 @@
+{
+  "connections": [
+    { "color": "red", "from": { "row": 0, "x": 0 }, "to": { "row": 1, "x": 1 } },
+    { "color": "red", "from": { "row": 1, "x": 1 }, "to": { "row": 2, "x": 0 } },
+    { "color": "red", "from": { "row": 2, "x": 0 }, "to": { "row": 3, "x": 0 } },
+    { "color": "orange", "from": { "row": 0, "x": 1 }, "to": { "row": 1, "x": 0 } },
+    { "color": "orange", "from": { "row": 1, "x": 0 }, "to": { "row": 2, "x": 1 } },
+    { "color": "orange", "from": { "row": 2, "x": 1 }, "to": { "row": 3, "x": 1 } },
+    { "color": "blue", "from": { "row": 0, "x": 2 }, "to": { "row": 3, "x": 2 } },
+    { "color": "green", "from": { "row": 0, "x": 3 }, "to": { "row": 2, "x": 3 } },
+    { "color": "green", "from": { "row": 2, "x": 3 }, "to": { "row": 3, "x": 4 } }
+  ],
+  "nodes": [
+    { "color": "red", "row": 0, "x": 0, "direction": "right", "metadata": "Red node 1" },
+    { "color": "red", "row": 1, "x": 1, "direction": "right", "metadata": "Red node 2" },
+    { "color": "red", "row": 2, "x": 0, "direction": "right", "metadata": "Red node 3" },
+    { "color": "red", "row": 3, "x": 0, "direction": "right", "metadata": "Red node 4" },
+    { "color": "orange", "row": 0, "x": 1, "direction": "left", "metadata": "Orange node 1" },
+    { "color": "orange", "row": 1, "x": 0, "direction": "left", "metadata": "Orange node 2" },
+    { "color": "orange", "row": 2, "x": 1, "direction": "left", "metadata": "Orange node 3" },
+    { "color": "orange", "row": 3, "x": 1, "direction": "left", "metadata": "Orange node 4" },
+    { "color": "blue", "row": 0, "x": 2, "direction": "left", "metadata": "Blue node 1" },
+    { "color": "blue", "row": 3, "x": 2, "direction": "left", "metadata": "Blue node 2" },
+    { "color": "green", "row": 0, "x": 3, "direction": "right", "metadata": "Green node 1" },
+    { "color": "green", "row": 2, "x": 3, "direction": "right", "metadata": "Green node 2" },
+    { "color": "green", "row": 3, "x": 4, "direction": "right", "metadata": "Green node 3" }
+  ],
+  "genomeNames": [
+    "Capitan",
+    "Iceburg",
+    "Dandie",
+    "GreenTowers"
+  ],
+  "properNodeLists": [
+    [
+      { "genome_name": "Capitan", "protein_name": "1234", "direction": "right", "percent_sim_to_ref": 78.5, "position": 0, "special": false, "row": 0 },
+      { "genome_name": "Iceburg", "protein_name": "5678", "direction": "right", "percent_sim_to_ref": 82.3, "position": 1, "special": false, "row": 1 },
+      { "genome_name": "Dandie", "protein_name": "9101", "direction": "right", "percent_sim_to_ref": 90.2, "position": 0, "special": false, "row": 2 },
+      { "genome_name": "GreenTowers", "protein_name": "1121", "direction": "right", "percent_sim_to_ref": 65.4, "position": 0, "special": false, "row": 3 }
+    ],
+    [
+      { "genome_name": "Capitan", "protein_name": "3141", "direction": "left", "percent_sim_to_ref": 70.1, "position": 1, "special": false, "row": 0 },
+      { "genome_name": "Iceburg", "protein_name": "5161", "direction": "left", "percent_sim_to_ref": 88.7, "position": 0, "special": false, "row": 1 },
+      { "genome_name": "Dandie", "protein_name": "7181", "direction": "left", "percent_sim_to_ref": 92.5, "position": 1, "special": false, "row": 2 },
+      { "genome_name": "GreenTowers", "protein_name": "9202", "direction": "left", "percent_sim_to_ref": 77.3, "position": 1, "special": false, "row": 3 }
+    ],
+    [
+      { "genome_name": "Capitan", "protein_name": "1223", "direction": "left", "percent_sim_to_ref": 85.6, "position": 2, "special": false, "row": 0 },
+      { "genome_name": "GreenTowers", "protein_name": "3445", "direction": "left", "percent_sim_to_ref": 91.2, "position": 2, "special": false, "row": 3 }
+    ],
+    [
+      { "genome_name": "Capitan", "protein_name": "5667", "direction": "right", "percent_sim_to_ref": 60.9, "position": 3, "special": false, "row": 0 },
+      { "genome_name": "Dandie", "protein_name": "7889", "direction": "right", "percent_sim_to_ref": 95.4, "position": 3, "special": false, "row": 2 },
+      { "genome_name": "GreenTowers", "protein_name": "9001", "direction": "right", "percent_sim_to_ref": 68.7, "position": 4, "special": false, "row": 3 }
+    ]
+  ],
+  "colors": [
+    "red",
+    "orange",
+    "blue",
+    "green"
+  ]
+}

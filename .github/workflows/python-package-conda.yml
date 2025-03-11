@@ -30,10 +30,14 @@ jobs:
         flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
     - name: Run simplify_headers.py
       run: |
-        cd ./Part1
+        cd ./Part1/simplify_headers_script
         python simplify_headers.py Dandie_helixer_Rprotein.fasta simplified.fasta
+        cd ./Part1/combine_coords_script
+        python combine_coords.py example_domain_coordinates_input_file_for_parser.csv combined_coords.csv
     - name: Test with pytest
       run: |
-        cd ./Part1
+        cd ./Part1/simplify_headers_script
         conda install pytest
         pytest test_simplify_headers.py
+        cd ./../combine_coords_script
+        pytest test_combine_coords.py

@@ -1,7 +1,7 @@
 import sys
 
 def test():
-    correct_file = open("./OUTPUT_example_domain_coordinates_parser.xlsx-Sheet1.csv", "r")
+    correct_file = open("./example_domain_coordinates_output_file_for_parser.csv", "r")
     output_file = open("combined_coords.csv", "r")
     correct_lines = correct_file.readlines()
     output_lines = output_file.readlines()

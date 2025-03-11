@@ -32,9 +32,11 @@ jobs:
       run: |
         cd ./Part1/simplify_headers_script
         python simplify_headers.py Dandie_helixer_Rprotein.fasta simplified.fasta
+    - name: Run combine_coords.py
+      run: |
         cd ./Part1/combine_coords_script
         python combine_coords.py example_domain_coordinates_input_file_for_parser.csv combined_coords.csv
-    - name: Test with pytest
+    - name: Test both scripts with pytest
       run: |
         cd ./Part1/simplify_headers_script
         conda install pytest

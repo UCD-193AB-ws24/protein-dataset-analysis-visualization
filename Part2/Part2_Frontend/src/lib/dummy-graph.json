@@ -1,0 +1,27 @@
+{
+  "nodes": [
+    { "id": "GT_1", "genome_name": "GreenTowers", "protein_name": "003421", "direction": "plus",  "rel_position": 0 },
+    { "id": "GT_2", "genome_name": "GreenTowers", "protein_name": "003422", "direction": "minus", "rel_position": 1 },
+    { "id": "GT_3", "genome_name": "GreenTowers", "protein_name": "003423", "direction": "plus",  "rel_position": 2 },
+    { "id": "GT_4", "genome_name": "GreenTowers", "protein_name": "003424", "direction": "minus", "rel_position": 3 },
+
+    { "id": "BH_1", "genome_name": "BlueHills",   "protein_name": "005111", "direction": "plus",  "rel_position": 0 },
+    { "id": "BH_2", "genome_name": "BlueHills",   "protein_name": "005112", "direction": "minus", "rel_position": 1 },
+    { "id": "BH_3", "genome_name": "BlueHills",   "protein_name": "005113", "direction": "plus",  "rel_position": 2 },
+    { "id": "BH_4", "genome_name": "BlueHills",   "protein_name": "005114", "direction": "minus", "rel_position": 3 },
+
+    { "id": "RV_1", "genome_name": "RedValley",   "protein_name": "002201", "direction": "plus",  "rel_position": 0 },
+    { "id": "RV_2", "genome_name": "RedValley",   "protein_name": "002202", "direction": "minus", "rel_position": 1 },
+    { "id": "RV_3", "genome_name": "RedValley",   "protein_name": "002203", "direction": "plus",  "rel_position": 2 }
+  ],
+
+  "links": [
+    { "source": "GT_2", "target": "BH_1", "score": 92, "is_reciprocal": true  },
+    { "source": "BH_1", "target": "RV_2", "score": 87, "is_reciprocal": false },
+    { "source": "RV_3", "target": "GT_1", "score": 78, "is_reciprocal": true  },
+
+    { "source": "GT_4", "target": "BH_4", "score": 55, "is_reciprocal": false },
+    { "source": "BH_2", "target": "RV_1", "score": 68, "is_reciprocal": true  },
+    { "source": "RV_2", "target": "GT_3", "score": 82, "is_reciprocal": false }
+  ]
+}

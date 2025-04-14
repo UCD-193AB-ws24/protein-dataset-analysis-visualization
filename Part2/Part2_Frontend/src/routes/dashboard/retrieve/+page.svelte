@@ -10,7 +10,7 @@
         }
 
         try {
-            const response = await fetch(`http://127.0.0.1:5000/retrieve/${manualPublicId}`);
+            const response = await fetch(`https://2l8kvakju8.execute-api.us-east-1.amazonaws.com/dev/retrieve/${manualPublicId}`);
             if (!response.ok) {
                 throw new Error("Failed to retrieve file.");
             }

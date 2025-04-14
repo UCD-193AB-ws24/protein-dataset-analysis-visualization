@@ -26,7 +26,7 @@
         errorMessage = "";
 
         try {
-            const response = await fetch("http://127.0.0.1:5000/get_user_files", {
+            const response = await fetch("https://2l8kvakju8.execute-api.us-east-1.amazonaws.com/dev/get_user_files", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ username }),

@@ -2,16 +2,15 @@
 </script>
 
 <nav>
-    <!-- <ul>
-        <li><a href="/">🏠 Home</a></li>
-        <li><a href="/diagram">📈 Diagram</a></li>
-        <li><a href="/upload">📤 Upload File</a></li>
-        <li><a href="/files">📂Files</a></li>
-    </ul> -->
+    <ul>
+        <li><a href="/dashboard/upload">📤 Upload File</a></li>
+        <li><a href="/dashboard/files">📂Files</a></li>
+        <li><a href="/dashboard/diagram">📊diagram</a></li>
+    </ul>
 </nav>
 
 <style>
-    /* nav {
+    nav {
         background: #1e293b;
         padding: 15px;
         text-align: center;
@@ -39,7 +38,7 @@
 
     a:hover {
         color: #60a5fa;
-    } */
+    }
 </style>
 
 <slot />

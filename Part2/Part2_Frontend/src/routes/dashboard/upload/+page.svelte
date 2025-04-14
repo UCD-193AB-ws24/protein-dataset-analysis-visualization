@@ -20,7 +20,7 @@
         formData.append("username", username);  // Automatically send stored username
 
         try {
-            const response = await fetch("http://127.0.0.1:5000/upload", {
+            const response = await fetch("https://h47f781wh1.execute-api.us-east-1.amazonaws.com/dev/upload", {
                 method: "POST",
                 body: formData
             });

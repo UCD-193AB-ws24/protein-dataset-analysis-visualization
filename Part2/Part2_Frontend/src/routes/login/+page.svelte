@@ -11,7 +11,7 @@
 
 		try {
 			const response = await fetch(
-				'https://2l8kvakju8.execute-api.us-east-1.amazonaws.com/dev/login',
+				'https://h47f781wh1.execute-api.us-east-1.amazonaws.com/dev/login',
 				{
 					method: 'POST',
 					headers: {

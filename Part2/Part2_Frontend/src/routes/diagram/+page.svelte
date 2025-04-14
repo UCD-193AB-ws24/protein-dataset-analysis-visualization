@@ -1,43 +1,42 @@
-<script>
-  import { onMount } from 'svelte';
-  import * as d3 from 'd3';
-  import data from './data.json';
-	import Chart from './Chart.svelte';
+<script lang="ts">
+  import Chart from '$lib/Chart.svelte';
+  import dummyGraph from '$lib/dummy-graph.json';
+  import testGraph from '$lib/test.json';
 
-  //const nodes = data.nodes;
-  //const connections = data.connections;
-  let genomeNames = [];
-  let nodeLists = [];
-  let colors = [];
-  let rowCount = 4;
-  let geneCount = 5;
-  let dataLoaded = false;
+  let graph = dummyGraph;
+  let cutoff = 0;            // slider value
 
-  async function fetchData() {
-    // Here, data would be fetched from the server based on input files
-    // for now, just "fetching" from the json file
-    genomeNames = data.genomeNames;
-    nodeLists = data.properNodeLists;
-    colors = data.colors;
-    dataLoaded = true;
+  // Function to switch data source
+  function switchDataSource(source: string) {
+    if (source === 'dummy') {
+      graph = dummyGraph;
+    } else if (source === 'test') {
+      graph = testGraph;
+    } else {
+      console.error('Invalid data source:', source);
+      return;
+    }
   }
 </script>
 
+<Chart {graph} {cutoff}/>
 
-{#if dataLoaded}
-  <Chart {genomeNames} {nodeLists} {colors} {rowCount} {geneCount} />
-{:else}
-  <div id="fetch">
-    <button on:click={fetchData}>Fetch Data</button>
-    <p>Click the button to fetch data</p>
-  </div>
-{/if}
+<!-- Buttons to switch data source -->
+<div style="margin: 1rem; display: flex; gap: 1rem;">
+  <button on:click={() => switchDataSource('dummy')}>Dummy Data</button>
+  <button on:click={() => switchDataSource('test')}>Test Data</button>
+</div>
+
+<label>
+  Adjust Cut-off:
+  <input type="range" min="0" max="100" bind:value={cutoff}/>
+  {cutoff}%
+</label>
 
 <style>
-  #fetch {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    margin-top: 50px;
+  label {
+    display: block;
+    margin-top: 1rem;
+    margin-left: 5%;
   }
 </style>

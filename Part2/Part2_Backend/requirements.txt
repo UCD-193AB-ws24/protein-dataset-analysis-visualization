@@ -1,0 +1,6 @@
+Flask
+python-dotenv
+cloudinary
+flask-cors
+supabase
+zappa

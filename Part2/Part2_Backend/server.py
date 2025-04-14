@@ -142,10 +142,18 @@ def get_user_files():
     # If no files are found, return an empty list
     return jsonify({"files": files_response.data}), 200
 
+@app.route('/pokemon', methods=['GET'])
+def nintendo():
+    return "Hello Pokemon"
+
+@app.route('/', methods=['GET'])
+def home():
+    return "Hello World"
+
 
 if __name__ == '__main__':
     app.run(debug=True)
-    app.config['MAX_CONTENT_LENGTH'] = 100 * 1024 * 1024  # 100MB limit
+    # app.config['MAX_CONTENT_LENGTH'] = 100 * 1024 * 1024  # 100MB limit
 
 
 

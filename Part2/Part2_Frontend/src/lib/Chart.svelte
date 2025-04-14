@@ -148,7 +148,14 @@
       .data(visibleLinks)
       .enter()
       .append('line')
-      .attr('x1', (d) => x(nodeById.get(d.source)!.rel_position))
+      .attr('x1', (d) => {
+        const sourceNode = nodeById.get(d.source);
+        if (sourceNode?.rel_position == null) {
+          console.warn(`Node with ID ${d.source} is missing rel_position`);
+          return 0; // Default value if rel_position is missing
+        }
+        return x(sourceNode.rel_position);
+      })
       .attr('y1', (d) => y(rowOf(nodeById.get(d.source)!))! + y.bandwidth() / 2 + margin.top)
       .attr('x2', (d) => x(nodeById.get(d.target)!.rel_position))
       .attr('y2', (d) => y(rowOf(nodeById.get(d.target)!))! + y.bandwidth() / 2 + margin.top)

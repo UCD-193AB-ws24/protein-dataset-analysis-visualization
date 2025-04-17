@@ -144,10 +144,9 @@ def parse_matrix(matrix_file, coord_file):
     coords = parse_coordinates(coord_file)
     print(coords)
 
-    output = {}
-
     subsections = df_only_cutoffs.index.to_series().str.split("_").str[0].unique()
 
+    output = { "genomes" : subsections.tolist() }
     output["nodes"] = add_nodes(coords)
 
 
@@ -326,6 +325,5 @@ def home():
 if __name__ == '__main__':
     app.run(debug=True)
     # app.config['MAX_CONTENT_LENGTH'] = 100 * 1024 * 1024  # 100MB limit
-
 
 

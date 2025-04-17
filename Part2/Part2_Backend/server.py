@@ -91,7 +91,7 @@ def add_nodes(coords):
             "direction": coords['orientation'][i],
             "rel_position": int(coords['rel_position'][i]),
         })
-    
+
     return nodes
 
 def add_links(df_only_cutoffs, row_max, col_max):
@@ -129,7 +129,9 @@ def add_links(df_only_cutoffs, row_max, col_max):
     return links
 
 def parse_matrix(matrix_file, coord_file):
+    print("Parsing matrix file...")
     df = pd.read_excel(BytesIO(matrix_file.read()), engine='openpyxl')
+    print("Matrix file parsed.")
     df = df.reset_index(drop=True)
     df = df.set_index(df.columns[0])
     df.index.name = None
@@ -217,7 +219,7 @@ def printdata():
 def upload_file():
     if 'file_matrix' not in request.files:
         return jsonify({"error": "No file provided"}), 400
-    
+
     if 'file_coordinate' not in request.files:
         return jsonify({"error": "No file provided"}), 400
 
@@ -232,30 +234,33 @@ def upload_file():
 
     matrix_original_filename = file_matrix.filename.rsplit('.', 1)[0]
     matrix_file_extension = file_matrix.filename.rsplit('.', 1)[-1].lower()
-    matrix_idName = f"{matrix_original_filename}.{matrix_file_extension}" 
+    matrix_idName = f"{matrix_original_filename}.{matrix_file_extension}"
 
     # Determine resource type
     matrix_resource_type = "raw" if matrix_file_extension not in ["jpg", "jpeg", "png", "gif", "mp4", "mov"] else "auto"
 
     coordinate_original_filename = file_coordinate.filename.rsplit('.', 1)[0]
     coordinate_file_extension = file_coordinate.filename.rsplit('.', 1)[-1].lower()
-    coordinate_idName = f"{coordinate_original_filename}.{coordinate_file_extension}" 
+    coordinate_idName = f"{coordinate_original_filename}.{coordinate_file_extension}"
 
     # Determine resource type
     coordinate_resource_type = "raw" if coordinate_file_extension not in ["jpg", "jpeg", "png", "gif", "mp4", "mov"] else "auto"
 
-    logging.basicConfig(level=logging.DEBUG)
+    # logging.basicConfig(level=logging.DEBUG)
 
     try:
+        matrix_bytes = file_matrix.read()
+        coordinate_bytes = file_coordinate.read()
+
         # The uploads work but the parse_matrix doesn't work if the uploads are there for some reason
-        upload_result_matrix = cloudinary.uploader.upload(file_matrix, resource_type=matrix_resource_type, public_id=matrix_idName, overwrite=True)
+        upload_result_matrix = cloudinary.uploader.upload(BytesIO(matrix_bytes), resource_type=matrix_resource_type, public_id=matrix_idName, overwrite=True)
         add_file_for_user(username=username, file_name=matrix_idName)
 
-        upload_result_coordinate = cloudinary.uploader.upload(file_coordinate, resource_type=coordinate_resource_type, public_id=coordinate_idName, overwrite=True)
+        upload_result_coordinate = cloudinary.uploader.upload(BytesIO(coordinate_bytes), resource_type=coordinate_resource_type, public_id=coordinate_idName, overwrite=True)
         add_file_for_user(username=username, file_name=coordinate_idName)
 
-        ret_json = parse_matrix(file_matrix, file_coordinate)
-        # print(ret_json)
+        ret_json = parse_matrix(BytesIO(matrix_bytes), BytesIO(coordinate_bytes))
+        print(ret_json)
 
         return jsonify([
             {

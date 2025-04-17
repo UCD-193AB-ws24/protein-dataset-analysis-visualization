@@ -324,9 +324,57 @@
             "is_reciprocal": true
         },
         {
+            "source": "GreenTowers_000046",
+            "target": "CobhamGreen_000035",
+            "score": 96.1,
+            "is_reciprocal": true
+        },
+        {
+            "source": "GreenTowers_000046",
+            "target": "Dandie_000032",
+            "score": 96.9,
+            "is_reciprocal": true
+        },
+        {
+            "source": "GreenTowers_000046",
+            "target": "ElDoradoDiff_000036",
+            "score": 95.2,
+            "is_reciprocal": true
+        },
+        {
+            "source": "GreenTowers_000046",
+            "target": "Salinas_000047",
+            "score": 100.0,
+            "is_reciprocal": true
+        },
+        {
             "source": "GreenTowers_003419",
             "target": "GreenTowers_000046",
             "score": 57.3,
+            "is_reciprocal": true
+        },
+        {
+            "source": "GreenTowers_003419",
+            "target": "CobhamGreen_003423",
+            "score": 95.6,
+            "is_reciprocal": true
+        },
+        {
+            "source": "GreenTowers_003419",
+            "target": "Dandie_003388",
+            "score": 95.1,
+            "is_reciprocal": true
+        },
+        {
+            "source": "GreenTowers_003419",
+            "target": "ElDoradoDiff_003392",
+            "score": 96.5,
+            "is_reciprocal": true
+        },
+        {
+            "source": "GreenTowers_003419",
+            "target": "Salinas_003412",
+            "score": 100.0,
             "is_reciprocal": true
         },
         {
@@ -336,15 +384,117 @@
             "is_reciprocal": false
         },
         {
+            "source": "GreenTowers_003420",
+            "target": "CobhamGreen_003424",
+            "score": 97.7,
+            "is_reciprocal": true
+        },
+        {
+            "source": "GreenTowers_003420",
+            "target": "Dandie_003389",
+            "score": 98.7,
+            "is_reciprocal": true
+        },
+        {
+            "source": "GreenTowers_003420",
+            "target": "ElDoradoDiff_003393",
+            "score": 78.4,
+            "is_reciprocal": true
+        },
+        {
+            "source": "GreenTowers_003420",
+            "target": "Salinas_003413",
+            "score": 100.0,
+            "is_reciprocal": true
+        },
+        {
             "source": "GreenTowers_003421",
             "target": "GreenTowers_003427",
             "score": 57.9,
             "is_reciprocal": false
         },
         {
+            "source": "GreenTowers_003421",
+            "target": "CobhamGreen_003425",
+            "score": 83.2,
+            "is_reciprocal": true
+        },
+        {
+            "source": "GreenTowers_003421",
+            "target": "Dandie_003390",
+            "score": 83.0,
+            "is_reciprocal": true
+        },
+        {
+            "source": "GreenTowers_003421",
+            "target": "ElDoradoDiff_003394",
+            "score": 83.5,
+            "is_reciprocal": true
+        },
+        {
+            "source": "GreenTowers_003421",
+            "target": "Salinas_003414",
+            "score": 100.0,
+            "is_reciprocal": true
+        },
+        {
+            "source": "GreenTowers_003422",
+            "target": "Salinas_003415",
+            "score": 100.0,
+            "is_reciprocal": true
+        },
+        {
             "source": "GreenTowers_003426",
             "target": "GreenTowers_003427",
             "score": 66.1,
+            "is_reciprocal": true
+        },
+        {
+            "source": "CobhamGreen_003442",
+            "target": "GreenTowers_003426",
+            "score": 72.6,
+            "is_reciprocal": false
+        },
+        {
+            "source": "GreenTowers_003426",
+            "target": "CobhamGreen_003443",
+            "score": 79.0,
+            "is_reciprocal": true
+        },
+        {
+            "source": "CobhamGreen_003447",
+            "target": "GreenTowers_003426",
+            "score": 75.4,
+            "is_reciprocal": false
+        },
+        {
+            "source": "Dandie_003411",
+            "target": "GreenTowers_003426",
+            "score": 80.6,
+            "is_reciprocal": false
+        },
+        {
+            "source": "GreenTowers_003426",
+            "target": "Dandie_003414",
+            "score": 83.7,
+            "is_reciprocal": true
+        },
+        {
+            "source": "ElDoradoDiff_003400",
+            "target": "GreenTowers_003426",
+            "score": 83.1,
+            "is_reciprocal": false
+        },
+        {
+            "source": "GreenTowers_003426",
+            "target": "ElDoradoDiff_003402",
+            "score": 86.1,
+            "is_reciprocal": true
+        },
+        {
+            "source": "GreenTowers_003426",
+            "target": "Salinas_003418",
+            "score": 98.2,
             "is_reciprocal": true
         },
         {
@@ -366,8 +516,86 @@
             "is_reciprocal": true
         },
         {
+            "source": "CobhamGreen_003426",
+            "target": "GreenTowers_003427",
+            "score": 58.8,
+            "is_reciprocal": false
+        },
+        {
+            "source": "GreenTowers_003427",
+            "target": "CobhamGreen_003438",
+            "score": 89.1,
+            "is_reciprocal": true
+        },
+        {
+            "source": "CobhamGreen_003458",
+            "target": "GreenTowers_003427",
+            "score": 72.5,
+            "is_reciprocal": false
+        },
+        {
+            "source": "GreenTowers_003427",
+            "target": "Dandie_003406",
+            "score": 81.8,
+            "is_reciprocal": true
+        },
+        {
+            "source": "Dandie_003416",
+            "target": "GreenTowers_003427",
+            "score": 71.8,
+            "is_reciprocal": false
+        },
+        {
+            "source": "GreenTowers_003427",
+            "target": "ElDoradoDiff_003401",
+            "score": 89.2,
+            "is_reciprocal": true
+        },
+        {
+            "source": "GreenTowers_003427",
+            "target": "Salinas_003419",
+            "score": 99.2,
+            "is_reciprocal": true
+        },
+        {
+            "source": "GreenTowers_LOC111908464",
+            "target": "Salinas_LOC111908464",
+            "score": 90.7,
+            "is_reciprocal": true
+        },
+        {
             "source": "CobhamGreen_000035",
             "target": "GreenTowers_000046",
+            "score": 96.1,
+            "is_reciprocal": true
+        },
+        {
+            "source": "CobhamGreen_003423",
+            "target": "CobhamGreen_000035",
+            "score": 57.5,
+            "is_reciprocal": false
+        },
+        {
+            "source": "CobhamGreen_000035",
+            "target": "CobhamGreen_003458",
+            "score": 59.9,
+            "is_reciprocal": false
+        },
+        {
+            "source": "CobhamGreen_000035",
+            "target": "Dandie_000032",
+            "score": 97.4,
+            "is_reciprocal": true
+        },
+        {
+            "source": "CobhamGreen_000035",
+            "target": "ElDoradoDiff_000036",
+            "score": 94.5,
+            "is_reciprocal": true
+        },
+        {
+            "source": "CobhamGreen_000035",
+            "target": "Salinas_000047",
             "score": 96.1,
             "is_reciprocal": true
         },
@@ -378,8 +606,62 @@
             "is_reciprocal": true
         },
         {
+            "source": "CobhamGreen_003423",
+            "target": "CobhamGreen_000035",
+            "score": 57.5,
+            "is_reciprocal": false
+        },
+        {
+            "source": "CobhamGreen_003423",
+            "target": "Dandie_003388",
+            "score": 98.0,
+            "is_reciprocal": true
+        },
+        {
+            "source": "CobhamGreen_003423",
+            "target": "ElDoradoDiff_003392",
+            "score": 96.1,
+            "is_reciprocal": true
+        },
+        {
+            "source": "CobhamGreen_003423",
+            "target": "Salinas_003412",
+            "score": 95.6,
+            "is_reciprocal": true
+        },
+        {
             "source": "CobhamGreen_003424",
             "target": "GreenTowers_003420",
+            "score": 97.7,
+            "is_reciprocal": true
+        },
+        {
+            "source": "CobhamGreen_003424",
+            "target": "CobhamGreen_003438",
+            "score": 64.0,
+            "is_reciprocal": false
+        },
+        {
+            "source": "CobhamGreen_003424",
+            "target": "CobhamGreen_003458",
+            "score": 64.0,
+            "is_reciprocal": false
+        },
+        {
+            "source": "CobhamGreen_003424",
+            "target": "Dandie_003389",
+            "score": 98.2,
+            "is_reciprocal": true
+        },
+        {
+            "source": "CobhamGreen_003424",
+            "target": "ElDoradoDiff_003393",
+            "score": 77.6,
+            "is_reciprocal": true
+        },
+        {
+            "source": "CobhamGreen_003424",
+            "target": "Salinas_003413",
             "score": 97.7,
             "is_reciprocal": true
         },
@@ -390,8 +672,56 @@
             "is_reciprocal": true
         },
         {
+            "source": "CobhamGreen_003425",
+            "target": "CobhamGreen_003438",
+            "score": 67.3,
+            "is_reciprocal": false
+        },
+        {
+            "source": "CobhamGreen_003425",
+            "target": "Dandie_003390",
+            "score": 96.3,
+            "is_reciprocal": true
+        },
+        {
+            "source": "CobhamGreen_003425",
+            "target": "ElDoradoDiff_003394",
+            "score": 96.7,
+            "is_reciprocal": true
+        },
+        {
+            "source": "CobhamGreen_003425",
+            "target": "Salinas_003414",
+            "score": 83.2,
+            "is_reciprocal": true
+        },
+        {
             "source": "CobhamGreen_003426",
             "target": "GreenTowers_003427",
+            "score": 58.8,
+            "is_reciprocal": false
+        },
+        {
+            "source": "CobhamGreen_003426",
+            "target": "CobhamGreen_003458",
+            "score": 63.0,
+            "is_reciprocal": false
+        },
+        {
+            "source": "CobhamGreen_003426",
+            "target": "Dandie_003389",
+            "score": 56.9,
+            "is_reciprocal": false
+        },
+        {
+            "source": "CobhamGreen_003426",
+            "target": "ElDoradoDiff_003401",
+            "score": 59.7,
+            "is_reciprocal": false
+        },
+        {
+            "source": "CobhamGreen_003426",
+            "target": "Salinas_003419",
             "score": 58.8,
             "is_reciprocal": false
         },
@@ -402,9 +732,75 @@
             "is_reciprocal": true
         },
         {
+            "source": "CobhamGreen_003424",
+            "target": "CobhamGreen_003438",
+            "score": 64.0,
+            "is_reciprocal": false
+        },
+        {
+            "source": "CobhamGreen_003425",
+            "target": "CobhamGreen_003438",
+            "score": 67.3,
+            "is_reciprocal": false
+        },
+        {
+            "source": "CobhamGreen_003438",
+            "target": "CobhamGreen_003458",
+            "score": 71.7,
+            "is_reciprocal": true
+        },
+        {
+            "source": "CobhamGreen_003438",
+            "target": "Dandie_003406",
+            "score": 82.2,
+            "is_reciprocal": true
+        },
+        {
+            "source": "Dandie_003416",
+            "target": "CobhamGreen_003438",
+            "score": 70.0,
+            "is_reciprocal": false
+        },
+        {
+            "source": "CobhamGreen_003438",
+            "target": "ElDoradoDiff_003401",
+            "score": 92.6,
+            "is_reciprocal": true
+        },
+        {
+            "source": "CobhamGreen_003438",
+            "target": "Salinas_003419",
+            "score": 88.5,
+            "is_reciprocal": true
+        },
+        {
             "source": "CobhamGreen_003442",
             "target": "GreenTowers_003426",
             "score": 72.6,
+            "is_reciprocal": false
+        },
+        {
+            "source": "CobhamGreen_003442",
+            "target": "CobhamGreen_003443",
+            "score": 73.9,
+            "is_reciprocal": false
+        },
+        {
+            "source": "CobhamGreen_003442",
+            "target": "Dandie_003414",
+            "score": 75.7,
+            "is_reciprocal": false
+        },
+        {
+            "source": "CobhamGreen_003442",
+            "target": "ElDoradoDiff_003400",
+            "score": 75.3,
+            "is_reciprocal": false
+        },
+        {
+            "source": "CobhamGreen_003442",
+            "target": "Salinas_003418",
+            "score": 72.4,
             "is_reciprocal": false
         },
         {
@@ -414,9 +810,75 @@
             "is_reciprocal": true
         },
         {
+            "source": "CobhamGreen_003442",
+            "target": "CobhamGreen_003443",
+            "score": 73.9,
+            "is_reciprocal": false
+        },
+        {
+            "source": "CobhamGreen_003443",
+            "target": "CobhamGreen_003447",
+            "score": 77.3,
+            "is_reciprocal": true
+        },
+        {
+            "source": "CobhamGreen_003443",
+            "target": "Dandie_003411",
+            "score": 83.1,
+            "is_reciprocal": true
+        },
+        {
+            "source": "Dandie_003414",
+            "target": "CobhamGreen_003443",
+            "score": 80.7,
+            "is_reciprocal": false
+        },
+        {
+            "source": "CobhamGreen_003443",
+            "target": "ElDoradoDiff_003400",
+            "score": 87.1,
+            "is_reciprocal": true
+        },
+        {
+            "source": "ElDoradoDiff_003402",
+            "target": "CobhamGreen_003443",
+            "score": 77.0,
+            "is_reciprocal": false
+        },
+        {
+            "source": "CobhamGreen_003443",
+            "target": "Salinas_003418",
+            "score": 79.5,
+            "is_reciprocal": true
+        },
+        {
             "source": "CobhamGreen_003447",
             "target": "GreenTowers_003426",
             "score": 75.4,
+            "is_reciprocal": false
+        },
+        {
+            "source": "CobhamGreen_003447",
+            "target": "CobhamGreen_003443",
+            "score": 77.3,
+            "is_reciprocal": true
+        },
+        {
+            "source": "CobhamGreen_003447",
+            "target": "Dandie_003414",
+            "score": 78.8,
+            "is_reciprocal": false
+        },
+        {
+            "source": "CobhamGreen_003447",
+            "target": "ElDoradoDiff_003400",
+            "score": 79.4,
+            "is_reciprocal": false
+        },
+        {
+            "source": "CobhamGreen_003447",
+            "target": "Salinas_003418",
+            "score": 75.1,
             "is_reciprocal": false
         },
         {
@@ -426,8 +888,80 @@
             "is_reciprocal": false
         },
         {
+            "source": "CobhamGreen_000035",
+            "target": "CobhamGreen_003458",
+            "score": 59.9,
+            "is_reciprocal": false
+        },
+        {
+            "source": "CobhamGreen_003424",
+            "target": "CobhamGreen_003458",
+            "score": 64.0,
+            "is_reciprocal": false
+        },
+        {
+            "source": "CobhamGreen_003426",
+            "target": "CobhamGreen_003458",
+            "score": 63.0,
+            "is_reciprocal": false
+        },
+        {
+            "source": "CobhamGreen_003458",
+            "target": "CobhamGreen_003438",
+            "score": 71.7,
+            "is_reciprocal": true
+        },
+        {
+            "source": "CobhamGreen_003458",
+            "target": "Dandie_003406",
+            "score": 71.2,
+            "is_reciprocal": false
+        },
+        {
+            "source": "ElDoradoDiff_003397",
+            "target": "CobhamGreen_003458",
+            "score": 55.7,
+            "is_reciprocal": false
+        },
+        {
+            "source": "CobhamGreen_003458",
+            "target": "ElDoradoDiff_003401",
+            "score": 73.7,
+            "is_reciprocal": false
+        },
+        {
+            "source": "CobhamGreen_003458",
+            "target": "Salinas_003419",
+            "score": 72.6,
+            "is_reciprocal": false
+        },
+        {
             "source": "Dandie_000032",
             "target": "GreenTowers_000046",
+            "score": 96.9,
+            "is_reciprocal": true
+        },
+        {
+            "source": "Dandie_000032",
+            "target": "CobhamGreen_000035",
+            "score": 97.4,
+            "is_reciprocal": true
+        },
+        {
+            "source": "Dandie_000032",
+            "target": "Dandie_003388",
+            "score": 57.4,
+            "is_reciprocal": true
+        },
+        {
+            "source": "Dandie_000032",
+            "target": "ElDoradoDiff_000036",
+            "score": 96.0,
+            "is_reciprocal": true
+        },
+        {
+            "source": "Dandie_000032",
+            "target": "Salinas_000047",
             "score": 96.9,
             "is_reciprocal": true
         },
@@ -438,8 +972,62 @@
             "is_reciprocal": true
         },
         {
+            "source": "Dandie_003388",
+            "target": "CobhamGreen_003423",
+            "score": 98.0,
+            "is_reciprocal": true
+        },
+        {
+            "source": "Dandie_003388",
+            "target": "Dandie_000032",
+            "score": 57.4,
+            "is_reciprocal": true
+        },
+        {
+            "source": "Dandie_003388",
+            "target": "ElDoradoDiff_003392",
+            "score": 96.7,
+            "is_reciprocal": true
+        },
+        {
+            "source": "Dandie_003388",
+            "target": "Salinas_003412",
+            "score": 95.1,
+            "is_reciprocal": true
+        },
+        {
             "source": "Dandie_003389",
             "target": "GreenTowers_003420",
+            "score": 98.7,
+            "is_reciprocal": true
+        },
+        {
+            "source": "Dandie_003389",
+            "target": "CobhamGreen_003424",
+            "score": 98.2,
+            "is_reciprocal": true
+        },
+        {
+            "source": "CobhamGreen_003426",
+            "target": "Dandie_003389",
+            "score": 56.9,
+            "is_reciprocal": false
+        },
+        {
+            "source": "Dandie_003389",
+            "target": "Dandie_003406",
+            "score": 62.7,
+            "is_reciprocal": false
+        },
+        {
+            "source": "Dandie_003389",
+            "target": "ElDoradoDiff_003393",
+            "score": 78.9,
+            "is_reciprocal": true
+        },
+        {
+            "source": "Dandie_003389",
+            "target": "Salinas_003413",
             "score": 98.7,
             "is_reciprocal": true
         },
@@ -450,9 +1038,81 @@
             "is_reciprocal": true
         },
         {
+            "source": "Dandie_003390",
+            "target": "CobhamGreen_003425",
+            "score": 96.3,
+            "is_reciprocal": true
+        },
+        {
+            "source": "Dandie_003390",
+            "target": "Dandie_003406",
+            "score": 66.0,
+            "is_reciprocal": false
+        },
+        {
+            "source": "Dandie_003390",
+            "target": "ElDoradoDiff_003394",
+            "score": 96.8,
+            "is_reciprocal": true
+        },
+        {
+            "source": "Dandie_003390",
+            "target": "Salinas_003414",
+            "score": 83.0,
+            "is_reciprocal": true
+        },
+        {
             "source": "Dandie_003406",
             "target": "GreenTowers_003427",
             "score": 81.8,
+            "is_reciprocal": true
+        },
+        {
+            "source": "Dandie_003406",
+            "target": "CobhamGreen_003438",
+            "score": 82.2,
+            "is_reciprocal": true
+        },
+        {
+            "source": "CobhamGreen_003458",
+            "target": "Dandie_003406",
+            "score": 71.2,
+            "is_reciprocal": false
+        },
+        {
+            "source": "Dandie_003389",
+            "target": "Dandie_003406",
+            "score": 62.7,
+            "is_reciprocal": false
+        },
+        {
+            "source": "Dandie_003390",
+            "target": "Dandie_003406",
+            "score": 66.0,
+            "is_reciprocal": false
+        },
+        {
+            "source": "Dandie_003406",
+            "target": "Dandie_003414",
+            "score": 73.4,
+            "is_reciprocal": false
+        },
+        {
+            "source": "Dandie_003416",
+            "target": "Dandie_003406",
+            "score": 61.7,
+            "is_reciprocal": false
+        },
+        {
+            "source": "Dandie_003406",
+            "target": "ElDoradoDiff_003401",
+            "score": 78.3,
+            "is_reciprocal": true
+        },
+        {
+            "source": "Dandie_003406",
+            "target": "Salinas_003419",
+            "score": 81.9,
             "is_reciprocal": true
         },
         {
@@ -462,8 +1122,80 @@
             "is_reciprocal": false
         },
         {
+            "source": "Dandie_003411",
+            "target": "CobhamGreen_003443",
+            "score": 83.1,
+            "is_reciprocal": true
+        },
+        {
+            "source": "Dandie_003411",
+            "target": "Dandie_003414",
+            "score": 85.7,
+            "is_reciprocal": true
+        },
+        {
+            "source": "Dandie_003411",
+            "target": "ElDoradoDiff_003400",
+            "score": 84.6,
+            "is_reciprocal": false
+        },
+        {
+            "source": "Dandie_003411",
+            "target": "Salinas_003418",
+            "score": 80.0,
+            "is_reciprocal": false
+        },
+        {
             "source": "Dandie_003414",
             "target": "GreenTowers_003426",
+            "score": 83.7,
+            "is_reciprocal": true
+        },
+        {
+            "source": "CobhamGreen_003442",
+            "target": "Dandie_003414",
+            "score": 75.7,
+            "is_reciprocal": false
+        },
+        {
+            "source": "Dandie_003414",
+            "target": "CobhamGreen_003443",
+            "score": 80.7,
+            "is_reciprocal": false
+        },
+        {
+            "source": "CobhamGreen_003447",
+            "target": "Dandie_003414",
+            "score": 78.8,
+            "is_reciprocal": false
+        },
+        {
+            "source": "Dandie_003406",
+            "target": "Dandie_003414",
+            "score": 73.4,
+            "is_reciprocal": false
+        },
+        {
+            "source": "Dandie_003414",
+            "target": "Dandie_003411",
+            "score": 85.7,
+            "is_reciprocal": true
+        },
+        {
+            "source": "Dandie_003414",
+            "target": "ElDoradoDiff_003400",
+            "score": 85.5,
+            "is_reciprocal": true
+        },
+        {
+            "source": "Dandie_003414",
+            "target": "ElDoradoDiff_003402",
+            "score": 85.5,
+            "is_reciprocal": true
+        },
+        {
+            "source": "Dandie_003414",
+            "target": "Salinas_003418",
             "score": 83.7,
             "is_reciprocal": true
         },
@@ -474,8 +1206,68 @@
             "is_reciprocal": false
         },
         {
+            "source": "Dandie_003416",
+            "target": "CobhamGreen_003438",
+            "score": 70.0,
+            "is_reciprocal": false
+        },
+        {
+            "source": "Dandie_003416",
+            "target": "Dandie_003406",
+            "score": 61.7,
+            "is_reciprocal": false
+        },
+        {
+            "source": "Dandie_003416",
+            "target": "ElDoradoDiff_003401",
+            "score": 70.9,
+            "is_reciprocal": false
+        },
+        {
+            "source": "Dandie_003416",
+            "target": "Salinas_003419",
+            "score": 71.8,
+            "is_reciprocal": false
+        },
+        {
+            "source": "Dandie_003432",
+            "target": "ElDoradoDiff_003399",
+            "score": 60.0,
+            "is_reciprocal": true
+        },
+        {
             "source": "ElDoradoDiff_000036",
             "target": "GreenTowers_000046",
+            "score": 95.2,
+            "is_reciprocal": true
+        },
+        {
+            "source": "ElDoradoDiff_000036",
+            "target": "CobhamGreen_000035",
+            "score": 94.5,
+            "is_reciprocal": true
+        },
+        {
+            "source": "ElDoradoDiff_000036",
+            "target": "Dandie_000032",
+            "score": 96.0,
+            "is_reciprocal": true
+        },
+        {
+            "source": "ElDoradoDiff_003392",
+            "target": "ElDoradoDiff_000036",
+            "score": 56.7,
+            "is_reciprocal": false
+        },
+        {
+            "source": "ElDoradoDiff_000036",
+            "target": "ElDoradoDiff_003401",
+            "score": 56.8,
+            "is_reciprocal": false
+        },
+        {
+            "source": "ElDoradoDiff_000036",
+            "target": "Salinas_000047",
             "score": 95.2,
             "is_reciprocal": true
         },
@@ -486,8 +1278,50 @@
             "is_reciprocal": true
         },
         {
+            "source": "ElDoradoDiff_003392",
+            "target": "CobhamGreen_003423",
+            "score": 96.1,
+            "is_reciprocal": true
+        },
+        {
+            "source": "ElDoradoDiff_003392",
+            "target": "Dandie_003388",
+            "score": 96.7,
+            "is_reciprocal": true
+        },
+        {
+            "source": "ElDoradoDiff_003392",
+            "target": "ElDoradoDiff_000036",
+            "score": 56.7,
+            "is_reciprocal": false
+        },
+        {
+            "source": "ElDoradoDiff_003392",
+            "target": "Salinas_003412",
+            "score": 96.5,
+            "is_reciprocal": true
+        },
+        {
             "source": "ElDoradoDiff_003393",
             "target": "GreenTowers_003420",
+            "score": 78.4,
+            "is_reciprocal": true
+        },
+        {
+            "source": "ElDoradoDiff_003393",
+            "target": "CobhamGreen_003424",
+            "score": 77.6,
+            "is_reciprocal": true
+        },
+        {
+            "source": "ElDoradoDiff_003393",
+            "target": "Dandie_003389",
+            "score": 78.9,
+            "is_reciprocal": true
+        },
+        {
+            "source": "ElDoradoDiff_003393",
+            "target": "Salinas_003413",
             "score": 78.4,
             "is_reciprocal": true
         },
@@ -498,9 +1332,93 @@
             "is_reciprocal": true
         },
         {
+            "source": "ElDoradoDiff_003394",
+            "target": "CobhamGreen_003425",
+            "score": 96.7,
+            "is_reciprocal": true
+        },
+        {
+            "source": "ElDoradoDiff_003394",
+            "target": "Dandie_003390",
+            "score": 96.8,
+            "is_reciprocal": true
+        },
+        {
+            "source": "ElDoradoDiff_003394",
+            "target": "ElDoradoDiff_003401",
+            "score": 66.7,
+            "is_reciprocal": false
+        },
+        {
+            "source": "ElDoradoDiff_003394",
+            "target": "Salinas_003414",
+            "score": 83.5,
+            "is_reciprocal": true
+        },
+        {
+            "source": "ElDoradoDiff_003397",
+            "target": "CobhamGreen_003458",
+            "score": 55.7,
+            "is_reciprocal": false
+        },
+        {
+            "source": "ElDoradoDiff_003399",
+            "target": "Dandie_003432",
+            "score": 60.0,
+            "is_reciprocal": true
+        },
+        {
             "source": "ElDoradoDiff_003400",
             "target": "GreenTowers_003426",
             "score": 83.1,
+            "is_reciprocal": false
+        },
+        {
+            "source": "CobhamGreen_003442",
+            "target": "ElDoradoDiff_003400",
+            "score": 75.3,
+            "is_reciprocal": false
+        },
+        {
+            "source": "ElDoradoDiff_003400",
+            "target": "CobhamGreen_003443",
+            "score": 87.1,
+            "is_reciprocal": true
+        },
+        {
+            "source": "CobhamGreen_003447",
+            "target": "ElDoradoDiff_003400",
+            "score": 79.4,
+            "is_reciprocal": false
+        },
+        {
+            "source": "Dandie_003411",
+            "target": "ElDoradoDiff_003400",
+            "score": 84.6,
+            "is_reciprocal": false
+        },
+        {
+            "source": "ElDoradoDiff_003400",
+            "target": "Dandie_003414",
+            "score": 85.5,
+            "is_reciprocal": true
+        },
+        {
+            "source": "ElDoradoDiff_003401",
+            "target": "ElDoradoDiff_003400",
+            "score": 68.0,
+            "is_reciprocal": false
+        },
+        {
+            "source": "ElDoradoDiff_003400",
+            "target": "ElDoradoDiff_003402",
+            "score": 81.0,
+            "is_reciprocal": true
+        },
+        {
+            "source": "ElDoradoDiff_003400",
+            "target": "Salinas_003418",
+            "score": 83.8,
             "is_reciprocal": false
         },
         {
@@ -510,9 +1428,87 @@
             "is_reciprocal": true
         },
         {
+            "source": "CobhamGreen_003426",
+            "target": "ElDoradoDiff_003401",
+            "score": 59.7,
+            "is_reciprocal": false
+        },
+        {
+            "source": "ElDoradoDiff_003401",
+            "target": "CobhamGreen_003438",
+            "score": 92.6,
+            "is_reciprocal": true
+        },
+        {
+            "source": "CobhamGreen_003458",
+            "target": "ElDoradoDiff_003401",
+            "score": 73.7,
+            "is_reciprocal": false
+        },
+        {
+            "source": "ElDoradoDiff_003401",
+            "target": "Dandie_003406",
+            "score": 78.3,
+            "is_reciprocal": true
+        },
+        {
+            "source": "Dandie_003416",
+            "target": "ElDoradoDiff_003401",
+            "score": 70.9,
+            "is_reciprocal": false
+        },
+        {
+            "source": "ElDoradoDiff_000036",
+            "target": "ElDoradoDiff_003401",
+            "score": 56.8,
+            "is_reciprocal": false
+        },
+        {
+            "source": "ElDoradoDiff_003394",
+            "target": "ElDoradoDiff_003401",
+            "score": 66.7,
+            "is_reciprocal": false
+        },
+        {
+            "source": "ElDoradoDiff_003401",
+            "target": "ElDoradoDiff_003400",
+            "score": 68.0,
+            "is_reciprocal": false
+        },
+        {
+            "source": "ElDoradoDiff_003401",
+            "target": "Salinas_003419",
+            "score": 90.0,
+            "is_reciprocal": true
+        },
+        {
             "source": "ElDoradoDiff_003402",
             "target": "GreenTowers_003426",
             "score": 86.1,
+            "is_reciprocal": true
+        },
+        {
+            "source": "ElDoradoDiff_003402",
+            "target": "CobhamGreen_003443",
+            "score": 77.0,
+            "is_reciprocal": false
+        },
+        {
+            "source": "ElDoradoDiff_003402",
+            "target": "Dandie_003414",
+            "score": 85.4,
+            "is_reciprocal": false
+        },
+        {
+            "source": "ElDoradoDiff_003402",
+            "target": "ElDoradoDiff_003400",
+            "score": 81.0,
+            "is_reciprocal": true
+        },
+        {
+            "source": "ElDoradoDiff_003402",
+            "target": "Salinas_003418",
+            "score": 86.0,
             "is_reciprocal": true
         },
         {
@@ -522,9 +1518,57 @@
             "is_reciprocal": true
         },
         {
+            "source": "Salinas_000047",
+            "target": "CobhamGreen_000035",
+            "score": 96.1,
+            "is_reciprocal": true
+        },
+        {
+            "source": "Salinas_000047",
+            "target": "Dandie_000032",
+            "score": 96.9,
+            "is_reciprocal": true
+        },
+        {
+            "source": "Salinas_000047",
+            "target": "ElDoradoDiff_000036",
+            "score": 95.2,
+            "is_reciprocal": true
+        },
+        {
+            "source": "Salinas_000047",
+            "target": "Salinas_003412",
+            "score": 57.3,
+            "is_reciprocal": true
+        },
+        {
             "source": "Salinas_003412",
             "target": "GreenTowers_003419",
             "score": 100.0,
+            "is_reciprocal": true
+        },
+        {
+            "source": "Salinas_003412",
+            "target": "CobhamGreen_003423",
+            "score": 95.6,
+            "is_reciprocal": true
+        },
+        {
+            "source": "Salinas_003412",
+            "target": "Dandie_003388",
+            "score": 95.1,
+            "is_reciprocal": true
+        },
+        {
+            "source": "Salinas_003412",
+            "target": "ElDoradoDiff_003392",
+            "score": 96.5,
+            "is_reciprocal": true
+        },
+        {
+            "source": "Salinas_003412",
+            "target": "Salinas_000047",
+            "score": 57.3,
             "is_reciprocal": true
         },
         {
@@ -534,10 +1578,58 @@
             "is_reciprocal": true
         },
         {
+            "source": "Salinas_003413",
+            "target": "CobhamGreen_003424",
+            "score": 97.7,
+            "is_reciprocal": true
+        },
+        {
+            "source": "Salinas_003413",
+            "target": "Dandie_003389",
+            "score": 98.7,
+            "is_reciprocal": true
+        },
+        {
+            "source": "Salinas_003413",
+            "target": "ElDoradoDiff_003393",
+            "score": 78.4,
+            "is_reciprocal": true
+        },
+        {
+            "source": "Salinas_003413",
+            "target": "Salinas_003419",
+            "score": 64.4,
+            "is_reciprocal": false
+        },
+        {
             "source": "Salinas_003414",
             "target": "GreenTowers_003421",
             "score": 100.0,
             "is_reciprocal": true
+        },
+        {
+            "source": "Salinas_003414",
+            "target": "CobhamGreen_003425",
+            "score": 83.2,
+            "is_reciprocal": true
+        },
+        {
+            "source": "Salinas_003414",
+            "target": "Dandie_003390",
+            "score": 83.0,
+            "is_reciprocal": true
+        },
+        {
+            "source": "Salinas_003414",
+            "target": "ElDoradoDiff_003394",
+            "score": 83.5,
+            "is_reciprocal": true
+        },
+        {
+            "source": "Salinas_003414",
+            "target": "Salinas_003419",
+            "score": 57.9,
+            "is_reciprocal": false
         },
         {
             "source": "Salinas_003415",
@@ -552,9 +1644,111 @@
             "is_reciprocal": true
         },
         {
+            "source": "CobhamGreen_003442",
+            "target": "Salinas_003418",
+            "score": 72.4,
+            "is_reciprocal": false
+        },
+        {
+            "source": "Salinas_003418",
+            "target": "CobhamGreen_003443",
+            "score": 79.5,
+            "is_reciprocal": true
+        },
+        {
+            "source": "CobhamGreen_003447",
+            "target": "Salinas_003418",
+            "score": 75.1,
+            "is_reciprocal": false
+        },
+        {
+            "source": "Dandie_003411",
+            "target": "Salinas_003418",
+            "score": 80.0,
+            "is_reciprocal": false
+        },
+        {
+            "source": "Salinas_003418",
+            "target": "Dandie_003414",
+            "score": 83.7,
+            "is_reciprocal": true
+        },
+        {
+            "source": "ElDoradoDiff_003400",
+            "target": "Salinas_003418",
+            "score": 83.8,
+            "is_reciprocal": false
+        },
+        {
+            "source": "Salinas_003418",
+            "target": "ElDoradoDiff_003402",
+            "score": 86.0,
+            "is_reciprocal": true
+        },
+        {
+            "source": "Salinas_003418",
+            "target": "Salinas_003419",
+            "score": 66.0,
+            "is_reciprocal": true
+        },
+        {
             "source": "Salinas_003419",
             "target": "GreenTowers_003427",
             "score": 99.2,
+            "is_reciprocal": true
+        },
+        {
+            "source": "CobhamGreen_003426",
+            "target": "Salinas_003419",
+            "score": 58.8,
+            "is_reciprocal": false
+        },
+        {
+            "source": "Salinas_003419",
+            "target": "CobhamGreen_003438",
+            "score": 88.5,
+            "is_reciprocal": true
+        },
+        {
+            "source": "CobhamGreen_003458",
+            "target": "Salinas_003419",
+            "score": 72.6,
+            "is_reciprocal": false
+        },
+        {
+            "source": "Salinas_003419",
+            "target": "Dandie_003406",
+            "score": 81.9,
+            "is_reciprocal": true
+        },
+        {
+            "source": "Dandie_003416",
+            "target": "Salinas_003419",
+            "score": 71.8,
+            "is_reciprocal": false
+        },
+        {
+            "source": "Salinas_003419",
+            "target": "ElDoradoDiff_003401",
+            "score": 90.0,
+            "is_reciprocal": true
+        },
+        {
+            "source": "Salinas_003413",
+            "target": "Salinas_003419",
+            "score": 64.4,
+            "is_reciprocal": false
+        },
+        {
+            "source": "Salinas_003414",
+            "target": "Salinas_003419",
+            "score": 57.9,
+            "is_reciprocal": false
+        },
+        {
+            "source": "Salinas_003419",
+            "target": "Salinas_003418",
+            "score": 66.0,
             "is_reciprocal": true
         },
         {

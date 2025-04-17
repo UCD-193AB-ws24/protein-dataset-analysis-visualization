@@ -28,11 +28,7 @@
     if (selectedGenomes.includes(genome)) {
       selectedGenomes = selectedGenomes.filter(g => g !== genome);
     } else {
-      if (selectedGenomes.length < 3) {
-        selectedGenomes = [...selectedGenomes, genome];
-      } else {
-        console.error('You can only select up to 3 genomes.');
-      }
+      selectedGenomes = [...selectedGenomes, genome];
     }
   }
 

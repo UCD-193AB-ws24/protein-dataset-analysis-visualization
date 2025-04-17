@@ -6,6 +6,11 @@ from dotenv import load_dotenv
 from flask_cors import CORS
 from supabase import create_client, Client
 
+import pandas as pd
+import json
+import logging
+from io import BytesIO
+
 # Load environment variables
 load_dotenv()
 
@@ -64,6 +69,141 @@ def add_file_for_user(username, file_name):
 
 
 
+def parse_coordinates(coord_file):
+    df = pd.read_excel(BytesIO(coord_file.read()), engine='openpyxl')
+
+    df['name'] = df['name'].str.replace('^Lsativa_', '', regex=True)
+    df['protein_name'] = df['name'].str.split('_').str[-1]
+    df['genome_name'] = df['name'].str.split('_').str[0]
+    df['rel_position'] = df.groupby('genome_name')['position'].rank(method='first').astype(int)
+
+    return df[['name', 'genome_name', 'protein_name', 'position', 'rel_position', 'orientation']]
+
+
+def add_nodes(coords):
+    nodes = []
+
+    for i in range(len(coords)):
+        nodes.append({
+            "id" : '_'.join([coords['genome_name'][i], coords['protein_name'][i]]),
+            "genome_name": coords['genome_name'][i],
+            "protein_name": coords['protein_name'][i],
+            "direction": coords['orientation'][i],
+            "rel_position": int(coords['rel_position'][i]),
+        })
+    
+    return nodes
+
+def add_links(df_only_cutoffs, row_max, col_max):
+    links = []
+
+    for row in df_only_cutoffs.index:
+        for col in df_only_cutoffs.columns:
+            entry = {}
+            is_col_max = pd.notna(col_max.at[row, col])
+            is_row_max = pd.notna(row_max.at[row, col])
+
+            if is_row_max and is_col_max:
+                source = row
+                target = col
+                reciprocal_max = True
+            elif is_row_max:
+                source = row
+                target = col
+                reciprocal_max = False
+            elif is_col_max:
+                source = col
+                target = row
+                reciprocal_max = False
+            else:
+                continue  # skip non-max values
+
+
+            links.append({
+                "source": '_'.join([source.split('_')[0], source.split('_')[-1]]),
+                "target": '_'.join([target.split('_')[0], target.split('_')[-1]]),
+                "score": float(df_only_cutoffs.at[row, col]),
+                "is_reciprocal": reciprocal_max
+            })
+
+    return links
+
+def parse_matrix(matrix_file, coord_file):
+    df = pd.read_excel(BytesIO(matrix_file.read()), engine='openpyxl')
+    df = df.reset_index(drop=True)
+    df = df.set_index(df.columns[0])
+    df.index.name = None
+    df = df.dropna(how='all')
+    df = df.dropna(axis = 1, how='all')
+    print(df)
+
+    df_only_cutoffs = df[df > 55]
+
+    coords = parse_coordinates(coord_file)
+    print(coords)
+
+    output = {}
+
+    subsections = df_only_cutoffs.index.to_series().str.split("_").str[0].unique()
+
+    output["nodes"] = add_nodes(coords)
+
+
+    # Generate a dataframe with the column maxes compared to the row genomes
+    col_max = pd.DataFrame(index = df_only_cutoffs.index, columns = df_only_cutoffs.columns)
+
+    # Precompute a Series mapping each row to its subsection (faster than repeated str.startswith)
+    row_to_subsection = pd.Series(index=df_only_cutoffs.index, dtype="object")
+    for section in subsections:
+        row_to_subsection.loc[df_only_cutoffs.index.str.startswith(section)] = section
+
+    for col in df_only_cutoffs.columns:
+        temp = pd.DataFrame({
+            'value': df_only_cutoffs[col],
+            'subsection': row_to_subsection
+        })
+
+        # For each subsection, find the max and assign it
+        max_vals = temp.groupby('subsection')['value'].transform('max')
+        col_max[col] = df_only_cutoffs[col].where(df_only_cutoffs[col] == max_vals)
+
+    #print(col_max)
+
+    # Generate a dataframe with the row maxes compared to the row genomes
+    row_max = pd.DataFrame(index=df_only_cutoffs.index, columns=df_only_cutoffs.columns, dtype=float)
+
+    # Precompute a Series mapping each column to its subsection
+    col_to_subsection = pd.Series(index=df_only_cutoffs.columns, dtype="object")
+    for subsection in subsections:
+        col_to_subsection.loc[df_only_cutoffs.columns.str.startswith(subsection)] = subsection
+
+    # Now process each row efficiently
+    for idx, row in df_only_cutoffs.iterrows():
+        # Combine row values with their subsections
+        temp = pd.DataFrame({
+            'value': row,
+            'subsection': col_to_subsection
+        })
+
+        # Find max per subsection
+        max_vals = temp.groupby('subsection')['value'].transform('max')
+
+        # Keep only the max values per subsection in the row
+        row_max.loc[idx] = row.where(row == max_vals)
+
+   # print(row_max)
+
+    output["links"] = add_links(df_only_cutoffs, row_max, col_max)
+    #print(output)
+
+    #print(json_output)
+    #print(json.dumps(output, indent=4))
+
+    return output
+
+
+
+
 @app.route('/login', methods=['POST'])
 def printdata():
     req = request.get_json()
@@ -75,30 +215,57 @@ def printdata():
 
 @app.route('/upload', methods=['POST'])
 def upload_file():
-    if 'file' not in request.files:
+    if 'file_matrix' not in request.files:
+        return jsonify({"error": "No file provided"}), 400
+    
+    if 'file_coordinate' not in request.files:
         return jsonify({"error": "No file provided"}), 400
 
     if 'username' not in request.form:
         return jsonify({"error": "Username is required"}), 400
 
-    file = request.files['file']
+    file_matrix = request.files['file_matrix']
+    file_coordinate = request.files['file_coordinate']
     username = request.form['username']  # Get username from form data
     print(username)
 
-    original_filename = file.filename.rsplit('.', 1)[0]
-    file_extension = file.filename.rsplit('.', 1)[-1].lower()
-    idName = f"{original_filename}.{file_extension}" 
+
+    matrix_original_filename = file_matrix.filename.rsplit('.', 1)[0]
+    matrix_file_extension = file_matrix.filename.rsplit('.', 1)[-1].lower()
+    matrix_idName = f"{matrix_original_filename}.{matrix_file_extension}" 
 
     # Determine resource type
-    resource_type = "raw" if file_extension not in ["jpg", "jpeg", "png", "gif", "mp4", "mov"] else "auto"
+    matrix_resource_type = "raw" if matrix_file_extension not in ["jpg", "jpeg", "png", "gif", "mp4", "mov"] else "auto"
+
+    coordinate_original_filename = file_coordinate.filename.rsplit('.', 1)[0]
+    coordinate_file_extension = file_coordinate.filename.rsplit('.', 1)[-1].lower()
+    coordinate_idName = f"{coordinate_original_filename}.{coordinate_file_extension}" 
+
+    # Determine resource type
+    coordinate_resource_type = "raw" if coordinate_file_extension not in ["jpg", "jpeg", "png", "gif", "mp4", "mov"] else "auto"
+
+    logging.basicConfig(level=logging.DEBUG)
 
     try:
-        upload_result = cloudinary.uploader.upload(file, resource_type=resource_type, public_id=idName, overwrite=True)
-        add_file_for_user(username=username, file_name=idName)
-        return jsonify({
-            "message": "File uploaded successfully",
-            "url": upload_result['secure_url'],
-        })
+        # The uploads work but the parse_matrix doesn't work if the uploads are there for some reason
+        upload_result_matrix = cloudinary.uploader.upload(file_matrix, resource_type=matrix_resource_type, public_id=matrix_idName, overwrite=True)
+        add_file_for_user(username=username, file_name=matrix_idName)
+
+        upload_result_coordinate = cloudinary.uploader.upload(file_coordinate, resource_type=coordinate_resource_type, public_id=coordinate_idName, overwrite=True)
+        add_file_for_user(username=username, file_name=coordinate_idName)
+
+        ret_json = parse_matrix(file_matrix, file_coordinate)
+        # print(ret_json)
+
+        return jsonify([
+            {
+                "message": "File uploaded successfully",
+                # "matrix_url": upload_result_matrix['secure_url'],
+                # "coordinate_url": upload_result_coordinate['secure_url'],
+                "file": ret_json
+            }
+        ])
+            #jsonify(response_data)
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 

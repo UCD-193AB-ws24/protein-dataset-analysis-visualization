@@ -4,3 +4,4 @@ cloudinary
 flask-cors
 supabase
 zappa
+openpyxl

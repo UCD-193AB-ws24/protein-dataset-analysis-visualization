@@ -249,18 +249,17 @@ def upload_file():
     # logging.basicConfig(level=logging.DEBUG)
 
     try:
+        matrix_bytes = file_matrix.read()
+        coordinate_bytes = file_coordinate.read()
+
         # The uploads work but the parse_matrix doesn't work if the uploads are there for some reason
-        upload_result_matrix = cloudinary.uploader.upload(file_matrix, resource_type=matrix_resource_type, public_id=matrix_idName, overwrite=True)
-        print("first file uploaded to cloudinary")
+        upload_result_matrix = cloudinary.uploader.upload(BytesIO(matrix_bytes), resource_type=matrix_resource_type, public_id=matrix_idName, overwrite=True)
         add_file_for_user(username=username, file_name=matrix_idName)
-        print("first file uploaded to database")
 
-        upload_result_coordinate = cloudinary.uploader.upload(file_coordinate, resource_type=coordinate_resource_type, public_id=coordinate_idName, overwrite=True)
-        print("second file uploaded to cloudinary")
+        upload_result_coordinate = cloudinary.uploader.upload(BytesIO(coordinate_bytes), resource_type=coordinate_resource_type, public_id=coordinate_idName, overwrite=True)
         add_file_for_user(username=username, file_name=coordinate_idName)
-        print("second file uploaded to database")
 
-        ret_json = parse_matrix(file_matrix, file_coordinate)
+        ret_json = parse_matrix(BytesIO(matrix_bytes), BytesIO(coordinate_bytes))
         print(ret_json)
 
         return jsonify([

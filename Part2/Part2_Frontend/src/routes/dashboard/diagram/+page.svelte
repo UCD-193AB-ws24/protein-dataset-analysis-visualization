@@ -33,10 +33,16 @@
         throw new Error(`Failed to fetch graph data: ${response.statusText}`);
       }
 
-      graph = await response.json();
-      selectedGenomes = []; // Reset selected genomes when new data is fetched
+      const fetchedGraph = await response.json();
+      graph = fetchedGraph[0].file; // Update the graph with the fetched data
+      selectedGenomes = []; // Reset selected genomes
       filteredGraph = { nodes: [], links: [], genomes: [] }; // Reset filtered graph
       console.log('Graph data uploaded successfully:', graph);
+      console.log('Graph nodes:', graph.nodes);
+      console.log('Graph links:', graph.links);
+      console.log('Graph genomes:', graph.genomes);
+      // print the names of the properties of the graph object
+      console.log('Graph properties:', Object.keys(graph));
     } catch (error) {
       console.error('Error uploading files:', error);
     }
@@ -118,18 +124,22 @@
   <div>
     <h3>Select 3 Genomes:</h3>
     { console.log(graph.genomes) }
-    {#each graph.genomes as genome}
-      { console.log(genome) }
-      <label style="display: block;">
-        <input
-          type="checkbox"
-          value={genome}
-          on:change={() => toggleGenomeSelection(genome)}
-          checked={selectedGenomes.includes(genome)}
-        />
-        {genome}
-      </label>
-    {/each}
+    {#if graph.genomes}
+      {#each graph.genomes as genome}
+        { console.log(genome) }
+        <label style="display: block;">
+          <input
+            type="checkbox"
+            value={genome}
+            on:change={() => toggleGenomeSelection(genome)}
+            checked={selectedGenomes.includes(genome)}
+          />
+          {genome}
+        </label>
+      {/each}
+    {:else}
+      <p>Loading genomes...</p>
+    {/if}
   </div>
 
   <button on:click={filterGraph} disabled={selectedGenomes.length !== 3}>

@@ -7,6 +7,40 @@
   let cutoff = 0;            // slider value
   let selectedGenomes: string[] = [];
   let filteredGraph: typeof graph = { nodes: [], links: [], genomes: [] };
+  let matrixFile: File | null = null;
+  let coordsFile: File | null = null;
+
+  // Function to handle file uploads
+  async function uploadFiles() {
+    if (!matrixFile || !coordsFile) {
+      alert('Please select both matrix and coordinates files to upload.');
+      return;
+    }
+
+    const formData = new FormData();
+    formData.append('file_matrix', matrixFile);
+    formData.append('file_coordinate', coordsFile);
+    formData.append('username', localStorage.getItem('username') || ''); // Automatically send stored username
+
+    try {
+       // https://h47f781wh1.execute-api.us-east-1.amazonaws.com/dev/upload
+      const response = await fetch('http://127.0.0.1:5000/upload', {
+        method: 'POST',
+        body: formData,
+      });
+
+      if (!response.ok) {
+        throw new Error(`Failed to fetch graph data: ${response.statusText}`);
+      }
+
+      graph = await response.json();
+      selectedGenomes = []; // Reset selected genomes when new data is fetched
+      filteredGraph = { nodes: [], links: [], genomes: [] }; // Reset filtered graph
+      console.log('Graph data uploaded successfully:', graph);
+    } catch (error) {
+      console.error('Error uploading files:', error);
+    }
+  }
 
   // Function to switch data source
   function switchDataSource(source: string) {
@@ -59,8 +93,22 @@
   }
 </script>
 
+<!-- File upload section -->
+<div style="margin: 1rem; display: flex; align-items: center; gap: 1rem;">
+  <div>
+    <h3>Upload Matrix File:</h3>
+    <input type="file" on:change={(e) => matrixFile = (e.target as HTMLInputElement).files?.[0] || null} />
+  </div>
+  <div>
+    <h3>Upload Coordinates File:</h3>
+    <input type="file" on:change={(e) => coordsFile = (e.target as HTMLInputElement).files?.[0] || null} />
+  </div>
+  <button on:click={uploadFiles} disabled={!matrixFile || !coordsFile}>Upload and Prepare Graph</button>
+</div>
+
 <!-- Buttons to switch data source -->
-<div style="margin: 1rem; display: flex; gap: 1rem;">
+<div style="margin: 1rem; display: flex; align-items: center; gap: 1rem;">
+  <h3>Or, use dummy data:</h3>
   <button on:click={() => switchDataSource('dummy')}>Dummy Data</button>
   <button on:click={() => switchDataSource('test')}>Test Data</button>
 </div>
@@ -69,7 +117,9 @@
 <div style="margin: 1rem; display: flex; align-items: center; gap: 2rem;">
   <div>
     <h3>Select 3 Genomes:</h3>
+    { console.log(graph.genomes) }
     {#each graph.genomes as genome}
+      { console.log(genome) }
       <label style="display: block;">
         <input
           type="checkbox"

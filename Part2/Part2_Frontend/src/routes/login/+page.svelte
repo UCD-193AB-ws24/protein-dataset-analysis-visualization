@@ -11,7 +11,7 @@
 
 		try {
 			const response = await fetch(
-				'https://h47f781wh1.execute-api.us-east-1.amazonaws.com/dev/login',
+				'http://127.0.0.1:5000/login',
 				{
 					method: 'POST',
 					headers: {

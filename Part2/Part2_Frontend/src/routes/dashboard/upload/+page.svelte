@@ -1,7 +1,4 @@
 <script>
-	//import { files } from "$service-worker";
-    import { browser } from '$app/environment'
-
     let numFiles = 2;
     let uploads = Array(numFiles).fill(null);
     let username = localStorage.getItem("username") || ""; // Retrieve username

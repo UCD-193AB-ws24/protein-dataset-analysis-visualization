@@ -1,4 +1,11 @@
 {
+    "genomes": [
+        "ElDoradoDiff",
+        "GreenTowers",
+        "CobhamGreen",
+        "Dandie",
+        "Salinas"
+    ],
     "nodes": [
         {
             "id": "ElDoradoDiff_000036",

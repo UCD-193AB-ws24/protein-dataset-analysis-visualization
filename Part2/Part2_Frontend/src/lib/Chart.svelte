@@ -4,10 +4,11 @@
 
   /**
    * Props
-   *  - graph  : { nodes, links }
+   *  - graph  : { genomes, nodes, links }
    *  - cutoff : similarity threshold (0‑100). Links with score < cutoff are hidden.
    */
   export let graph: {
+    genomes: string[];
     nodes: Node[];
     links: Link[];
   };
@@ -52,7 +53,7 @@
   /* duplicate first‑genome nodes to bottom row */
   function massage(original: typeof graph) {
     if (!original) return { nodes: [], links: [], genomes: [] };
-    const genomes = Array.from(new Set(original.nodes.map((n) => n.genome_name)));
+    const genomes = original.genomes;
     const firstGenome = genomes[0];
     const dupSuffix = '__dup';
 
@@ -157,7 +158,26 @@
         return x(sourceNode.rel_position);
       })
       .attr('y1', (d) => y(rowOf(nodeById.get(d.source)!))! + y.bandwidth() / 2 + margin.top)
+
       .attr('x2', (d) => x(nodeById.get(d.target)!.rel_position))
+        // // Logging the target node for debugging, prob not needed anymore but keeping for reference
+        // try {
+        //   const targetNode = nodeById.get(d.target);
+        //   if (!targetNode) {
+        //     console.warn(`Node ${d} is problematic`, d)
+        //     return 0; // Default value if node is not found
+        //   }
+        //   if (targetNode?.rel_position == null) {
+        //     console.warn(`Node with ID ${d.target} is missing rel_position`);
+        //     return 0; // Default value if rel_position is missing
+        //   }
+        //   return x(targetNode.rel_position);
+        // } catch (error) {
+        //   console.error('Error getting target node:', error);
+        //   return 0; // Default value in case of error
+        // }
+        // console.log(d.target, nodeById.get(d.target), nodeById.get(d.target)!.rel_position);
+        // return x(nodeById.get(d.target)!.rel_position)
       .attr('y2', (d) => y(rowOf(nodeById.get(d.target)!))! + y.bandwidth() / 2 + margin.top)
       .attr('stroke-width', (d) => strokeW(d.score))
       .attr('stroke-dasharray', (d) => (d.is_reciprocal ? null : '4,4'))

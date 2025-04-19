@@ -261,14 +261,12 @@ def upload_file():
         ret_json = parse_matrix(BytesIO(matrix_bytes), BytesIO(coordinate_bytes))
         print(ret_json)
 
-        return jsonify([
-            {
+        return jsonify({
                 "message": "File uploaded successfully",
                 # "matrix_url": upload_result_matrix['secure_url'],
                 # "coordinate_url": upload_result_coordinate['secure_url'],
-                "file": ret_json
-            }
-        ])
+                "graph": ret_json
+            })
             #jsonify(response_data)
     except Exception as e:
         return jsonify({"error": str(e)}), 500

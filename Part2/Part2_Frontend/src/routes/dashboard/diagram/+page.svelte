@@ -34,15 +34,9 @@
       }
 
       const fetchedGraph = await response.json();
-      graph = fetchedGraph[0].file; // Update the graph with the fetched data
+      graph = fetchedGraph.graph; // Update the graph with the fetched data
       selectedGenomes = []; // Reset selected genomes
       filteredGraph = { nodes: [], links: [], genomes: [] }; // Reset filtered graph
-      console.log('Graph data uploaded successfully:', graph);
-      console.log('Graph nodes:', graph.nodes);
-      console.log('Graph links:', graph.links);
-      console.log('Graph genomes:', graph.genomes);
-      // print the names of the properties of the graph object
-      console.log('Graph properties:', Object.keys(graph));
     } catch (error) {
       console.error('Error uploading files:', error);
     }
@@ -93,9 +87,6 @@
       selectedGenomes.some(genome => link.source.includes(genome)) &&
       selectedGenomes.some(genome => link.target.includes(genome))
     );
-
-    console.log('Filtered graph:', filteredGraph);
-    console.log('Original graph:', graph);
   }
 </script>
 
@@ -123,10 +114,8 @@
 <div style="margin: 1rem; display: flex; align-items: center; gap: 2rem;">
   <div>
     <h3>Select 3 Genomes:</h3>
-    { console.log(graph.genomes) }
     {#if graph.genomes}
       {#each graph.genomes as genome}
-        { console.log(genome) }
         <label style="display: block;">
           <input
             type="checkbox"

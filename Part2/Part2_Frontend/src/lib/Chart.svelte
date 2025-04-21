@@ -142,6 +142,20 @@
       .attr('clip-path', 'url(#clip)')
       .append('g');
 
+    // ── HORIZONTAL LINES ──
+    content
+      .append('g')
+      .selectAll('line')
+      .data(d3.range(numRows))
+      .enter()
+      .append('line')
+      .attr('x1', margin.left)
+      .attr('x2', chartWidth - margin.right)
+      .attr('y1', (d) => y(d)! + y.bandwidth() / 2 + margin.top)
+      .attr('y2', (d) => y(d)! + y.bandwidth() / 2 + margin.top)
+      .attr('stroke', '#000')
+      .attr('stroke-width', 2)
+
     // LINKS
     const linkSel = content
       .append('g')

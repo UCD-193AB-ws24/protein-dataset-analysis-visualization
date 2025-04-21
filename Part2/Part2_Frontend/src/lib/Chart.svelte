@@ -1,6 +1,7 @@
 <script lang="ts">
   import { onMount, afterUpdate } from 'svelte';
   import * as d3 from 'd3';
+  import UnionFind from '$lib/UnionFind';
 
   /**
    * Props
@@ -52,7 +53,11 @@
 
   /* duplicate first‑genome nodes to bottom row */
   function massage(original: typeof graph) {
-    if (!original) return { nodes: [], links: [], genomes: [] };
+    if (!original) return {
+      nodes: [] as Node[],
+      links: [] as Link[],
+      genomes: [] as string[]
+    };
     const genomes = original.genomes;
     const firstGenome = genomes[0];
     const dupSuffix = '__dup';
@@ -82,14 +87,27 @@
       return l;
     });
 
-    return { nodes, links, genomes };
+    // UnionFind to group connected components by color
+    const uf = new UnionFind(nodes.map((n) => n.id));
+    links.forEach((l) => {
+      if (l.is_reciprocal) {
+        uf.union(l.source, l.target);
+      }
+    });
+
+    // Map CCs to colors
+    const componentRoots = new Set(nodes.map((n) => uf.find(n.id)));
+    const colorScale = d3.scaleOrdinal([...d3.schemeSet3]).domain([...componentRoots]);
+    const nodeColor = new Map(nodes.map((n) => [n.id, colorScale(uf.find(n.id))!]));
+
+    return { nodes, links, genomes, nodeColor };
   }
 
   // ────────────────────────────────────────────────────────────────
   //  Render
   // ────────────────────────────────────────────────────────────────
   function draw() {
-    const { nodes, links, genomes } = massage(graph);
+    const { nodes, links, genomes, nodeColor } = massage(graph);
     if (!nodes.length) return;
 
     // apply cutoff filter
@@ -163,39 +181,13 @@
       .data(visibleLinks)
       .enter()
       .append('line')
-      .attr('x1', (d) => {
-        const sourceNode = nodeById.get(d.source);
-        if (sourceNode?.rel_position == null) {
-          console.warn(`Node with ID ${d.source} is missing rel_position`);
-          return 0; // Default value if rel_position is missing
-        }
-        return x(sourceNode.rel_position);
-      })
+      .attr('x1', (d) => x(nodeById.get(d.source)!.rel_position))
       .attr('y1', (d) => y(rowOf(nodeById.get(d.source)!))! + y.bandwidth() / 2 + margin.top)
-
       .attr('x2', (d) => x(nodeById.get(d.target)!.rel_position))
-        // // Logging the target node for debugging, prob not needed anymore but keeping for reference
-        // try {
-        //   const targetNode = nodeById.get(d.target);
-        //   if (!targetNode) {
-        //     console.warn(`Node ${d} is problematic`, d)
-        //     return 0; // Default value if node is not found
-        //   }
-        //   if (targetNode?.rel_position == null) {
-        //     console.warn(`Node with ID ${d.target} is missing rel_position`);
-        //     return 0; // Default value if rel_position is missing
-        //   }
-        //   return x(targetNode.rel_position);
-        // } catch (error) {
-        //   console.error('Error getting target node:', error);
-        //   return 0; // Default value in case of error
-        // }
-        // console.log(d.target, nodeById.get(d.target), nodeById.get(d.target)!.rel_position);
-        // return x(nodeById.get(d.target)!.rel_position)
       .attr('y2', (d) => y(rowOf(nodeById.get(d.target)!))! + y.bandwidth() / 2 + margin.top)
       .attr('stroke-width', (d) => strokeW(d.score))
       .attr('stroke-dasharray', (d) => (d.is_reciprocal ? null : '4,4'))
-      .attr('stroke', '#444')
+      .attr('stroke', (d) => (d.is_reciprocal ? nodeColor?.get(d.source)! : '#bbb'))
       .on('mouseover', function (event, d) {
         d3.select(this).transition().duration(150).attr('stroke-width', strokeW(d.score) * 2);
         const n1 = nodeById.get(d.source)!;
@@ -223,7 +215,7 @@
       .enter()
       .append('path')
       .attr('d', (d) => arrowPath(d.direction))
-      .attr('fill', '#1f77b4')
+      .attr('fill', (d) => nodeColor?.get(d.id)!)
       .attr('transform', (d) => {
         const px = x(d.rel_position);
         const py = y(rowOf(d))! + y.bandwidth() / 2 + margin.top;

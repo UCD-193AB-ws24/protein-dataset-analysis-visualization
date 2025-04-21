@@ -85,7 +85,9 @@
           : { ...l, target: dupMap.get(l.target)! };
       }
       return l;
-    });
+    })
+    // Exclude links between genes of the same genome
+    .filter((l) => genomeOf.get(l.source) !== genomeOf.get(l.target));
 
     // UnionFind to group connected components by color
     const uf = new UnionFind(nodes.map((n) => n.id));
@@ -97,8 +99,22 @@
 
     // Map CCs to colors
     const componentRoots = new Set(nodes.map((n) => uf.find(n.id)));
-    const colorScale = d3.scaleOrdinal([...d3.schemeSet3]).domain([...componentRoots]);
-    const nodeColor = new Map(nodes.map((n) => [n.id, colorScale(uf.find(n.id))!]));
+    // const colorScale = d3.scaleOrdinal([...d3.schemeSet3]).domain([...componentRoots]);
+    const componentSize = new Map([...componentRoots].map((root) => [root, 0]));
+    nodes.forEach((n) => {
+      const root = uf.find(n.id);
+      componentSize.set(root, (componentSize.get(root) || 0) + 1);
+    });
+    const nonSingletonRoots = [...componentRoots].filter((root) => componentSize.get(root)! > 1);
+    const colorScale = d3.scaleOrdinal([...d3.schemeSet3]).domain(nonSingletonRoots);
+    // Gray-out CCs of size 1
+    const nodeColor = new Map(
+      nodes.map((n) => {
+      const root = uf.find(n.id);
+      return [n.id, componentSize.get(root) === 1 ? '#ccc' : colorScale(root)];
+      })
+    );
+    // const nodeColor = new Map(nodes.map((n) => [n.id, colorScale(uf.find(n.id))!]));
 
     return { nodes, links, genomes, nodeColor };
   }

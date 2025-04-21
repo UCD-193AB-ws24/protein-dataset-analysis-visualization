@@ -1,13 +1,15 @@
 <script lang="ts">
   import { onMount, afterUpdate } from 'svelte';
   import * as d3 from 'd3';
+  import UnionFind from '$lib/UnionFind';
 
   /**
    * Props
-   *  - graph  : { nodes, links }
+   *  - graph  : { genomes, nodes, links }
    *  - cutoff : similarity threshold (0‑100). Links with score < cutoff are hidden.
    */
   export let graph: {
+    genomes: string[];
     nodes: Node[];
     links: Link[];
   };
@@ -51,8 +53,12 @@
 
   /* duplicate first‑genome nodes to bottom row */
   function massage(original: typeof graph) {
-    if (!original) return { nodes: [], links: [], genomes: [] };
-    const genomes = Array.from(new Set(original.nodes.map((n) => n.genome_name)));
+    if (!original) return {
+      nodes: [] as Node[],
+      links: [] as Link[],
+      genomes: [] as string[]
+    };
+    const genomes = original.genomes;
     const firstGenome = genomes[0];
     const dupSuffix = '__dup';
 
@@ -79,16 +85,45 @@
           : { ...l, target: dupMap.get(l.target)! };
       }
       return l;
+    })
+    // Exclude links between genes of the same genome
+    .filter((l) => genomeOf.get(l.source) !== genomeOf.get(l.target));
+
+    // UnionFind to group connected components by color
+    const uf = new UnionFind(nodes.map((n) => n.id));
+    links.forEach((l) => {
+      if (l.is_reciprocal) {
+        uf.union(l.source, l.target);
+      }
     });
 
-    return { nodes, links, genomes };
+    // Map CCs to colors
+    const componentRoots = new Set(nodes.map((n) => uf.find(n.id)));
+    // const colorScale = d3.scaleOrdinal([...d3.schemeSet3]).domain([...componentRoots]);
+    const componentSize = new Map([...componentRoots].map((root) => [root, 0]));
+    nodes.forEach((n) => {
+      const root = uf.find(n.id);
+      componentSize.set(root, (componentSize.get(root) || 0) + 1);
+    });
+    const nonSingletonRoots = [...componentRoots].filter((root) => componentSize.get(root)! > 1);
+    const colorScale = d3.scaleOrdinal([...d3.schemeSet3]).domain(nonSingletonRoots);
+    // Gray-out CCs of size 1
+    const nodeColor = new Map(
+      nodes.map((n) => {
+      const root = uf.find(n.id);
+      return [n.id, componentSize.get(root) === 1 ? '#ccc' : colorScale(root)];
+      })
+    );
+    // const nodeColor = new Map(nodes.map((n) => [n.id, colorScale(uf.find(n.id))!]));
+
+    return { nodes, links, genomes, nodeColor };
   }
 
   // ────────────────────────────────────────────────────────────────
   //  Render
   // ────────────────────────────────────────────────────────────────
   function draw() {
-    const { nodes, links, genomes } = massage(graph);
+    const { nodes, links, genomes, nodeColor } = massage(graph);
     if (!nodes.length) return;
 
     // apply cutoff filter
@@ -141,6 +176,20 @@
       .attr('clip-path', 'url(#clip)')
       .append('g');
 
+    // ── HORIZONTAL LINES ──
+    content
+      .append('g')
+      .selectAll('line')
+      .data(d3.range(numRows))
+      .enter()
+      .append('line')
+      .attr('x1', margin.left)
+      .attr('x2', chartWidth - margin.right)
+      .attr('y1', (d) => y(d)! + y.bandwidth() / 2 + margin.top)
+      .attr('y2', (d) => y(d)! + y.bandwidth() / 2 + margin.top)
+      .attr('stroke', '#000')
+      .attr('stroke-width', 2)
+
     // LINKS
     const linkSel = content
       .append('g')
@@ -148,20 +197,13 @@
       .data(visibleLinks)
       .enter()
       .append('line')
-      .attr('x1', (d) => {
-        const sourceNode = nodeById.get(d.source);
-        if (sourceNode?.rel_position == null) {
-          console.warn(`Node with ID ${d.source} is missing rel_position`);
-          return 0; // Default value if rel_position is missing
-        }
-        return x(sourceNode.rel_position);
-      })
+      .attr('x1', (d) => x(nodeById.get(d.source)!.rel_position))
       .attr('y1', (d) => y(rowOf(nodeById.get(d.source)!))! + y.bandwidth() / 2 + margin.top)
       .attr('x2', (d) => x(nodeById.get(d.target)!.rel_position))
       .attr('y2', (d) => y(rowOf(nodeById.get(d.target)!))! + y.bandwidth() / 2 + margin.top)
       .attr('stroke-width', (d) => strokeW(d.score))
       .attr('stroke-dasharray', (d) => (d.is_reciprocal ? null : '4,4'))
-      .attr('stroke', '#444')
+      .attr('stroke', (d) => (d.is_reciprocal ? nodeColor?.get(d.source)! : '#bbb'))
       .on('mouseover', function (event, d) {
         d3.select(this).transition().duration(150).attr('stroke-width', strokeW(d.score) * 2);
         const n1 = nodeById.get(d.source)!;
@@ -189,7 +231,7 @@
       .enter()
       .append('path')
       .attr('d', (d) => arrowPath(d.direction))
-      .attr('fill', '#1f77b4')
+      .attr('fill', (d) => nodeColor?.get(d.id)!)
       .attr('transform', (d) => {
         const px = x(d.rel_position);
         const py = y(rowOf(d))! + y.bandwidth() / 2 + margin.top;

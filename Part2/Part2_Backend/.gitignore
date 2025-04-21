@@ -13,7 +13,8 @@ dist-ssr
 *.local
 zappa_settings.json
 venv/
-
+.venv/
+__pycache__
 
 # Editor directories and files
 .vscode/*

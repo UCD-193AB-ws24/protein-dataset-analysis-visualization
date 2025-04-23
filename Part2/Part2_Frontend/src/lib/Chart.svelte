@@ -97,6 +97,19 @@
       }
     });
 
+    // TODO: look into this, need to see how necessary it is
+    // Add to union-find structure "links" bewtween first-genome and duplicated nodes
+    // nodes.forEach((n) => {
+    //   if (n._dup) {
+    //     const originalId = n.id.slice(0, -dupSuffix.length);
+    //     const originalNode = nodes.find((o) => o.id === originalId);
+    //     if (originalNode) {
+    //       uf.union(n.id, originalId);
+    //     }
+    //   }
+    // });
+
+
     // Map CCs to colors
     const componentRoots = new Set(nodes.map((n) => uf.find(n.id)));
     // const colorScale = d3.scaleOrdinal([...d3.schemeSet3]).domain([...componentRoots]);

@@ -68,8 +68,6 @@ def add_file_for_user(username, file_name):
         return {"error": "User not found"}
 
 
-
-
 def parse_coordinates(coord_file):
     df = pd.read_excel(BytesIO(coord_file.read()), engine='openpyxl')
 

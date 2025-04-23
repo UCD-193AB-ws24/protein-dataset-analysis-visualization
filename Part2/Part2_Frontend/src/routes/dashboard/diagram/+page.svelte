@@ -9,6 +9,7 @@
   let filteredGraph: typeof graph = { nodes: [], links: [], genomes: [] };
   let matrixFile: File | null = null;
   let coordsFile: File | null = null;
+  let errorMessage = "";
 
   // Function to handle file uploads
   async function uploadFiles() {
@@ -30,7 +31,8 @@
       });
 
       if (!response.ok) {
-        throw new Error(`Failed to fetch graph data: ${response.statusText}`);
+        const errorData = await response.json();
+        throw new Error(errorData.error || `Upload failed: ${response.statusText}`);
       }
 
       const fetchedGraph = await response.json();
@@ -38,7 +40,11 @@
       selectedGenomes = []; // Reset selected genomes
       filteredGraph = { nodes: [], links: [], genomes: [] }; // Reset filtered graph
     } catch (error) {
-      console.error('Error uploading files:', error);
+      errorMessage = error.message || "An error occurred.";
+      console.error('Detailed error:', {
+          status: error.response?.status,
+          data: await error.response?.text()
+      });
     }
   }
 
@@ -101,6 +107,9 @@
     <input type="file" on:change={(e) => coordsFile = (e.target as HTMLInputElement).files?.[0] || null} />
   </div>
   <button on:click={uploadFiles} disabled={!matrixFile || !coordsFile}>Upload and Prepare Graph</button>
+  {#if errorMessage}
+        <p class="error">{errorMessage}</p>
+  {/if}
 </div>
 
 <!-- Buttons to switch data source -->

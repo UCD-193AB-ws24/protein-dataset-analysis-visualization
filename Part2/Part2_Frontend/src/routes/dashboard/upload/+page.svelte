@@ -30,7 +30,8 @@
             });
 
             if (!response.ok) {
-                throw new Error(`Upload failed: ${response.statusText}`);
+                const errorData = await response.json();
+                throw new Error(errorData.error || `Upload failed: ${response.statusText}`);
             }
 
             const data = await response.json();

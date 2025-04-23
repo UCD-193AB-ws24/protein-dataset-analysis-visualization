@@ -10,6 +10,7 @@ import pandas as pd
 import json
 import logging
 from io import BytesIO
+from datetime import datetime
 
 # Load environment variables
 load_dotenv()
@@ -129,9 +130,7 @@ def add_links(df_only_cutoffs, row_max, col_max):
     return links
 
 def parse_matrix(matrix_file, coord_file):
-    print("Parsing matrix file...")
     df = pd.read_excel(BytesIO(matrix_file.read()), engine='openpyxl')
-    print("Matrix file parsed.")
     df = df.reset_index(drop=True)
     df = df.set_index(df.columns[0])
     df.index.name = None
@@ -168,8 +167,6 @@ def parse_matrix(matrix_file, coord_file):
         max_vals = temp.groupby('subsection')['value'].transform('max')
         col_max[col] = df_only_cutoffs[col].where(df_only_cutoffs[col] == max_vals)
 
-    #print(col_max)
-
     # Generate a dataframe with the row maxes compared to the row genomes
     row_max = pd.DataFrame(index=df_only_cutoffs.index, columns=df_only_cutoffs.columns, dtype=float)
 
@@ -192,17 +189,9 @@ def parse_matrix(matrix_file, coord_file):
         # Keep only the max values per subsection in the row
         row_max.loc[idx] = row.where(row == max_vals)
 
-   # print(row_max)
-
     output["links"] = add_links(df_only_cutoffs, row_max, col_max)
-    #print(output)
-
-    #print(json_output)
-    #print(json.dumps(output, indent=4))
 
     return output
-
-
 
 
 @app.route('/login', methods=['POST'])
@@ -213,6 +202,191 @@ def printdata():
         return jsonify({"msg": "login success"}), 200
     return jsonify({"msg": "login failed"}), 400
 
+
+@app.route('/generate_graph', methods=['POST'])
+def generate_graph():
+    if 'file_matrix' not in request.files or 'file_coordinate' not in request.files:
+        return jsonify({"error": "Both matrix and coordinate files are required"}), 400
+
+    print(f"Request Form Data: {request.form}")
+    print(f"Request Files: {request.files}")
+
+    # Assumes only one matrix file uploaded, TODO: support multiple in the future
+    file_matrix = request.files['file_matrix']
+    file_coordinate = request.files['file_coordinate']
+    is_domain_specific = request.form.get('is_domain_specific', 'false').lower() == 'true'
+
+    try:
+        matrix_bytes = file_matrix.read()
+        coordinate_bytes = file_coordinate.read()
+
+        graph = parse_matrix(BytesIO(matrix_bytes), BytesIO(coordinate_bytes))
+        num_genes = len(graph["nodes"])
+        num_domains = 1     # Placeholder, adjust in the future
+        is_domain_specific = False  # Placeholder, adjust in the future
+
+        return jsonify({
+            "message": "Graph generated successfully",
+            "graph": graph,
+            "num_genes": num_genes,
+            "num_domains": num_domains,
+            "is_domain_specific": is_domain_specific
+        }), 200
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+
+@app.route('/save', methods=['POST'])
+def save_files():
+    print(f"Request Form Data: {request.form}")
+    print(f"Request Files: {request.files}")
+
+    if 'file_matrix' not in request.files:
+        return jsonify({"error": "No matrix file provided"}), 400
+
+    if 'file_coordinate' not in request.files:
+        return jsonify({"error": "No coordinate file provided"}), 400
+
+    if 'username' not in request.form:
+        return jsonify({"error": "Username is required"}), 400
+
+    username = request.form['username']
+    file_matrix = request.files['file_matrix']
+    file_coordinate = request.files['file_coordinate']
+
+    # Metadata for file group
+    title = request.form.get('title')
+    description = request.form.get('description')
+    is_domain_specific = request.form.get('is_domain_specific', 'false').lower() == 'true'
+    genomes = request.form.get('genomes', '[]')
+    num_genes = request.form.get('num_genes')
+    num_domains = request.form.get('num_domains')
+
+    try:
+        # Get user ID
+        user_response = (
+            supabase.table("users_new")
+            .select("id")
+            .eq("username", username)
+            .execute()
+        )
+        if not user_response.data:
+            return jsonify({"error": "User not found"}), 404
+        user_id = user_response.data[0]["id"]
+
+        # Upload files to Cloudinary
+        # Below chunk modified from upload_file function, will need to be refactored
+
+        # Add datetime to filename to avoid overwriting
+        timestamp = datetime.now().strftime("%Y%m%d%H%M%S")
+
+        matrix_original_filename = file_matrix.filename.rsplit('.', 1)[0]
+        matrix_file_extension = file_matrix.filename.rsplit('.', 1)[-1].lower()
+        matrix_idName = f"{matrix_original_filename}_{timestamp}.{matrix_file_extension}"
+
+        # Determine resource type
+        matrix_resource_type = "raw" if matrix_file_extension not in ["jpg", "jpeg", "png", "gif", "mp4", "mov"] else "auto"
+
+        coordinate_original_filename = file_coordinate.filename.rsplit('.', 1)[0]
+        coordinate_file_extension = file_coordinate.filename.rsplit('.', 1)[-1].lower()
+        coordinate_idName = f"{coordinate_original_filename}_{timestamp}.{coordinate_file_extension}"
+
+        # Determine resource type
+        coordinate_resource_type = "raw" if coordinate_file_extension not in ["jpg", "jpeg", "png", "gif", "mp4", "mov"] else "auto"
+
+        matrix_bytes = file_matrix.read()
+        coordinate_bytes = file_coordinate.read()
+
+        upload_result_matrix = cloudinary.uploader.upload(BytesIO(matrix_bytes), resource_type=matrix_resource_type, public_id=matrix_idName, overwrite=True)
+        upload_result_coordinate = cloudinary.uploader.upload(BytesIO(coordinate_bytes), resource_type=coordinate_resource_type, public_id=coordinate_idName, overwrite=True)
+
+        # Insert into groups table
+        group_response = (
+            supabase.table("groups")
+            .insert({
+                "user_id": user_id,
+                "title": title,
+                "description": description,
+                "is_domain_specific": is_domain_specific,
+                "genomes": json.loads(genomes),
+                "num_genes": int(num_genes),
+                "num_domains": int(num_domains)
+            })
+            .execute()
+        )
+
+        group_id = group_response.data[0]["id"]
+
+        # Insert files
+        supabase.table("files").insert([
+            {
+                "group_id": group_id,
+                "user_id": user_id,
+                "file_name": file_matrix.filename,
+                "s3_key": upload_result_matrix['public_id'],
+                "file_type": "matrix"
+            },
+            {
+                "group_id": group_id,
+                "user_id": user_id,
+                "file_name": file_coordinate.filename,
+                "s3_key": upload_result_coordinate['public_id'],
+                "file_type": "coordinate"
+            }
+        ]).execute()
+
+        return jsonify({"message": "Files saved successfully"}), 200
+
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+@app.route('/get_user_file_groups', methods=['POST'])
+def get_user_file_groups():
+    # Extract username from request JSON
+    req = request.get_json()
+    username = req.get("username")
+
+    if not username:
+        return jsonify({"error": "Username is required"}), 400
+
+    try:
+        # Get user ID from Supabase
+        user_response = (
+            supabase.table("users_new")
+            .select("id")
+            .eq("username", username)
+            .execute()
+        )
+
+        if not user_response.data:
+            return jsonify({"error": "User not found"}), 404
+
+        user_id = user_response.data[0]["id"]
+
+        # Get all file groups associated with the user ID
+        file_groups_response = (
+            supabase.table("groups")
+            .select("""
+                id,
+                title,
+                description,
+                is_domain_specific,
+                genomes,
+                num_genes,
+                num_domains,
+                files(file_name, file_type)
+                """)
+            .eq("user_id", user_id)
+            .execute()
+        )
+
+        if not file_groups_response.data:
+            return jsonify({"error": "No file groups found for this user"}), 404
+
+        return jsonify({"file_groups": file_groups_response.data}), 200
+
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
 
 @app.route('/upload', methods=['POST'])
 def upload_file():
@@ -251,7 +425,6 @@ def upload_file():
         matrix_bytes = file_matrix.read()
         coordinate_bytes = file_coordinate.read()
 
-        # The uploads work but the parse_matrix doesn't work if the uploads are there for some reason
         upload_result_matrix = cloudinary.uploader.upload(BytesIO(matrix_bytes), resource_type=matrix_resource_type, public_id=matrix_idName, overwrite=True)
         add_file_for_user(username=username, file_name=matrix_idName)
 

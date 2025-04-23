@@ -3,28 +3,58 @@
   import dummyGraph from '$lib/dummy-graph.json';
   import testGraph from '$lib/test.json';
 
-  let graph = dummyGraph;
-  let cutoff = 0;            // slider value
+  interface Node {
+    id: string;
+    genome_name: string;
+    protein_name: string;
+    direction: string;   // "plus" | "minus"
+    rel_position: number;
+    _dup?: boolean;      // internal flag for duplicated bottom‑row copy
+  }
+
+  interface Link {
+    source: string;
+    target: string;
+    score: number;       // 0‑100
+    is_reciprocal: boolean;
+  }
+
+  interface Graph {
+    nodes: Node[];
+    links: Link[];
+    genomes: string[];   // list of genome names
+  }
+
+  let graph: Graph = { nodes: [], links: [], genomes: [] };
   let selectedGenomes: string[] = [];
-  let filteredGraph: typeof graph = { nodes: [], links: [], genomes: [] };
-  let matrixFile: File | null = null;
+  let filteredGraph: Graph = { nodes: [], links: [], genomes: [] };
+  let matrixFile: File | null = null;   // TODO: update to support multiple files
   let coordsFile: File | null = null;
+  let cutoff = 0;            // slider value
+  let isDomainSpecific = false;
+
+  // Form information if user choses to save graph
+  let title = '';
+  let description = '';
+  let numGenes = 0;
+  let numDomains = 1;
 
   // Function to handle file uploads
   async function uploadFiles() {
-    if (!matrixFile || !coordsFile) {
-      alert('Please select both matrix and coordinates files to upload.');
+    if (!coordsFile || !matrixFile) {
+      alert('Please select matrix and coordinates files to upload.');
       return;
     }
 
     const formData = new FormData();
-    formData.append('file_matrix', matrixFile);
     formData.append('file_coordinate', coordsFile);
+    formData.append('file_matrix', matrixFile);
+    formData.append('is_domain_specific', isDomainSpecific ? 'true' : 'false');
     formData.append('username', localStorage.getItem('username') || ''); // Automatically send stored username
 
     try {
-       // https://h47f781wh1.execute-api.us-east-1.amazonaws.com/dev/upload
-      const response = await fetch('http://127.0.0.1:5000/upload', {
+      // https://h47f781wh1.execute-api.us-east-1.amazonaws.com/dev/upload
+      const response = await fetch('http://127.0.0.1:5000/generate_graph', {
         method: 'POST',
         body: formData,
       });
@@ -34,11 +64,61 @@
       }
 
       const fetchedGraph = await response.json();
-      graph = fetchedGraph.graph; // Update the graph with the fetched data
-      selectedGenomes = []; // Reset selected genomes
-      filteredGraph = { nodes: [], links: [], genomes: [] }; // Reset filtered graph
+      console.log('Fetched graph:', fetchedGraph);
+      graph = fetchedGraph.graph;
+      numGenes = fetchedGraph.num_genes;
+      numDomains = fetchedGraph.num_domains;
+      // Reset selected genomes and filtered graph
+      selectedGenomes = [];
+      filteredGraph = { nodes: [], links: [], genomes: [] };
     } catch (error) {
       console.error('Error uploading files:', error);
+    }
+  }
+
+  // Function to save the group of files
+  async function saveGroup() {
+    if (!title) {
+      alert('Please provide a title for the group of files.');
+      return;
+    }
+
+    if (!coordsFile || !matrixFile) {
+      alert('Please select matrix and coordinates files to upload.');
+      return;
+    }
+
+    const formData = new FormData();
+    formData.append('file_coordinate', coordsFile);
+    formData.append('file_matrix', matrixFile);
+
+    formData.append('username', localStorage.getItem('username') || ''); // Automatically send stored username
+    formData.append('title', title);
+    formData.append('description', description);
+    formData.append('num_genes', numGenes.toString());
+    formData.append('num_domains', numDomains.toString());
+    formData.append('is_domain_specific', isDomainSpecific ? 'true' : 'false');
+    formData.append('genomes', JSON.stringify(graph.genomes));
+
+    try {
+      const response = await fetch('http://127.0.0.1:5000/save', {
+        method: 'POST',
+        body: formData,
+      });
+
+      if (!response.ok) {
+        const errorResponse = await response.json();
+        const errorMessage = errorResponse.error || 'Unknown error';
+        console.error('Error saving group:', errorMessage);
+        throw new Error(`Failed to save group: ${response.statusText}`);
+      }
+
+      const result = await response.json();
+      console.log('Group saved successfully:', result);
+      alert('Group saved successfully!');
+    } catch (error) {
+      console.error('Error saving group:', error);
+      alert('Failed to save group. Please try again.');
     }
   }
 
@@ -91,17 +171,24 @@
 </script>
 
 <!-- File upload section -->
-<div style="margin: 1rem; display: flex; align-items: center; gap: 1rem;">
-  <div>
-    <h3>Upload Matrix File:</h3>
-    <input type="file" on:change={(e) => matrixFile = (e.target as HTMLInputElement).files?.[0] || null} />
-  </div>
+
+<div style="margin: 1rem; display: flex; justify-content: space-between; align-items: center; gap: 1rem;">
   <div>
     <h3>Upload Coordinates File:</h3>
     <input type="file" on:change={(e) => coordsFile = (e.target as HTMLInputElement).files?.[0] || null} />
   </div>
+  <div>
+    <h3>Upload Matrix File:</h3>
+    <input type="file" on:change={(e) => matrixFile = (e.target as HTMLInputElement).files?.[0] || null} />
+  </div>
+  <label>
+    <input type="checkbox" bind:checked={isDomainSpecific} disabled/>
+    Domain-Specific?
+  </label>
   <button on:click={uploadFiles} disabled={!matrixFile || !coordsFile}>Upload and Prepare Graph</button>
 </div>
+
+
 
 <!-- Buttons to switch data source -->
 <div style="margin: 1rem; display: flex; align-items: center; gap: 1rem;">
@@ -110,13 +197,25 @@
   <button on:click={() => switchDataSource('test')}>Test Data</button>
 </div>
 
+<hr>
+
+<!-- Save group section -->
+{#if graph.nodes.length > 0}
+  <div style="margin: 1rem; margin-top: 0px; display: flex; flex-direction: column; gap: 1rem; max-width: 300px;">
+    <h3>Save Group</h3>
+    <input type="text" placeholder="Title" bind:value={title} />
+    <textarea placeholder="Description" bind:value={description}></textarea>
+    <button on:click={saveGroup}>Save Group</button>
+  </div>
+{/if}
+
 <!-- Genome selection checkboxes, filter button, and cutoff slider in one row -->
 <div style="margin: 1rem; display: flex; align-items: center; gap: 2rem;">
   <div>
     <h3>Select 3 Genomes:</h3>
     {#if graph.genomes}
       {#each graph.genomes as genome}
-        <label style="display: block;">
+        <label style="display: block; margin-top: 1rem; margin-left: 5%;">
           <input
             type="checkbox"
             value={genome}
@@ -144,10 +243,5 @@
 
 <Chart graph={filteredGraph} {cutoff}/>
 
-<style>
-  label {
-    display: block;
-    margin-top: 1rem;
-    margin-left: 5%;
-  }
-</style>
+<!-- Removed general styles, only using inline styles for specific elements -->
+<!-- TODO: incorporate tailwindcss for cleaner styling -->

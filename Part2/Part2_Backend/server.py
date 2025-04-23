@@ -6,7 +6,7 @@ from dotenv import load_dotenv
 from flask_cors import CORS
 from supabase import create_client, Client
 from parse_matrix import parse_matrix
-
+import json
 from io import BytesIO
 from datetime import datetime
 

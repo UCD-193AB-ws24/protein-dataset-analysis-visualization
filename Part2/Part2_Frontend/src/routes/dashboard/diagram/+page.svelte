@@ -30,6 +30,8 @@
   let filteredGraph: Graph = { nodes: [], links: [], genomes: [] };
   let matrixFile: File | null = null;   // TODO: update to support multiple files
   let coordsFile: File | null = null;
+    
+  let errorMessage = "";
   let cutoff = 0;            // slider value
   let isDomainSpecific = false;
 
@@ -60,7 +62,8 @@
       });
 
       if (!response.ok) {
-        throw new Error(`Failed to fetch graph data: ${response.statusText}`);
+        const errorData = await response.json();
+        throw new Error(errorData.error || `Upload failed: ${response.statusText}`);
       }
 
       const fetchedGraph = await response.json();
@@ -72,7 +75,11 @@
       selectedGenomes = [];
       filteredGraph = { nodes: [], links: [], genomes: [] };
     } catch (error) {
-      console.error('Error uploading files:', error);
+      errorMessage = error.message || "An error occurred.";
+      console.error('Detailed error:', {
+          status: error.response?.status,
+          data: await error.response?.text()
+      });
     }
   }
 
@@ -186,6 +193,9 @@
     Domain-Specific?
   </label>
   <button on:click={uploadFiles} disabled={!matrixFile || !coordsFile}>Upload and Prepare Graph</button>
+  {#if errorMessage}
+        <p class="error">{errorMessage}</p>
+  {/if}
 </div>
 
 

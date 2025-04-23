@@ -378,9 +378,6 @@ def get_user_file_groups():
             .execute()
         )
 
-        if not file_groups_response.data:
-            return jsonify({"error": "No file groups found for this user"}), 404
-
         return jsonify({"file_groups": file_groups_response.data}), 200
 
     except Exception as e:

@@ -29,7 +29,7 @@
         errorMessage = "";
 
         try {
-            const response = await fetch("http://127.0.0.1:5000/get_user_file_groups", {
+            const response = await fetch("https://4aorvlzrd1.execute-api.us-east-1.amazonaws.com/dev/get_user_file_groups", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ username }),
@@ -53,7 +53,7 @@
         errorMessage = "";
 
         try {
-            const response = await fetch("http://127.0.0.1:5000/get_user_files", {
+            const response = await fetch("https://4aorvlzrd1.execute-api.us-east-1.amazonaws.com/dev/get_user_files", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ username }),
@@ -84,7 +84,7 @@
         retrievedFileUrl = "";
 
         try {
-            const response = await fetch(`http://127.0.0.1:5000/retrieve/${fileName}`);
+            const response = await fetch(`https://4aorvlzrd1.execute-api.us-east-1.amazonaws.com/dev/retrieve/${fileName}`);
             if (!response.ok) {
                 throw new Error("Failed to retrieve file.");
             }

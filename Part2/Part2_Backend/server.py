@@ -385,6 +385,7 @@ def home():
 
 
 if __name__ == '__main__':
+    # app.run(debug=True)
      app.run(debug=True, port=3005)
     # app.config['MAX_CONTENT_LENGTH'] = 100 * 1024 * 1024  # 100MB limit
 

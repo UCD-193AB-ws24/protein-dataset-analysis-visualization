@@ -3,8 +3,8 @@ python-dotenv
 cloudinary
 flask-cors
 supabase
-zappa
 openpyxl
 python-jose[cryptography]
 requests
-flask-cors
+pandas
+zappa

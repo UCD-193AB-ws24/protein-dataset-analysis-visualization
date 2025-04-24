@@ -34,6 +34,8 @@
 		"vite": "^6.0.0"
 	},
 	"dependencies": {
-		"d3": "^7.9.0"
+		"d3": "^7.9.0",
+		"oidc-client-ts": "^3.2.0",
+		"react-oidc-context": "^3.3.0"
 	}
 }

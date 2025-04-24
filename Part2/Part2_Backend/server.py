@@ -9,6 +9,7 @@ from parse_matrix import parse_matrix
 import json
 from io import BytesIO
 from datetime import datetime
+from auth_utils import verify_token
 
 # Load environment variables
 load_dotenv()
@@ -355,6 +356,25 @@ def get_user_files():
     # If no files are found, return an empty list
     return jsonify({"files": files_response.data}), 200
 
+@app.route('/api/user-data')
+def get_user_data():
+    auth_header = request.headers.get('Authorization', '')
+    token = auth_header.replace('Bearer ', '')
+
+    try:
+        user_info = verify_token(token)
+        user_id = user_info['sub']
+
+        # 🧠 Use user_email or user_id to fetch user-specific data from DB
+        return jsonify({
+            'message': 'Hello, authenticated user!',
+            'user': {
+                'id': user_id
+            }
+        })
+    except Exception as e:
+        return jsonify({'error': str(e)}), 401
+
 @app.route('/pokemon', methods=['GET'])
 def nintendo():
     return "Hello Pokemon"
@@ -365,7 +385,7 @@ def home():
 
 
 if __name__ == '__main__':
-    app.run(debug=True)
+     app.run(debug=True, port=3005)
     # app.config['MAX_CONTENT_LENGTH'] = 100 * 1024 * 1024  # 100MB limit
 
 

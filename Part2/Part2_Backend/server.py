@@ -9,6 +9,7 @@ from parse_matrix import parse_matrix
 import json
 from io import BytesIO
 from datetime import datetime
+import requests
 
 # Load environment variables
 load_dotenv()
@@ -74,6 +75,71 @@ def printdata():
         return jsonify({"msg": "login success"}), 200
     return jsonify({"msg": "login failed"}), 400
 
+# Expects a query parameter 'groupId' in the URL; e.g., /get_group_graph?groupId=123
+# TODO: look into whether it makes sense to have query parameter or directly in the URL
+@app.route('/get_group_graph', methods=['GET'])
+def get_group_graph():
+    try:
+        # Query files for the provided group ID
+        group_id = request.args.get('groupId')
+
+        # Get information about the group
+        group_response = supabase.table("groups") \
+            .select("id, title, description, is_domain_specific") \
+            .eq("id", group_id) \
+            .single() \
+            .execute()
+
+        if not group_response.data:
+            return jsonify({"error": "Group not found"}), 404
+
+        response = supabase.table("files") \
+            .select("file_type, s3_key") \
+            .eq("group_id", group_id) \
+            .execute()
+
+        if not response.data:
+            return jsonify({"error": "No files associated with this group"}), 404
+
+        matrix_s3_key = None
+        coordinate_s3_key = None
+        for file in response.data:
+            if file.get("file_type") == "matrix":
+                matrix_s3_key = file.get("s3_key")
+            elif file.get("file_type") == "coordinate":
+                coordinate_s3_key = file.get("s3_key")
+
+        if not matrix_s3_key or not coordinate_s3_key:
+            return jsonify({"error": "Matrix or coordinate file not found for this group"}), 400
+
+
+        # Retrieve file URLs from Cloudinary
+        matrix_url = cloudinary.utils.cloudinary_url(matrix_s3_key, resource_type="raw")[0]
+        coordinate_url = cloudinary.utils.cloudinary_url(coordinate_s3_key, resource_type="raw")[0]
+
+        # Download the files
+        matrix_response = requests.get(matrix_url)
+        coordinate_response = requests.get(coordinate_url)
+
+        if matrix_response.status_code != 200 or coordinate_response.status_code != 200:
+            return jsonify({"error": "Failed to download one or more files"}), 500
+
+        # Generate the graph using the downloaded files
+        graph = parse_matrix(BytesIO(matrix_response.content), BytesIO(coordinate_response.content))
+        num_genes = len(graph.get("nodes", []))
+        num_domains = 1  # Adjust as needed
+
+        return jsonify({
+            "message": "Graph generated successfully",
+            "title": group_response.data.get("title"),
+            "description": group_response.data.get("description"),
+            "graph": graph,
+            "num_genes": num_genes,
+            "num_domains": num_domains
+        }), 200
+
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
 
 @app.route('/generate_graph', methods=['POST'])
 def generate_graph():
@@ -140,74 +206,96 @@ def save_files():
             supabase.table("users_new")
             .select("id")
             .eq("username", username)
+            .single()
             .execute()
         )
         if not user_response.data:
             return jsonify({"error": "User not found"}), 404
-        user_id = user_response.data[0]["id"]
+        user_id = user_response.data["id"]
 
-        # Upload files to Cloudinary
-        # Below chunk modified from upload_file function, will need to be refactored
+        # Check if group_id is provided in the form
+        group_id = request.form.get('group_id')
 
-        # Add datetime to filename to avoid overwriting
-        timestamp = datetime.now().strftime("%Y%m%d%H%M%S")
+        if group_id:
+            # Verify if the provided group_id is valid
+            group_response = (
+                supabase.table("groups")
+                .select("id")
+                .eq("id", group_id)
+                .single()
+                .execute()
+            )
 
-        matrix_original_filename = file_matrix.filename.rsplit('.', 1)[0]
-        matrix_file_extension = file_matrix.filename.rsplit('.', 1)[-1].lower()
-        matrix_idName = f"{matrix_original_filename}_{timestamp}.{matrix_file_extension}"
+            if not group_response.data:
+                return jsonify({"error": "Invalid group_id provided"}), 400
 
-        # Determine resource type
-        matrix_resource_type = "raw" if matrix_file_extension not in ["jpg", "jpeg", "png", "gif", "mp4", "mov"] else "auto"
-
-        coordinate_original_filename = file_coordinate.filename.rsplit('.', 1)[0]
-        coordinate_file_extension = file_coordinate.filename.rsplit('.', 1)[-1].lower()
-        coordinate_idName = f"{coordinate_original_filename}_{timestamp}.{coordinate_file_extension}"
-
-        # Determine resource type
-        coordinate_resource_type = "raw" if coordinate_file_extension not in ["jpg", "jpeg", "png", "gif", "mp4", "mov"] else "auto"
-
-        matrix_bytes = file_matrix.read()
-        coordinate_bytes = file_coordinate.read()
-
-        upload_result_matrix = cloudinary.uploader.upload(BytesIO(matrix_bytes), resource_type=matrix_resource_type, public_id=matrix_idName, overwrite=True)
-        upload_result_coordinate = cloudinary.uploader.upload(BytesIO(coordinate_bytes), resource_type=coordinate_resource_type, public_id=coordinate_idName, overwrite=True)
-
-        # Insert into groups table
-        group_response = (
-            supabase.table("groups")
-            .insert({
-                "user_id": user_id,
+            # Update the existing group with changed title/description
+            (supabase.table("groups")
+            .update({
                 "title": title,
-                "description": description,
-                "is_domain_specific": is_domain_specific,
-                "genomes": json.loads(genomes),
-                "num_genes": int(num_genes),
-                "num_domains": int(num_domains)
+                "description": description
             })
-            .execute()
-        )
+            .eq("id", group_id)
+            .execute())
 
-        group_id = group_response.data[0]["id"]
+            return jsonify({"message": "Group updated successfully"}), 200
+        else:
+            # Insert new group
+            new_group_response = (
+                supabase.table("groups")
+                .insert({
+                    "user_id": user_id,
+                    "title": title,
+                    "description": description,
+                    "is_domain_specific": is_domain_specific,
+                    "genomes": json.loads(genomes),
+                    "num_genes": int(num_genes),
+                    "num_domains": int(num_domains)
+                })
+                .execute()
+            )
+            group_id = new_group_response.data[0]["id"]
 
-        # Insert files
-        supabase.table("files").insert([
-            {
-                "group_id": group_id,
-                "user_id": user_id,
-                "file_name": file_matrix.filename,
-                "s3_key": upload_result_matrix['public_id'],
-                "file_type": "matrix"
-            },
-            {
-                "group_id": group_id,
-                "user_id": user_id,
-                "file_name": file_coordinate.filename,
-                "s3_key": upload_result_coordinate['public_id'],
-                "file_type": "coordinate"
-            }
-        ]).execute()
+            # Upload files to Cloudinary
+            timestamp = datetime.now().strftime("%Y%m%d%H%M%S")
 
-        return jsonify({"message": "Files saved successfully"}), 200
+            matrix_original_filename = file_matrix.filename.rsplit('.', 1)[0]
+            matrix_file_extension = file_matrix.filename.rsplit('.', 1)[-1].lower()
+            matrix_idName = f"{matrix_original_filename}_{timestamp}.{matrix_file_extension}"
+
+            matrix_resource_type = "raw" if matrix_file_extension not in ["jpg", "jpeg", "png", "gif", "mp4", "mov"] else "auto"
+
+            coordinate_original_filename = file_coordinate.filename.rsplit('.', 1)[0]
+            coordinate_file_extension = file_coordinate.filename.rsplit('.', 1)[-1].lower()
+            coordinate_idName = f"{coordinate_original_filename}_{timestamp}.{coordinate_file_extension}"
+
+            coordinate_resource_type = "raw" if coordinate_file_extension not in ["jpg", "jpeg", "png", "gif", "mp4", "mov"] else "auto"
+
+            matrix_bytes = file_matrix.read()
+            coordinate_bytes = file_coordinate.read()
+
+            upload_result_matrix = cloudinary.uploader.upload(BytesIO(matrix_bytes), resource_type=matrix_resource_type, public_id=matrix_idName, overwrite=True)
+            upload_result_coordinate = cloudinary.uploader.upload(BytesIO(coordinate_bytes), resource_type=coordinate_resource_type, public_id=coordinate_idName, overwrite=True)
+
+            # Insert files
+            supabase.table("files").insert([
+                {
+                    "group_id": group_id,
+                    "user_id": user_id,
+                    "file_name": file_matrix.filename,
+                    "s3_key": upload_result_matrix['public_id'],
+                    "file_type": "matrix"
+                },
+                {
+                    "group_id": group_id,
+                    "user_id": user_id,
+                    "file_name": file_coordinate.filename,
+                    "s3_key": upload_result_coordinate['public_id'],
+                    "file_type": "coordinate"
+                }
+            ]).execute()
+
+            return jsonify({"message": "Files saved successfully"}), 200
 
     except Exception as e:
         return jsonify({"error": str(e)}), 500
@@ -227,13 +315,14 @@ def get_user_file_groups():
             supabase.table("users_new")
             .select("id")
             .eq("username", username)
+            .single()
             .execute()
         )
 
         if not user_response.data:
             return jsonify({"error": "User not found"}), 404
 
-        user_id = user_response.data[0]["id"]
+        user_id = user_response.data["id"]
 
         # Get all file groups associated with the user ID
         file_groups_response = (
@@ -293,7 +382,7 @@ def upload_file():
     try:
         matrix_bytes = file_matrix.read()
         coordinate_bytes = file_coordinate.read()
-        
+
         ret_json = parse_matrix(BytesIO(matrix_bytes), BytesIO(coordinate_bytes))
 
 

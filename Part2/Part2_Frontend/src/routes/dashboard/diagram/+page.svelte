@@ -34,7 +34,7 @@
   let coordsFile: File | null = null;
 
   let errorMessage = "";
-  let loading = false;        // Loading state for file upload
+  let loading = true;        // Loading state for file upload
   let cutoff = 0;             // slider value
   let isDomainSpecific = false;
 
@@ -50,7 +50,6 @@
 
     if (groupId) {
       try {
-        loading = true;
         const response = await fetch(`http://127.0.0.1:5000/get_group_graph?groupId=${groupId}`);
 
         if (!response.ok) {
@@ -68,7 +67,6 @@
         // Set the title and description if available
         title = fetchedGraph.title || '';
         description = fetchedGraph.description || '';
-        loading = false;
       } catch (error) {
         errorMessage = error.message || "An error occurred.";
         console.error('Detailed error:', {
@@ -77,6 +75,8 @@
         });
       }
     }
+
+    loading = false; // Set loading to false after fetching data
   });
 
 
@@ -223,7 +223,6 @@
 {#if loading}
   <p>Loading...</p>
 {:else}
-
   <!-- File upload/data source section only available if not reviewing a specific group -->
   {#if !groupId}
     <!-- File upload section -->

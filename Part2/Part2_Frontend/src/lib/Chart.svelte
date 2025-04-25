@@ -97,37 +97,45 @@
       }
     });
 
-    // TODO: look into this, need to see how necessary it is
+    // TODO: Verify w/client what coloring scheme to use for duplicated nodes
     // Add to union-find structure "links" bewtween first-genome and duplicated nodes
-    // nodes.forEach((n) => {
-    //   if (n._dup) {
-    //     const originalId = n.id.slice(0, -dupSuffix.length);
-    //     const originalNode = nodes.find((o) => o.id === originalId);
-    //     if (originalNode) {
-    //       uf.union(n.id, originalId);
-    //     }
-    //   }
-    // });
-
+    nodes.forEach((n) => {
+      if (n._dup) {
+        const originalId = n.id.slice(0, -dupSuffix.length);
+        const originalNode = nodes.find((o) => o.id === originalId);
+        if (originalNode) {
+          uf.union(n.id, originalId);
+        }
+      }
+    });
 
     // Map CCs to colors
     const componentRoots = new Set(nodes.map((n) => uf.find(n.id)));
-    // const colorScale = d3.scaleOrdinal([...d3.schemeSet3]).domain([...componentRoots]);
     const componentSize = new Map([...componentRoots].map((root) => [root, 0]));
     nodes.forEach((n) => {
       const root = uf.find(n.id);
       componentSize.set(root, (componentSize.get(root) || 0) + 1);
     });
-    const nonSingletonRoots = [...componentRoots].filter((root) => componentSize.get(root)! > 1);
-    const colorScale = d3.scaleOrdinal([...d3.schemeSet3]).domain(nonSingletonRoots);
-    // Gray-out CCs of size 1
+
+    // Select nodes we want to color (non-singletons or CCs of size 2 with a dup)
+    const colorRoots = [...componentRoots].filter(root => {
+      const size = componentSize.get(root)!;
+      // if it’s a size-2 CC *and* one member is a dup, skip it
+      if (size === 2 && nodes.some(n => uf.find(n.id) === root && n._dup)) {
+        return false;
+      }
+      // otherwise color only if size > 1
+      return size > 1;
+    });
+
+    const colorScale = d3.scaleOrdinal([...d3.schemeSet3]).domain(colorRoots);
+    // Gray-out CCs not associated with colorRoots
     const nodeColor = new Map(
       nodes.map((n) => {
-      const root = uf.find(n.id);
-      return [n.id, componentSize.get(root) === 1 ? '#ccc' : colorScale(root)];
+        const root = uf.find(n.id);
+        return [n.id, colorRoots.includes(root) ? colorScale(root) : '#ccc'];
       })
     );
-    // const nodeColor = new Map(nodes.map((n) => [n.id, colorScale(uf.find(n.id))!]));
 
     return { nodes, links, genomes, nodeColor };
   }

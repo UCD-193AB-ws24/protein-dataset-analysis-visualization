@@ -1,5 +1,6 @@
 <script>
     import { onMount } from "svelte";
+    import { goto } from "$app/navigation";
 
     let username = "";
     let userFiles = [];
@@ -132,6 +133,9 @@
                                 </li>
                             {/each}
                         </ul>
+                        <button on:click={() => goto(`/dashboard/diagram?groupId=${group.id}`)}>
+                            View Diagram
+                        </button>
                     {:else}
                         <p class="no-files">No files included</p>
                     {/if}

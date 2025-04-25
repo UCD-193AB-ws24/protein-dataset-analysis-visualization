@@ -103,29 +103,35 @@ def get_group_graph():
 
         matrix_s3_key = None
         coordinate_s3_key = None
+        graph_s3_key = None
         for file in response.data:
             if file.get("file_type") == "matrix":
                 matrix_s3_key = file.get("s3_key")
             elif file.get("file_type") == "coordinate":
                 coordinate_s3_key = file.get("s3_key")
+            elif file.get("file_type") == "graph":
+                graph_s3_key = file.get("s3_key")
 
-        if not matrix_s3_key or not coordinate_s3_key:
-            return jsonify({"error": "Matrix or coordinate file not found for this group"}), 400
+        if not matrix_s3_key or not coordinate_s3_key or not graph_s3_key:
+            return jsonify({"error": "Matrix/coordinate/graph file not found for this group"}), 400
 
 
         # Retrieve file URLs from Cloudinary
         matrix_url = cloudinary.utils.cloudinary_url(matrix_s3_key, resource_type="raw")[0]
         coordinate_url = cloudinary.utils.cloudinary_url(coordinate_s3_key, resource_type="raw")[0]
+        graph_url = cloudinary.utils.cloudinary_url(graph_s3_key, resource_type="raw")[0]
 
         # Download the files
         matrix_response = requests.get(matrix_url)
         coordinate_response = requests.get(coordinate_url)
+        graph_response = requests.get(graph_url)
 
-        if matrix_response.status_code != 200 or coordinate_response.status_code != 200:
+        if matrix_response.status_code != 200 or coordinate_response.status_code != 200 or graph_response.status_code != 200:
             return jsonify({"error": "Failed to download one or more files"}), 500
 
         # Generate the graph using the downloaded files
-        graph = parse_matrix(BytesIO(matrix_response.content), BytesIO(coordinate_response.content))
+        # graph = parse_matrix(BytesIO(matrix_response.content), BytesIO(coordinate_response.content))
+        graph = graph_response.json()  # Assuming the graph is in JSON format
         num_genes = len(graph.get("nodes", []))
         num_domains = 1  # Adjust as needed
 
@@ -176,21 +182,18 @@ def generate_graph():
 
 @app.route('/save', methods=['POST'])
 def save_files():
-    print(f"Request Form Data: {request.form}")
-    print(f"Request Files: {request.files}")
+    # print(f"Request Form Data: {request.form}")
+    # print(f"Request Files: {request.files}")
 
-    if 'file_matrix' not in request.files:
-        return jsonify({"error": "No matrix file provided"}), 400
-
-    if 'file_coordinate' not in request.files:
-        return jsonify({"error": "No coordinate file provided"}), 400
+    if (('file_matrix' not in request.files
+            or 'file_coordinate' not in request.files)
+        and "group_id" not in request.form):
+        return jsonify({"error": "Matrix or coordinate file is missing"}), 400
 
     if 'username' not in request.form:
         return jsonify({"error": "Username is required"}), 400
 
     username = request.form['username']
-    file_matrix = request.files['file_matrix']
-    file_coordinate = request.files['file_coordinate']
 
     # Metadata for file group
     title = request.form.get('title')
@@ -199,6 +202,7 @@ def save_files():
     genomes = request.form.get('genomes', '[]')
     num_genes = request.form.get('num_genes')
     num_domains = request.form.get('num_domains')
+    graph_data = request.form.get('graph')
 
     try:
         # Get user ID
@@ -240,6 +244,9 @@ def save_files():
 
             return jsonify({"message": "Group updated successfully"}), 200
         else:
+            file_matrix = request.files['file_matrix']
+            file_coordinate = request.files['file_coordinate']
+
             # Insert new group
             new_group_response = (
                 supabase.table("groups")
@@ -277,6 +284,16 @@ def save_files():
             upload_result_matrix = cloudinary.uploader.upload(BytesIO(matrix_bytes), resource_type=matrix_resource_type, public_id=matrix_idName, overwrite=True)
             upload_result_coordinate = cloudinary.uploader.upload(BytesIO(coordinate_bytes), resource_type=coordinate_resource_type, public_id=coordinate_idName, overwrite=True)
 
+            # Upload graph to Cloudinary and save to Supabase
+            timestamp = datetime.now().strftime("%Y%m%d%H%M%S")
+            graph_filename = f"graph_{timestamp}.json"
+            upload_result_graph = cloudinary.uploader.upload(
+                BytesIO(graph_data.encode('utf-8')),
+                resource_type="raw",
+                public_id=graph_filename,
+                overwrite=True
+            )
+
             # Insert files
             supabase.table("files").insert([
                 {
@@ -292,10 +309,18 @@ def save_files():
                     "file_name": file_coordinate.filename,
                     "s3_key": upload_result_coordinate['public_id'],
                     "file_type": "coordinate"
+                },
+                {
+                    "group_id": group_id,
+                    "user_id": user_id,
+                    "file_name": graph_filename,
+                    "s3_key": upload_result_graph['public_id'],
+                    "file_type": "graph"
                 }
             ]).execute()
 
             return jsonify({"message": "Files saved successfully"}), 200
+
 
     except Exception as e:
         return jsonify({"error": str(e)}), 500

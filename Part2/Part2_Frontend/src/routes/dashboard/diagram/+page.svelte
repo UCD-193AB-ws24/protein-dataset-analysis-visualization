@@ -130,17 +130,20 @@
       return;
     }
 
-    if (!coordsFile || !matrixFile) {
-      alert('Please select matrix and coordinates files to upload.');
-      return;
-    }
+    // if (!coordsFile || !matrixFile) {
+    //   alert('Please select matrix and coordinates files to upload.');
+    //   return;
+    // }
 
     const formData = new FormData();
-    formData.append('file_coordinate', coordsFile);
-    formData.append('file_matrix', matrixFile);
+
+    if (coordsFile && matrixFile) {
+      formData.append('file_coordinate', coordsFile);
+      formData.append('file_matrix', matrixFile);
+    }
 
     if (groupId) {
-      formData.append('groupId', groupId); // Include groupId if available
+      formData.append('group_id', groupId); // Include groupId if available
     }
     formData.append('username', localStorage.getItem('username') || ''); // Automatically send stored username
     formData.append('title', title);
@@ -149,6 +152,7 @@
     formData.append('num_domains', numDomains.toString());
     formData.append('is_domain_specific', isDomainSpecific ? 'true' : 'false');
     formData.append('genomes', JSON.stringify(graph.genomes));
+    formData.append('graph', JSON.stringify(graph));
 
     try {
       const response = await fetch('http://127.0.0.1:5000/save', {

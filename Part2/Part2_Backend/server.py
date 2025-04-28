@@ -25,18 +25,6 @@ load_dotenv()
 app = Flask(__name__)
 CORS(app)
 
-# Configure Cloudinary
-cloudinary.config(
-    cloud_name=os.getenv("CLOUD_NAME"),
-    api_key=os.getenv("API_KEY"),
-    api_secret=os.getenv("API_SECRET")
-)
-
-# # Configure Supabase
-# url: str = os.getenv("SUPABASE_URL")
-# key: str = os.getenv("SUPABASE_KEY")
-# supabase: Client = create_client(url, key)
-
 # Configure AWS S3
 s3_client = boto3.client(
     's3',
@@ -127,11 +115,6 @@ def get_group_graph():
         matrix_url = f"https://{bucket_name}.s3.amazonaws.com/{matrix_s3_key}"
         coordinate_url = f"https://{bucket_name}.s3.amazonaws.com/{coordinate_s3_key}"
         graph_url = f"https://{bucket_name}.s3.amazonaws.com/{graph_s3_key}"
-
-        # # Retrieve files from Cloudinary
-        # matrix_url = cloudinary.utils.cloudinary_url(matrix_s3_key, resource_type="raw")[0]
-        # coordinate_url = cloudinary.utils.cloudinary_url(coordinate_s3_key, resource_type="raw")[0]
-        # graph_url = cloudinary.utils.cloudinary_url(graph_s3_key, resource_type="raw")[0]
 
         matrix_response = requests.get(matrix_url)
         coordinate_response = requests.get(coordinate_url)
@@ -300,11 +283,6 @@ def save_files():
         graph_file.filename = f"graph_{timestamp}.json"
         graph_s3_key, graph_filename = upload_to_s3(graph_file)
 
-        # # Upload files to Cloudinary
-        # matrix_s3_key, matrix_filename = upload_file_to_cloudinary(file_matrix)
-        # coordinate_s3_key, coordinate_filename = upload_file_to_cloudinary(file_coordinate)
-        # graph_s3_key, graph_filename = upload_graph_to_cloudinary(graph_data)
-
         # Insert file records into database
         session.add_all([
             File(group_id=group_id, user_id=user.id, file_name=matrix_filename, s3_key=matrix_s3_key, file_type="matrix"),
@@ -367,71 +345,6 @@ def get_user_file_groups():
 
     finally:
         session.close()
-
-# Not really used anymore, but kept for reference
-# @app.route('/upload', methods=['POST'])
-# def upload_file():
-#     if 'file_matrix' not in request.files:
-#         return jsonify({"error": "No file provided"}), 400
-
-#     if 'file_coordinate' not in request.files:
-#         return jsonify({"error": "No file provided"}), 400
-
-#     if 'username' not in request.form:
-#         return jsonify({"error": "Username is required"}), 400
-
-#     file_matrix = request.files['file_matrix']
-#     file_coordinate = request.files['file_coordinate']
-#     username = request.form['username']  # Get username from form data
-#     print(username)
-
-
-#     matrix_original_filename = file_matrix.filename.rsplit('.', 1)[0]
-#     matrix_file_extension = file_matrix.filename.rsplit('.', 1)[-1].lower()
-#     matrix_idName = f"{matrix_original_filename}.{matrix_file_extension}"
-
-#     # Determine resource type
-#     matrix_resource_type = "raw" if matrix_file_extension not in ["jpg", "jpeg", "png", "gif", "mp4", "mov"] else "auto"
-
-#     coordinate_original_filename = file_coordinate.filename.rsplit('.', 1)[0]
-#     coordinate_file_extension = file_coordinate.filename.rsplit('.', 1)[-1].lower()
-#     coordinate_idName = f"{coordinate_original_filename}.{coordinate_file_extension}"
-
-#     # Determine resource type
-#     coordinate_resource_type = "raw" if coordinate_file_extension not in ["jpg", "jpeg", "png", "gif", "mp4", "mov"] else "auto"
-
-#     # logging.basicConfig(level=logging.DEBUG)
-
-#     try:
-#         matrix_bytes = file_matrix.read()
-#         coordinate_bytes = file_coordinate.read()
-
-#         ret_json = parse_matrix(BytesIO(matrix_bytes), BytesIO(coordinate_bytes))
-
-
-#         upload_result_matrix = cloudinary.uploader.upload(BytesIO(matrix_bytes), resource_type=matrix_resource_type, public_id=matrix_idName, overwrite=True)
-#         add_file_for_user(username=username, file_name=matrix_idName)
-
-#         upload_result_coordinate = cloudinary.uploader.upload(BytesIO(coordinate_bytes), resource_type=coordinate_resource_type, public_id=coordinate_idName, overwrite=True)
-#         add_file_for_user(username=username, file_name=coordinate_idName)
-
-#         print(ret_json)
-
-#         return jsonify({
-#                 "message": "File uploaded successfully",
-#                 # "matrix_url": upload_result_matrix['secure_url'],
-#                 # "coordinate_url": upload_result_coordinate['secure_url'],
-#                 "graph": ret_json
-#             })
-#             #jsonify(response_data)
-#     except Exception as e:
-#         return jsonify({"error": str(e)}), 500
-
-
-# @app.route('/retrieve/<public_id>', methods=['GET'])
-# def retrieve_file(public_id):
-#     file_url = cloudinary.utils.cloudinary_url(public_id, resource_type="raw")[0]
-#     return jsonify({"file_url": file_url})
 
 
 @app.route('/get_user_files', methods=['POST'])

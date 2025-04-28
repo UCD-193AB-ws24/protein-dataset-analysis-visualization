@@ -4,7 +4,7 @@ import cloudinary
 import cloudinary.uploader
 from dotenv import load_dotenv
 from flask_cors import CORS
-from supabase import create_client, Client
+# from supabase import create_client, Client
 from parse_matrix import parse_matrix
 import json
 from io import BytesIO
@@ -30,10 +30,10 @@ cloudinary.config(
     api_secret=os.getenv("API_SECRET")
 )
 
-# Configure Supabase
-url: str = os.getenv("SUPABASE_URL")
-key: str = os.getenv("SUPABASE_KEY")
-supabase: Client = create_client(url, key)
+# # Configure Supabase
+# url: str = os.getenv("SUPABASE_URL")
+# key: str = os.getenv("SUPABASE_KEY")
+# supabase: Client = create_client(url, key)
 
 # Configure sqlalchemy
 if os.getenv("ENV") == "production":

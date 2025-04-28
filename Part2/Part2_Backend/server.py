@@ -14,6 +14,7 @@ import requests
 from models import Base, User, Group, File
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
+from sqlalchemy.pool import NullPool
 
 # Load environment variables
 load_dotenv()
@@ -35,7 +36,21 @@ key: str = os.getenv("SUPABASE_KEY")
 supabase: Client = create_client(url, key)
 
 # Configure sqlalchemy
-engine = create_engine(os.getenv("DATABASE_URL"), pool_size=1, max_overflow=0)
+if os.getenv("ENV") == "production":
+    engine = create_engine(
+        os.getenv("DATABASE_URL"),
+        poolclass=NullPool,
+        pool_pre_ping=True
+    )
+else:
+    engine = create_engine(
+        os.getenv("DATABASE_URL"),
+        pool_size=5,
+        max_overflow=10,
+        pool_recycle=300,
+        pool_pre_ping=True
+    )
+
 SessionLocal = sessionmaker(bind=engine)
 
 @app.route('/login', methods=['POST'])
@@ -179,10 +194,10 @@ def upload_graph_to_cloudinary(graph_data):
 
 @app.route('/save', methods=['POST'])
 def save_files():
-    if 'username' not in request.form:
+    username = request.form.get("username")
+    if not username:
         return jsonify({"error": "Username is required"}), 400
 
-    username = request.form['username']
     title = request.form.get('title')
     description = request.form.get('description')
     is_domain_specific = request.form.get('is_domain_specific', 'false').lower() == 'true'
@@ -254,147 +269,151 @@ def save_files():
 
 @app.route('/get_user_file_groups', methods=['POST'])
 def get_user_file_groups():
-    # Extract username from request JSON
     req = request.get_json()
     username = req.get("username")
 
     if not username:
         return jsonify({"error": "Username is required"}), 400
 
+    session = SessionLocal()
     try:
-        # Get user ID from Supabase
-        user_response = (
-            supabase.table("users_new")
-            .select("id")
-            .eq("username", username)
-            .single()
-            .execute()
-        )
-
-        if not user_response.data:
+        # Get user first
+        user = session.query(User).filter_by(username=username).first()
+        if not user:
             return jsonify({"error": "User not found"}), 404
 
-        user_id = user_response.data["id"]
+        # Get all file groups associated with user
+        groups = session.query(Group).filter_by(user_id=user.id).all()
 
-        # Get all file groups associated with the user ID
-        file_groups_response = (
-            supabase.table("groups")
-            .select("""
-                id,
-                title,
-                description,
-                is_domain_specific,
-                genomes,
-                num_genes,
-                num_domains,
-                files(file_name, file_type)
-                """)
-            .eq("user_id", user_id)
-            .execute()
-        )
+        result = []
+        for group in groups:
+            # Get files associated with the group
+            files = session.query(File).filter_by(group_id=group.id).all()
+            file_list = [{"file_name": file.file_name, "file_type": file.file_type} for file in files]
 
-        return jsonify({"file_groups": file_groups_response.data}), 200
-
-    except Exception as e:
-        return jsonify({"error": str(e)}), 500
-
-@app.route('/upload', methods=['POST'])
-def upload_file():
-    if 'file_matrix' not in request.files:
-        return jsonify({"error": "No file provided"}), 400
-
-    if 'file_coordinate' not in request.files:
-        return jsonify({"error": "No file provided"}), 400
-
-    if 'username' not in request.form:
-        return jsonify({"error": "Username is required"}), 400
-
-    file_matrix = request.files['file_matrix']
-    file_coordinate = request.files['file_coordinate']
-    username = request.form['username']  # Get username from form data
-    print(username)
-
-
-    matrix_original_filename = file_matrix.filename.rsplit('.', 1)[0]
-    matrix_file_extension = file_matrix.filename.rsplit('.', 1)[-1].lower()
-    matrix_idName = f"{matrix_original_filename}.{matrix_file_extension}"
-
-    # Determine resource type
-    matrix_resource_type = "raw" if matrix_file_extension not in ["jpg", "jpeg", "png", "gif", "mp4", "mov"] else "auto"
-
-    coordinate_original_filename = file_coordinate.filename.rsplit('.', 1)[0]
-    coordinate_file_extension = file_coordinate.filename.rsplit('.', 1)[-1].lower()
-    coordinate_idName = f"{coordinate_original_filename}.{coordinate_file_extension}"
-
-    # Determine resource type
-    coordinate_resource_type = "raw" if coordinate_file_extension not in ["jpg", "jpeg", "png", "gif", "mp4", "mov"] else "auto"
-
-    # logging.basicConfig(level=logging.DEBUG)
-
-    try:
-        matrix_bytes = file_matrix.read()
-        coordinate_bytes = file_coordinate.read()
-
-        ret_json = parse_matrix(BytesIO(matrix_bytes), BytesIO(coordinate_bytes))
-
-
-        upload_result_matrix = cloudinary.uploader.upload(BytesIO(matrix_bytes), resource_type=matrix_resource_type, public_id=matrix_idName, overwrite=True)
-        add_file_for_user(username=username, file_name=matrix_idName)
-
-        upload_result_coordinate = cloudinary.uploader.upload(BytesIO(coordinate_bytes), resource_type=coordinate_resource_type, public_id=coordinate_idName, overwrite=True)
-        add_file_for_user(username=username, file_name=coordinate_idName)
-
-        print(ret_json)
-
-        return jsonify({
-                "message": "File uploaded successfully",
-                # "matrix_url": upload_result_matrix['secure_url'],
-                # "coordinate_url": upload_result_coordinate['secure_url'],
-                "graph": ret_json
+            # Assemble group data
+            result.append({
+                "id": str(group.id),
+                "title": group.title,
+                "description": group.description,
+                "is_domain_specific": group.is_domain_specific,
+                "genomes": group.genomes,
+                "num_genes": group.num_genes,
+                "num_domains": group.num_domains,
+                "files": file_list
             })
-            #jsonify(response_data)
+
+        return jsonify({"file_groups": result}), 200
+
     except Exception as e:
-        return jsonify({"error": str(e)}), 500
+        session.rollback()
+        return jsonify({"error": f"Failed to retrieve file groups: {str(e)}"}), 500
+
+    finally:
+        session.close()
+
+# Not really used anymore, but kept for reference
+# @app.route('/upload', methods=['POST'])
+# def upload_file():
+#     if 'file_matrix' not in request.files:
+#         return jsonify({"error": "No file provided"}), 400
+
+#     if 'file_coordinate' not in request.files:
+#         return jsonify({"error": "No file provided"}), 400
+
+#     if 'username' not in request.form:
+#         return jsonify({"error": "Username is required"}), 400
+
+#     file_matrix = request.files['file_matrix']
+#     file_coordinate = request.files['file_coordinate']
+#     username = request.form['username']  # Get username from form data
+#     print(username)
 
 
-@app.route('/retrieve/<public_id>', methods=['GET'])
-def retrieve_file(public_id):
-    file_url = cloudinary.utils.cloudinary_url(public_id, resource_type="raw")[0]
-    return jsonify({"file_url": file_url})
+#     matrix_original_filename = file_matrix.filename.rsplit('.', 1)[0]
+#     matrix_file_extension = file_matrix.filename.rsplit('.', 1)[-1].lower()
+#     matrix_idName = f"{matrix_original_filename}.{matrix_file_extension}"
+
+#     # Determine resource type
+#     matrix_resource_type = "raw" if matrix_file_extension not in ["jpg", "jpeg", "png", "gif", "mp4", "mov"] else "auto"
+
+#     coordinate_original_filename = file_coordinate.filename.rsplit('.', 1)[0]
+#     coordinate_file_extension = file_coordinate.filename.rsplit('.', 1)[-1].lower()
+#     coordinate_idName = f"{coordinate_original_filename}.{coordinate_file_extension}"
+
+#     # Determine resource type
+#     coordinate_resource_type = "raw" if coordinate_file_extension not in ["jpg", "jpeg", "png", "gif", "mp4", "mov"] else "auto"
+
+#     # logging.basicConfig(level=logging.DEBUG)
+
+#     try:
+#         matrix_bytes = file_matrix.read()
+#         coordinate_bytes = file_coordinate.read()
+
+#         ret_json = parse_matrix(BytesIO(matrix_bytes), BytesIO(coordinate_bytes))
+
+
+#         upload_result_matrix = cloudinary.uploader.upload(BytesIO(matrix_bytes), resource_type=matrix_resource_type, public_id=matrix_idName, overwrite=True)
+#         add_file_for_user(username=username, file_name=matrix_idName)
+
+#         upload_result_coordinate = cloudinary.uploader.upload(BytesIO(coordinate_bytes), resource_type=coordinate_resource_type, public_id=coordinate_idName, overwrite=True)
+#         add_file_for_user(username=username, file_name=coordinate_idName)
+
+#         print(ret_json)
+
+#         return jsonify({
+#                 "message": "File uploaded successfully",
+#                 # "matrix_url": upload_result_matrix['secure_url'],
+#                 # "coordinate_url": upload_result_coordinate['secure_url'],
+#                 "graph": ret_json
+#             })
+#             #jsonify(response_data)
+#     except Exception as e:
+#         return jsonify({"error": str(e)}), 500
+
+
+# @app.route('/retrieve/<public_id>', methods=['GET'])
+# def retrieve_file(public_id):
+#     file_url = cloudinary.utils.cloudinary_url(public_id, resource_type="raw")[0]
+#     return jsonify({"file_url": file_url})
 
 
 @app.route('/get_user_files', methods=['POST'])
 def get_user_files():
-    # Extract username from request JSON
     req = request.get_json()
     username = req.get("username")
 
     if not username:
         return jsonify({"error": "Username is required"}), 400
 
-    # Step 1: Get the user ID from Supabase
-    user_response = (
-        supabase.table("users")
-        .select("id")
-        .eq("username", username)
-        .execute()
-    )
+    session = SessionLocal()
+    try:
+        # Get user
+        user = session.query(User).filter_by(username=username).first()
+        if not user:
+            return jsonify({"error": "User not found"}), 404
 
-    if not user_response.data:
-        return jsonify({"error": "User not found"}), 404
+        # Get all files for the user
+        files = session.query(File).filter_by(user_id=user.id).all()
 
-    user_id = user_response.data[0]["id"]
+        file_list = [
+            {
+                "file_name": f.file_name,
+                "uploaded_at": f.uploaded_at.isoformat() if f.uploaded_at else None,
+                "file_type": f.file_type,
+                "group_id": str(f.group_id) if f.group_id else None
+            }
+            for f in files
+        ]
 
-    # Step 2: Get all files associated with the user ID
-    files_response = (
-        supabase.table("user_files")
-        .select("file_name, uploaded_at")
-        .eq("user_id", user_id)
-        .execute()
-    )
+        return jsonify({"files": file_list}), 200
 
-    # If no files are found, return an empty list
-    return jsonify({"files": files_response.data}), 200
+    except Exception as e:
+        session.rollback()
+        return jsonify({"error": f"Failed to retrieve files: {str(e)}"}), 500
+
+    finally:
+        session.close()
 
 @app.route('/pokemon', methods=['GET'])
 def nintendo():

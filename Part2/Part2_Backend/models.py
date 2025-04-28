@@ -2,6 +2,7 @@
 from sqlalchemy import Column, String, Integer, Boolean, TIMESTAMP, ARRAY, ForeignKey
 from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy.sql import func
 import uuid
 
 Base = declarative_base()
@@ -24,15 +25,15 @@ class Group(Base):
     num_genes = Column(Integer)
     num_domains = Column(Integer)
     genomes = Column(ARRAY(String))
-    created_at = Column(TIMESTAMP(timezone=True))
+    created_at = Column(TIMESTAMP(timezone=True), server_default=func.now())
 
 class File(Base):
     __tablename__ = "files"
 
     id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
-    group_id = Column(UUID(as_uuid=True), ForeignKey('groups.id'), nullable=False)
+    group_id = Column(UUID(as_uuid=True), ForeignKey('groups.id'), nullable=True)
     user_id = Column(UUID(as_uuid=True), ForeignKey('users.id'), nullable=False)
     file_name = Column(String, nullable=False)
     s3_key = Column(String, nullable=False)
     file_type = Column(String)
-    uploaded_at = Column(TIMESTAMP(timezone=True))
+    uploaded_at = Column(TIMESTAMP(timezone=True), server_default=func.now())

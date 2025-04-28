@@ -1,5 +1,6 @@
 <script>
     import { onMount } from "svelte";
+    import { goto } from "$app/navigation";
 
     let username = "";
     let userFiles = [];
@@ -8,16 +9,19 @@
     let loading = false;
     let retrievedFileUrl = "";
     let retrievingFile = false;
-    let manualPublicId = ""; // To store the manually entered file name
 
     // Ensure `localStorage` is accessed only in the client
-    onMount(() => {
+    onMount(async () => {
         if (typeof window !== "undefined") {
             username = localStorage.getItem("username") || "";
             if (username) {
-                // Autofetch files and file groups on page load
-                fetchUserFiles();
-                fetchUserFileGroups();
+                try {
+                    // Fetch user files and file groups
+                    await fetchUserFiles();
+                    await fetchUserFileGroups();
+                } catch (error) {
+                    errorMessage = error.message || "Failed to load data";
+                }
             } else {
                 errorMessage = "No username found. Please log in.";
             }
@@ -129,6 +133,9 @@
                                 </li>
                             {/each}
                         </ul>
+                        <button on:click={() => goto(`/dashboard/diagram?groupId=${group.id}`)}>
+                            View Diagram
+                        </button>
                     {:else}
                         <p class="no-files">No files included</p>
                     {/if}
@@ -181,9 +188,10 @@
         margin-top: 30px;
     }
 
+
     .card-container {
         display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        grid-template-columns: repeat(3, minmax(200px, 1fr));
         gap: 15px;
         margin-top: 15px;
     }

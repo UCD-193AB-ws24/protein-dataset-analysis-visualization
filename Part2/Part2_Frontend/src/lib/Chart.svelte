@@ -97,37 +97,58 @@
       }
     });
 
-    // TODO: look into this, need to see how necessary it is
+    // TODO: Verify w/client what coloring scheme to use for duplicated nodes
     // Add to union-find structure "links" bewtween first-genome and duplicated nodes
-    // nodes.forEach((n) => {
-    //   if (n._dup) {
-    //     const originalId = n.id.slice(0, -dupSuffix.length);
-    //     const originalNode = nodes.find((o) => o.id === originalId);
-    //     if (originalNode) {
-    //       uf.union(n.id, originalId);
-    //     }
-    //   }
-    // });
-
+    nodes.forEach((n) => {
+      if (n._dup) {
+        const originalId = n.id.slice(0, -dupSuffix.length);
+        const originalNode = nodes.find((o) => o.id === originalId);
+        if (originalNode) {
+          uf.union(n.id, originalId);
+        }
+      }
+    });
 
     // Map CCs to colors
     const componentRoots = new Set(nodes.map((n) => uf.find(n.id)));
-    // const colorScale = d3.scaleOrdinal([...d3.schemeSet3]).domain([...componentRoots]);
     const componentSize = new Map([...componentRoots].map((root) => [root, 0]));
     nodes.forEach((n) => {
       const root = uf.find(n.id);
       componentSize.set(root, (componentSize.get(root) || 0) + 1);
     });
-    const nonSingletonRoots = [...componentRoots].filter((root) => componentSize.get(root)! > 1);
-    const colorScale = d3.scaleOrdinal([...d3.schemeSet3]).domain(nonSingletonRoots);
-    // Gray-out CCs of size 1
+
+    // Select nodes we want to color (non-singletons or CCs of size 2 with a dup)
+    const colorRoots = [...componentRoots].filter(root => {
+      const size = componentSize.get(root)!;
+      // if it’s a size-2 CC *and* one member is a dup, skip it
+      if (size === 2 && nodes.some(n => uf.find(n.id) === root && n._dup)) {
+        return false;
+      }
+      // otherwise color only if size > 1
+      return size > 1;
+    });
+
+    const customColors = [
+      "#1f77b4",
+      "#ff7f0e",
+      "#2ca02c",
+      "#d62728",
+      "#9467bd",
+      "#8c564b",
+      "#e377c2",
+      "#7f7f7f",
+      "#bcbd22",
+      "#17becf"
+    ];
+    const colorScale = d3.scaleOrdinal(customColors).domain(colorRoots);
+    // const colorScale = d3.scaleOrdinal([...d3.schemeSet3]).domain(colorRoots);
+    // Gray-out CCs not associated with colorRoots
     const nodeColor = new Map(
       nodes.map((n) => {
-      const root = uf.find(n.id);
-      return [n.id, componentSize.get(root) === 1 ? '#ccc' : colorScale(root)];
+        const root = uf.find(n.id);
+        return [n.id, colorRoots.includes(root) ? colorScale(root) : '#ccc'];
       })
     );
-    // const nodeColor = new Map(nodes.map((n) => [n.id, colorScale(uf.find(n.id))!]));
 
     return { nodes, links, genomes, nodeColor };
   }
@@ -214,11 +235,11 @@
       .attr('y1', (d) => y(rowOf(nodeById.get(d.source)!))! + y.bandwidth() / 2 + margin.top)
       .attr('x2', (d) => x(nodeById.get(d.target)!.rel_position))
       .attr('y2', (d) => y(rowOf(nodeById.get(d.target)!))! + y.bandwidth() / 2 + margin.top)
-      .attr('stroke-width', (d) => strokeW(d.score))
+      .attr('stroke-width', (d) => strokeW(d.score) * 2)
       .attr('stroke-dasharray', (d) => (d.is_reciprocal ? null : '4,4'))
       .attr('stroke', (d) => (d.is_reciprocal ? nodeColor?.get(d.source)! : '#bbb'))
       .on('mouseover', function (event, d) {
-        d3.select(this).transition().duration(150).attr('stroke-width', strokeW(d.score) * 2);
+        d3.select(this).transition().duration(150).attr('stroke-width', strokeW(d.score) * 4);
         const n1 = nodeById.get(d.source)!;
         const n2 = nodeById.get(d.target)!;
         d3.select(tooltipEl)
@@ -232,7 +253,7 @@
         d3.select(tooltipEl).style('left', event.pageX + 10 + 'px').style('top', event.pageY + 10 + 'px');
       })
       .on('mouseout', function (event, d) {
-        d3.select(this).transition().duration(150).attr('stroke-width', strokeW(d.score));
+        d3.select(this).transition().duration(150).attr('stroke-width', strokeW(d.score) * 2);
         d3.select(tooltipEl).style('opacity', 0);
       });
 
@@ -270,6 +291,20 @@
       });
   }
 
+  function downloadSVG() {
+    const svg = d3.select(chartSvgEl);
+    const svgData = new XMLSerializer().serializeToString(svg.node()!);
+    const svgBlob = new Blob([svgData], { type: 'image/svg+xml;charset=utf-8' });
+    const url = URL.createObjectURL(svgBlob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'diagram.svg';
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  }
+
   onMount(draw);
   afterUpdate(draw);
 </script>
@@ -282,6 +317,7 @@
   </div>
 </div>
 <div bind:this={tooltipEl} class="tooltip"></div>
+<button on:click={downloadSVG} class="download-btn">Download SVG</button>
 
 <style>
   .wrapper {
@@ -307,5 +343,18 @@
     pointer-events: none;
     opacity: 0;
     white-space: nowrap;
+  }
+
+  .download-btn {
+    margin-left: 40px;
+    padding: 6px 12px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+  .download-btn:hover {
+    background-color: #0056b3;
   }
 </style>

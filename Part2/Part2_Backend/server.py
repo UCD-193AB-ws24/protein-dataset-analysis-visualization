@@ -10,6 +10,8 @@ import json
 from io import BytesIO
 from datetime import datetime
 import requests
+import boto3
+import uuid
 
 from models import Base, User, Group, File
 from sqlalchemy import create_engine
@@ -34,6 +36,14 @@ cloudinary.config(
 # url: str = os.getenv("SUPABASE_URL")
 # key: str = os.getenv("SUPABASE_KEY")
 # supabase: Client = create_client(url, key)
+
+# Configure AWS S3
+s3_client = boto3.client(
+    's3',
+    aws_access_key_id=os.getenv("AWS_ACCESS_KEY_ID"),
+    aws_secret_access_key=os.getenv("AWS_SECRET_ACCESS_KEY"),
+    region_name=os.getenv("AWS_REGION")
+)
 
 # Configure sqlalchemy
 if os.getenv("ENV") == "production":
@@ -109,10 +119,19 @@ def get_group_graph():
         if not (matrix_s3_key and coordinate_s3_key and graph_s3_key):
             return jsonify({"error": "Matrix/coordinate/graph file not found for this group"}), 400
 
-        # Retrieve files from Cloudinary
-        matrix_url = cloudinary.utils.cloudinary_url(matrix_s3_key, resource_type="raw")[0]
-        coordinate_url = cloudinary.utils.cloudinary_url(coordinate_s3_key, resource_type="raw")[0]
-        graph_url = cloudinary.utils.cloudinary_url(graph_s3_key, resource_type="raw")[0]
+        # Retrieve files from S3
+        # Note: files aren't exactly private so we're just using simple urls
+        # but, we can switch to presigned URLs if needed
+        bucket_name = os.getenv('S3_BUCKET_NAME')
+
+        matrix_url = f"https://{bucket_name}.s3.amazonaws.com/{matrix_s3_key}"
+        coordinate_url = f"https://{bucket_name}.s3.amazonaws.com/{coordinate_s3_key}"
+        graph_url = f"https://{bucket_name}.s3.amazonaws.com/{graph_s3_key}"
+
+        # # Retrieve files from Cloudinary
+        # matrix_url = cloudinary.utils.cloudinary_url(matrix_s3_key, resource_type="raw")[0]
+        # coordinate_url = cloudinary.utils.cloudinary_url(coordinate_s3_key, resource_type="raw")[0]
+        # graph_url = cloudinary.utils.cloudinary_url(graph_s3_key, resource_type="raw")[0]
 
         matrix_response = requests.get(matrix_url)
         coordinate_response = requests.get(coordinate_url)
@@ -191,6 +210,35 @@ def upload_graph_to_cloudinary(graph_data):
     )
     return upload_result['public_id'], graph_filename
 
+def guess_content_type(extension):
+    mapping = {
+        "csv": "text/csv",
+        "json": "application/json",
+        "xlsx": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+    }
+    return mapping.get(extension.lower(), "application/octet-stream")
+
+def upload_to_s3(file_obj):
+    bucket_name = os.getenv('S3_BUCKET_NAME')
+
+    # Extract original filename/extension and create a unique filename
+    original_filename = file_obj.filename
+    extension = file_obj.filename.rsplit('.', 1)[-1].lower()
+
+    unique_filename = f"uploadedfiles/{uuid.uuid4()}.{extension.lower()}"
+
+    # Upload to S3
+    s3_client.upload_fileobj(
+        Fileobj=BytesIO(file_obj.read()),  # Important: rewrap as BytesIO
+        Bucket=bucket_name,
+        Key=unique_filename,
+        ExtraArgs={
+            "ContentType": guess_content_type(extension),
+            "ACL": "public-read"
+        }
+    )
+
+    return unique_filename, original_filename  # Return the S3 object key (not full URL)
 
 @app.route('/save', methods=['POST'])
 def save_files():
@@ -244,10 +292,18 @@ def save_files():
         session.commit()
         group_id = new_group.id
 
-        # Upload files to Cloudinary
-        matrix_s3_key, matrix_filename = upload_file_to_cloudinary(file_matrix)
-        coordinate_s3_key, coordinate_filename = upload_file_to_cloudinary(file_coordinate)
-        graph_s3_key, graph_filename = upload_graph_to_cloudinary(graph_data)
+        # Upload files to S3
+        matrix_s3_key, matrix_filename = upload_to_s3(file_matrix)
+        coordinate_s3_key, coordinate_filename = upload_to_s3(file_coordinate)
+        graph_file = BytesIO(graph_data.encode('utf-8'))
+        timestamp = datetime.now().strftime("%Y%m%d%H%M%S")
+        graph_file.filename = f"graph_{timestamp}.json"
+        graph_s3_key, graph_filename = upload_to_s3(graph_file)
+
+        # # Upload files to Cloudinary
+        # matrix_s3_key, matrix_filename = upload_file_to_cloudinary(file_matrix)
+        # coordinate_s3_key, coordinate_filename = upload_file_to_cloudinary(file_coordinate)
+        # graph_s3_key, graph_filename = upload_graph_to_cloudinary(graph_data)
 
         # Insert file records into database
         session.add_all([

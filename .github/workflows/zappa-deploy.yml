@@ -8,35 +8,35 @@ jobs:
   deploy-backend:
     runs-on: ubuntu-latest
 
-    # every run: block below starts in your backend directory
+    # All run: steps will execute from Part2/Part2_Backend
     defaults:
       run:
-        working-directory: ./Part2/Part2_Backend
+        working-directory: Part2/Part2_Backend
 
     steps:
-      # 1. Check out the code
+      # 1) Check out your repo
       - name: Checkout code
         uses: actions/checkout@v4
 
-      # 2. Set up Python 3.9 (to match your zappa_settings.json runtime)
+      # 2) Use Python 3.9 to match your Zappa settings
       - name: Setup Python
         uses: actions/setup-python@v4
         with:
           python-version: '3.9'
 
-      # 3. Cache & install dependencies + Zappa
+      # 3) Cache & install dependencies + latest Zappa
       - name: Cache pip
         uses: actions/cache@v3
         with:
           path: ~/.cache/pip
           key: ${{ runner.os }}-pip-${{ hashFiles('Part2/Part2_Backend/requirements.txt') }}
-      - name: Install requirements & Zappa
+      - name: Install dependencies & Zappa
         run: |
           pip install --upgrade pip
           pip install -r requirements.txt
-          pip install zappa
+          pip install --upgrade zappa
 
-      # 4. Configure AWS credentials
+      # 4) Configure AWS credentials for Zappa
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v2
         with:
@@ -44,7 +44,7 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region:            ${{ secrets.AWS_DEFAULT_REGION }}
 
-      # 5. Build real env.json from your GitHub Secrets
+      # 5) Build the real env.json from your GitHub Secrets
       - name: Build env.json
         run: |
           cat > env.json <<EOF
@@ -57,11 +57,11 @@ jobs:
           }
           EOF
 
-      # 6. Deploy (or update) your dev stage via Zappa
+      # 6) Deploy (or update) your `dev` stage via Zappa
       - name: Deploy or Update Zappa
         run: |
-          if zappa status dev --settings_file zappa_settings.json >/dev/null; then
-            zappa update dev --settings_file zappa_settings.json --env-vars env.json
+          if zappa status -s zappa_settings.json dev >/dev/null 2>&1; then
+            zappa update -s zappa_settings.json dev --env-vars env.json
           else
-            zappa deploy dev --settings_file zappa_settings.json --env-vars env.json
+            zappa deploy -s zappa_settings.json dev --env-vars env.json
           fi

@@ -1,0 +1,67 @@
+name: Deploy Zappa on main
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  deploy-backend:
+    runs-on: ubuntu-latest
+
+    # All run: steps will execute from Part2/Part2_Backend
+    defaults:
+      run:
+        working-directory: Part2/Part2_Backend
+
+    steps:
+      # 1) Check out your repo
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      # 2) Use Python 3.9 to match your Zappa settings
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.9'
+
+      # 3) Cache & install dependencies + latest Zappa
+      - name: Cache pip
+        uses: actions/cache@v3
+        with:
+          path: ~/.cache/pip
+          key: ${{ runner.os }}-pip-${{ hashFiles('Part2/Part2_Backend/requirements.txt') }}
+      - name: Install dependencies & Zappa
+        run: |
+          pip install --upgrade pip
+          pip install -r requirements.txt
+          pip install --upgrade zappa
+
+      # 4) Configure AWS credentials for Zappa
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v2
+        with:
+          aws-access-key-id:     ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region:            ${{ secrets.AWS_DEFAULT_REGION }}
+
+      # 5) Build the real env.json from your GitHub Secrets
+      - name: Build env.json
+        run: |
+          cat > env.json <<EOF
+          {
+            "SUPABASE_URL":  "${{ secrets.SUPABASE_URL }}",
+            "SUPABASE_KEY":  "${{ secrets.SUPABASE_KEY }}",
+            "CLOUD_NAME":    "${{ secrets.CLOUD_NAME }}",
+            "API_KEY":       "${{ secrets.API_KEY }}",
+            "API_SECRET":    "${{ secrets.API_SECRET }}"
+          }
+          EOF
+
+      # 6) Deploy (or update) your `dev` stage via Zappa
+      - name: Deploy or Update Zappa
+        run: |
+          if zappa status -s zappa_settings.json dev >/dev/null 2>&1; then
+            zappa update -s zappa_settings.json dev --env-vars env.json
+          else
+            zappa deploy -s zappa_settings.json dev --env-vars env.json
+          fi

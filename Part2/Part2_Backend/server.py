@@ -4,7 +4,6 @@ import cloudinary
 import cloudinary.uploader
 from dotenv import load_dotenv
 from flask_cors import CORS
-# from supabase import create_client, Client
 from parse_matrix import parse_matrix
 import json
 from io import BytesIO
@@ -17,6 +16,7 @@ from models import Base, User, Group, File
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.pool import NullPool
+from auth_utils import verify_token
 
 # Load environment variables
 load_dotenv()
@@ -383,6 +383,25 @@ def get_user_files():
 
     finally:
         session.close()
+
+@app.route('/api/user-data')
+def get_user_data():
+    auth_header = request.headers.get('Authorization', '')
+    token = auth_header.replace('Bearer ', '')
+
+    try:
+        user_info = verify_token(token)
+        user_id = user_info['sub']
+
+        # 🧠 Use user_email or user_id to fetch user-specific data from DB
+        return jsonify({
+            'message': 'Hello, authenticated user!',
+            'user': {
+                'id': user_id
+            }
+        })
+    except Exception as e:
+        return jsonify({'error': str(e)}), 401
 
 @app.route('/pokemon', methods=['GET'])
 def nintendo():

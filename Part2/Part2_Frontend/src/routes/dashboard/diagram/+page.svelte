@@ -95,7 +95,7 @@
 
     try {
       // https://h47f781wh1.execute-api.us-east-1.amazonaws.com/dev/upload
-      const response = await fetch('http://127.0.0.1:5000/generate_graph', {
+      const response = await fetch('https://4aorvlzrd1.execute-api.us-east-1.amazonaws.com/dev/generate_graph', {
         method: 'POST',
         body: formData,
       });
@@ -155,7 +155,7 @@
     formData.append('graph', JSON.stringify(graph));
 
     try {
-      const response = await fetch('http://127.0.0.1:5000/save', {
+      const response = await fetch('https://4aorvlzrd1.execute-api.us-east-1.amazonaws.com/dev/save', {
         method: 'POST',
         body: formData,
       });

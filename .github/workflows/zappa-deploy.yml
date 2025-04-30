@@ -41,13 +41,13 @@ jobs:
 
       - name: Inject environment variables into zappa_settings.json
         run: |
-          jq --arg env "${{ vars.ENV }}" \"
+          jq --arg env "${{ vars.ENV }}" \
              --arg s3_key "${{ secrets.S3_AWS_ACCESS_KEY_ID }}" \
              --arg s3_secret "${{ secrets.S3_AWS_SECRET_ACCESS_KEY }}" \
              --arg s3_region "${{ secrets.S3_AWS_REGION }}" \
              --arg db_url "${{ secrets.DATABASE_URL }}" \
              '.dev.environment_variables.ENV = $env |
-             '.dev.environment_variables.S3_AWS_ACCESS_KEY_ID = $s3_key |
+              .dev.environment_variables.S3_AWS_ACCESS_KEY_ID = $s3_key |
               .dev.environment_variables.S3_AWS_SECRET_ACCESS_KEY = $s3_secret |
               .dev.environment_variables.S3_AWS_REGION = $s3_region \
               .dev.environment_variables.DATABASE_URL = $db_url' \

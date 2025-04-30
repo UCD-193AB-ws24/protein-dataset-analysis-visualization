@@ -1,0 +1,16 @@
+{
+  "dev": {
+    "app_function": "server.app",
+    "aws_region": "us-east-1",
+    "project_name": "lettuce-backend",
+    "runtime": "python3.9",
+    "s3_bucket": "zappa-lettuce-backend-bucket",
+    "environment_variables": {
+      "ENV": "PLACEHOLDER_ENV",
+      "S3_AWS_ACCESS_KEY_ID": "PLACEHOLDER_S3_AWS_ACCESS_KEY_ID",
+      "S3_AWS_SECRET_ACCESS_KEY": "PLACEHOLDER_S3_AWS_SECRET_ACCESS_KEY",
+      "S3_AWS_REGION": "PLACEHOLDER_S3_AWS_REGION",
+      "DATABASE_URL": "PLACEHOLDER_DATABASE_URL"
+    }
+  }
+}

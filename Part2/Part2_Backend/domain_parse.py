@@ -8,7 +8,7 @@ def validate_coordinate_dataframe_basic(df):
     if df.empty:
         raise ValueError("The coordinate file is empty")
         
-    required_columns = ['name', 'protein_name', 'genome', 'orientation']
+    required_columns = ['name', 'protein_name', 'genome', 'gene_type', 'orientation']
     missing_columns = [col for col in required_columns if col not in df.columns]
     if missing_columns:
         raise ValueError(f"Missing required columns: {', '.join(missing_columns)}")
@@ -31,21 +31,55 @@ def validate_coordinate_data_types(df):
     if not df['orientation'].isin(valid_orientations).all():
         raise ValueError("Orientation column should only contain 'plus', 'minus', 'positive', 'negative', '+' or '-'")
 
+    if df['orientation'].isin(['positive', '+']).any():
+        df['orientation'] = 'plus'
+    elif df['orientation'].isin(['negative', '-']).any():
+        df['orientation'] = 'minus'
+
 def process_name_field(df):
     try:
-        df['protein_name'] = df['name'].str.split('_').str[-1]
-        df['genome_name'] = df['name'].str.split('_').str[0]
-        
-        if df['protein_name'].isnull().any() or df['genome_name'].isnull().any():
+        if df['protein_name'].isnull().any() or df['genome'].isnull().any():
             raise ValueError("Some names don't follow the expected format (should contain '_')")
             
         return df
     except Exception as e:
         raise ValueError(f"Error processing name field: {str(e)}")
 
+def process_domain_field(df):
+    try:
+        domain_columns = [col for col in df.columns if 'domain' in col]
+        if len(domain_columns) == 0:
+            raise ValueError("No domain columns found (should be in format 'domainX_NAME_start/end)")
+        
+        domain_names = set()
+        domain_col_names = set()
+        for col in domain_columns:
+            domain_col_names.add(col)
+            parts = col.split('_')
+            if len(parts) < 2:
+                raise ValueError(f"Invalid domain format, needs underscore: {col}")
+            
+            if len(parts) == 3:
+                domain_name = '_'.join(parts[1:-1]) # Also handles cases where domain names have underscores
+            elif len(parts) == 2:
+                domain_name = parts[-1]
+            domain_names.add(domain_name)
+
+        for domain in domain_names:
+            test_domain_cols = [col for col in domain_columns if domain in col]
+            has_start = any(col for col in test_domain_cols if col.endswith('_start'))
+            has_end = (col for col in test_domain_cols if col.endswith('_end'))
+
+            if (has_start or has_end) and not (has_start and has_end):
+                raise ValueError(f"Domain {domain} is missing start or end position")
+            
+        return list(domain_names), list(domain_col_names)
+    except Exception as e:
+        raise ValueError(f"Error processing domain field: {str(e)}")
+
 def calculate_relative_positions(df):
     try:
-        df['rel_position'] = df.groupby('genome_name')['position'].rank(method='first').astype(int)
+        df['rel_position'] = df.groupby('genome')['position'].rank(method='first').astype(int)
         return df
     except Exception as e:
         raise ValueError(f"Error calculating relative positions: {str(e)}")
@@ -60,6 +94,8 @@ def parse_coordinates(coord_file):
         
         # Validate data types
         validate_coordinate_data_types(df)
+
+        domain_names, domain_col_names = process_domain_field(df)
         
         # Process name field
         df = process_name_field(df)
@@ -68,9 +104,13 @@ def parse_coordinates(coord_file):
         df = calculate_relative_positions(df)
         
         # Return only the required columns in the specified order
-        required_columns = ['name', 'genome_name', 'protein_name', 'position', 'rel_position', 'orientation']
+        required_columns = ['name', 'genome', 'protein_name', 'position', 'rel_position', 'orientation', 'gene_type']
+        required_columns = required_columns + domain_col_names
+        print(required_columns)
         if not all(col in df.columns for col in required_columns):
             raise ValueError("Missing one or more required columns after processing")
+        
+        print(df[required_columns])
             
         return df[required_columns]
         
@@ -81,54 +121,6 @@ def parse_coordinates(coord_file):
     except Exception as e:
         raise ValueError(f"Error processing coordinate file: {str(e)}")
 
-
-def add_nodes(coords):
-    nodes = []
-
-    for i in range(len(coords)):
-        nodes.append({
-            "id" : '_'.join([coords['genome_name'][i], coords['protein_name'][i]]),
-            "genome_name": coords['genome_name'][i],
-            "protein_name": coords['protein_name'][i],
-            "direction": coords['orientation'][i],
-            "rel_position": int(coords['rel_position'][i]),
-        })
-
-    return nodes
-
-def add_links(df_only_cutoffs, row_max, col_max):
-    links = []
-
-    for row in df_only_cutoffs.index:
-        for col in df_only_cutoffs.columns:
-            entry = {}
-            is_col_max = pd.notna(col_max.at[row, col])
-            is_row_max = pd.notna(row_max.at[row, col])
-
-            if is_row_max and is_col_max:
-                source = row
-                target = col
-                reciprocal_max = True
-            elif is_row_max:
-                source = row
-                target = col
-                reciprocal_max = False
-            elif is_col_max:
-                source = col
-                target = row
-                reciprocal_max = False
-            else:
-                continue  # skip non-max values
-
-
-            links.append({
-                "source": '_'.join([source.split('_')[0], source.split('_')[-1]]),
-                "target": '_'.join([target.split('_')[0], target.split('_')[-1]]),
-                "score": float(df_only_cutoffs.at[row, col]),
-                "is_reciprocal": reciprocal_max
-            })
-
-    return links
 
 def validate_dataframe_basic(df):
     if df.empty:
@@ -171,7 +163,6 @@ def extract_subsections(df_only_cutoffs):
     return subsections.unique()
 
 def create_subsection_mappings(df_only_cutoffs, subsections):
-    """Create mappings using the second token as subsection"""
     row_to_subsection = pd.Series(index=df_only_cutoffs.index, dtype="object")
     col_to_subsection = pd.Series(index=df_only_cutoffs.columns, dtype="object")
     
@@ -257,18 +248,87 @@ def parse_matrix_data(matrix_file):
         raise ValueError(f"Error processing matrix file: {str(e)}")
 
 
+def add_nodes(coords):
+    nodes = []
+
+    for i in range(len(coords)):
+        nodes.append({
+            "id" : coords['name'][i],
+            "genome_name": coords['genome'][i],
+            "protein_name": coords['protein_name'][i],
+            "direction": coords['orientation'][i],
+            "rel_position": int(coords['rel_position'][i]),
+            "gene_type": coords['gene_type'][i]
+        })
+
+    return nodes
+
+def add_links(df_only_cutoffs, row_max, col_max, subsections):
+    links = []
+
+    for row in df_only_cutoffs.index:
+        for col in df_only_cutoffs.columns:
+            is_col_max = pd.notna(col_max.at[row, col])
+            is_row_max = pd.notna(row_max.at[row, col])
+
+            if is_row_max and is_col_max:
+                source = row
+                target = col
+                reciprocal_max = True
+            elif is_row_max:
+                source = row
+                target = col
+                reciprocal_max = False
+            elif is_col_max:
+                source = col
+                target = row
+                reciprocal_max = False
+            else:
+                continue  # skip non-max values
+
+            if any((genome in source) and (genome in target) for genome in subsections):
+                continue
+
+
+            links.append({
+                "source": source,
+                "target": target,
+                "score": float(df_only_cutoffs.at[row, col]),
+                "is_reciprocal": reciprocal_max
+            })
+
+    return links
+
 def create_output(matrix_data, coords):
     output = {"genomes": matrix_data['subsections'].tolist()}
     output["nodes"] = add_nodes(coords)
-    output["links"] = add_links(matrix_data['df_only_cutoffs'], matrix_data['row_max'], matrix_data['col_max'])
+    output["links"] = add_links(matrix_data['df_only_cutoffs'], matrix_data['row_max'], matrix_data['col_max'], matrix_data['subsections'])
     return output
 
+def get_gene_names_by_genome(coords):
+    gene_names_by_genome = {}
+    all_names = coords['name'].tolist()
+    for genome in coords['genome']:
+        gene_names_by_genome[genome] = [name for name in all_names if genome in name]
+    return gene_names_by_genome
+
 # Update the original parse_matrix function to use the new functions
-def parse_matrix(matrix_file, coord_file):
-    matrix_data = parse_matrix_data(matrix_file)
-    print(matrix_data)
-    # coords = parse_coordinates(coord_file)
-    # return create_output(matrix_data, coords)
+def parse_matrix(matrix_files, coord_file):
+    coords = parse_coordinates(coord_file)
+
+    all_outputs = {}
+
+    genomes_output = []
+    gene_names_by_genome = get_gene_names_by_genome(coords)
+
+    all_outputs['genes_by_genomes'] = gene_names_by_genome
+
+    for idx, matrix_file in enumerate(matrix_files, 1):
+        matrix_file.seek(0)
+        result = create_output(parse_matrix_data(matrix_file), coords)
+        all_outputs[f'graph_{idx}'] = result
+
+    return all_outputs
 
 
 if __name__ == "__main__":
@@ -277,7 +337,9 @@ if __name__ == "__main__":
     
     # Create argument parser
     parser = argparse.ArgumentParser(description='Parse matrix and coordinate files for genome visualization')
-    parser.add_argument('matrix_file', type=str, help='Path to the matrix Excel file')
+    parser.add_argument('matrix_file_1', type=str, help='Path to the first matrix Excel file')
+    parser.add_argument('matrix_file_2', type=str, help='Path to the second matrix Excel file')
+    parser.add_argument('matrix_file_3', type=str, help='Path to the third matrix Excel file')
     parser.add_argument('coord_file', type=str, help='Path to the coordinate Excel file')
     parser.add_argument('--output', '-o', type=str, help='Output JSON file path (optional, defaults to stdout)')
     
@@ -285,21 +347,23 @@ if __name__ == "__main__":
     args = parser.parse_args()
     
     try:
-        # Open and process files
-        with open(args.matrix_file, 'rb') as matrix_file, open(args.coord_file, 'rb') as coord_file:
-            result = parse_matrix(matrix_file, coord_file)
-            
-            # Convert result to JSON
-            output_json = json.dumps(result, indent=2)
-            
-            # Output results
+        with open(args.matrix_file_1, 'rb') as matrix_file_1, \
+             open(args.matrix_file_2, 'rb') as matrix_file_2, \
+             open(args.matrix_file_3, 'rb') as matrix_file_3, \
+             open(args.coord_file, 'rb') as coord_file:
+
+            matrix_files = [matrix_file_1, matrix_file_2, matrix_file_3]
+            result_obj = parse_matrix(matrix_files, coord_file)
+
+            output_json = json.dumps(result_obj, indent=2)
+
             if args.output:
                 with open(args.output, 'w') as f:
                     f.write(output_json)
                 print(f"Results written to {args.output}")
             else:
                 print(output_json)
-                
+
     except Exception as e:
         print(f"Error: {str(e)}", file=sys.stderr)
         sys.exit(1)

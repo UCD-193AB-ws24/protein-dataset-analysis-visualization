@@ -2,7 +2,9 @@ name: Deploy Zappa on main
 
 on:
   push:
-    branches: [main]
+    branches:
+      - main
+      - git-actions-backend
 
 jobs:
   deploy-backend:
@@ -39,16 +41,16 @@ jobs:
 
       - name: Inject environment variables into zappa_settings.json
         run: |
-          jq --arg url    "${{ secrets.SUPABASE_URL }}" \
-             --arg key    "${{ secrets.SUPABASE_KEY }}" \
-             --arg cloud  "${{ secrets.CLOUD_NAME }}"   \
-             --arg api    "${{ secrets.API_KEY }}"      \
-             --arg secret "${{ secrets.API_SECRET }}"   \
-             '.dev.environment_variables.SUPABASE_URL = $url |
-              .dev.environment_variables.SUPABASE_KEY = $key |
-              .dev.environment_variables.CLOUD_NAME   = $cloud |
-              .dev.environment_variables.API_KEY      = $api |
-              .dev.environment_variables.API_SECRET   = $secret' \
+          jq --arg env "${{ vars.ENV }}" \"
+             --arg s3_key "${{ secrets.S3_AWS_ACCESS_KEY_ID }}" \
+             --arg s3_secret "${{ secrets.S3_AWS_SECRET_ACCESS_KEY }}" \
+             --arg s3_region "${{ secrets.S3_AWS_REGION }}" \
+             --arg db_url "${{ secrets.DATABASE_URL }}" \
+             '.dev.environment_variables.ENV = $env |
+             '.dev.environment_variables.S3_AWS_ACCESS_KEY_ID = $s3_key |
+              .dev.environment_variables.S3_AWS_SECRET_ACCESS_KEY = $s3_secret |
+              .dev.environment_variables.S3_AWS_REGION = $s3_region \
+              .dev.environment_variables.DATABASE_URL = $db_url' \
              zappa_settings.json > tmp && mv tmp zappa_settings.json
 
       - name: Create virtualenv, install packages, and deploy with Zappa

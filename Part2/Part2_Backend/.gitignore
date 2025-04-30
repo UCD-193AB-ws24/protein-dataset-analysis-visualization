@@ -11,7 +11,7 @@ node_modules
 dist
 dist-ssr
 *.local
-zappa_settings.json
+# zappa_settings.json
 venv/
 .venv/
 __pycache__

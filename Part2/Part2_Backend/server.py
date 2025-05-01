@@ -16,8 +16,7 @@ from sqlalchemy.orm import sessionmaker
 from sqlalchemy.pool import NullPool
 from auth_utils import verify_token
 
-import traceback
-
+# import traceback
 
 # Load environment variables
 load_dotenv()
@@ -201,12 +200,12 @@ def upload_to_s3(file_obj):
 
 @app.route('/save', methods=['POST'])
 def save_files():
-    # More logs for debugging
-    print("🔧 Entered /save route")
-    print("Form keys:", request.form.keys())
-    print("File keys:", request.files.keys())
-    print("Request headers:", dict(request.headers))
-    print("Request method:", request.method)
+    # # More logs for debugging
+    # print("🔧 Entered /save route")
+    # print("Form keys:", request.form.keys())
+    # print("File keys:", request.files.keys())
+    # print("Request headers:", dict(request.headers))
+    # print("Request method:", request.method)
 
     username = request.form.get("username")
     if not username:
@@ -224,19 +223,19 @@ def save_files():
     file_matrix = request.files.get('file_matrix')
     file_coordinate = request.files.get('file_coordinate')
 
-    print("Form keys received: %s", list(request.form.keys()))
-    print("Type of graph_data: %s, length: %s",
-              type(graph_data), len(graph_data) if graph_data else 0)
-    print("Graph data content preview: %s", graph_data[:200] if graph_data else "No data")
+    # print("Form keys received: %s", list(request.form.keys()))
+    # print("Type of graph_data: %s, length: %s",
+    #           type(graph_data), len(graph_data) if graph_data else 0)
+    # print("Graph data content preview: %s", graph_data[:200] if graph_data else "No data")
 
 
     session = SessionLocal()
 
     try:
-        print("→ Saving files for user:", username)
-        print("→ Received matrix file:", file_matrix.filename if file_matrix else "None")
-        print("→ Received coordinate file:", file_coordinate.filename if file_coordinate else "None")
-        print("→ Graph data length:", len(graph_data) if graph_data else "None")
+        # print("→ Saving files for user:", username)
+        # print("→ Received matrix file:", file_matrix.filename if file_matrix else "None")
+        # print("→ Received coordinate file:", file_coordinate.filename if file_coordinate else "None")
+        # print("→ Graph data length:", len(graph_data) if graph_data else "None")
         # Find user first
         user = session.query(User).filter_by(username=username).first()
         if not user:
@@ -271,7 +270,6 @@ def save_files():
         # Upload files to S3
         matrix_s3_key, matrix_filename = upload_to_s3(file_matrix)
         coordinate_s3_key, coordinate_filename = upload_to_s3(file_coordinate)
-        print("graph data:", graph_data)
         graph_file = BytesIO(graph_data.encode('utf-8'))
         timestamp = datetime.now().strftime("%Y%m%d%H%M%S")
         graph_file.filename = f"graph_{timestamp}.json"
@@ -288,8 +286,8 @@ def save_files():
         return jsonify({"message": "Files and group saved successfully"}), 200
 
     except Exception as e:
-        print("❌ Exception in /save:", str(e))
-        traceback.print_exc()
+        # print("❌ Exception in /save:", str(e))
+        # traceback.print_exc()
         session.rollback()
         return jsonify({"error": f"Failed to save files: {str(e)}"}), 500
 

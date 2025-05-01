@@ -16,9 +16,7 @@ from sqlalchemy.orm import sessionmaker
 from sqlalchemy.pool import NullPool
 from auth_utils import verify_token
 
-import logging
 import traceback
-logging.basicConfig(level=logging.DEBUG)
 
 
 # Load environment variables
@@ -179,6 +177,7 @@ def guess_content_type(extension):
     return mapping.get(extension.lower(), "application/octet-stream")
 
 def upload_to_s3(file_obj):
+    file_obj.seek(0)       # rewind before wrapping
     bucket_name = os.getenv('S3_BUCKET_NAME')
 
     # Extract original filename/extension and create a unique filename
@@ -225,10 +224,10 @@ def save_files():
     file_matrix = request.files.get('file_matrix')
     file_coordinate = request.files.get('file_coordinate')
 
-    logging.debug("Form keys received: %s", list(request.form.keys()))
-    logging.debug("Type of graph_data: %s, length: %s",
+    print("Form keys received: %s", list(request.form.keys()))
+    print("Type of graph_data: %s, length: %s",
               type(graph_data), len(graph_data) if graph_data else 0)
-    logging.debug("Graph data content preview: %s", graph_data[:200] if graph_data else "No data")
+    print("Graph data content preview: %s", graph_data[:200] if graph_data else "No data")
 
 
     session = SessionLocal()

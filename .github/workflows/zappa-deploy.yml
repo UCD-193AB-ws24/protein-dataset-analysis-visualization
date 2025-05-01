@@ -51,8 +51,8 @@ jobs:
               .dev.environment_variables.S3_AWS_ACCESS_KEY_ID = $s3_key |
               .dev.environment_variables.S3_AWS_SECRET_ACCESS_KEY = $s3_secret |
               .dev.environment_variables.S3_AWS_REGION = $aws_region |
-              .dev.environment_variables.DATABASE_URL = $db_url' |
-              .dev.environment_variables.S3_BUCKET_NAME = $s3_bucket \
+              .dev.environment_variables.DATABASE_URL = $db_url |
+              .dev.environment_variables.S3_BUCKET_NAME = $s3_bucket' \
              zappa_settings.json > tmp && mv tmp zappa_settings.json
 
       - name: Create virtualenv, install packages, and deploy with Zappa

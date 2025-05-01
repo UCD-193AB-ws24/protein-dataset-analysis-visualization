@@ -46,7 +46,7 @@ jobs:
              --arg s3_secret "${{ secrets.S3_AWS_SECRET_ACCESS_KEY }}" \
              --arg aws_region "${{ secrets.AWS_DEFAULT_REGION }}" \
              --arg db_url "${{ secrets.DATABASE_URL }}" \
-             --ARG s3_bucket "${{ secrets.S3_BUCKET_NAME }}" \
+             --arg s3_bucket "${{ secrets.S3_BUCKET_NAME }}" \
              '.dev.environment_variables.ENV = $env |
               .dev.environment_variables.S3_AWS_ACCESS_KEY_ID = $s3_key |
               .dev.environment_variables.S3_AWS_SECRET_ACCESS_KEY = $s3_secret |

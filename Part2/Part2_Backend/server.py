@@ -1,14 +1,12 @@
 import os
 from flask import Flask, request, jsonify
-import cloudinary
-import cloudinary.uploader
 from dotenv import load_dotenv
 from flask_cors import CORS
 from parse_matrix import parse_matrix
 import json
 from io import BytesIO
 from datetime import datetime
-import requests
+# import requests
 import boto3
 import uuid
 
@@ -107,24 +105,20 @@ def get_group_graph():
         if not (matrix_s3_key and coordinate_s3_key and graph_s3_key):
             return jsonify({"error": "Matrix/coordinate/graph file not found for this group"}), 400
 
-        # Retrieve files from S3
-        # Note: files aren't exactly private so we're just using simple urls
-        # but, we can switch to presigned URLs if needed
+        # Retrieve files **privately** with boto3
         bucket_name = os.getenv('S3_BUCKET_NAME')
 
-        matrix_url = f"https://{bucket_name}.s3.amazonaws.com/{matrix_s3_key}"
-        coordinate_url = f"https://{bucket_name}.s3.amazonaws.com/{coordinate_s3_key}"
-        graph_url = f"https://{bucket_name}.s3.amazonaws.com/{graph_s3_key}"
+        matrix_bytes = s3_client.get_object(
+            Bucket=bucket_name, Key=matrix_s3_key)["Body"].read()
 
-        matrix_response = requests.get(matrix_url)
-        coordinate_response = requests.get(coordinate_url)
-        graph_response = requests.get(graph_url)
+        coordinate_bytes = s3_client.get_object(
+            Bucket=bucket_name, Key=coordinate_s3_key)["Body"].read()
 
-        if matrix_response.status_code != 200 or coordinate_response.status_code != 200 or graph_response.status_code != 200:
-            return jsonify({"error": "Failed to download one or more files"}), 500
+        graph_str = s3_client.get_object(
+            Bucket=bucket_name, Key=graph_s3_key)["Body"].read().decode()
 
-        # Parse graph retrieved from Cloudinary
-        graph = graph_response.json()  # Assuming the graph is in JSON format
+        # Parse graph JSON
+        graph = json.loads(graph_str)
         num_genes = len(graph.get("nodes", []))
         num_domains = 1  # Adjust as needed
 
@@ -170,28 +164,6 @@ def generate_graph():
     except Exception as e:
         return jsonify({"error": f"Failed to generate graph: {str(e)}"}), 500
 
-def upload_file_to_cloudinary(file):
-    timestamp = datetime.now().strftime("%Y%m%d%H%M%S")
-    filename = file.filename.rsplit('.', 1)[0]
-    extension = file.filename.rsplit('.', 1)[-1].lower()
-    public_id = f"{filename}_{timestamp}"
-
-    resource_type = "raw" if extension not in ["jpg", "jpeg", "png", "gif", "mp4", "mov"] else "auto"
-
-    upload_result = cloudinary.uploader.upload(BytesIO(file.read()), resource_type=resource_type, public_id=public_id, overwrite=True)
-    return upload_result['public_id'], f"{filename}.{extension}"
-
-def upload_graph_to_cloudinary(graph_data):
-    timestamp = datetime.now().strftime("%Y%m%d%H%M%S")
-    graph_filename = f"graph_{timestamp}.json"
-
-    upload_result = cloudinary.uploader.upload(
-        BytesIO(graph_data.encode('utf-8')),
-        resource_type="raw",
-        public_id=graph_filename,
-        overwrite=True
-    )
-    return upload_result['public_id'], graph_filename
 
 def guess_content_type(extension):
     mapping = {
@@ -217,7 +189,7 @@ def upload_to_s3(file_obj):
         Key=unique_filename,
         ExtraArgs={
             "ContentType": guess_content_type(extension),
-            "ACL": "public-read"
+            # "ACL": "public-read"
         }
     )
 

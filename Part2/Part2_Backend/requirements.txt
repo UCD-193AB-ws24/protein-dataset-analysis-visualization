@@ -1,0 +1,10 @@
+Flask
+Flask-Cors
+python-dotenv
+boto3
+SQLAlchemy
+psycopg2-binary
+python-jose
+requests
+pandas
+openpyxl

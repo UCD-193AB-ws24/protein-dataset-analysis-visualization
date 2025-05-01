@@ -50,7 +50,7 @@
 
     if (groupId) {
       try {
-        const response = await fetch(`http://127.0.0.1:5000/get_group_graph?groupId=${groupId}`);
+        const response = await fetch(`https://4aorvlzrd1.execute-api.us-east-1.amazonaws.com/dev/get_group_graph?groupId=${groupId}`);
 
         if (!response.ok) {
           throw new Error(`Error fetching graph: ${response.statusText}`);
@@ -153,6 +153,7 @@
     formData.append('is_domain_specific', isDomainSpecific ? 'true' : 'false');
     formData.append('genomes', JSON.stringify(graph.genomes));
     formData.append('graph', JSON.stringify(graph));
+    console.log("graph string", JSON.stringify(graph));
 
     try {
       const response = await fetch('https://4aorvlzrd1.execute-api.us-east-1.amazonaws.com/dev/save', {

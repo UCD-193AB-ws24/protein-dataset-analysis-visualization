@@ -16,6 +16,10 @@ from sqlalchemy.orm import sessionmaker
 from sqlalchemy.pool import NullPool
 from auth_utils import verify_token
 
+import logging
+logging.basicConfig(level=logging.DEBUG)
+
+
 # Load environment variables
 load_dotenv()
 
@@ -213,6 +217,12 @@ def save_files():
     file_matrix = request.files.get('file_matrix')
     file_coordinate = request.files.get('file_coordinate')
 
+    logging.debug("Form keys received: %s", list(request.form.keys()))
+    logging.debug("Type of graph_data: %s, length: %s",
+              type(graph_data), len(graph_data) if graph_data else 0)
+    logging.debug("Graph data content preview: %s", graph_data[:200] if graph_data else "No data")
+
+
     session = SessionLocal()
 
     try:
@@ -250,6 +260,7 @@ def save_files():
         # Upload files to S3
         matrix_s3_key, matrix_filename = upload_to_s3(file_matrix)
         coordinate_s3_key, coordinate_filename = upload_to_s3(file_coordinate)
+        print("graph data:", graph_data)
         graph_file = BytesIO(graph_data.encode('utf-8'))
         timestamp = datetime.now().strftime("%Y%m%d%H%M%S")
         graph_file.filename = f"graph_{timestamp}.json"

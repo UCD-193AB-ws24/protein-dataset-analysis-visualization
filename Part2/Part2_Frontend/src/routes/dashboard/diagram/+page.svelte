@@ -153,6 +153,7 @@
     formData.append('is_domain_specific', isDomainSpecific ? 'true' : 'false');
     formData.append('genomes', JSON.stringify(graph.genomes));
     formData.append('graph', JSON.stringify(graph));
+    console.log("graph string", JSON.stringify(graph));
 
     try {
       const response = await fetch('https://4aorvlzrd1.execute-api.us-east-1.amazonaws.com/dev/save', {

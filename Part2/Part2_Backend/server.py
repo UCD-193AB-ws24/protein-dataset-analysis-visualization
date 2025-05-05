@@ -64,9 +64,9 @@ def login():
     try:
         user = session.query(User).filter_by(username=username).first()
         if user and user.password_hash == password:
-        return jsonify({"msg": "login success"}), 200
+            return jsonify({"msg": "login success"}), 200
         else:
-    return jsonify({"msg": "login failed"}), 400
+            return jsonify({"msg": "login failed"}), 400
     finally:
         session.close()
 
@@ -360,7 +360,7 @@ def get_user_files():
         # Get user
         user = session.query(User).filter_by(username=username).first()
         if not user:
-        return jsonify({"error": "User not found"}), 404
+            return jsonify({"error": "User not found"}), 404
 
         # Get all files for the user
         files = session.query(File).filter_by(user_id=user.id).all()

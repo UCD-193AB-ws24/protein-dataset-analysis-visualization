@@ -252,6 +252,7 @@ def add_nodes(coords):
     nodes = []
 
     for i in range(len(coords)):
+        if coords['']
         nodes.append({
             "id" : coords['name'][i],
             "genome_name": coords['genome'][i],
@@ -259,6 +260,8 @@ def add_nodes(coords):
             "direction": coords['orientation'][i],
             "rel_position": int(coords['rel_position'][i]),
             "gene_type": coords['gene_type'][i]
+            # Extra flag "present": T/F
+            # Extra flag "inconsistent": T/F
         })
 
     return nodes
@@ -295,6 +298,7 @@ def add_links(df_only_cutoffs, row_max, col_max, subsections):
                 "target": target,
                 "score": float(df_only_cutoffs.at[row, col]),
                 "is_reciprocal": reciprocal_max
+                # Change to 1 enum with the different types of connection possible: "Solid Red", "Solid Color", "Dotted Color", "Dotted Gray"
             })
 
     return links

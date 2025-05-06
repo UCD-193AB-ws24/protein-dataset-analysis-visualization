@@ -5,6 +5,7 @@ import cloudinary.uploader
 from dotenv import load_dotenv
 from flask_cors import CORS
 from parse_matrix import parse_matrix
+from domain_parse import domain_parse
 import json
 from io import BytesIO
 from datetime import datetime
@@ -143,32 +144,64 @@ def get_group_graph():
 
 @app.route('/generate_graph', methods=['POST'])
 def generate_graph():
-    if 'file_matrix' not in request.files or 'file_coordinate' not in request.files:
-        return jsonify({"error": "Both matrix and coordinate files are required"}), 400
-
-    # Assumes only one matrix file uploaded, TODO: support multiple in the future
-    file_matrix = request.files['file_matrix']
-    file_coordinate = request.files['file_coordinate']
     is_domain_specific = request.form.get('is_domain_specific', 'false').lower() == 'true'
+    if is_domain_specific == 'false':
+        if 'file_matrix' not in request.files or 'file_coordinate' not in request.files:
+            return jsonify({"error": "Both matrix and coordinate files are required"}), 400
+        
+        file_matrix = request.files['file_matrix']
+        file_coordinate = request.files['file_coordinate']
+        try:
+            matrix_bytes = file_matrix.read()
+            coordinate_bytes = file_coordinate.read()
 
-    try:
-        matrix_bytes = file_matrix.read()
-        coordinate_bytes = file_coordinate.read()
+            graph = parse_matrix(BytesIO(matrix_bytes), BytesIO(coordinate_bytes))
+            num_genes = len(graph["nodes"])
+            num_domains = 1     # Placeholder, adjust in the future
 
-        graph = parse_matrix(BytesIO(matrix_bytes), BytesIO(coordinate_bytes))
-        num_genes = len(graph["nodes"])
-        num_domains = 1     # Placeholder, adjust in the future
+            return jsonify({
+                "message": "Graph generated successfully",
+                "graph": graph,
+                "num_genes": num_genes,
+                "num_domains": num_domains,
+                "is_domain_specific": is_domain_specific
+            }), 200
 
-        return jsonify({
-            "message": "Graph generated successfully",
-            "graph": graph,
-            "num_genes": num_genes,
-            "num_domains": num_domains,
-            "is_domain_specific": is_domain_specific
-        }), 200
+        except Exception as e:
+            return jsonify({"error": f"Failed to generate graph: {str(e)}"}), 500
 
-    except Exception as e:
-        return jsonify({"error": f"Failed to generate graph: {str(e)}"}), 500
+    else:
+        if "file_matrix1" not in request.files or 'file_matrix2' not in request.files or 'file_matrix3' not in request.files or 'file_coordinate' not in request.files:
+            return jsonify({"error": "Three matrix files and a coordinate file are required"}), 400
+       
+        file_matrix1 = request.files['file_matrix1']
+        file_matrix2 = request.files['file_matrix2']
+        file_matrix3 = request.files['file_matrix3']
+        file_coordinate = request.files['file_coordinate']
+
+        try:
+            matrix_bytes1 = file_matrix1.read()
+            matrix_bytes2 = file_matrix2.read()
+            matrix_bytes3 = file_matrix3.read()
+            coordinate_bytes = file_coordinate.read()
+            matrices = [BytesIO(matrix_bytes1), BytesIO(matrix_bytes2), BytesIO(matrix_bytes3)]
+            filenames = [file_matrix1.filename(), file_matrix2.filename(), file_matrix3.filename()]
+
+            graph = domain_parse(matrices, BytesIO(coordinate_bytes), filenames)
+            num_genes = len(graph["nodes"])
+            num_domains = 3     # Placeholder, adjust in the future
+
+            return jsonify({
+                "message": "Domain comparison graph generated successfully",
+                "graph": graph,
+                "num_genes": num_genes,
+                "num_domains": num_domains,
+                "is_domain_specific": is_domain_specific
+            }), 200
+        
+        except Exception as e:
+            return jsonify({"error": f"Failed to generate graph: {str(e)}"}), 500
+
 
 def upload_file_to_cloudinary(file):
     timestamp = datetime.now().strftime("%Y%m%d%H%M%S")

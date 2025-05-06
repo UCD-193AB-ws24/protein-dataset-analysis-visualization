@@ -121,6 +121,26 @@ def parse_coordinates(coord_file):
     except Exception as e:
         raise ValueError(f"Error processing coordinate file: {str(e)}")
 
+def parse_filenames(file_names):
+    domains = []
+    for name in file_names:
+        parts = name.split('domain') # ['2', 'NBS']
+        if len(parts > 1):
+            after_domain = parts[1]
+            tokens = after_domain.split('_')
+            if len(tokens) > 1:
+                try:
+                    domain_num = int(tokens[0])
+                    domain_name = tokens[1]
+                    domains.append((domain_num, domain_name))
+                except Exception as e:
+                    raise ValueError(f"File name is in invalid format: {str(e)}")
+                
+    domains.sort(key = lambda x: x[0])
+
+    return [name for _, name in domains]
+
+
 
 def validate_dataframe_basic(df):
     if df.empty:
@@ -248,26 +268,27 @@ def parse_matrix_data(matrix_file):
         raise ValueError(f"Error processing matrix file: {str(e)}")
 
 
-def add_nodes(coords):
+def add_nodes(coords, cutoff_index):
     nodes = []
 
     for i in range(len(coords)):
-        if coords['']
+        present = coords['name'][i] in cutoff_index
         nodes.append({
             "id" : coords['name'][i],
             "genome_name": coords['genome'][i],
             "protein_name": coords['protein_name'][i],
             "direction": coords['orientation'][i],
             "rel_position": int(coords['rel_position'][i]),
-            "gene_type": coords['gene_type'][i]
-            # Extra flag "present": T/F
+            "gene_type": coords['gene_type'][i],
+            "is_present": present
             # Extra flag "inconsistent": T/F
         })
 
     return nodes
 
-def add_links(df_only_cutoffs, row_max, col_max, subsections):
+def add_links(df_only_cutoffs, row_max, col_max, subsections, domain):
     links = []
+    domain_connections = {}
 
     for row in df_only_cutoffs.index:
         for col in df_only_cutoffs.columns:
@@ -289,25 +310,20 @@ def add_links(df_only_cutoffs, row_max, col_max, subsections):
             else:
                 continue  # skip non-max values
 
+            domain_connections[f'{source}_{target}'] = {'f{domain}': reciprocal_max}
+
+
             if any((genome in source) and (genome in target) for genome in subsections):
                 continue
 
 
             links.append({
                 "source": source,
-                "target": target,
-                "score": float(df_only_cutoffs.at[row, col]),
-                "is_reciprocal": reciprocal_max
+                "target": target
                 # Change to 1 enum with the different types of connection possible: "Solid Red", "Solid Color", "Dotted Color", "Dotted Gray"
             })
 
-    return links
-
-def create_output(matrix_data, coords):
-    output = {"genomes": matrix_data['subsections'].tolist()}
-    output["nodes"] = add_nodes(coords)
-    output["links"] = add_links(matrix_data['df_only_cutoffs'], matrix_data['row_max'], matrix_data['col_max'], matrix_data['subsections'])
-    return output
+    return links, domain_connections
 
 def get_gene_names_by_genome(coords):
     gene_names_by_genome = {}
@@ -316,9 +332,61 @@ def get_gene_names_by_genome(coords):
         gene_names_by_genome[genome] = [name for name in all_names if genome in name]
     return gene_names_by_genome
 
+def create_output(matrix_data, coords, domain):
+    
+    output = {"genomes": matrix_data['subsections'].tolist()}
+    output["nodes"] = add_nodes(coords, matrix_data['df_only_cutoffs'].index)
+    output["links"] = add_links(matrix_data['df_only_cutoffs'], matrix_data['row_max'], matrix_data['col_max'], matrix_data['subsections'], domain)
+    return output
+
+def combine_graphs(all_domain_connections):
+    #for each connection in domain 1 check if the connection exists in domains 2/3 and if those are reciprocal
+        #genomeA_gene1-genomeB_gene2 --> domain 1
+        #genomeB_gene2-genomeA_gene1 --> domain 2
+    #for each connection in domain 2:
+        #check if connection has already been parsed through
+    
+    # Collect all unique connections across all domains
+    all_keys = set()
+    for domain_dict in all_domain_connections:
+        all_keys.update(domain_dict.keys())
+
+    combined = []
+    num_domains = len(all_domain_connections)
+
+    for key in all_keys:
+        reverse_key = key.split('_', 1)
+        reverse_key = f"{target}_{source}"
+        # Check if this key exists in all domain dicts
+        present_in_domains = [
+            (key in domain_dict) or (reverse_key in domain_dict)
+            for domain_dict in all_domain_connections
+        ]
+        # inconsistent = not all(present_in_domains)
+        # # Optionally, collect which domains it's missing from
+        # # missing_domains = [i for i, present in enumerate(present_in_domains) if not present]
+
+        # # You can also merge the domain info if needed
+        domain_info = {}
+        for i, domain_dict in enumerate(all_domain_connections):
+            if key in domain_dict:
+                domain_info.update(domain_dict[key])
+
+        source, target = key.split('_', 1)
+        combined.append({
+            "source": source,
+            "target": target,
+            "inconsistent": inconsistent,
+            "domain_info": domain_info  # optional, remove if not needed
+            # You can add more fields as needed
+        })
+
+    return combined
+
 # Update the original parse_matrix function to use the new functions
-def parse_matrix(matrix_files, coord_file):
+def domain_parse(matrix_files, coord_file, file_names):
     coords = parse_coordinates(coord_file)
+    domains = parse_filenames(file_names)
 
     all_outputs = {}
 
@@ -327,10 +395,15 @@ def parse_matrix(matrix_files, coord_file):
 
     all_outputs['genes_by_genomes'] = gene_names_by_genome
 
+    all_domain_connections = []
+
     for idx, matrix_file in enumerate(matrix_files, 1):
         matrix_file.seek(0)
-        result = create_output(parse_matrix_data(matrix_file), coords)
+        result, domain_connections = create_output(parse_matrix_data(matrix_file), coords, domains[idx - 1])
+        all_domain_connections.append(domain_connections)
         all_outputs[f'graph_{idx}'] = result
+
+    domain_combination = combine_graphs(all_domain_connections)
 
     return all_outputs
 
@@ -357,7 +430,8 @@ if __name__ == "__main__":
              open(args.coord_file, 'rb') as coord_file:
 
             matrix_files = [matrix_file_1, matrix_file_2, matrix_file_3]
-            result_obj = parse_matrix(matrix_files, coord_file)
+            file_names = [matrix_file_1.name, matrix_file_2.name, matrix_file_3.name]
+            result_obj = domain_parse(matrix_files, coord_file, file_names)
 
             output_json = json.dumps(result_obj, indent=2)
 

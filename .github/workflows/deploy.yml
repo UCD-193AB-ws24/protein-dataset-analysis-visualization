@@ -91,12 +91,12 @@ jobs:
           status_output=$(zappa status -s zappa_settings.json dev 2>&1)
           echo "🔍 Zappa status output:"
           echo "$status_output"
-          url=$(echo "$status_output" | grep -o 'https://[^ ]*' || true)
+          url=$(echo "$status_output" | grep -o 'https://[^ ]*' | tr -d '\n\r')
           echo "✅ Extracted URL: $url"
           echo "ℹ️ Length of URL: ${#url}"
           echo "$url" > debug_url.txt
           cat debug_url.txt | hexdump -C
-          encoded=$(echo -n "$url" | base64)
+          encoded=$(printf "%s" "$url" | base64)
           echo "✅ Encoded URL: '$encoded'"
           echo "url_b64=$encoded" >> $GITHUB_OUTPUT
 

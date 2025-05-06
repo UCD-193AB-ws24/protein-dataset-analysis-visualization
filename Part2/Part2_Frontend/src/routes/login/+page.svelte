@@ -1,4 +1,4 @@
-<script>
+<!-- <script>
 	import { goto } from '$app/navigation';
 
 	let username = '';
@@ -160,4 +160,36 @@
 			transform: translateY(0);
 		}
 	}
-</style>
+</style> -->
+
+
+<script lang="ts">
+	import { signIn } from '$lib/auth/auth';
+	import { goto } from '$app/navigation';
+  
+	let email = '';
+	let password = '';
+	let error = '';
+  
+	async function handleLogin() {
+	  try {
+		const tokens = await signIn(email, password);
+		console.log('Tokens:', tokens);
+		// Store in localStorage or cookie if needed
+		goto('/dashboard/files');
+	  } catch (err: any) {
+		error = err.message || 'Login failed';
+	  }
+	}
+  </script>
+  
+  <h1>Login</h1>
+  <input bind:value={email} placeholder="Email" />
+  <input type="password" bind:value={password} placeholder="Password" />
+  <button on:click={handleLogin}>Login</button>
+  
+  {#if error}
+	<p style="color: red">{error}</p>
+  {/if}
+  
+  

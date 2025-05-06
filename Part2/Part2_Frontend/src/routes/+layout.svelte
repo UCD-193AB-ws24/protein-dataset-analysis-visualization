@@ -1,4 +1,5 @@
 <script>
+    import '$lib/auth/init-polyfill';
 </script>
 
 <nav>

@@ -18,20 +18,30 @@
 
 			// Optional: redirect to home or dashboard
 			// window.location.href = '/';
-			console.log('sending token:', accessToken);
-			const response = await fetch('http://localhost:3005/api/user-data', {
-				method: 'GET',
-				headers: { Authorization: `Bearer ${accessToken}` }
-			});
+			// console.log('sending token:', accessToken);
+			// console.log(user.state)
+			// const response = await fetch('http://localhost:3050/api/user-data', {
+			// 	method: 'GET',
+			// 	headers: { Authorization: `Bearer ${accessToken}` }
+			// });
 
-			const data = await response.json();
-			if (!response.ok) {
-				console.error('auth failed:', data.error);
-				return;
+			// const data = await response.json();
+			// if (!response.ok) {
+			// 	console.error('auth failed:', data.error);
+			// 	return;
+			// }
+
+			// console.log('user id:', data.user.id);
+			// console.log('server returned:', data);
+
+			const flow = user.state?.myflow;
+			if (flow === 'signin') {
+				// window.location.replace("/dashboard/files");
+				console.log('signin flow');
+			} else {
+				// window.location.replace("/welcome");
+				console.log('welcome flow');
 			}
-
-			console.log('user id:', data.user.id);
-			console.log('server returned:', data);
 		} catch (err) {
 			console.error('Signin callback failed', err);
 		}

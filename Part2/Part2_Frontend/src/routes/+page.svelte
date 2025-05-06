@@ -1,14 +1,14 @@
-<script>
+<!-- <script>
     import { goto } from "$app/navigation";
 
     function goToLogin() {
         goto("/login");
     }
 
-    import { userManager } from '$lib/auth/userManager';
+    import { userManager, signInRedirect } from '$lib/auth/userManager';
 
     async function handleSignIn() {
-        await userManager.signinRedirect();
+        await signInRedirect();
     }
 </script>
 
@@ -71,4 +71,22 @@
             transform: translateY(0);
         }
     }
-</style>
+</style> -->
+
+<script>
+	import { goto } from '$app/navigation';
+
+	function goToLogin() {
+		goto('/login');
+	}
+
+	function goToSignup() {
+		goto('/signup');
+	}
+</script>
+
+<div class="container">
+	<h1>👋 Welcome</h1>
+	<button on:click={goToLogin}>Sign In</button>
+	<button on:click={goToSignup}>Sign Up</button>
+</div>

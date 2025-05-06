@@ -1,17 +1,33 @@
-name: Deploy Zappa on main
+name: Full Stack Deployment
 
 on:
   push:
     branches:
       - main
 
+  workflow_dispatch:
+    inputs:
+      run_backend:
+        description: 'Run backend deploy?'
+        required: false
+        default: 'true'
+      run_frontend:
+        description: 'Run frontend deploy?'
+        required: false
+        default: 'true'
+
 jobs:
   deploy-backend:
+    if: github.event_name == 'push' || github.event.inputs.run_backend == 'true'
+
     runs-on: ubuntu-latest
 
     defaults:
       run:
         working-directory: Part2/Part2_Backend
+
+    outputs:
+      zappa-url: ${{ steps.get-url.outputs.url }}
 
     steps:
       - name: Checkout code
@@ -66,3 +82,47 @@ jobs:
           else
             zappa deploy -s zappa_settings.json dev
           fi
+
+      - name: Get Zappa URL
+        id: get-url
+        run: |
+          echo "url=$(zappa status -s zappa_settings.json dev | grep -o 'https://[^ ]*')" >> $GITHUB_OUTPUT
+
+  deploy-frontend:
+    if: github.event_name == 'push' || github.event.inputs.run_frontend == 'true'
+
+    runs-on: ubuntu-latest
+    needs: deploy-backend
+
+    defaults:
+      run:
+        working-directory: Part2/Part2_Frontend
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      # TODO: Check which node version to use
+      - name: Setup Node.js 16
+        uses: actions/setup-node@v4
+        with:
+          node-version: '16'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build SvelteKit app with backend URL
+        run: |
+          VITE_API_URL="${{ needs.deploy-backend.outputs.zappa-url }}" npm run build
+
+      - name: Deploy to S3
+        uses: jakejarvis/s3-sync-action@master
+        with:
+          args: --delete
+        env:
+          AWS_S3_BUCKET: ${{ secrets.FRONTEND_S3_BUCKET_NAME }}
+          AWS_ACCESS_KEY_ID: ${{ secrets.S3_AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.S3_AWS_SECRET_ACCESS_KEY }}
+          AWS_REGION: ${{ secrets.AWS_DEFAULT_REGION }}
+          SOURCE_DIR: build
+

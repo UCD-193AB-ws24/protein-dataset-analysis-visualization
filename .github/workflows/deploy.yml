@@ -87,6 +87,7 @@ jobs:
       - name: Get Zappa URL
         id: get-url
         run: |
+          source venv/bin/activate
           echo "url=$(zappa status -s zappa_settings.json dev | grep -o 'https://[^ ]*')" >> $GITHUB_OUTPUT
 
   deploy-frontend:

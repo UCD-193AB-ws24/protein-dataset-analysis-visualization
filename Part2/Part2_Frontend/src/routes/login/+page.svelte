@@ -42,6 +42,7 @@
 <main class="container">
 	<h2>Login</h2>
 	<p class="subtitle">Welcome back! Please enter your credentials.</p>
+	<p>Backend API URL: {API_BASE_URL}</p>
 
 	<form on:submit|preventDefault={handleLogin}>
 		<div class="input-group">

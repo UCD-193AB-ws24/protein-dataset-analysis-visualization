@@ -121,7 +121,7 @@ jobs:
       - name: Decode Zappa URL
         id: decode_url
         run: |
-          echo "${{ needs.deploy_backend.outputs.zappa_url_b64 }}" | base64 --decode > decoded_url.txt
+          printf "%s" "${{ needs.deploy_backend.outputs.zappa_url_b64 }}" | base64 --decode > decoded_url.txt
           url=$(cat decoded_url.txt)
           echo "url=$url" >> $GITHUB_ENV
 

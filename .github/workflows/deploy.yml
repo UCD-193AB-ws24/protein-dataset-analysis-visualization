@@ -103,11 +103,10 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      # TODO: Check which node version to use
-      - name: Setup Node.js 16
+      - name: Setup Node.js 20
         uses: actions/setup-node@v4
         with:
-          node-version: '16'
+          node-version: '20'
 
       - name: Install dependencies
         run: npm ci

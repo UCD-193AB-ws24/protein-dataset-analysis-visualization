@@ -1,5 +1,6 @@
 <script>
 	import { goto } from '$app/navigation';
+	import { API_BASE_URL } from '$lib/api';
 
 	let username = '';
 	let password = '';
@@ -11,7 +12,7 @@
 
 		try {
 			const response = await fetch(
-				'https://4aorvlzrd1.execute-api.us-east-1.amazonaws.com/dev/login',
+				`${API_BASE_URL}/login`,
 				{
 					method: 'POST',
 					headers: {

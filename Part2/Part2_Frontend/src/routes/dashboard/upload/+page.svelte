@@ -1,4 +1,6 @@
 <script>
+	import { API_BASE_URL } from "$lib/api";
+
     let numFiles = 2;
     let uploads = Array(numFiles).fill(null);
     let username = localStorage.getItem("username") || ""; // Retrieve username
@@ -24,7 +26,7 @@
         formData.append("username", username);  // Automatically send stored username
 
         try {
-            const response = await fetch("https://4aorvlzrd1.execute-api.us-east-1.amazonaws.com/dev/upload", { // https://h47f781wh1.execute-api.us-east-1.amazonaws.com/dev/upload
+            const response = await fetch(`${API_BASE_URL}/upload`, {
                 method: "POST",
                 body: formData
             });

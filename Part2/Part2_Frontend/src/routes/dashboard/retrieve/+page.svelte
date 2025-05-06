@@ -1,4 +1,6 @@
 <script>
+	import { API_BASE_URL } from "$lib/api";
+
     let manualPublicId = "";
     let retrievedFileUrl = "";
     let errorMessage = "";
@@ -10,7 +12,7 @@
         }
 
         try {
-            const response = await fetch(`https://4aorvlzrd1.execute-api.us-east-1.amazonaws.com/dev/retrieve/${manualPublicId}`);
+            const response = await fetch(`${API_BASE_URL}/retrieve/${manualPublicId}`);
             if (!response.ok) {
                 throw new Error("Failed to retrieve file.");
             }

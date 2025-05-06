@@ -18,7 +18,7 @@ on:
         default: 'true'
 
 jobs:
-  deploy-backend:
+  deploy_backend:
     if: github.event_name == 'push' || github.event.inputs.run_backend == 'true'
 
     runs-on: ubuntu-latest
@@ -28,7 +28,7 @@ jobs:
         working-directory: Part2/Part2_Backend
 
     outputs:
-      zappa-url: ${{ steps.get-url.outputs.url }}
+      zappa_url: ${{ steps.get_url.outputs.url }}
 
     steps:
       - name: Checkout code
@@ -85,7 +85,7 @@ jobs:
           fi
 
       - name: Get Zappa URL
-        id: get-url
+        id: get_url
         run: |
           source venv/bin/activate
           status_output=$(zappa status -s zappa_settings.json dev 2>&1)
@@ -95,11 +95,11 @@ jobs:
           echo "✅ Extracted URL: $url"
           echo "url=$url" >> $GITHUB_OUTPUT
 
-  deploy-frontend:
+  deploy_frontend:
     if: github.event_name == 'push' || github.event.inputs.run_frontend == 'true'
 
     runs-on: ubuntu-latest
-    needs: deploy-backend
+    needs: deploy_backend
 
     defaults:
       run:
@@ -117,9 +117,14 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
+      - name: Debug Zappa URL
+        run: |
+          echo "⏱️  Using backend URL: ${{ needs.deploy_backend.outputs.zappa_url }}"
+
+
       - name: Build SvelteKit app with backend URL
         run: |
-          VITE_API_URL="${{ needs.deploy-backend.outputs.zappa-url }}" npm run build
+          VITE_API_URL="${{ needs.deploy_backend.outputs.zappa_url }}" npm run build
 
       - name: Deploy to S3
         uses: jakejarvis/s3-sync-action@master

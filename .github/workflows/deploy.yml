@@ -88,8 +88,12 @@ jobs:
         id: get-url
         run: |
           source venv/bin/activate
-          url=$(zappa status -s zappa_settings.json dev | grep -o 'https://[^ ]*')
-          echo "zappa-url: $url" >> $GITHUB_OUTPUT
+          status_output=$(zappa status -s zappa_settings.json dev 2>&1)
+          echo "🔍 Zappa status output:"
+          echo "$status_output"
+          url=$(echo "$status_output" | grep -o 'https://[^ ]*' || true)
+          echo "✅ Extracted URL: $url"
+          echo "url=$url" >> $GITHUB_OUTPUT
 
   deploy-frontend:
     if: github.event_name == 'push' || github.event.inputs.run_frontend == 'true'

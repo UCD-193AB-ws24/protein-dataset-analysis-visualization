@@ -96,7 +96,7 @@ jobs:
           echo "ℹ️ Length of URL: ${#url}"
           echo "$url" > debug_url.txt
           cat debug_url.txt | hexdump -C
-          encoded=$(printf "%s" "$url" | base64)
+          encoded=$(printf "%s" "$url" | base64 -w 0)
           echo "✅ Encoded URL: '$encoded'"
           echo "url_b64=$encoded" >> $GITHUB_OUTPUT
 

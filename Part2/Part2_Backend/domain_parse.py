@@ -124,14 +124,14 @@ def parse_coordinates(coord_file):
 def parse_filenames(file_names):
     domains = []
     for name in file_names:
-        parts = name.split('domain') # ['2', 'NBS']
-        if len(parts > 1):
+        parts = name.split('domain') # ['2_NBS.xlsx']
+        if len(parts) > 1:
             after_domain = parts[1]
-            tokens = after_domain.split('_')
+            tokens = after_domain.split('_') # ['2','NBS.xlsx']
             if len(tokens) > 1:
                 try:
                     domain_num = int(tokens[0])
-                    domain_name = tokens[1]
+                    domain_name = tokens[1].split('.')[0]
                     domains.append((domain_num, domain_name))
                 except Exception as e:
                     raise ValueError(f"File name is in invalid format: {str(e)}")
@@ -312,7 +312,7 @@ def add_links(df_only_cutoffs, row_max, col_max, subsections, domain):
             else:
                 continue  # skip non-max values
 
-            domain_connections[f'{source}_{target}'] = {domain: reciprocal_max}
+            domain_connections[f'{source}#{target}'] = {domain: reciprocal_max}
 
 
             if any((genome in source) and (genome in target) for genome in subsections):
@@ -328,20 +328,19 @@ def add_links(df_only_cutoffs, row_max, col_max, subsections, domain):
 
     return links, domain_connections, all_genes
 
-def get_gene_names_by_genome(coords):
-    gene_names_by_genome = {}
-    all_names = coords['name'].tolist()
-    for genome in coords['genome']:
-        gene_names_by_genome[genome] = [name for name in all_names if genome in name]
-    return gene_names_by_genome
+# def get_gene_names_by_genome(coords):
+#     gene_names_by_genome = {}
+#     all_names = coords['name'].tolist()
+#     for genome in coords['genome']:
+#         gene_names_by_genome[genome] = [name for name in all_names if genome in name]
+#     return gene_names_by_genome
 
 def create_output(matrix_data, coords, domain):
     
-    output = {"genomes": matrix_data['subsections'].tolist()}
-    output["nodes"] = add_nodes(coords, matrix_data['df_only_cutoffs'].index)
+    genomes = matrix_data['subsections'].tolist()
+    nodes = add_nodes(coords, matrix_data['df_only_cutoffs'].index)
     links, domain_connections, domain_genes = add_links(matrix_data['df_only_cutoffs'], matrix_data['row_max'], matrix_data['col_max'], matrix_data['subsections'], domain)
-    output["links"] = links
-    return output, domain_connections, domain_genes
+    return genomes, nodes, links, domain_connections, domain_genes, matrix_data['df_only_cutoffs'].index
 
 def combine_graphs(all_domain_connections, all_domain_genes, domains):
     #for each connection in domain 1 check if the connection exists in domains 2/3 and if those are reciprocal
@@ -358,14 +357,16 @@ def combine_graphs(all_domain_connections, all_domain_genes, domains):
     for domain_dict in all_domain_connections:
         for key, value in domain_dict.items():
             all_keys.add(key)
-            unique_links.add(key, value.key()) # ("source_target", "TIR")
+            for item in value:
+                if isinstance(item, str):
+                    unique_links.add((key, item)) # ("source_target", "TIR")
 
     combined = []
     num_domains = len(domains)
 
     for key in all_keys:
-        source, target = key.split('_', 1)
-        reverse_key = f"{target}_{source}"
+        source, target = key.split('#', 1)
+        reverse_key = f"{target}#{source}"
         # Check if this key exists in all domain dicts
 
         # Create list of tuples containing (key, domain) for each domain
@@ -424,25 +425,37 @@ def domain_parse(matrix_files, coord_file, file_names):
     all_outputs = {}
 
     genomes_output = []
-    gene_names_by_genome = get_gene_names_by_genome(coords)
-
-    all_outputs['genes_by_genomes'] = gene_names_by_genome
-
+    # gene_names_by_genome = get_gene_names_by_genome(coords)
+    #
+    # all_outputs['genes_by_genomes'] = gene_names_by_genome
     all_domain_connections = []
     all_domain_genes = []
+    total_genomes = set()
+    total_gene_list = []
 
     for idx, matrix_file in enumerate(matrix_files, 1):
+        graph_output = {"domain_name": domains[idx - 1]}
         matrix_file.seek(0)
-        result, domain_connections, domain_genes = create_output(parse_matrix_data(matrix_file), coords, domains[idx - 1])
+        genomes, nodes, links, domain_connections, domain_genes, total_gene_list = create_output(parse_matrix_data(matrix_file), coords, domains[idx - 1])
         all_domain_connections.append(domain_connections)
         all_domain_genes.append(domain_genes)
-        all_outputs[f'graph_{idx}'] = result
+        total_genomes.update(genomes)
+        graph_output["genomes"] = genomes
+        graph_output["nodes"] = nodes
+        graph_output["links"] = links
+        genomes_output.append(graph_output)
 
-    domain_combination = combine_graphs(all_domain_connections, all_domain_genes, domains)
+    domain_graph_nodes = add_nodes(coords, total_gene_list)
+    domain_graph = {
+        "domain_name": "ALL",
+        "genomes": list(total_genomes),
+        "nodes": domain_graph_nodes,
+        "links": combine_graphs(all_domain_connections, all_domain_genes, domains)
+    }
 
-    all_outputs['combined_graph'] = domain_combination
+    genomes_output.append(domain_graph)
 
-    return all_outputs
+    return genomes_output
 
 
 if __name__ == "__main__":

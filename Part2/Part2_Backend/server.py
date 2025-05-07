@@ -148,27 +148,27 @@ def generate_graph():
     if is_domain_specific == 'false':
         if 'file_matrix' not in request.files or 'file_coordinate' not in request.files:
             return jsonify({"error": "Both matrix and coordinate files are required"}), 400
-        
-        file_matrix = request.files['file_matrix']
-        file_coordinate = request.files['file_coordinate']
-        try:
-            matrix_bytes = file_matrix.read()
-            coordinate_bytes = file_coordinate.read()
 
-            graph = parse_matrix(BytesIO(matrix_bytes), BytesIO(coordinate_bytes))
-            num_genes = len(graph["nodes"])
-            num_domains = 1     # Placeholder, adjust in the future
+    file_matrix = request.files['file_matrix']
+    file_coordinate = request.files['file_coordinate']
+    try:
+        matrix_bytes = file_matrix.read()
+        coordinate_bytes = file_coordinate.read()
 
-            return jsonify({
-                "message": "Graph generated successfully",
-                "graph": graph,
-                "num_genes": num_genes,
-                "num_domains": num_domains,
-                "is_domain_specific": is_domain_specific
-            }), 200
+        graph = parse_matrix(BytesIO(matrix_bytes), BytesIO(coordinate_bytes))
+        num_genes = len(graph["nodes"])
+        num_domains = 1     # Placeholder, adjust in the future
 
-        except Exception as e:
-            return jsonify({"error": f"Failed to generate graph: {str(e)}"}), 500
+        return jsonify({
+            "message": "Graph generated successfully",
+            "graph": graph,
+            "num_genes": num_genes,
+            "num_domains": num_domains,
+            "is_domain_specific": is_domain_specific
+        }), 200
+
+    except Exception as e:
+        return jsonify({"error": f"Failed to generate graph: {str(e)}"}), 500
 
     else:
         if "file_matrix1" not in request.files or 'file_matrix2' not in request.files or 'file_matrix3' not in request.files or 'file_coordinate' not in request.files:
@@ -393,7 +393,7 @@ def get_user_files():
         # Get user
         user = session.query(User).filter_by(username=username).first()
         if not user:
-            return jsonify({"error": "User not found"}), 404
+        return jsonify({"error": "User not found"}), 404
 
         # Get all files for the user
         files = session.query(File).filter_by(user_id=user.id).all()

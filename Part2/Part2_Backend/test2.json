@@ -1,97 +1,6 @@
-{
-  "genes_by_genomes": {
-    "Salinas": [
-      "Lsativa_Salinas_Chr8_003553",
-      "Lsativa_Salinas_Chr8_003557",
-      "Lsativa_Salinas_Chr8_003558",
-      "Lsativa_Salinas_Chr8_003559",
-      "Lsativa_Salinas_Chr8_003560",
-      "Lsativa_Salinas_Chr8_003564",
-      "Lsativa_Salinas_Chr8_003566",
-      "Lsativa_Salinas_Chr8_003567",
-      "Lsativa_Salinas_Chr8_003569",
-      "Lsativa_Salinas_Chr8_003570",
-      "Lsativa_Salinas_Chr8_003571",
-      "Lsativa_Salinas_Chr8_003572",
-      "Lsativa_Salinas_Chr8_003573",
-      "Lsativa_Salinas_Chr8_003574",
-      "Lsativa_Salinas_Chr8_003575",
-      "Lsativa_Salinas_Chr8_003577",
-      "Lsativa_Salinas_Chr8_003578"
-    ],
-    "ViAE": [
-      "Lsativa_ViAE_chr8_003521",
-      "Lsativa_ViAE_chr8_003522",
-      "Lsativa_ViAE_chr8_003524",
-      "Lsativa_ViAE_chr8_003526",
-      "Lsativa_ViAE_chr8_003528",
-      "Lsativa_ViAE_chr8_003531",
-      "Lsativa_ViAE_chr8_003532",
-      "Lsativa_ViAE_chr8_003533",
-      "Lsativa_ViAE_chr8_003534",
-      "Lsativa_ViAE_chr8_003535",
-      "Lsativa_ViAE_chr8_003536",
-      "Lsativa_ViAE_chr8_003538",
-      "Lsativa_ViAE_chr8_003539",
-      "Lsativa_ViAE_chr8_003540",
-      "Lsativa_ViAE_chr8_003541"
-    ],
-    "Armenian999": [
-      "Lser_Armenian999_Chr8_003410",
-      "Lser_Armenian999_Chr8_003411",
-      "Lser_Armenian999_Chr8_003412",
-      "Lser_Armenian999_Chr8_003414",
-      "Lser_Armenian999_Chr8_003415",
-      "Lser_Armenian999_Chr8_003416",
-      "Lser_Armenian999_Chr8_LOC111906314",
-      "Lser_Armenian999_Chr8_003418",
-      "Lser_Armenian999_Chr8_003419",
-      "Lser_Armenian999_Chr8_003420",
-      "Lser_Armenian999_Chr8_003422",
-      "Lser_Armenian999_Chr8_003423",
-      "Lser_Armenian999_Chr8_003424",
-      "Lser_Armenian999_Chr8_003425",
-      "Lser_Armenian999_Chr8_003426",
-      "Lser_Armenian999_Chr8_003427"
-    ],
-    "PI251246": [
-      "Lsativa_PI251246_Chr8_000683",
-      "Lsativa_PI251246_Chr8_003476",
-      "Lsativa_PI251246_Chr8_003477",
-      "Lsativa_PI251246_Chr8_003478",
-      "Lsativa_PI251246_Chr8_003479",
-      "Lsativa_PI251246_Chr8_003480",
-      "Lsativa_PI251246_Chr8_003481",
-      "Lsativa_PI251246_Chr8_003482",
-      "Lsativa_PI251246_Chr8_003483",
-      "Lsativa_PI251246_Chr8_003484",
-      "Lsativa_PI251246_Chr8_003485",
-      "Lsativa_PI251246_Chr8_003486",
-      "Lsativa_PI251246_Chr8_003488",
-      "Lsativa_PI251246_Chr8_003489",
-      "Lsativa_PI251246_Chr8_003490",
-      "Lsativa_PI251246_Chr8_003493",
-      "Lsativa_PI251246_Chr8_003494"
-    ],
-    "US96UC23": [
-      "Lser_US96UC23_Chr8_003521",
-      "Lser_US96UC23_Chr8_003522",
-      "Lser_US96UC23_Chr8_003524",
-      "Lser_US96UC23_Chr8_003525",
-      "Lser_US96UC23_Chr8_003526",
-      "Lser_US96UC23_Chr8_003528",
-      "Lser_US96UC23_Chr8_003529",
-      "Lser_US96UC23_Chr8_003530",
-      "Lser_US96UC23_Chr8_003532",
-      "Lser_US96UC23_Chr8_003533",
-      "Lser_US96UC23_Chr8_003534",
-      "Lser_US96UC23_Chr8_003535",
-      "Lser_US96UC23_Chr8_003536",
-      "Lser_US96UC23_Chr8_003537",
-      "Lser_US96UC23_Chr8_003538"
-    ]
-  },
-  "graph_1": {
+[
+  {
+    "domain_name": "TIR",
     "genomes": [
       "Salinas",
       "ViAE",
@@ -106,7 +15,8 @@
         "protein_name": "Salinas_Chr8_003553",
         "direction": "plus",
         "rel_position": 17,
-        "gene_type": "TNL"
+        "gene_type": "TNL",
+        "is_present": true
       },
       {
         "id": "Lsativa_Salinas_Chr8_003557",
@@ -114,7 +24,8 @@
         "protein_name": "Salinas_Chr8_003557",
         "direction": "plus",
         "rel_position": 16,
-        "gene_type": "TNL"
+        "gene_type": "TNL",
+        "is_present": true
       },
       {
         "id": "Lsativa_Salinas_Chr8_003558",
@@ -122,7 +33,8 @@
         "protein_name": "Salinas_Chr8_003558",
         "direction": "plus",
         "rel_position": 15,
-        "gene_type": "TIR"
+        "gene_type": "TIR",
+        "is_present": true
       },
       {
         "id": "Lsativa_Salinas_Chr8_003559",
@@ -130,7 +42,8 @@
         "protein_name": "Salinas_Chr8_003559",
         "direction": "plus",
         "rel_position": 14,
-        "gene_type": "NBS"
+        "gene_type": "NBS",
+        "is_present": false
       },
       {
         "id": "Lsativa_Salinas_Chr8_003560",
@@ -138,7 +51,8 @@
         "protein_name": "Salinas_Chr8_003560",
         "direction": "plus",
         "rel_position": 13,
-        "gene_type": "LRR"
+        "gene_type": "LRR",
+        "is_present": false
       },
       {
         "id": "Lsativa_Salinas_Chr8_003564",
@@ -146,7 +60,8 @@
         "protein_name": "Salinas_Chr8_003564",
         "direction": "plus",
         "rel_position": 12,
-        "gene_type": "TNL"
+        "gene_type": "TNL",
+        "is_present": true
       },
       {
         "id": "Lsativa_Salinas_Chr8_003566",
@@ -154,7 +69,8 @@
         "protein_name": "Salinas_Chr8_003566",
         "direction": "plus",
         "rel_position": 11,
-        "gene_type": "TNL"
+        "gene_type": "TNL",
+        "is_present": true
       },
       {
         "id": "Lsativa_Salinas_Chr8_003567",
@@ -162,7 +78,8 @@
         "protein_name": "Salinas_Chr8_003567",
         "direction": "plus",
         "rel_position": 10,
-        "gene_type": "TIR"
+        "gene_type": "TIR",
+        "is_present": true
       },
       {
         "id": "Lsativa_Salinas_Chr8_003569",
@@ -170,7 +87,8 @@
         "protein_name": "Salinas_Chr8_003569",
         "direction": "plus",
         "rel_position": 9,
-        "gene_type": "NLR"
+        "gene_type": "NLR",
+        "is_present": false
       },
       {
         "id": "Lsativa_Salinas_Chr8_003570",
@@ -178,7 +96,8 @@
         "protein_name": "Salinas_Chr8_003570",
         "direction": "plus",
         "rel_position": 8,
-        "gene_type": "TNL"
+        "gene_type": "TNL",
+        "is_present": true
       },
       {
         "id": "Lsativa_Salinas_Chr8_003571",
@@ -186,7 +105,8 @@
         "protein_name": "Salinas_Chr8_003571",
         "direction": "plus",
         "rel_position": 7,
-        "gene_type": "TNL"
+        "gene_type": "TNL",
+        "is_present": true
       },
       {
         "id": "Lsativa_Salinas_Chr8_003572",
@@ -194,7 +114,8 @@
         "protein_name": "Salinas_Chr8_003572",
         "direction": "plus",
         "rel_position": 6,
-        "gene_type": "TNBS"
+        "gene_type": "TNBS",
+        "is_present": true
       },
       {
         "id": "Lsativa_Salinas_Chr8_003573",
@@ -202,7 +123,8 @@
         "protein_name": "Salinas_Chr8_003573",
         "direction": "plus",
         "rel_position": 5,
-        "gene_type": "TNL"
+        "gene_type": "TNL",
+        "is_present": true
       },
       {
         "id": "Lsativa_Salinas_Chr8_003574",
@@ -210,7 +132,8 @@
         "protein_name": "Salinas_Chr8_003574",
         "direction": "plus",
         "rel_position": 4,
-        "gene_type": "TNL"
+        "gene_type": "TNL",
+        "is_present": true
       },
       {
         "id": "Lsativa_Salinas_Chr8_003575",
@@ -218,7 +141,8 @@
         "protein_name": "Salinas_Chr8_003575",
         "direction": "plus",
         "rel_position": 3,
-        "gene_type": "TNL"
+        "gene_type": "TNL",
+        "is_present": true
       },
       {
         "id": "Lsativa_Salinas_Chr8_003577",
@@ -226,7 +150,8 @@
         "protein_name": "Salinas_Chr8_003577",
         "direction": "plus",
         "rel_position": 2,
-        "gene_type": "TNL"
+        "gene_type": "TNL",
+        "is_present": true
       },
       {
         "id": "Lsativa_Salinas_Chr8_003578",
@@ -234,7 +159,8 @@
         "protein_name": "Salinas_Chr8_003578",
         "direction": "plus",
         "rel_position": 1,
-        "gene_type": "TNL"
+        "gene_type": "TNL",
+        "is_present": true
       },
       {
         "id": "Lsativa_ViAE_chr8_003521",
@@ -242,7 +168,8 @@
         "protein_name": "ViAE_chr8_003521",
         "direction": "plus",
         "rel_position": 15,
-        "gene_type": "TNL"
+        "gene_type": "TNL",
+        "is_present": true
       },
       {
         "id": "Lsativa_ViAE_chr8_003522",
@@ -250,7 +177,8 @@
         "protein_name": "ViAE_chr8_003522",
         "direction": "plus",
         "rel_position": 14,
-        "gene_type": "TNL"
+        "gene_type": "TNL",
+        "is_present": true
       },
       {
         "id": "Lsativa_ViAE_chr8_003524",
@@ -258,7 +186,8 @@
         "protein_name": "ViAE_chr8_003524",
         "direction": "plus",
         "rel_position": 13,
-        "gene_type": "TNBS"
+        "gene_type": "TNBS",
+        "is_present": true
       },
       {
         "id": "Lsativa_ViAE_chr8_003526",
@@ -266,7 +195,8 @@
         "protein_name": "ViAE_chr8_003526",
         "direction": "plus",
         "rel_position": 12,
-        "gene_type": "LRR"
+        "gene_type": "LRR",
+        "is_present": false
       },
       {
         "id": "Lsativa_ViAE_chr8_003528",
@@ -274,7 +204,8 @@
         "protein_name": "ViAE_chr8_003528",
         "direction": "plus",
         "rel_position": 11,
-        "gene_type": "TNL"
+        "gene_type": "TNL",
+        "is_present": true
       },
       {
         "id": "Lsativa_ViAE_chr8_003531",
@@ -282,7 +213,8 @@
         "protein_name": "ViAE_chr8_003531",
         "direction": "plus",
         "rel_position": 10,
-        "gene_type": "TIR"
+        "gene_type": "TIR",
+        "is_present": true
       },
       {
         "id": "Lsativa_ViAE_chr8_003532",
@@ -290,7 +222,8 @@
         "protein_name": "ViAE_chr8_003532",
         "direction": "plus",
         "rel_position": 9,
-        "gene_type": "TNBS"
+        "gene_type": "TNBS",
+        "is_present": true
       },
       {
         "id": "Lsativa_ViAE_chr8_003533",
@@ -298,7 +231,8 @@
         "protein_name": "ViAE_chr8_003533",
         "direction": "plus",
         "rel_position": 8,
-        "gene_type": "LRR"
+        "gene_type": "LRR",
+        "is_present": false
       },
       {
         "id": "Lsativa_ViAE_chr8_003534",
@@ -306,7 +240,8 @@
         "protein_name": "ViAE_chr8_003534",
         "direction": "plus",
         "rel_position": 7,
-        "gene_type": "TIR"
+        "gene_type": "TIR",
+        "is_present": true
       },
       {
         "id": "Lsativa_ViAE_chr8_003535",
@@ -314,7 +249,8 @@
         "protein_name": "ViAE_chr8_003535",
         "direction": "plus",
         "rel_position": 6,
-        "gene_type": "NLR"
+        "gene_type": "NLR",
+        "is_present": false
       },
       {
         "id": "Lsativa_ViAE_chr8_003536",
@@ -322,7 +258,8 @@
         "protein_name": "ViAE_chr8_003536",
         "direction": "plus",
         "rel_position": 5,
-        "gene_type": "TNL"
+        "gene_type": "TNL",
+        "is_present": true
       },
       {
         "id": "Lsativa_ViAE_chr8_003538",
@@ -330,7 +267,8 @@
         "protein_name": "ViAE_chr8_003538",
         "direction": "plus",
         "rel_position": 4,
-        "gene_type": "TNL"
+        "gene_type": "TNL",
+        "is_present": true
       },
       {
         "id": "Lsativa_ViAE_chr8_003539",
@@ -338,7 +276,8 @@
         "protein_name": "ViAE_chr8_003539",
         "direction": "plus",
         "rel_position": 3,
-        "gene_type": "NLR"
+        "gene_type": "NLR",
+        "is_present": false
       },
       {
         "id": "Lsativa_ViAE_chr8_003540",
@@ -346,7 +285,8 @@
         "protein_name": "ViAE_chr8_003540",
         "direction": "plus",
         "rel_position": 2,
-        "gene_type": "TNL"
+        "gene_type": "TNL",
+        "is_present": true
       },
       {
         "id": "Lsativa_ViAE_chr8_003541",
@@ -354,7 +294,8 @@
         "protein_name": "ViAE_chr8_003541",
         "direction": "plus",
         "rel_position": 1,
-        "gene_type": "TNL"
+        "gene_type": "TNL",
+        "is_present": true
       },
       {
         "id": "Lser_Armenian999_Chr8_003410",
@@ -362,7 +303,8 @@
         "protein_name": "Armenian999_Chr8_003410",
         "direction": "plus",
         "rel_position": 16,
-        "gene_type": "TNL"
+        "gene_type": "TNL",
+        "is_present": true
       },
       {
         "id": "Lser_Armenian999_Chr8_003411",
@@ -370,7 +312,8 @@
         "protein_name": "Armenian999_Chr8_003411",
         "direction": "plus",
         "rel_position": 15,
-        "gene_type": "TNL"
+        "gene_type": "TNL",
+        "is_present": true
       },
       {
         "id": "Lser_Armenian999_Chr8_003412",
@@ -378,7 +321,8 @@
         "protein_name": "Armenian999_Chr8_003412",
         "direction": "plus",
         "rel_position": 14,
-        "gene_type": "TNL"
+        "gene_type": "TNL",
+        "is_present": true
       },
       {
         "id": "Lser_Armenian999_Chr8_003414",
@@ -386,7 +330,8 @@
         "protein_name": "Armenian999_Chr8_003414",
         "direction": "plus",
         "rel_position": 13,
-        "gene_type": "TNL"
+        "gene_type": "TNL",
+        "is_present": true
       },
       {
         "id": "Lser_Armenian999_Chr8_003415",
@@ -394,7 +339,8 @@
         "protein_name": "Armenian999_Chr8_003415",
         "direction": "plus",
         "rel_position": 12,
-        "gene_type": "TNBS"
+        "gene_type": "TNBS",
+        "is_present": true
       },
       {
         "id": "Lser_Armenian999_Chr8_003416",
@@ -402,7 +348,8 @@
         "protein_name": "Armenian999_Chr8_003416",
         "direction": "plus",
         "rel_position": 11,
-        "gene_type": "NBS"
+        "gene_type": "NBS",
+        "is_present": false
       },
       {
         "id": "Lser_Armenian999_Chr8_LOC111906314",
@@ -410,7 +357,8 @@
         "protein_name": "Armenian999_Chr8_LOC111906314",
         "direction": "plus",
         "rel_position": 10,
-        "gene_type": "TNL"
+        "gene_type": "TNL",
+        "is_present": true
       },
       {
         "id": "Lser_Armenian999_Chr8_003418",
@@ -418,7 +366,8 @@
         "protein_name": "Armenian999_Chr8_003418",
         "direction": "plus",
         "rel_position": 9,
-        "gene_type": "TNBS"
+        "gene_type": "TNBS",
+        "is_present": true
       },
       {
         "id": "Lser_Armenian999_Chr8_003419",
@@ -426,7 +375,8 @@
         "protein_name": "Armenian999_Chr8_003419",
         "direction": "plus",
         "rel_position": 8,
-        "gene_type": "TNL"
+        "gene_type": "TNL",
+        "is_present": true
       },
       {
         "id": "Lser_Armenian999_Chr8_003420",
@@ -434,7 +384,8 @@
         "protein_name": "Armenian999_Chr8_003420",
         "direction": "plus",
         "rel_position": 7,
-        "gene_type": "TNL"
+        "gene_type": "TNL",
+        "is_present": true
       },
       {
         "id": "Lser_Armenian999_Chr8_003422",
@@ -442,7 +393,8 @@
         "protein_name": "Armenian999_Chr8_003422",
         "direction": "plus",
         "rel_position": 6,
-        "gene_type": "TNL"
+        "gene_type": "TNL",
+        "is_present": true
       },
       {
         "id": "Lser_Armenian999_Chr8_003423",
@@ -450,7 +402,8 @@
         "protein_name": "Armenian999_Chr8_003423",
         "direction": "plus",
         "rel_position": 5,
-        "gene_type": "TNL"
+        "gene_type": "TNL",
+        "is_present": true
       },
       {
         "id": "Lser_Armenian999_Chr8_003424",
@@ -458,7 +411,8 @@
         "protein_name": "Armenian999_Chr8_003424",
         "direction": "plus",
         "rel_position": 4,
-        "gene_type": "TNL"
+        "gene_type": "TNL",
+        "is_present": true
       },
       {
         "id": "Lser_Armenian999_Chr8_003425",
@@ -466,7 +420,8 @@
         "protein_name": "Armenian999_Chr8_003425",
         "direction": "plus",
         "rel_position": 3,
-        "gene_type": "TNL"
+        "gene_type": "TNL",
+        "is_present": true
       },
       {
         "id": "Lser_Armenian999_Chr8_003426",
@@ -474,7 +429,8 @@
         "protein_name": "Armenian999_Chr8_003426",
         "direction": "plus",
         "rel_position": 2,
-        "gene_type": "TNL"
+        "gene_type": "TNL",
+        "is_present": true
       },
       {
         "id": "Lser_Armenian999_Chr8_003427",
@@ -482,7 +438,8 @@
         "protein_name": "Armenian999_Chr8_003427",
         "direction": "plus",
         "rel_position": 1,
-        "gene_type": "TNL"
+        "gene_type": "TNL",
+        "is_present": true
       },
       {
         "id": "Lsativa_PI251246_Chr8_000683",
@@ -490,7 +447,8 @@
         "protein_name": "PI251246_Chr8_000683",
         "direction": "plus",
         "rel_position": 17,
-        "gene_type": "TNL"
+        "gene_type": "TNL",
+        "is_present": true
       },
       {
         "id": "Lsativa_PI251246_Chr8_003476",
@@ -498,7 +456,8 @@
         "protein_name": "PI251246_Chr8_003476",
         "direction": "plus",
         "rel_position": 16,
-        "gene_type": "TNL"
+        "gene_type": "TNL",
+        "is_present": true
       },
       {
         "id": "Lsativa_PI251246_Chr8_003477",
@@ -506,7 +465,8 @@
         "protein_name": "PI251246_Chr8_003477",
         "direction": "plus",
         "rel_position": 15,
-        "gene_type": "TNL"
+        "gene_type": "TNL",
+        "is_present": true
       },
       {
         "id": "Lsativa_PI251246_Chr8_003478",
@@ -514,7 +474,8 @@
         "protein_name": "PI251246_Chr8_003478",
         "direction": "plus",
         "rel_position": 14,
-        "gene_type": "TNL"
+        "gene_type": "TNL",
+        "is_present": true
       },
       {
         "id": "Lsativa_PI251246_Chr8_003479",
@@ -522,7 +483,8 @@
         "protein_name": "PI251246_Chr8_003479",
         "direction": "plus",
         "rel_position": 13,
-        "gene_type": "TNL"
+        "gene_type": "TNL",
+        "is_present": true
       },
       {
         "id": "Lsativa_PI251246_Chr8_003480",
@@ -530,7 +492,8 @@
         "protein_name": "PI251246_Chr8_003480",
         "direction": "plus",
         "rel_position": 12,
-        "gene_type": "TNL"
+        "gene_type": "TNL",
+        "is_present": true
       },
       {
         "id": "Lsativa_PI251246_Chr8_003481",
@@ -538,7 +501,8 @@
         "protein_name": "PI251246_Chr8_003481",
         "direction": "plus",
         "rel_position": 11,
-        "gene_type": "TNL"
+        "gene_type": "TNL",
+        "is_present": true
       },
       {
         "id": "Lsativa_PI251246_Chr8_003482",
@@ -546,7 +510,8 @@
         "protein_name": "PI251246_Chr8_003482",
         "direction": "plus",
         "rel_position": 10,
-        "gene_type": "TNL"
+        "gene_type": "TNL",
+        "is_present": true
       },
       {
         "id": "Lsativa_PI251246_Chr8_003483",
@@ -554,7 +519,8 @@
         "protein_name": "PI251246_Chr8_003483",
         "direction": "plus",
         "rel_position": 9,
-        "gene_type": "TNBS"
+        "gene_type": "TNBS",
+        "is_present": true
       },
       {
         "id": "Lsativa_PI251246_Chr8_003484",
@@ -562,7 +528,8 @@
         "protein_name": "PI251246_Chr8_003484",
         "direction": "plus",
         "rel_position": 8,
-        "gene_type": "TNL"
+        "gene_type": "TNL",
+        "is_present": true
       },
       {
         "id": "Lsativa_PI251246_Chr8_003485",
@@ -570,7 +537,8 @@
         "protein_name": "PI251246_Chr8_003485",
         "direction": "plus",
         "rel_position": 7,
-        "gene_type": "TNL"
+        "gene_type": "TNL",
+        "is_present": true
       },
       {
         "id": "Lsativa_PI251246_Chr8_003486",
@@ -578,7 +546,8 @@
         "protein_name": "PI251246_Chr8_003486",
         "direction": "plus",
         "rel_position": 6,
-        "gene_type": "TNL"
+        "gene_type": "TNL",
+        "is_present": true
       },
       {
         "id": "Lsativa_PI251246_Chr8_003488",
@@ -586,7 +555,8 @@
         "protein_name": "PI251246_Chr8_003488",
         "direction": "plus",
         "rel_position": 5,
-        "gene_type": "TNL"
+        "gene_type": "TNL",
+        "is_present": true
       },
       {
         "id": "Lsativa_PI251246_Chr8_003489",
@@ -594,7 +564,8 @@
         "protein_name": "PI251246_Chr8_003489",
         "direction": "plus",
         "rel_position": 4,
-        "gene_type": "TNL"
+        "gene_type": "TNL",
+        "is_present": true
       },
       {
         "id": "Lsativa_PI251246_Chr8_003490",
@@ -602,7 +573,8 @@
         "protein_name": "PI251246_Chr8_003490",
         "direction": "plus",
         "rel_position": 3,
-        "gene_type": "TNL"
+        "gene_type": "TNL",
+        "is_present": true
       },
       {
         "id": "Lsativa_PI251246_Chr8_003493",
@@ -610,7 +582,8 @@
         "protein_name": "PI251246_Chr8_003493",
         "direction": "plus",
         "rel_position": 2,
-        "gene_type": "TNL"
+        "gene_type": "TNL",
+        "is_present": true
       },
       {
         "id": "Lsativa_PI251246_Chr8_003494",
@@ -618,7 +591,8 @@
         "protein_name": "PI251246_Chr8_003494",
         "direction": "plus",
         "rel_position": 1,
-        "gene_type": "LRR"
+        "gene_type": "LRR",
+        "is_present": false
       },
       {
         "id": "Lser_US96UC23_Chr8_003521",
@@ -626,7 +600,8 @@
         "protein_name": "US96UC23_Chr8_003521",
         "direction": "plus",
         "rel_position": 15,
-        "gene_type": "TNL"
+        "gene_type": "TNL",
+        "is_present": true
       },
       {
         "id": "Lser_US96UC23_Chr8_003522",
@@ -634,7 +609,8 @@
         "protein_name": "US96UC23_Chr8_003522",
         "direction": "plus",
         "rel_position": 14,
-        "gene_type": "TNBS"
+        "gene_type": "TNBS",
+        "is_present": true
       },
       {
         "id": "Lser_US96UC23_Chr8_003524",
@@ -642,7 +618,8 @@
         "protein_name": "US96UC23_Chr8_003524",
         "direction": "plus",
         "rel_position": 13,
-        "gene_type": "TNL"
+        "gene_type": "TNL",
+        "is_present": true
       },
       {
         "id": "Lser_US96UC23_Chr8_003525",
@@ -650,7 +627,8 @@
         "protein_name": "US96UC23_Chr8_003525",
         "direction": "plus",
         "rel_position": 12,
-        "gene_type": "TNL"
+        "gene_type": "TNL",
+        "is_present": true
       },
       {
         "id": "Lser_US96UC23_Chr8_003526",
@@ -658,7 +636,8 @@
         "protein_name": "US96UC23_Chr8_003526",
         "direction": "plus",
         "rel_position": 11,
-        "gene_type": "TNL"
+        "gene_type": "TNL",
+        "is_present": true
       },
       {
         "id": "Lser_US96UC23_Chr8_003528",
@@ -666,7 +645,8 @@
         "protein_name": "US96UC23_Chr8_003528",
         "direction": "plus",
         "rel_position": 10,
-        "gene_type": "TNL"
+        "gene_type": "TNL",
+        "is_present": true
       },
       {
         "id": "Lser_US96UC23_Chr8_003529",
@@ -674,7 +654,8 @@
         "protein_name": "US96UC23_Chr8_003529",
         "direction": "plus",
         "rel_position": 9,
-        "gene_type": "TNL"
+        "gene_type": "TNL",
+        "is_present": true
       },
       {
         "id": "Lser_US96UC23_Chr8_003530",
@@ -682,7 +663,8 @@
         "protein_name": "US96UC23_Chr8_003530",
         "direction": "plus",
         "rel_position": 8,
-        "gene_type": "TNL"
+        "gene_type": "TNL",
+        "is_present": true
       },
       {
         "id": "Lser_US96UC23_Chr8_003532",
@@ -690,7 +672,8 @@
         "protein_name": "US96UC23_Chr8_003532",
         "direction": "plus",
         "rel_position": 7,
-        "gene_type": "TNBS"
+        "gene_type": "TNBS",
+        "is_present": true
       },
       {
         "id": "Lser_US96UC23_Chr8_003533",
@@ -698,7 +681,8 @@
         "protein_name": "US96UC23_Chr8_003533",
         "direction": "plus",
         "rel_position": 6,
-        "gene_type": "TNL"
+        "gene_type": "TNL",
+        "is_present": true
       },
       {
         "id": "Lser_US96UC23_Chr8_003534",
@@ -706,7 +690,8 @@
         "protein_name": "US96UC23_Chr8_003534",
         "direction": "plus",
         "rel_position": 5,
-        "gene_type": "TNL"
+        "gene_type": "TNL",
+        "is_present": true
       },
       {
         "id": "Lser_US96UC23_Chr8_003535",
@@ -714,7 +699,8 @@
         "protein_name": "US96UC23_Chr8_003535",
         "direction": "plus",
         "rel_position": 4,
-        "gene_type": "TNL"
+        "gene_type": "TNL",
+        "is_present": true
       },
       {
         "id": "Lser_US96UC23_Chr8_003536",
@@ -722,7 +708,8 @@
         "protein_name": "US96UC23_Chr8_003536",
         "direction": "plus",
         "rel_position": 3,
-        "gene_type": "TNL"
+        "gene_type": "TNL",
+        "is_present": true
       },
       {
         "id": "Lser_US96UC23_Chr8_003537",
@@ -730,7 +717,8 @@
         "protein_name": "US96UC23_Chr8_003537",
         "direction": "plus",
         "rel_position": 2,
-        "gene_type": "TNL"
+        "gene_type": "TNL",
+        "is_present": true
       },
       {
         "id": "Lser_US96UC23_Chr8_003538",
@@ -738,7 +726,8 @@
         "protein_name": "US96UC23_Chr8_003538",
         "direction": "plus",
         "rel_position": 1,
-        "gene_type": "TNL"
+        "gene_type": "TNL",
+        "is_present": true
       }
     ],
     "links": [
@@ -2988,7 +2977,8 @@
       }
     ]
   },
-  "graph_2": {
+  {
+    "domain_name": "NBS",
     "genomes": [
       "Salinas",
       "ViAE",
@@ -3003,7 +2993,8 @@
         "protein_name": "Salinas_Chr8_003553",
         "direction": "plus",
         "rel_position": 17,
-        "gene_type": "TNL"
+        "gene_type": "TNL",
+        "is_present": true
       },
       {
         "id": "Lsativa_Salinas_Chr8_003557",
@@ -3011,7 +3002,8 @@
         "protein_name": "Salinas_Chr8_003557",
         "direction": "plus",
         "rel_position": 16,
-        "gene_type": "TNL"
+        "gene_type": "TNL",
+        "is_present": true
       },
       {
         "id": "Lsativa_Salinas_Chr8_003558",
@@ -3019,7 +3011,8 @@
         "protein_name": "Salinas_Chr8_003558",
         "direction": "plus",
         "rel_position": 15,
-        "gene_type": "TIR"
+        "gene_type": "TIR",
+        "is_present": false
       },
       {
         "id": "Lsativa_Salinas_Chr8_003559",
@@ -3027,7 +3020,8 @@
         "protein_name": "Salinas_Chr8_003559",
         "direction": "plus",
         "rel_position": 14,
-        "gene_type": "NBS"
+        "gene_type": "NBS",
+        "is_present": true
       },
       {
         "id": "Lsativa_Salinas_Chr8_003560",
@@ -3035,7 +3029,8 @@
         "protein_name": "Salinas_Chr8_003560",
         "direction": "plus",
         "rel_position": 13,
-        "gene_type": "LRR"
+        "gene_type": "LRR",
+        "is_present": false
       },
       {
         "id": "Lsativa_Salinas_Chr8_003564",
@@ -3043,7 +3038,8 @@
         "protein_name": "Salinas_Chr8_003564",
         "direction": "plus",
         "rel_position": 12,
-        "gene_type": "TNL"
+        "gene_type": "TNL",
+        "is_present": true
       },
       {
         "id": "Lsativa_Salinas_Chr8_003566",
@@ -3051,7 +3047,8 @@
         "protein_name": "Salinas_Chr8_003566",
         "direction": "plus",
         "rel_position": 11,
-        "gene_type": "TNL"
+        "gene_type": "TNL",
+        "is_present": true
       },
       {
         "id": "Lsativa_Salinas_Chr8_003567",
@@ -3059,7 +3056,8 @@
         "protein_name": "Salinas_Chr8_003567",
         "direction": "plus",
         "rel_position": 10,
-        "gene_type": "TIR"
+        "gene_type": "TIR",
+        "is_present": false
       },
       {
         "id": "Lsativa_Salinas_Chr8_003569",
@@ -3067,7 +3065,8 @@
         "protein_name": "Salinas_Chr8_003569",
         "direction": "plus",
         "rel_position": 9,
-        "gene_type": "NLR"
+        "gene_type": "NLR",
+        "is_present": true
       },
       {
         "id": "Lsativa_Salinas_Chr8_003570",
@@ -3075,7 +3074,8 @@
         "protein_name": "Salinas_Chr8_003570",
         "direction": "plus",
         "rel_position": 8,
-        "gene_type": "TNL"
+        "gene_type": "TNL",
+        "is_present": true
       },
       {
         "id": "Lsativa_Salinas_Chr8_003571",
@@ -3083,7 +3083,8 @@
         "protein_name": "Salinas_Chr8_003571",
         "direction": "plus",
         "rel_position": 7,
-        "gene_type": "TNL"
+        "gene_type": "TNL",
+        "is_present": true
       },
       {
         "id": "Lsativa_Salinas_Chr8_003572",
@@ -3091,7 +3092,8 @@
         "protein_name": "Salinas_Chr8_003572",
         "direction": "plus",
         "rel_position": 6,
-        "gene_type": "TNBS"
+        "gene_type": "TNBS",
+        "is_present": true
       },
       {
         "id": "Lsativa_Salinas_Chr8_003573",
@@ -3099,7 +3101,8 @@
         "protein_name": "Salinas_Chr8_003573",
         "direction": "plus",
         "rel_position": 5,
-        "gene_type": "TNL"
+        "gene_type": "TNL",
+        "is_present": true
       },
       {
         "id": "Lsativa_Salinas_Chr8_003574",
@@ -3107,7 +3110,8 @@
         "protein_name": "Salinas_Chr8_003574",
         "direction": "plus",
         "rel_position": 4,
-        "gene_type": "TNL"
+        "gene_type": "TNL",
+        "is_present": true
       },
       {
         "id": "Lsativa_Salinas_Chr8_003575",
@@ -3115,7 +3119,8 @@
         "protein_name": "Salinas_Chr8_003575",
         "direction": "plus",
         "rel_position": 3,
-        "gene_type": "TNL"
+        "gene_type": "TNL",
+        "is_present": true
       },
       {
         "id": "Lsativa_Salinas_Chr8_003577",
@@ -3123,7 +3128,8 @@
         "protein_name": "Salinas_Chr8_003577",
         "direction": "plus",
         "rel_position": 2,
-        "gene_type": "TNL"
+        "gene_type": "TNL",
+        "is_present": true
       },
       {
         "id": "Lsativa_Salinas_Chr8_003578",
@@ -3131,7 +3137,8 @@
         "protein_name": "Salinas_Chr8_003578",
         "direction": "plus",
         "rel_position": 1,
-        "gene_type": "TNL"
+        "gene_type": "TNL",
+        "is_present": true
       },
       {
         "id": "Lsativa_ViAE_chr8_003521",
@@ -3139,7 +3146,8 @@
         "protein_name": "ViAE_chr8_003521",
         "direction": "plus",
         "rel_position": 15,
-        "gene_type": "TNL"
+        "gene_type": "TNL",
+        "is_present": true
       },
       {
         "id": "Lsativa_ViAE_chr8_003522",
@@ -3147,7 +3155,8 @@
         "protein_name": "ViAE_chr8_003522",
         "direction": "plus",
         "rel_position": 14,
-        "gene_type": "TNL"
+        "gene_type": "TNL",
+        "is_present": true
       },
       {
         "id": "Lsativa_ViAE_chr8_003524",
@@ -3155,7 +3164,8 @@
         "protein_name": "ViAE_chr8_003524",
         "direction": "plus",
         "rel_position": 13,
-        "gene_type": "TNBS"
+        "gene_type": "TNBS",
+        "is_present": true
       },
       {
         "id": "Lsativa_ViAE_chr8_003526",
@@ -3163,7 +3173,8 @@
         "protein_name": "ViAE_chr8_003526",
         "direction": "plus",
         "rel_position": 12,
-        "gene_type": "LRR"
+        "gene_type": "LRR",
+        "is_present": false
       },
       {
         "id": "Lsativa_ViAE_chr8_003528",
@@ -3171,7 +3182,8 @@
         "protein_name": "ViAE_chr8_003528",
         "direction": "plus",
         "rel_position": 11,
-        "gene_type": "TNL"
+        "gene_type": "TNL",
+        "is_present": true
       },
       {
         "id": "Lsativa_ViAE_chr8_003531",
@@ -3179,7 +3191,8 @@
         "protein_name": "ViAE_chr8_003531",
         "direction": "plus",
         "rel_position": 10,
-        "gene_type": "TIR"
+        "gene_type": "TIR",
+        "is_present": false
       },
       {
         "id": "Lsativa_ViAE_chr8_003532",
@@ -3187,7 +3200,8 @@
         "protein_name": "ViAE_chr8_003532",
         "direction": "plus",
         "rel_position": 9,
-        "gene_type": "TNBS"
+        "gene_type": "TNBS",
+        "is_present": true
       },
       {
         "id": "Lsativa_ViAE_chr8_003533",
@@ -3195,7 +3209,8 @@
         "protein_name": "ViAE_chr8_003533",
         "direction": "plus",
         "rel_position": 8,
-        "gene_type": "LRR"
+        "gene_type": "LRR",
+        "is_present": false
       },
       {
         "id": "Lsativa_ViAE_chr8_003534",
@@ -3203,7 +3218,8 @@
         "protein_name": "ViAE_chr8_003534",
         "direction": "plus",
         "rel_position": 7,
-        "gene_type": "TIR"
+        "gene_type": "TIR",
+        "is_present": false
       },
       {
         "id": "Lsativa_ViAE_chr8_003535",
@@ -3211,7 +3227,8 @@
         "protein_name": "ViAE_chr8_003535",
         "direction": "plus",
         "rel_position": 6,
-        "gene_type": "NLR"
+        "gene_type": "NLR",
+        "is_present": true
       },
       {
         "id": "Lsativa_ViAE_chr8_003536",
@@ -3219,7 +3236,8 @@
         "protein_name": "ViAE_chr8_003536",
         "direction": "plus",
         "rel_position": 5,
-        "gene_type": "TNL"
+        "gene_type": "TNL",
+        "is_present": true
       },
       {
         "id": "Lsativa_ViAE_chr8_003538",
@@ -3227,7 +3245,8 @@
         "protein_name": "ViAE_chr8_003538",
         "direction": "plus",
         "rel_position": 4,
-        "gene_type": "TNL"
+        "gene_type": "TNL",
+        "is_present": true
       },
       {
         "id": "Lsativa_ViAE_chr8_003539",
@@ -3235,7 +3254,8 @@
         "protein_name": "ViAE_chr8_003539",
         "direction": "plus",
         "rel_position": 3,
-        "gene_type": "NLR"
+        "gene_type": "NLR",
+        "is_present": true
       },
       {
         "id": "Lsativa_ViAE_chr8_003540",
@@ -3243,7 +3263,8 @@
         "protein_name": "ViAE_chr8_003540",
         "direction": "plus",
         "rel_position": 2,
-        "gene_type": "TNL"
+        "gene_type": "TNL",
+        "is_present": true
       },
       {
         "id": "Lsativa_ViAE_chr8_003541",
@@ -3251,7 +3272,8 @@
         "protein_name": "ViAE_chr8_003541",
         "direction": "plus",
         "rel_position": 1,
-        "gene_type": "TNL"
+        "gene_type": "TNL",
+        "is_present": true
       },
       {
         "id": "Lser_Armenian999_Chr8_003410",
@@ -3259,7 +3281,8 @@
         "protein_name": "Armenian999_Chr8_003410",
         "direction": "plus",
         "rel_position": 16,
-        "gene_type": "TNL"
+        "gene_type": "TNL",
+        "is_present": true
       },
       {
         "id": "Lser_Armenian999_Chr8_003411",
@@ -3267,7 +3290,8 @@
         "protein_name": "Armenian999_Chr8_003411",
         "direction": "plus",
         "rel_position": 15,
-        "gene_type": "TNL"
+        "gene_type": "TNL",
+        "is_present": true
       },
       {
         "id": "Lser_Armenian999_Chr8_003412",
@@ -3275,7 +3299,8 @@
         "protein_name": "Armenian999_Chr8_003412",
         "direction": "plus",
         "rel_position": 14,
-        "gene_type": "TNL"
+        "gene_type": "TNL",
+        "is_present": true
       },
       {
         "id": "Lser_Armenian999_Chr8_003414",
@@ -3283,7 +3308,8 @@
         "protein_name": "Armenian999_Chr8_003414",
         "direction": "plus",
         "rel_position": 13,
-        "gene_type": "TNL"
+        "gene_type": "TNL",
+        "is_present": true
       },
       {
         "id": "Lser_Armenian999_Chr8_003415",
@@ -3291,7 +3317,8 @@
         "protein_name": "Armenian999_Chr8_003415",
         "direction": "plus",
         "rel_position": 12,
-        "gene_type": "TNBS"
+        "gene_type": "TNBS",
+        "is_present": true
       },
       {
         "id": "Lser_Armenian999_Chr8_003416",
@@ -3299,7 +3326,8 @@
         "protein_name": "Armenian999_Chr8_003416",
         "direction": "plus",
         "rel_position": 11,
-        "gene_type": "NBS"
+        "gene_type": "NBS",
+        "is_present": true
       },
       {
         "id": "Lser_Armenian999_Chr8_LOC111906314",
@@ -3307,7 +3335,8 @@
         "protein_name": "Armenian999_Chr8_LOC111906314",
         "direction": "plus",
         "rel_position": 10,
-        "gene_type": "TNL"
+        "gene_type": "TNL",
+        "is_present": true
       },
       {
         "id": "Lser_Armenian999_Chr8_003418",
@@ -3315,7 +3344,8 @@
         "protein_name": "Armenian999_Chr8_003418",
         "direction": "plus",
         "rel_position": 9,
-        "gene_type": "TNBS"
+        "gene_type": "TNBS",
+        "is_present": true
       },
       {
         "id": "Lser_Armenian999_Chr8_003419",
@@ -3323,7 +3353,8 @@
         "protein_name": "Armenian999_Chr8_003419",
         "direction": "plus",
         "rel_position": 8,
-        "gene_type": "TNL"
+        "gene_type": "TNL",
+        "is_present": true
       },
       {
         "id": "Lser_Armenian999_Chr8_003420",
@@ -3331,7 +3362,8 @@
         "protein_name": "Armenian999_Chr8_003420",
         "direction": "plus",
         "rel_position": 7,
-        "gene_type": "TNL"
+        "gene_type": "TNL",
+        "is_present": true
       },
       {
         "id": "Lser_Armenian999_Chr8_003422",
@@ -3339,7 +3371,8 @@
         "protein_name": "Armenian999_Chr8_003422",
         "direction": "plus",
         "rel_position": 6,
-        "gene_type": "TNL"
+        "gene_type": "TNL",
+        "is_present": true
       },
       {
         "id": "Lser_Armenian999_Chr8_003423",
@@ -3347,7 +3380,8 @@
         "protein_name": "Armenian999_Chr8_003423",
         "direction": "plus",
         "rel_position": 5,
-        "gene_type": "TNL"
+        "gene_type": "TNL",
+        "is_present": true
       },
       {
         "id": "Lser_Armenian999_Chr8_003424",
@@ -3355,7 +3389,8 @@
         "protein_name": "Armenian999_Chr8_003424",
         "direction": "plus",
         "rel_position": 4,
-        "gene_type": "TNL"
+        "gene_type": "TNL",
+        "is_present": true
       },
       {
         "id": "Lser_Armenian999_Chr8_003425",
@@ -3363,7 +3398,8 @@
         "protein_name": "Armenian999_Chr8_003425",
         "direction": "plus",
         "rel_position": 3,
-        "gene_type": "TNL"
+        "gene_type": "TNL",
+        "is_present": true
       },
       {
         "id": "Lser_Armenian999_Chr8_003426",
@@ -3371,7 +3407,8 @@
         "protein_name": "Armenian999_Chr8_003426",
         "direction": "plus",
         "rel_position": 2,
-        "gene_type": "TNL"
+        "gene_type": "TNL",
+        "is_present": true
       },
       {
         "id": "Lser_Armenian999_Chr8_003427",
@@ -3379,7 +3416,8 @@
         "protein_name": "Armenian999_Chr8_003427",
         "direction": "plus",
         "rel_position": 1,
-        "gene_type": "TNL"
+        "gene_type": "TNL",
+        "is_present": true
       },
       {
         "id": "Lsativa_PI251246_Chr8_000683",
@@ -3387,7 +3425,8 @@
         "protein_name": "PI251246_Chr8_000683",
         "direction": "plus",
         "rel_position": 17,
-        "gene_type": "TNL"
+        "gene_type": "TNL",
+        "is_present": true
       },
       {
         "id": "Lsativa_PI251246_Chr8_003476",
@@ -3395,7 +3434,8 @@
         "protein_name": "PI251246_Chr8_003476",
         "direction": "plus",
         "rel_position": 16,
-        "gene_type": "TNL"
+        "gene_type": "TNL",
+        "is_present": true
       },
       {
         "id": "Lsativa_PI251246_Chr8_003477",
@@ -3403,7 +3443,8 @@
         "protein_name": "PI251246_Chr8_003477",
         "direction": "plus",
         "rel_position": 15,
-        "gene_type": "TNL"
+        "gene_type": "TNL",
+        "is_present": true
       },
       {
         "id": "Lsativa_PI251246_Chr8_003478",
@@ -3411,7 +3452,8 @@
         "protein_name": "PI251246_Chr8_003478",
         "direction": "plus",
         "rel_position": 14,
-        "gene_type": "TNL"
+        "gene_type": "TNL",
+        "is_present": true
       },
       {
         "id": "Lsativa_PI251246_Chr8_003479",
@@ -3419,7 +3461,8 @@
         "protein_name": "PI251246_Chr8_003479",
         "direction": "plus",
         "rel_position": 13,
-        "gene_type": "TNL"
+        "gene_type": "TNL",
+        "is_present": true
       },
       {
         "id": "Lsativa_PI251246_Chr8_003480",
@@ -3427,7 +3470,8 @@
         "protein_name": "PI251246_Chr8_003480",
         "direction": "plus",
         "rel_position": 12,
-        "gene_type": "TNL"
+        "gene_type": "TNL",
+        "is_present": true
       },
       {
         "id": "Lsativa_PI251246_Chr8_003481",
@@ -3435,7 +3479,8 @@
         "protein_name": "PI251246_Chr8_003481",
         "direction": "plus",
         "rel_position": 11,
-        "gene_type": "TNL"
+        "gene_type": "TNL",
+        "is_present": true
       },
       {
         "id": "Lsativa_PI251246_Chr8_003482",
@@ -3443,7 +3488,8 @@
         "protein_name": "PI251246_Chr8_003482",
         "direction": "plus",
         "rel_position": 10,
-        "gene_type": "TNL"
+        "gene_type": "TNL",
+        "is_present": true
       },
       {
         "id": "Lsativa_PI251246_Chr8_003483",
@@ -3451,7 +3497,8 @@
         "protein_name": "PI251246_Chr8_003483",
         "direction": "plus",
         "rel_position": 9,
-        "gene_type": "TNBS"
+        "gene_type": "TNBS",
+        "is_present": true
       },
       {
         "id": "Lsativa_PI251246_Chr8_003484",
@@ -3459,7 +3506,8 @@
         "protein_name": "PI251246_Chr8_003484",
         "direction": "plus",
         "rel_position": 8,
-        "gene_type": "TNL"
+        "gene_type": "TNL",
+        "is_present": true
       },
       {
         "id": "Lsativa_PI251246_Chr8_003485",
@@ -3467,7 +3515,8 @@
         "protein_name": "PI251246_Chr8_003485",
         "direction": "plus",
         "rel_position": 7,
-        "gene_type": "TNL"
+        "gene_type": "TNL",
+        "is_present": true
       },
       {
         "id": "Lsativa_PI251246_Chr8_003486",
@@ -3475,7 +3524,8 @@
         "protein_name": "PI251246_Chr8_003486",
         "direction": "plus",
         "rel_position": 6,
-        "gene_type": "TNL"
+        "gene_type": "TNL",
+        "is_present": true
       },
       {
         "id": "Lsativa_PI251246_Chr8_003488",
@@ -3483,7 +3533,8 @@
         "protein_name": "PI251246_Chr8_003488",
         "direction": "plus",
         "rel_position": 5,
-        "gene_type": "TNL"
+        "gene_type": "TNL",
+        "is_present": true
       },
       {
         "id": "Lsativa_PI251246_Chr8_003489",
@@ -3491,7 +3542,8 @@
         "protein_name": "PI251246_Chr8_003489",
         "direction": "plus",
         "rel_position": 4,
-        "gene_type": "TNL"
+        "gene_type": "TNL",
+        "is_present": true
       },
       {
         "id": "Lsativa_PI251246_Chr8_003490",
@@ -3499,7 +3551,8 @@
         "protein_name": "PI251246_Chr8_003490",
         "direction": "plus",
         "rel_position": 3,
-        "gene_type": "TNL"
+        "gene_type": "TNL",
+        "is_present": true
       },
       {
         "id": "Lsativa_PI251246_Chr8_003493",
@@ -3507,7 +3560,8 @@
         "protein_name": "PI251246_Chr8_003493",
         "direction": "plus",
         "rel_position": 2,
-        "gene_type": "TNL"
+        "gene_type": "TNL",
+        "is_present": true
       },
       {
         "id": "Lsativa_PI251246_Chr8_003494",
@@ -3515,7 +3569,8 @@
         "protein_name": "PI251246_Chr8_003494",
         "direction": "plus",
         "rel_position": 1,
-        "gene_type": "LRR"
+        "gene_type": "LRR",
+        "is_present": false
       },
       {
         "id": "Lser_US96UC23_Chr8_003521",
@@ -3523,7 +3578,8 @@
         "protein_name": "US96UC23_Chr8_003521",
         "direction": "plus",
         "rel_position": 15,
-        "gene_type": "TNL"
+        "gene_type": "TNL",
+        "is_present": true
       },
       {
         "id": "Lser_US96UC23_Chr8_003522",
@@ -3531,7 +3587,8 @@
         "protein_name": "US96UC23_Chr8_003522",
         "direction": "plus",
         "rel_position": 14,
-        "gene_type": "TNBS"
+        "gene_type": "TNBS",
+        "is_present": true
       },
       {
         "id": "Lser_US96UC23_Chr8_003524",
@@ -3539,7 +3596,8 @@
         "protein_name": "US96UC23_Chr8_003524",
         "direction": "plus",
         "rel_position": 13,
-        "gene_type": "TNL"
+        "gene_type": "TNL",
+        "is_present": true
       },
       {
         "id": "Lser_US96UC23_Chr8_003525",
@@ -3547,7 +3605,8 @@
         "protein_name": "US96UC23_Chr8_003525",
         "direction": "plus",
         "rel_position": 12,
-        "gene_type": "TNL"
+        "gene_type": "TNL",
+        "is_present": true
       },
       {
         "id": "Lser_US96UC23_Chr8_003526",
@@ -3555,7 +3614,8 @@
         "protein_name": "US96UC23_Chr8_003526",
         "direction": "plus",
         "rel_position": 11,
-        "gene_type": "TNL"
+        "gene_type": "TNL",
+        "is_present": true
       },
       {
         "id": "Lser_US96UC23_Chr8_003528",
@@ -3563,7 +3623,8 @@
         "protein_name": "US96UC23_Chr8_003528",
         "direction": "plus",
         "rel_position": 10,
-        "gene_type": "TNL"
+        "gene_type": "TNL",
+        "is_present": true
       },
       {
         "id": "Lser_US96UC23_Chr8_003529",
@@ -3571,7 +3632,8 @@
         "protein_name": "US96UC23_Chr8_003529",
         "direction": "plus",
         "rel_position": 9,
-        "gene_type": "TNL"
+        "gene_type": "TNL",
+        "is_present": true
       },
       {
         "id": "Lser_US96UC23_Chr8_003530",
@@ -3579,7 +3641,8 @@
         "protein_name": "US96UC23_Chr8_003530",
         "direction": "plus",
         "rel_position": 8,
-        "gene_type": "TNL"
+        "gene_type": "TNL",
+        "is_present": true
       },
       {
         "id": "Lser_US96UC23_Chr8_003532",
@@ -3587,7 +3650,8 @@
         "protein_name": "US96UC23_Chr8_003532",
         "direction": "plus",
         "rel_position": 7,
-        "gene_type": "TNBS"
+        "gene_type": "TNBS",
+        "is_present": true
       },
       {
         "id": "Lser_US96UC23_Chr8_003533",
@@ -3595,7 +3659,8 @@
         "protein_name": "US96UC23_Chr8_003533",
         "direction": "plus",
         "rel_position": 6,
-        "gene_type": "TNL"
+        "gene_type": "TNL",
+        "is_present": true
       },
       {
         "id": "Lser_US96UC23_Chr8_003534",
@@ -3603,7 +3668,8 @@
         "protein_name": "US96UC23_Chr8_003534",
         "direction": "plus",
         "rel_position": 5,
-        "gene_type": "TNL"
+        "gene_type": "TNL",
+        "is_present": true
       },
       {
         "id": "Lser_US96UC23_Chr8_003535",
@@ -3611,7 +3677,8 @@
         "protein_name": "US96UC23_Chr8_003535",
         "direction": "plus",
         "rel_position": 4,
-        "gene_type": "TNL"
+        "gene_type": "TNL",
+        "is_present": true
       },
       {
         "id": "Lser_US96UC23_Chr8_003536",
@@ -3619,7 +3686,8 @@
         "protein_name": "US96UC23_Chr8_003536",
         "direction": "plus",
         "rel_position": 3,
-        "gene_type": "TNL"
+        "gene_type": "TNL",
+        "is_present": true
       },
       {
         "id": "Lser_US96UC23_Chr8_003537",
@@ -3627,7 +3695,8 @@
         "protein_name": "US96UC23_Chr8_003537",
         "direction": "plus",
         "rel_position": 2,
-        "gene_type": "TNL"
+        "gene_type": "TNL",
+        "is_present": true
       },
       {
         "id": "Lser_US96UC23_Chr8_003538",
@@ -3635,7 +3704,8 @@
         "protein_name": "US96UC23_Chr8_003538",
         "direction": "plus",
         "rel_position": 1,
-        "gene_type": "TNL"
+        "gene_type": "TNL",
+        "is_present": true
       }
     ],
     "links": [
@@ -6053,7 +6123,8 @@
       }
     ]
   },
-  "graph_3": {
+  {
+    "domain_name": "LRR",
     "genomes": [
       "Salinas",
       "ViAE",
@@ -6068,7 +6139,8 @@
         "protein_name": "Salinas_Chr8_003553",
         "direction": "plus",
         "rel_position": 17,
-        "gene_type": "TNL"
+        "gene_type": "TNL",
+        "is_present": true
       },
       {
         "id": "Lsativa_Salinas_Chr8_003557",
@@ -6076,7 +6148,8 @@
         "protein_name": "Salinas_Chr8_003557",
         "direction": "plus",
         "rel_position": 16,
-        "gene_type": "TNL"
+        "gene_type": "TNL",
+        "is_present": true
       },
       {
         "id": "Lsativa_Salinas_Chr8_003558",
@@ -6084,7 +6157,8 @@
         "protein_name": "Salinas_Chr8_003558",
         "direction": "plus",
         "rel_position": 15,
-        "gene_type": "TIR"
+        "gene_type": "TIR",
+        "is_present": false
       },
       {
         "id": "Lsativa_Salinas_Chr8_003559",
@@ -6092,7 +6166,8 @@
         "protein_name": "Salinas_Chr8_003559",
         "direction": "plus",
         "rel_position": 14,
-        "gene_type": "NBS"
+        "gene_type": "NBS",
+        "is_present": false
       },
       {
         "id": "Lsativa_Salinas_Chr8_003560",
@@ -6100,7 +6175,8 @@
         "protein_name": "Salinas_Chr8_003560",
         "direction": "plus",
         "rel_position": 13,
-        "gene_type": "LRR"
+        "gene_type": "LRR",
+        "is_present": true
       },
       {
         "id": "Lsativa_Salinas_Chr8_003564",
@@ -6108,7 +6184,8 @@
         "protein_name": "Salinas_Chr8_003564",
         "direction": "plus",
         "rel_position": 12,
-        "gene_type": "TNL"
+        "gene_type": "TNL",
+        "is_present": true
       },
       {
         "id": "Lsativa_Salinas_Chr8_003566",
@@ -6116,7 +6193,8 @@
         "protein_name": "Salinas_Chr8_003566",
         "direction": "plus",
         "rel_position": 11,
-        "gene_type": "TNL"
+        "gene_type": "TNL",
+        "is_present": true
       },
       {
         "id": "Lsativa_Salinas_Chr8_003567",
@@ -6124,7 +6202,8 @@
         "protein_name": "Salinas_Chr8_003567",
         "direction": "plus",
         "rel_position": 10,
-        "gene_type": "TIR"
+        "gene_type": "TIR",
+        "is_present": false
       },
       {
         "id": "Lsativa_Salinas_Chr8_003569",
@@ -6132,7 +6211,8 @@
         "protein_name": "Salinas_Chr8_003569",
         "direction": "plus",
         "rel_position": 9,
-        "gene_type": "NLR"
+        "gene_type": "NLR",
+        "is_present": true
       },
       {
         "id": "Lsativa_Salinas_Chr8_003570",
@@ -6140,7 +6220,8 @@
         "protein_name": "Salinas_Chr8_003570",
         "direction": "plus",
         "rel_position": 8,
-        "gene_type": "TNL"
+        "gene_type": "TNL",
+        "is_present": true
       },
       {
         "id": "Lsativa_Salinas_Chr8_003571",
@@ -6148,7 +6229,8 @@
         "protein_name": "Salinas_Chr8_003571",
         "direction": "plus",
         "rel_position": 7,
-        "gene_type": "TNL"
+        "gene_type": "TNL",
+        "is_present": true
       },
       {
         "id": "Lsativa_Salinas_Chr8_003572",
@@ -6156,7 +6238,8 @@
         "protein_name": "Salinas_Chr8_003572",
         "direction": "plus",
         "rel_position": 6,
-        "gene_type": "TNBS"
+        "gene_type": "TNBS",
+        "is_present": false
       },
       {
         "id": "Lsativa_Salinas_Chr8_003573",
@@ -6164,7 +6247,8 @@
         "protein_name": "Salinas_Chr8_003573",
         "direction": "plus",
         "rel_position": 5,
-        "gene_type": "TNL"
+        "gene_type": "TNL",
+        "is_present": true
       },
       {
         "id": "Lsativa_Salinas_Chr8_003574",
@@ -6172,7 +6256,8 @@
         "protein_name": "Salinas_Chr8_003574",
         "direction": "plus",
         "rel_position": 4,
-        "gene_type": "TNL"
+        "gene_type": "TNL",
+        "is_present": true
       },
       {
         "id": "Lsativa_Salinas_Chr8_003575",
@@ -6180,7 +6265,8 @@
         "protein_name": "Salinas_Chr8_003575",
         "direction": "plus",
         "rel_position": 3,
-        "gene_type": "TNL"
+        "gene_type": "TNL",
+        "is_present": true
       },
       {
         "id": "Lsativa_Salinas_Chr8_003577",
@@ -6188,7 +6274,8 @@
         "protein_name": "Salinas_Chr8_003577",
         "direction": "plus",
         "rel_position": 2,
-        "gene_type": "TNL"
+        "gene_type": "TNL",
+        "is_present": true
       },
       {
         "id": "Lsativa_Salinas_Chr8_003578",
@@ -6196,7 +6283,8 @@
         "protein_name": "Salinas_Chr8_003578",
         "direction": "plus",
         "rel_position": 1,
-        "gene_type": "TNL"
+        "gene_type": "TNL",
+        "is_present": true
       },
       {
         "id": "Lsativa_ViAE_chr8_003521",
@@ -6204,7 +6292,8 @@
         "protein_name": "ViAE_chr8_003521",
         "direction": "plus",
         "rel_position": 15,
-        "gene_type": "TNL"
+        "gene_type": "TNL",
+        "is_present": true
       },
       {
         "id": "Lsativa_ViAE_chr8_003522",
@@ -6212,7 +6301,8 @@
         "protein_name": "ViAE_chr8_003522",
         "direction": "plus",
         "rel_position": 14,
-        "gene_type": "TNL"
+        "gene_type": "TNL",
+        "is_present": true
       },
       {
         "id": "Lsativa_ViAE_chr8_003524",
@@ -6220,7 +6310,8 @@
         "protein_name": "ViAE_chr8_003524",
         "direction": "plus",
         "rel_position": 13,
-        "gene_type": "TNBS"
+        "gene_type": "TNBS",
+        "is_present": false
       },
       {
         "id": "Lsativa_ViAE_chr8_003526",
@@ -6228,7 +6319,8 @@
         "protein_name": "ViAE_chr8_003526",
         "direction": "plus",
         "rel_position": 12,
-        "gene_type": "LRR"
+        "gene_type": "LRR",
+        "is_present": true
       },
       {
         "id": "Lsativa_ViAE_chr8_003528",
@@ -6236,7 +6328,8 @@
         "protein_name": "ViAE_chr8_003528",
         "direction": "plus",
         "rel_position": 11,
-        "gene_type": "TNL"
+        "gene_type": "TNL",
+        "is_present": true
       },
       {
         "id": "Lsativa_ViAE_chr8_003531",
@@ -6244,7 +6337,8 @@
         "protein_name": "ViAE_chr8_003531",
         "direction": "plus",
         "rel_position": 10,
-        "gene_type": "TIR"
+        "gene_type": "TIR",
+        "is_present": false
       },
       {
         "id": "Lsativa_ViAE_chr8_003532",
@@ -6252,7 +6346,8 @@
         "protein_name": "ViAE_chr8_003532",
         "direction": "plus",
         "rel_position": 9,
-        "gene_type": "TNBS"
+        "gene_type": "TNBS",
+        "is_present": false
       },
       {
         "id": "Lsativa_ViAE_chr8_003533",
@@ -6260,7 +6355,8 @@
         "protein_name": "ViAE_chr8_003533",
         "direction": "plus",
         "rel_position": 8,
-        "gene_type": "LRR"
+        "gene_type": "LRR",
+        "is_present": true
       },
       {
         "id": "Lsativa_ViAE_chr8_003534",
@@ -6268,7 +6364,8 @@
         "protein_name": "ViAE_chr8_003534",
         "direction": "plus",
         "rel_position": 7,
-        "gene_type": "TIR"
+        "gene_type": "TIR",
+        "is_present": false
       },
       {
         "id": "Lsativa_ViAE_chr8_003535",
@@ -6276,7 +6373,8 @@
         "protein_name": "ViAE_chr8_003535",
         "direction": "plus",
         "rel_position": 6,
-        "gene_type": "NLR"
+        "gene_type": "NLR",
+        "is_present": true
       },
       {
         "id": "Lsativa_ViAE_chr8_003536",
@@ -6284,7 +6382,8 @@
         "protein_name": "ViAE_chr8_003536",
         "direction": "plus",
         "rel_position": 5,
-        "gene_type": "TNL"
+        "gene_type": "TNL",
+        "is_present": true
       },
       {
         "id": "Lsativa_ViAE_chr8_003538",
@@ -6292,7 +6391,8 @@
         "protein_name": "ViAE_chr8_003538",
         "direction": "plus",
         "rel_position": 4,
-        "gene_type": "TNL"
+        "gene_type": "TNL",
+        "is_present": true
       },
       {
         "id": "Lsativa_ViAE_chr8_003539",
@@ -6300,7 +6400,8 @@
         "protein_name": "ViAE_chr8_003539",
         "direction": "plus",
         "rel_position": 3,
-        "gene_type": "NLR"
+        "gene_type": "NLR",
+        "is_present": true
       },
       {
         "id": "Lsativa_ViAE_chr8_003540",
@@ -6308,7 +6409,8 @@
         "protein_name": "ViAE_chr8_003540",
         "direction": "plus",
         "rel_position": 2,
-        "gene_type": "TNL"
+        "gene_type": "TNL",
+        "is_present": true
       },
       {
         "id": "Lsativa_ViAE_chr8_003541",
@@ -6316,7 +6418,8 @@
         "protein_name": "ViAE_chr8_003541",
         "direction": "plus",
         "rel_position": 1,
-        "gene_type": "TNL"
+        "gene_type": "TNL",
+        "is_present": true
       },
       {
         "id": "Lser_Armenian999_Chr8_003410",
@@ -6324,7 +6427,8 @@
         "protein_name": "Armenian999_Chr8_003410",
         "direction": "plus",
         "rel_position": 16,
-        "gene_type": "TNL"
+        "gene_type": "TNL",
+        "is_present": true
       },
       {
         "id": "Lser_Armenian999_Chr8_003411",
@@ -6332,7 +6436,8 @@
         "protein_name": "Armenian999_Chr8_003411",
         "direction": "plus",
         "rel_position": 15,
-        "gene_type": "TNL"
+        "gene_type": "TNL",
+        "is_present": true
       },
       {
         "id": "Lser_Armenian999_Chr8_003412",
@@ -6340,7 +6445,8 @@
         "protein_name": "Armenian999_Chr8_003412",
         "direction": "plus",
         "rel_position": 14,
-        "gene_type": "TNL"
+        "gene_type": "TNL",
+        "is_present": true
       },
       {
         "id": "Lser_Armenian999_Chr8_003414",
@@ -6348,7 +6454,8 @@
         "protein_name": "Armenian999_Chr8_003414",
         "direction": "plus",
         "rel_position": 13,
-        "gene_type": "TNL"
+        "gene_type": "TNL",
+        "is_present": true
       },
       {
         "id": "Lser_Armenian999_Chr8_003415",
@@ -6356,7 +6463,8 @@
         "protein_name": "Armenian999_Chr8_003415",
         "direction": "plus",
         "rel_position": 12,
-        "gene_type": "TNBS"
+        "gene_type": "TNBS",
+        "is_present": false
       },
       {
         "id": "Lser_Armenian999_Chr8_003416",
@@ -6364,7 +6472,8 @@
         "protein_name": "Armenian999_Chr8_003416",
         "direction": "plus",
         "rel_position": 11,
-        "gene_type": "NBS"
+        "gene_type": "NBS",
+        "is_present": false
       },
       {
         "id": "Lser_Armenian999_Chr8_LOC111906314",
@@ -6372,7 +6481,8 @@
         "protein_name": "Armenian999_Chr8_LOC111906314",
         "direction": "plus",
         "rel_position": 10,
-        "gene_type": "TNL"
+        "gene_type": "TNL",
+        "is_present": true
       },
       {
         "id": "Lser_Armenian999_Chr8_003418",
@@ -6380,7 +6490,8 @@
         "protein_name": "Armenian999_Chr8_003418",
         "direction": "plus",
         "rel_position": 9,
-        "gene_type": "TNBS"
+        "gene_type": "TNBS",
+        "is_present": false
       },
       {
         "id": "Lser_Armenian999_Chr8_003419",
@@ -6388,7 +6499,8 @@
         "protein_name": "Armenian999_Chr8_003419",
         "direction": "plus",
         "rel_position": 8,
-        "gene_type": "TNL"
+        "gene_type": "TNL",
+        "is_present": true
       },
       {
         "id": "Lser_Armenian999_Chr8_003420",
@@ -6396,7 +6508,8 @@
         "protein_name": "Armenian999_Chr8_003420",
         "direction": "plus",
         "rel_position": 7,
-        "gene_type": "TNL"
+        "gene_type": "TNL",
+        "is_present": true
       },
       {
         "id": "Lser_Armenian999_Chr8_003422",
@@ -6404,7 +6517,8 @@
         "protein_name": "Armenian999_Chr8_003422",
         "direction": "plus",
         "rel_position": 6,
-        "gene_type": "TNL"
+        "gene_type": "TNL",
+        "is_present": true
       },
       {
         "id": "Lser_Armenian999_Chr8_003423",
@@ -6412,7 +6526,8 @@
         "protein_name": "Armenian999_Chr8_003423",
         "direction": "plus",
         "rel_position": 5,
-        "gene_type": "TNL"
+        "gene_type": "TNL",
+        "is_present": true
       },
       {
         "id": "Lser_Armenian999_Chr8_003424",
@@ -6420,7 +6535,8 @@
         "protein_name": "Armenian999_Chr8_003424",
         "direction": "plus",
         "rel_position": 4,
-        "gene_type": "TNL"
+        "gene_type": "TNL",
+        "is_present": true
       },
       {
         "id": "Lser_Armenian999_Chr8_003425",
@@ -6428,7 +6544,8 @@
         "protein_name": "Armenian999_Chr8_003425",
         "direction": "plus",
         "rel_position": 3,
-        "gene_type": "TNL"
+        "gene_type": "TNL",
+        "is_present": true
       },
       {
         "id": "Lser_Armenian999_Chr8_003426",
@@ -6436,7 +6553,8 @@
         "protein_name": "Armenian999_Chr8_003426",
         "direction": "plus",
         "rel_position": 2,
-        "gene_type": "TNL"
+        "gene_type": "TNL",
+        "is_present": true
       },
       {
         "id": "Lser_Armenian999_Chr8_003427",
@@ -6444,7 +6562,8 @@
         "protein_name": "Armenian999_Chr8_003427",
         "direction": "plus",
         "rel_position": 1,
-        "gene_type": "TNL"
+        "gene_type": "TNL",
+        "is_present": true
       },
       {
         "id": "Lsativa_PI251246_Chr8_000683",
@@ -6452,7 +6571,8 @@
         "protein_name": "PI251246_Chr8_000683",
         "direction": "plus",
         "rel_position": 17,
-        "gene_type": "TNL"
+        "gene_type": "TNL",
+        "is_present": true
       },
       {
         "id": "Lsativa_PI251246_Chr8_003476",
@@ -6460,7 +6580,8 @@
         "protein_name": "PI251246_Chr8_003476",
         "direction": "plus",
         "rel_position": 16,
-        "gene_type": "TNL"
+        "gene_type": "TNL",
+        "is_present": true
       },
       {
         "id": "Lsativa_PI251246_Chr8_003477",
@@ -6468,7 +6589,8 @@
         "protein_name": "PI251246_Chr8_003477",
         "direction": "plus",
         "rel_position": 15,
-        "gene_type": "TNL"
+        "gene_type": "TNL",
+        "is_present": true
       },
       {
         "id": "Lsativa_PI251246_Chr8_003478",
@@ -6476,7 +6598,8 @@
         "protein_name": "PI251246_Chr8_003478",
         "direction": "plus",
         "rel_position": 14,
-        "gene_type": "TNL"
+        "gene_type": "TNL",
+        "is_present": true
       },
       {
         "id": "Lsativa_PI251246_Chr8_003479",
@@ -6484,7 +6607,8 @@
         "protein_name": "PI251246_Chr8_003479",
         "direction": "plus",
         "rel_position": 13,
-        "gene_type": "TNL"
+        "gene_type": "TNL",
+        "is_present": true
       },
       {
         "id": "Lsativa_PI251246_Chr8_003480",
@@ -6492,7 +6616,8 @@
         "protein_name": "PI251246_Chr8_003480",
         "direction": "plus",
         "rel_position": 12,
-        "gene_type": "TNL"
+        "gene_type": "TNL",
+        "is_present": true
       },
       {
         "id": "Lsativa_PI251246_Chr8_003481",
@@ -6500,7 +6625,8 @@
         "protein_name": "PI251246_Chr8_003481",
         "direction": "plus",
         "rel_position": 11,
-        "gene_type": "TNL"
+        "gene_type": "TNL",
+        "is_present": true
       },
       {
         "id": "Lsativa_PI251246_Chr8_003482",
@@ -6508,7 +6634,8 @@
         "protein_name": "PI251246_Chr8_003482",
         "direction": "plus",
         "rel_position": 10,
-        "gene_type": "TNL"
+        "gene_type": "TNL",
+        "is_present": true
       },
       {
         "id": "Lsativa_PI251246_Chr8_003483",
@@ -6516,7 +6643,8 @@
         "protein_name": "PI251246_Chr8_003483",
         "direction": "plus",
         "rel_position": 9,
-        "gene_type": "TNBS"
+        "gene_type": "TNBS",
+        "is_present": false
       },
       {
         "id": "Lsativa_PI251246_Chr8_003484",
@@ -6524,7 +6652,8 @@
         "protein_name": "PI251246_Chr8_003484",
         "direction": "plus",
         "rel_position": 8,
-        "gene_type": "TNL"
+        "gene_type": "TNL",
+        "is_present": true
       },
       {
         "id": "Lsativa_PI251246_Chr8_003485",
@@ -6532,7 +6661,8 @@
         "protein_name": "PI251246_Chr8_003485",
         "direction": "plus",
         "rel_position": 7,
-        "gene_type": "TNL"
+        "gene_type": "TNL",
+        "is_present": true
       },
       {
         "id": "Lsativa_PI251246_Chr8_003486",
@@ -6540,7 +6670,8 @@
         "protein_name": "PI251246_Chr8_003486",
         "direction": "plus",
         "rel_position": 6,
-        "gene_type": "TNL"
+        "gene_type": "TNL",
+        "is_present": true
       },
       {
         "id": "Lsativa_PI251246_Chr8_003488",
@@ -6548,7 +6679,8 @@
         "protein_name": "PI251246_Chr8_003488",
         "direction": "plus",
         "rel_position": 5,
-        "gene_type": "TNL"
+        "gene_type": "TNL",
+        "is_present": true
       },
       {
         "id": "Lsativa_PI251246_Chr8_003489",
@@ -6556,7 +6688,8 @@
         "protein_name": "PI251246_Chr8_003489",
         "direction": "plus",
         "rel_position": 4,
-        "gene_type": "TNL"
+        "gene_type": "TNL",
+        "is_present": true
       },
       {
         "id": "Lsativa_PI251246_Chr8_003490",
@@ -6564,7 +6697,8 @@
         "protein_name": "PI251246_Chr8_003490",
         "direction": "plus",
         "rel_position": 3,
-        "gene_type": "TNL"
+        "gene_type": "TNL",
+        "is_present": true
       },
       {
         "id": "Lsativa_PI251246_Chr8_003493",
@@ -6572,7 +6706,8 @@
         "protein_name": "PI251246_Chr8_003493",
         "direction": "plus",
         "rel_position": 2,
-        "gene_type": "TNL"
+        "gene_type": "TNL",
+        "is_present": true
       },
       {
         "id": "Lsativa_PI251246_Chr8_003494",
@@ -6580,7 +6715,8 @@
         "protein_name": "PI251246_Chr8_003494",
         "direction": "plus",
         "rel_position": 1,
-        "gene_type": "LRR"
+        "gene_type": "LRR",
+        "is_present": true
       },
       {
         "id": "Lser_US96UC23_Chr8_003521",
@@ -6588,7 +6724,8 @@
         "protein_name": "US96UC23_Chr8_003521",
         "direction": "plus",
         "rel_position": 15,
-        "gene_type": "TNL"
+        "gene_type": "TNL",
+        "is_present": true
       },
       {
         "id": "Lser_US96UC23_Chr8_003522",
@@ -6596,7 +6733,8 @@
         "protein_name": "US96UC23_Chr8_003522",
         "direction": "plus",
         "rel_position": 14,
-        "gene_type": "TNBS"
+        "gene_type": "TNBS",
+        "is_present": false
       },
       {
         "id": "Lser_US96UC23_Chr8_003524",
@@ -6604,7 +6742,8 @@
         "protein_name": "US96UC23_Chr8_003524",
         "direction": "plus",
         "rel_position": 13,
-        "gene_type": "TNL"
+        "gene_type": "TNL",
+        "is_present": true
       },
       {
         "id": "Lser_US96UC23_Chr8_003525",
@@ -6612,7 +6751,8 @@
         "protein_name": "US96UC23_Chr8_003525",
         "direction": "plus",
         "rel_position": 12,
-        "gene_type": "TNL"
+        "gene_type": "TNL",
+        "is_present": true
       },
       {
         "id": "Lser_US96UC23_Chr8_003526",
@@ -6620,7 +6760,8 @@
         "protein_name": "US96UC23_Chr8_003526",
         "direction": "plus",
         "rel_position": 11,
-        "gene_type": "TNL"
+        "gene_type": "TNL",
+        "is_present": true
       },
       {
         "id": "Lser_US96UC23_Chr8_003528",
@@ -6628,7 +6769,8 @@
         "protein_name": "US96UC23_Chr8_003528",
         "direction": "plus",
         "rel_position": 10,
-        "gene_type": "TNL"
+        "gene_type": "TNL",
+        "is_present": true
       },
       {
         "id": "Lser_US96UC23_Chr8_003529",
@@ -6636,7 +6778,8 @@
         "protein_name": "US96UC23_Chr8_003529",
         "direction": "plus",
         "rel_position": 9,
-        "gene_type": "TNL"
+        "gene_type": "TNL",
+        "is_present": true
       },
       {
         "id": "Lser_US96UC23_Chr8_003530",
@@ -6644,7 +6787,8 @@
         "protein_name": "US96UC23_Chr8_003530",
         "direction": "plus",
         "rel_position": 8,
-        "gene_type": "TNL"
+        "gene_type": "TNL",
+        "is_present": true
       },
       {
         "id": "Lser_US96UC23_Chr8_003532",
@@ -6652,7 +6796,8 @@
         "protein_name": "US96UC23_Chr8_003532",
         "direction": "plus",
         "rel_position": 7,
-        "gene_type": "TNBS"
+        "gene_type": "TNBS",
+        "is_present": false
       },
       {
         "id": "Lser_US96UC23_Chr8_003533",
@@ -6660,7 +6805,8 @@
         "protein_name": "US96UC23_Chr8_003533",
         "direction": "plus",
         "rel_position": 6,
-        "gene_type": "TNL"
+        "gene_type": "TNL",
+        "is_present": true
       },
       {
         "id": "Lser_US96UC23_Chr8_003534",
@@ -6668,7 +6814,8 @@
         "protein_name": "US96UC23_Chr8_003534",
         "direction": "plus",
         "rel_position": 5,
-        "gene_type": "TNL"
+        "gene_type": "TNL",
+        "is_present": true
       },
       {
         "id": "Lser_US96UC23_Chr8_003535",
@@ -6676,7 +6823,8 @@
         "protein_name": "US96UC23_Chr8_003535",
         "direction": "plus",
         "rel_position": 4,
-        "gene_type": "TNL"
+        "gene_type": "TNL",
+        "is_present": true
       },
       {
         "id": "Lser_US96UC23_Chr8_003536",
@@ -6684,7 +6832,8 @@
         "protein_name": "US96UC23_Chr8_003536",
         "direction": "plus",
         "rel_position": 3,
-        "gene_type": "TNL"
+        "gene_type": "TNL",
+        "is_present": true
       },
       {
         "id": "Lser_US96UC23_Chr8_003537",
@@ -6692,7 +6841,8 @@
         "protein_name": "US96UC23_Chr8_003537",
         "direction": "plus",
         "rel_position": 2,
-        "gene_type": "TNL"
+        "gene_type": "TNL",
+        "is_present": true
       },
       {
         "id": "Lser_US96UC23_Chr8_003538",
@@ -6700,7 +6850,8 @@
         "protein_name": "US96UC23_Chr8_003538",
         "direction": "plus",
         "rel_position": 1,
-        "gene_type": "TNL"
+        "gene_type": "TNL",
+        "is_present": true
       }
     ],
     "links": [
@@ -8349,5 +8500,3749 @@
         "is_reciprocal": true
       }
     ]
+  },
+  {
+    "domain_name": "ALL",
+    "genomes": [
+      "Salinas",
+      "ViAE",
+      "Armenian999",
+      "PI251246",
+      "US96UC23"
+    ],
+    "nodes": [
+      {
+        "id": "Lsativa_Salinas_Chr8_003553",
+        "genome_name": "Salinas",
+        "protein_name": "Salinas_Chr8_003553",
+        "direction": "plus",
+        "rel_position": 17,
+        "gene_type": "TNL",
+        "is_present": true
+      },
+      {
+        "id": "Lsativa_Salinas_Chr8_003557",
+        "genome_name": "Salinas",
+        "protein_name": "Salinas_Chr8_003557",
+        "direction": "plus",
+        "rel_position": 16,
+        "gene_type": "TNL",
+        "is_present": true
+      },
+      {
+        "id": "Lsativa_Salinas_Chr8_003558",
+        "genome_name": "Salinas",
+        "protein_name": "Salinas_Chr8_003558",
+        "direction": "plus",
+        "rel_position": 15,
+        "gene_type": "TIR",
+        "is_present": false
+      },
+      {
+        "id": "Lsativa_Salinas_Chr8_003559",
+        "genome_name": "Salinas",
+        "protein_name": "Salinas_Chr8_003559",
+        "direction": "plus",
+        "rel_position": 14,
+        "gene_type": "NBS",
+        "is_present": false
+      },
+      {
+        "id": "Lsativa_Salinas_Chr8_003560",
+        "genome_name": "Salinas",
+        "protein_name": "Salinas_Chr8_003560",
+        "direction": "plus",
+        "rel_position": 13,
+        "gene_type": "LRR",
+        "is_present": true
+      },
+      {
+        "id": "Lsativa_Salinas_Chr8_003564",
+        "genome_name": "Salinas",
+        "protein_name": "Salinas_Chr8_003564",
+        "direction": "plus",
+        "rel_position": 12,
+        "gene_type": "TNL",
+        "is_present": true
+      },
+      {
+        "id": "Lsativa_Salinas_Chr8_003566",
+        "genome_name": "Salinas",
+        "protein_name": "Salinas_Chr8_003566",
+        "direction": "plus",
+        "rel_position": 11,
+        "gene_type": "TNL",
+        "is_present": true
+      },
+      {
+        "id": "Lsativa_Salinas_Chr8_003567",
+        "genome_name": "Salinas",
+        "protein_name": "Salinas_Chr8_003567",
+        "direction": "plus",
+        "rel_position": 10,
+        "gene_type": "TIR",
+        "is_present": false
+      },
+      {
+        "id": "Lsativa_Salinas_Chr8_003569",
+        "genome_name": "Salinas",
+        "protein_name": "Salinas_Chr8_003569",
+        "direction": "plus",
+        "rel_position": 9,
+        "gene_type": "NLR",
+        "is_present": true
+      },
+      {
+        "id": "Lsativa_Salinas_Chr8_003570",
+        "genome_name": "Salinas",
+        "protein_name": "Salinas_Chr8_003570",
+        "direction": "plus",
+        "rel_position": 8,
+        "gene_type": "TNL",
+        "is_present": true
+      },
+      {
+        "id": "Lsativa_Salinas_Chr8_003571",
+        "genome_name": "Salinas",
+        "protein_name": "Salinas_Chr8_003571",
+        "direction": "plus",
+        "rel_position": 7,
+        "gene_type": "TNL",
+        "is_present": true
+      },
+      {
+        "id": "Lsativa_Salinas_Chr8_003572",
+        "genome_name": "Salinas",
+        "protein_name": "Salinas_Chr8_003572",
+        "direction": "plus",
+        "rel_position": 6,
+        "gene_type": "TNBS",
+        "is_present": false
+      },
+      {
+        "id": "Lsativa_Salinas_Chr8_003573",
+        "genome_name": "Salinas",
+        "protein_name": "Salinas_Chr8_003573",
+        "direction": "plus",
+        "rel_position": 5,
+        "gene_type": "TNL",
+        "is_present": true
+      },
+      {
+        "id": "Lsativa_Salinas_Chr8_003574",
+        "genome_name": "Salinas",
+        "protein_name": "Salinas_Chr8_003574",
+        "direction": "plus",
+        "rel_position": 4,
+        "gene_type": "TNL",
+        "is_present": true
+      },
+      {
+        "id": "Lsativa_Salinas_Chr8_003575",
+        "genome_name": "Salinas",
+        "protein_name": "Salinas_Chr8_003575",
+        "direction": "plus",
+        "rel_position": 3,
+        "gene_type": "TNL",
+        "is_present": true
+      },
+      {
+        "id": "Lsativa_Salinas_Chr8_003577",
+        "genome_name": "Salinas",
+        "protein_name": "Salinas_Chr8_003577",
+        "direction": "plus",
+        "rel_position": 2,
+        "gene_type": "TNL",
+        "is_present": true
+      },
+      {
+        "id": "Lsativa_Salinas_Chr8_003578",
+        "genome_name": "Salinas",
+        "protein_name": "Salinas_Chr8_003578",
+        "direction": "plus",
+        "rel_position": 1,
+        "gene_type": "TNL",
+        "is_present": true
+      },
+      {
+        "id": "Lsativa_ViAE_chr8_003521",
+        "genome_name": "ViAE",
+        "protein_name": "ViAE_chr8_003521",
+        "direction": "plus",
+        "rel_position": 15,
+        "gene_type": "TNL",
+        "is_present": true
+      },
+      {
+        "id": "Lsativa_ViAE_chr8_003522",
+        "genome_name": "ViAE",
+        "protein_name": "ViAE_chr8_003522",
+        "direction": "plus",
+        "rel_position": 14,
+        "gene_type": "TNL",
+        "is_present": true
+      },
+      {
+        "id": "Lsativa_ViAE_chr8_003524",
+        "genome_name": "ViAE",
+        "protein_name": "ViAE_chr8_003524",
+        "direction": "plus",
+        "rel_position": 13,
+        "gene_type": "TNBS",
+        "is_present": false
+      },
+      {
+        "id": "Lsativa_ViAE_chr8_003526",
+        "genome_name": "ViAE",
+        "protein_name": "ViAE_chr8_003526",
+        "direction": "plus",
+        "rel_position": 12,
+        "gene_type": "LRR",
+        "is_present": true
+      },
+      {
+        "id": "Lsativa_ViAE_chr8_003528",
+        "genome_name": "ViAE",
+        "protein_name": "ViAE_chr8_003528",
+        "direction": "plus",
+        "rel_position": 11,
+        "gene_type": "TNL",
+        "is_present": true
+      },
+      {
+        "id": "Lsativa_ViAE_chr8_003531",
+        "genome_name": "ViAE",
+        "protein_name": "ViAE_chr8_003531",
+        "direction": "plus",
+        "rel_position": 10,
+        "gene_type": "TIR",
+        "is_present": false
+      },
+      {
+        "id": "Lsativa_ViAE_chr8_003532",
+        "genome_name": "ViAE",
+        "protein_name": "ViAE_chr8_003532",
+        "direction": "plus",
+        "rel_position": 9,
+        "gene_type": "TNBS",
+        "is_present": false
+      },
+      {
+        "id": "Lsativa_ViAE_chr8_003533",
+        "genome_name": "ViAE",
+        "protein_name": "ViAE_chr8_003533",
+        "direction": "plus",
+        "rel_position": 8,
+        "gene_type": "LRR",
+        "is_present": true
+      },
+      {
+        "id": "Lsativa_ViAE_chr8_003534",
+        "genome_name": "ViAE",
+        "protein_name": "ViAE_chr8_003534",
+        "direction": "plus",
+        "rel_position": 7,
+        "gene_type": "TIR",
+        "is_present": false
+      },
+      {
+        "id": "Lsativa_ViAE_chr8_003535",
+        "genome_name": "ViAE",
+        "protein_name": "ViAE_chr8_003535",
+        "direction": "plus",
+        "rel_position": 6,
+        "gene_type": "NLR",
+        "is_present": true
+      },
+      {
+        "id": "Lsativa_ViAE_chr8_003536",
+        "genome_name": "ViAE",
+        "protein_name": "ViAE_chr8_003536",
+        "direction": "plus",
+        "rel_position": 5,
+        "gene_type": "TNL",
+        "is_present": true
+      },
+      {
+        "id": "Lsativa_ViAE_chr8_003538",
+        "genome_name": "ViAE",
+        "protein_name": "ViAE_chr8_003538",
+        "direction": "plus",
+        "rel_position": 4,
+        "gene_type": "TNL",
+        "is_present": true
+      },
+      {
+        "id": "Lsativa_ViAE_chr8_003539",
+        "genome_name": "ViAE",
+        "protein_name": "ViAE_chr8_003539",
+        "direction": "plus",
+        "rel_position": 3,
+        "gene_type": "NLR",
+        "is_present": true
+      },
+      {
+        "id": "Lsativa_ViAE_chr8_003540",
+        "genome_name": "ViAE",
+        "protein_name": "ViAE_chr8_003540",
+        "direction": "plus",
+        "rel_position": 2,
+        "gene_type": "TNL",
+        "is_present": true
+      },
+      {
+        "id": "Lsativa_ViAE_chr8_003541",
+        "genome_name": "ViAE",
+        "protein_name": "ViAE_chr8_003541",
+        "direction": "plus",
+        "rel_position": 1,
+        "gene_type": "TNL",
+        "is_present": true
+      },
+      {
+        "id": "Lser_Armenian999_Chr8_003410",
+        "genome_name": "Armenian999",
+        "protein_name": "Armenian999_Chr8_003410",
+        "direction": "plus",
+        "rel_position": 16,
+        "gene_type": "TNL",
+        "is_present": true
+      },
+      {
+        "id": "Lser_Armenian999_Chr8_003411",
+        "genome_name": "Armenian999",
+        "protein_name": "Armenian999_Chr8_003411",
+        "direction": "plus",
+        "rel_position": 15,
+        "gene_type": "TNL",
+        "is_present": true
+      },
+      {
+        "id": "Lser_Armenian999_Chr8_003412",
+        "genome_name": "Armenian999",
+        "protein_name": "Armenian999_Chr8_003412",
+        "direction": "plus",
+        "rel_position": 14,
+        "gene_type": "TNL",
+        "is_present": true
+      },
+      {
+        "id": "Lser_Armenian999_Chr8_003414",
+        "genome_name": "Armenian999",
+        "protein_name": "Armenian999_Chr8_003414",
+        "direction": "plus",
+        "rel_position": 13,
+        "gene_type": "TNL",
+        "is_present": true
+      },
+      {
+        "id": "Lser_Armenian999_Chr8_003415",
+        "genome_name": "Armenian999",
+        "protein_name": "Armenian999_Chr8_003415",
+        "direction": "plus",
+        "rel_position": 12,
+        "gene_type": "TNBS",
+        "is_present": false
+      },
+      {
+        "id": "Lser_Armenian999_Chr8_003416",
+        "genome_name": "Armenian999",
+        "protein_name": "Armenian999_Chr8_003416",
+        "direction": "plus",
+        "rel_position": 11,
+        "gene_type": "NBS",
+        "is_present": false
+      },
+      {
+        "id": "Lser_Armenian999_Chr8_LOC111906314",
+        "genome_name": "Armenian999",
+        "protein_name": "Armenian999_Chr8_LOC111906314",
+        "direction": "plus",
+        "rel_position": 10,
+        "gene_type": "TNL",
+        "is_present": true
+      },
+      {
+        "id": "Lser_Armenian999_Chr8_003418",
+        "genome_name": "Armenian999",
+        "protein_name": "Armenian999_Chr8_003418",
+        "direction": "plus",
+        "rel_position": 9,
+        "gene_type": "TNBS",
+        "is_present": false
+      },
+      {
+        "id": "Lser_Armenian999_Chr8_003419",
+        "genome_name": "Armenian999",
+        "protein_name": "Armenian999_Chr8_003419",
+        "direction": "plus",
+        "rel_position": 8,
+        "gene_type": "TNL",
+        "is_present": true
+      },
+      {
+        "id": "Lser_Armenian999_Chr8_003420",
+        "genome_name": "Armenian999",
+        "protein_name": "Armenian999_Chr8_003420",
+        "direction": "plus",
+        "rel_position": 7,
+        "gene_type": "TNL",
+        "is_present": true
+      },
+      {
+        "id": "Lser_Armenian999_Chr8_003422",
+        "genome_name": "Armenian999",
+        "protein_name": "Armenian999_Chr8_003422",
+        "direction": "plus",
+        "rel_position": 6,
+        "gene_type": "TNL",
+        "is_present": true
+      },
+      {
+        "id": "Lser_Armenian999_Chr8_003423",
+        "genome_name": "Armenian999",
+        "protein_name": "Armenian999_Chr8_003423",
+        "direction": "plus",
+        "rel_position": 5,
+        "gene_type": "TNL",
+        "is_present": true
+      },
+      {
+        "id": "Lser_Armenian999_Chr8_003424",
+        "genome_name": "Armenian999",
+        "protein_name": "Armenian999_Chr8_003424",
+        "direction": "plus",
+        "rel_position": 4,
+        "gene_type": "TNL",
+        "is_present": true
+      },
+      {
+        "id": "Lser_Armenian999_Chr8_003425",
+        "genome_name": "Armenian999",
+        "protein_name": "Armenian999_Chr8_003425",
+        "direction": "plus",
+        "rel_position": 3,
+        "gene_type": "TNL",
+        "is_present": true
+      },
+      {
+        "id": "Lser_Armenian999_Chr8_003426",
+        "genome_name": "Armenian999",
+        "protein_name": "Armenian999_Chr8_003426",
+        "direction": "plus",
+        "rel_position": 2,
+        "gene_type": "TNL",
+        "is_present": true
+      },
+      {
+        "id": "Lser_Armenian999_Chr8_003427",
+        "genome_name": "Armenian999",
+        "protein_name": "Armenian999_Chr8_003427",
+        "direction": "plus",
+        "rel_position": 1,
+        "gene_type": "TNL",
+        "is_present": true
+      },
+      {
+        "id": "Lsativa_PI251246_Chr8_000683",
+        "genome_name": "PI251246",
+        "protein_name": "PI251246_Chr8_000683",
+        "direction": "plus",
+        "rel_position": 17,
+        "gene_type": "TNL",
+        "is_present": true
+      },
+      {
+        "id": "Lsativa_PI251246_Chr8_003476",
+        "genome_name": "PI251246",
+        "protein_name": "PI251246_Chr8_003476",
+        "direction": "plus",
+        "rel_position": 16,
+        "gene_type": "TNL",
+        "is_present": true
+      },
+      {
+        "id": "Lsativa_PI251246_Chr8_003477",
+        "genome_name": "PI251246",
+        "protein_name": "PI251246_Chr8_003477",
+        "direction": "plus",
+        "rel_position": 15,
+        "gene_type": "TNL",
+        "is_present": true
+      },
+      {
+        "id": "Lsativa_PI251246_Chr8_003478",
+        "genome_name": "PI251246",
+        "protein_name": "PI251246_Chr8_003478",
+        "direction": "plus",
+        "rel_position": 14,
+        "gene_type": "TNL",
+        "is_present": true
+      },
+      {
+        "id": "Lsativa_PI251246_Chr8_003479",
+        "genome_name": "PI251246",
+        "protein_name": "PI251246_Chr8_003479",
+        "direction": "plus",
+        "rel_position": 13,
+        "gene_type": "TNL",
+        "is_present": true
+      },
+      {
+        "id": "Lsativa_PI251246_Chr8_003480",
+        "genome_name": "PI251246",
+        "protein_name": "PI251246_Chr8_003480",
+        "direction": "plus",
+        "rel_position": 12,
+        "gene_type": "TNL",
+        "is_present": true
+      },
+      {
+        "id": "Lsativa_PI251246_Chr8_003481",
+        "genome_name": "PI251246",
+        "protein_name": "PI251246_Chr8_003481",
+        "direction": "plus",
+        "rel_position": 11,
+        "gene_type": "TNL",
+        "is_present": true
+      },
+      {
+        "id": "Lsativa_PI251246_Chr8_003482",
+        "genome_name": "PI251246",
+        "protein_name": "PI251246_Chr8_003482",
+        "direction": "plus",
+        "rel_position": 10,
+        "gene_type": "TNL",
+        "is_present": true
+      },
+      {
+        "id": "Lsativa_PI251246_Chr8_003483",
+        "genome_name": "PI251246",
+        "protein_name": "PI251246_Chr8_003483",
+        "direction": "plus",
+        "rel_position": 9,
+        "gene_type": "TNBS",
+        "is_present": false
+      },
+      {
+        "id": "Lsativa_PI251246_Chr8_003484",
+        "genome_name": "PI251246",
+        "protein_name": "PI251246_Chr8_003484",
+        "direction": "plus",
+        "rel_position": 8,
+        "gene_type": "TNL",
+        "is_present": true
+      },
+      {
+        "id": "Lsativa_PI251246_Chr8_003485",
+        "genome_name": "PI251246",
+        "protein_name": "PI251246_Chr8_003485",
+        "direction": "plus",
+        "rel_position": 7,
+        "gene_type": "TNL",
+        "is_present": true
+      },
+      {
+        "id": "Lsativa_PI251246_Chr8_003486",
+        "genome_name": "PI251246",
+        "protein_name": "PI251246_Chr8_003486",
+        "direction": "plus",
+        "rel_position": 6,
+        "gene_type": "TNL",
+        "is_present": true
+      },
+      {
+        "id": "Lsativa_PI251246_Chr8_003488",
+        "genome_name": "PI251246",
+        "protein_name": "PI251246_Chr8_003488",
+        "direction": "plus",
+        "rel_position": 5,
+        "gene_type": "TNL",
+        "is_present": true
+      },
+      {
+        "id": "Lsativa_PI251246_Chr8_003489",
+        "genome_name": "PI251246",
+        "protein_name": "PI251246_Chr8_003489",
+        "direction": "plus",
+        "rel_position": 4,
+        "gene_type": "TNL",
+        "is_present": true
+      },
+      {
+        "id": "Lsativa_PI251246_Chr8_003490",
+        "genome_name": "PI251246",
+        "protein_name": "PI251246_Chr8_003490",
+        "direction": "plus",
+        "rel_position": 3,
+        "gene_type": "TNL",
+        "is_present": true
+      },
+      {
+        "id": "Lsativa_PI251246_Chr8_003493",
+        "genome_name": "PI251246",
+        "protein_name": "PI251246_Chr8_003493",
+        "direction": "plus",
+        "rel_position": 2,
+        "gene_type": "TNL",
+        "is_present": true
+      },
+      {
+        "id": "Lsativa_PI251246_Chr8_003494",
+        "genome_name": "PI251246",
+        "protein_name": "PI251246_Chr8_003494",
+        "direction": "plus",
+        "rel_position": 1,
+        "gene_type": "LRR",
+        "is_present": true
+      },
+      {
+        "id": "Lser_US96UC23_Chr8_003521",
+        "genome_name": "US96UC23",
+        "protein_name": "US96UC23_Chr8_003521",
+        "direction": "plus",
+        "rel_position": 15,
+        "gene_type": "TNL",
+        "is_present": true
+      },
+      {
+        "id": "Lser_US96UC23_Chr8_003522",
+        "genome_name": "US96UC23",
+        "protein_name": "US96UC23_Chr8_003522",
+        "direction": "plus",
+        "rel_position": 14,
+        "gene_type": "TNBS",
+        "is_present": false
+      },
+      {
+        "id": "Lser_US96UC23_Chr8_003524",
+        "genome_name": "US96UC23",
+        "protein_name": "US96UC23_Chr8_003524",
+        "direction": "plus",
+        "rel_position": 13,
+        "gene_type": "TNL",
+        "is_present": true
+      },
+      {
+        "id": "Lser_US96UC23_Chr8_003525",
+        "genome_name": "US96UC23",
+        "protein_name": "US96UC23_Chr8_003525",
+        "direction": "plus",
+        "rel_position": 12,
+        "gene_type": "TNL",
+        "is_present": true
+      },
+      {
+        "id": "Lser_US96UC23_Chr8_003526",
+        "genome_name": "US96UC23",
+        "protein_name": "US96UC23_Chr8_003526",
+        "direction": "plus",
+        "rel_position": 11,
+        "gene_type": "TNL",
+        "is_present": true
+      },
+      {
+        "id": "Lser_US96UC23_Chr8_003528",
+        "genome_name": "US96UC23",
+        "protein_name": "US96UC23_Chr8_003528",
+        "direction": "plus",
+        "rel_position": 10,
+        "gene_type": "TNL",
+        "is_present": true
+      },
+      {
+        "id": "Lser_US96UC23_Chr8_003529",
+        "genome_name": "US96UC23",
+        "protein_name": "US96UC23_Chr8_003529",
+        "direction": "plus",
+        "rel_position": 9,
+        "gene_type": "TNL",
+        "is_present": true
+      },
+      {
+        "id": "Lser_US96UC23_Chr8_003530",
+        "genome_name": "US96UC23",
+        "protein_name": "US96UC23_Chr8_003530",
+        "direction": "plus",
+        "rel_position": 8,
+        "gene_type": "TNL",
+        "is_present": true
+      },
+      {
+        "id": "Lser_US96UC23_Chr8_003532",
+        "genome_name": "US96UC23",
+        "protein_name": "US96UC23_Chr8_003532",
+        "direction": "plus",
+        "rel_position": 7,
+        "gene_type": "TNBS",
+        "is_present": false
+      },
+      {
+        "id": "Lser_US96UC23_Chr8_003533",
+        "genome_name": "US96UC23",
+        "protein_name": "US96UC23_Chr8_003533",
+        "direction": "plus",
+        "rel_position": 6,
+        "gene_type": "TNL",
+        "is_present": true
+      },
+      {
+        "id": "Lser_US96UC23_Chr8_003534",
+        "genome_name": "US96UC23",
+        "protein_name": "US96UC23_Chr8_003534",
+        "direction": "plus",
+        "rel_position": 5,
+        "gene_type": "TNL",
+        "is_present": true
+      },
+      {
+        "id": "Lser_US96UC23_Chr8_003535",
+        "genome_name": "US96UC23",
+        "protein_name": "US96UC23_Chr8_003535",
+        "direction": "plus",
+        "rel_position": 4,
+        "gene_type": "TNL",
+        "is_present": true
+      },
+      {
+        "id": "Lser_US96UC23_Chr8_003536",
+        "genome_name": "US96UC23",
+        "protein_name": "US96UC23_Chr8_003536",
+        "direction": "plus",
+        "rel_position": 3,
+        "gene_type": "TNL",
+        "is_present": true
+      },
+      {
+        "id": "Lser_US96UC23_Chr8_003537",
+        "genome_name": "US96UC23",
+        "protein_name": "US96UC23_Chr8_003537",
+        "direction": "plus",
+        "rel_position": 2,
+        "gene_type": "TNL",
+        "is_present": true
+      },
+      {
+        "id": "Lser_US96UC23_Chr8_003538",
+        "genome_name": "US96UC23",
+        "protein_name": "US96UC23_Chr8_003538",
+        "direction": "plus",
+        "rel_position": 1,
+        "gene_type": "TNL",
+        "is_present": true
+      }
+    ],
+    "links": [
+      {
+        "source": "Lser_US96UC23_Chr8_003532",
+        "target": "Lsativa_ViAE_chr8_003522",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lsativa_ViAE_chr8_003532",
+        "target": "Lsativa_ViAE_chr8_003521",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lsativa_Salinas_Chr8_003572",
+        "target": "Lsativa_Salinas_Chr8_003553",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lsativa_PI251246_Chr8_003477",
+        "target": "Lser_Armenian999_Chr8_003411",
+        "link_type": "dotted_color"
+      },
+      {
+        "source": "Lser_US96UC23_Chr8_003529",
+        "target": "Lsativa_ViAE_chr8_003524",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lser_US96UC23_Chr8_003536",
+        "target": "Lser_US96UC23_Chr8_003530",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lser_Armenian999_Chr8_003412",
+        "target": "Lsativa_ViAE_chr8_003524",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lser_Armenian999_Chr8_003424",
+        "target": "Lsativa_Salinas_Chr8_003577",
+        "link_type": "dotted_color"
+      },
+      {
+        "source": "Lsativa_ViAE_chr8_003526",
+        "target": "Lser_US96UC23_Chr8_003524",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lser_Armenian999_Chr8_003412",
+        "target": "Lsativa_Salinas_Chr8_003573",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lsativa_PI251246_Chr8_003485",
+        "target": "Lser_US96UC23_Chr8_003534",
+        "link_type": "dotted_color"
+      },
+      {
+        "source": "Lsativa_PI251246_Chr8_000683",
+        "target": "Lsativa_PI251246_Chr8_003486",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lser_US96UC23_Chr8_003521",
+        "target": "Lsativa_Salinas_Chr8_003553",
+        "link_type": "dotted_color"
+      },
+      {
+        "source": "Lsativa_PI251246_Chr8_003484",
+        "target": "Lsativa_ViAE_chr8_003528",
+        "link_type": "dotted_color"
+      },
+      {
+        "source": "Lser_Armenian999_Chr8_003414",
+        "target": "Lser_Armenian999_Chr8_003422",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lser_US96UC23_Chr8_003525",
+        "target": "Lsativa_ViAE_chr8_003522",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lser_Armenian999_Chr8_003410",
+        "target": "Lser_Armenian999_Chr8_003411",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lser_Armenian999_Chr8_003418",
+        "target": "Lser_Armenian999_Chr8_003410",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lser_Armenian999_Chr8_003425",
+        "target": "Lsativa_PI251246_Chr8_003477",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lser_US96UC23_Chr8_003525",
+        "target": "Lsativa_ViAE_chr8_003540",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lsativa_Salinas_Chr8_003564",
+        "target": "Lser_US96UC23_Chr8_003522",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lsativa_PI251246_Chr8_003493",
+        "target": "Lsativa_PI251246_Chr8_003485",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lser_US96UC23_Chr8_003528",
+        "target": "Lsativa_Salinas_Chr8_003571",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lsativa_PI251246_Chr8_003483",
+        "target": "Lsativa_ViAE_chr8_003522",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lsativa_PI251246_Chr8_003480",
+        "target": "Lser_Armenian999_Chr8_003414",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lser_Armenian999_Chr8_003411",
+        "target": "Lsativa_PI251246_Chr8_003477",
+        "link_type": "dotted_color"
+      },
+      {
+        "source": "Lser_Armenian999_Chr8_003426",
+        "target": "Lser_US96UC23_Chr8_003538",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lser_US96UC23_Chr8_003528",
+        "target": "Lser_US96UC23_Chr8_003530",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lsativa_PI251246_Chr8_003486",
+        "target": "Lsativa_ViAE_chr8_003535",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lser_Armenian999_Chr8_003425",
+        "target": "Lsativa_ViAE_chr8_003521",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lsativa_PI251246_Chr8_003493",
+        "target": "Lsativa_ViAE_chr8_003541",
+        "link_type": "dotted_color"
+      },
+      {
+        "source": "Lser_US96UC23_Chr8_003537",
+        "target": "Lser_US96UC23_Chr8_003536",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lser_US96UC23_Chr8_003521",
+        "target": "Lsativa_ViAE_chr8_003538",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lser_Armenian999_Chr8_003418",
+        "target": "Lser_Armenian999_Chr8_003411",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lsativa_PI251246_Chr8_003488",
+        "target": "Lsativa_PI251246_Chr8_003490",
+        "link_type": "dotted_color"
+      },
+      {
+        "source": "Lsativa_Salinas_Chr8_003578",
+        "target": "Lsativa_PI251246_Chr8_003477",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lsativa_PI251246_Chr8_003493",
+        "target": "Lsativa_Salinas_Chr8_003574",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lsativa_PI251246_Chr8_003490",
+        "target": "Lsativa_PI251246_Chr8_003488",
+        "link_type": "dotted_color"
+      },
+      {
+        "source": "Lsativa_ViAE_chr8_003524",
+        "target": "Lsativa_Salinas_Chr8_003559",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lsativa_PI251246_Chr8_003477",
+        "target": "Lsativa_ViAE_chr8_003522",
+        "link_type": "dotted_color"
+      },
+      {
+        "source": "Lsativa_Salinas_Chr8_003578",
+        "target": "Lser_Armenian999_Chr8_003427",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lser_Armenian999_Chr8_003415",
+        "target": "Lsativa_ViAE_chr8_003538",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lser_US96UC23_Chr8_003537",
+        "target": "Lsativa_ViAE_chr8_003536",
+        "link_type": "dotted_color"
+      },
+      {
+        "source": "Lsativa_Salinas_Chr8_003553",
+        "target": "Lsativa_ViAE_chr8_003522",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lsativa_ViAE_chr8_003521",
+        "target": "Lser_Armenian999_Chr8_003419",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lsativa_PI251246_Chr8_003485",
+        "target": "Lsativa_ViAE_chr8_003532",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lsativa_Salinas_Chr8_003567",
+        "target": "Lsativa_ViAE_chr8_003522",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lser_US96UC23_Chr8_003538",
+        "target": "Lsativa_Salinas_Chr8_003577",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lsativa_PI251246_Chr8_003480",
+        "target": "Lsativa_Salinas_Chr8_003567",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lser_Armenian999_Chr8_003424",
+        "target": "Lsativa_ViAE_chr8_003536",
+        "link_type": "dotted_color"
+      },
+      {
+        "source": "Lser_US96UC23_Chr8_003526",
+        "target": "Lser_Armenian999_Chr8_003414",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lser_Armenian999_Chr8_003410",
+        "target": "Lsativa_ViAE_chr8_003538",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lser_US96UC23_Chr8_003536",
+        "target": "Lsativa_ViAE_chr8_003539",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lsativa_ViAE_chr8_003536",
+        "target": "Lser_Armenian999_Chr8_003424",
+        "link_type": "dotted_color"
+      },
+      {
+        "source": "Lsativa_ViAE_chr8_003521",
+        "target": "Lsativa_ViAE_chr8_003528",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lsativa_ViAE_chr8_003539",
+        "target": "Lser_US96UC23_Chr8_003522",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lser_US96UC23_Chr8_003538",
+        "target": "Lsativa_PI251246_Chr8_003490",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lser_US96UC23_Chr8_003522",
+        "target": "Lser_Armenian999_Chr8_003411",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lsativa_Salinas_Chr8_003557",
+        "target": "Lsativa_Salinas_Chr8_003578",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lsativa_ViAE_chr8_003536",
+        "target": "Lsativa_Salinas_Chr8_003577",
+        "link_type": "dotted_color"
+      },
+      {
+        "source": "Lser_Armenian999_Chr8_003426",
+        "target": "Lser_Armenian999_Chr8_003420",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lsativa_Salinas_Chr8_003567",
+        "target": "Lsativa_PI251246_Chr8_003480",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lser_Armenian999_Chr8_003423",
+        "target": "Lsativa_Salinas_Chr8_003570",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lsativa_PI251246_Chr8_003489",
+        "target": "Lser_US96UC23_Chr8_003525",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lsativa_ViAE_chr8_003536",
+        "target": "Lsativa_PI251246_Chr8_003488",
+        "link_type": "dotted_color"
+      },
+      {
+        "source": "Lser_US96UC23_Chr8_003526",
+        "target": "Lser_US96UC23_Chr8_003522",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lsativa_ViAE_chr8_003541",
+        "target": "Lser_Armenian999_Chr8_003427",
+        "link_type": "dotted_color"
+      },
+      {
+        "source": "Lser_Armenian999_Chr8_003411",
+        "target": "Lser_Armenian999_Chr8_003425",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lser_US96UC23_Chr8_003524",
+        "target": "Lser_Armenian999_Chr8_003412",
+        "link_type": "dotted_color"
+      },
+      {
+        "source": "Lsativa_PI251246_Chr8_003484",
+        "target": "Lsativa_PI251246_Chr8_003479",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lsativa_Salinas_Chr8_003571",
+        "target": "Lser_Armenian999_Chr8_LOC111906314",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lser_US96UC23_Chr8_003524",
+        "target": "Lser_US96UC23_Chr8_003521",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lsativa_ViAE_chr8_003534",
+        "target": "Lsativa_PI251246_Chr8_003488",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lsativa_Salinas_Chr8_003566",
+        "target": "Lsativa_Salinas_Chr8_003575",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lser_US96UC23_Chr8_003525",
+        "target": "Lsativa_Salinas_Chr8_003566",
+        "link_type": "dotted_color"
+      },
+      {
+        "source": "Lser_US96UC23_Chr8_003522",
+        "target": "Lsativa_Salinas_Chr8_003557",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lser_US96UC23_Chr8_003534",
+        "target": "Lser_Armenian999_Chr8_003420",
+        "link_type": "dotted_color"
+      },
+      {
+        "source": "Lsativa_ViAE_chr8_003538",
+        "target": "Lsativa_PI251246_Chr8_003484",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lsativa_PI251246_Chr8_003481",
+        "target": "Lser_Armenian999_Chr8_003414",
+        "link_type": "dotted_color"
+      },
+      {
+        "source": "Lsativa_Salinas_Chr8_003553",
+        "target": "Lser_Armenian999_Chr8_003410",
+        "link_type": "dotted_color"
+      },
+      {
+        "source": "Lser_US96UC23_Chr8_003534",
+        "target": "Lsativa_Salinas_Chr8_003574",
+        "link_type": "dotted_color"
+      },
+      {
+        "source": "Lsativa_PI251246_Chr8_003482",
+        "target": "Lsativa_PI251246_Chr8_003480",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lser_US96UC23_Chr8_003529",
+        "target": "Lsativa_ViAE_chr8_003528",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lsativa_ViAE_chr8_003538",
+        "target": "Lser_Armenian999_Chr8_003411",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lser_US96UC23_Chr8_003533",
+        "target": "Lsativa_PI251246_Chr8_003484",
+        "link_type": "dotted_color"
+      },
+      {
+        "source": "Lsativa_ViAE_chr8_003538",
+        "target": "Lsativa_Salinas_Chr8_003577",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lsativa_Salinas_Chr8_003575",
+        "target": "Lsativa_PI251246_Chr8_003486",
+        "link_type": "dotted_color"
+      },
+      {
+        "source": "Lser_Armenian999_Chr8_003420",
+        "target": "Lsativa_ViAE_chr8_003541",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lsativa_Salinas_Chr8_003570",
+        "target": "Lsativa_PI251246_Chr8_003481",
+        "link_type": "dotted_color"
+      },
+      {
+        "source": "Lsativa_PI251246_Chr8_003477",
+        "target": "Lsativa_PI251246_Chr8_003489",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lsativa_PI251246_Chr8_003480",
+        "target": "Lsativa_PI251246_Chr8_003481",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lser_Armenian999_Chr8_003426",
+        "target": "Lser_Armenian999_Chr8_003424",
+        "link_type": "dotted_color"
+      },
+      {
+        "source": "Lsativa_Salinas_Chr8_003564",
+        "target": "Lsativa_Salinas_Chr8_003557",
+        "link_type": "dotted_color"
+      },
+      {
+        "source": "Lsativa_ViAE_chr8_003522",
+        "target": "Lser_Armenian999_Chr8_003411",
+        "link_type": "dotted_color"
+      },
+      {
+        "source": "Lsativa_PI251246_Chr8_003486",
+        "target": "Lser_US96UC23_Chr8_003525",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lsativa_PI251246_Chr8_003481",
+        "target": "Lsativa_ViAE_chr8_003524",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lsativa_ViAE_chr8_003524",
+        "target": "Lsativa_Salinas_Chr8_003578",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lsativa_PI251246_Chr8_003486",
+        "target": "Lser_US96UC23_Chr8_003537",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lsativa_PI251246_Chr8_003493",
+        "target": "Lser_Armenian999_Chr8_003427",
+        "link_type": "dotted_color"
+      },
+      {
+        "source": "Lser_Armenian999_Chr8_003426",
+        "target": "Lsativa_PI251246_Chr8_003490",
+        "link_type": "dotted_color"
+      },
+      {
+        "source": "Lsativa_ViAE_chr8_003540",
+        "target": "Lsativa_ViAE_chr8_003538",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lsativa_PI251246_Chr8_003484",
+        "target": "Lser_US96UC23_Chr8_003533",
+        "link_type": "dotted_color"
+      },
+      {
+        "source": "Lsativa_Salinas_Chr8_003569",
+        "target": "Lsativa_PI251246_Chr8_003480",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lsativa_Salinas_Chr8_003578",
+        "target": "Lser_Armenian999_Chr8_003411",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lsativa_ViAE_chr8_003538",
+        "target": "Lsativa_ViAE_chr8_003536",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lsativa_Salinas_Chr8_003571",
+        "target": "Lser_US96UC23_Chr8_003530",
+        "link_type": "dotted_color"
+      },
+      {
+        "source": "Lser_US96UC23_Chr8_003536",
+        "target": "Lser_Armenian999_Chr8_003424",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lsativa_Salinas_Chr8_003566",
+        "target": "Lsativa_PI251246_Chr8_003479",
+        "link_type": "dotted_color"
+      },
+      {
+        "source": "Lsativa_ViAE_chr8_003524",
+        "target": "Lsativa_Salinas_Chr8_003573",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lsativa_ViAE_chr8_003535",
+        "target": "Lser_Armenian999_Chr8_003416",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lser_US96UC23_Chr8_003535",
+        "target": "Lsativa_Salinas_Chr8_003557",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lsativa_PI251246_Chr8_003479",
+        "target": "Lsativa_Salinas_Chr8_003566",
+        "link_type": "dotted_color"
+      },
+      {
+        "source": "Lser_Armenian999_Chr8_003418",
+        "target": "Lser_US96UC23_Chr8_003532",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lsativa_ViAE_chr8_003539",
+        "target": "Lsativa_Salinas_Chr8_003557",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lsativa_ViAE_chr8_003534",
+        "target": "Lser_US96UC23_Chr8_003537",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lser_Armenian999_Chr8_003424",
+        "target": "Lser_US96UC23_Chr8_003537",
+        "link_type": "dotted_color"
+      },
+      {
+        "source": "Lsativa_Salinas_Chr8_003564",
+        "target": "Lsativa_PI251246_Chr8_003477",
+        "link_type": "dotted_color"
+      },
+      {
+        "source": "Lser_US96UC23_Chr8_003535",
+        "target": "Lser_Armenian999_Chr8_003422",
+        "link_type": "dotted_color"
+      },
+      {
+        "source": "Lsativa_Salinas_Chr8_003578",
+        "target": "Lsativa_Salinas_Chr8_003557",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lsativa_ViAE_chr8_003540",
+        "target": "Lser_Armenian999_Chr8_003426",
+        "link_type": "dotted_color"
+      },
+      {
+        "source": "Lser_US96UC23_Chr8_003528",
+        "target": "Lser_Armenian999_Chr8_003415",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lser_Armenian999_Chr8_003414",
+        "target": "Lsativa_ViAE_chr8_003528",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lsativa_PI251246_Chr8_000683",
+        "target": "Lsativa_PI251246_Chr8_003477",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lsativa_PI251246_Chr8_003476",
+        "target": "Lser_US96UC23_Chr8_003521",
+        "link_type": "dotted_color"
+      },
+      {
+        "source": "Lser_US96UC23_Chr8_003529",
+        "target": "Lser_Armenian999_Chr8_003414",
+        "link_type": "dotted_color"
+      },
+      {
+        "source": "Lsativa_Salinas_Chr8_003574",
+        "target": "Lsativa_ViAE_chr8_003532",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lser_US96UC23_Chr8_003532",
+        "target": "Lser_US96UC23_Chr8_003521",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lser_Armenian999_Chr8_003414",
+        "target": "Lsativa_Salinas_Chr8_003570",
+        "link_type": "dotted_color"
+      },
+      {
+        "source": "Lsativa_Salinas_Chr8_003567",
+        "target": "Lser_Armenian999_Chr8_003411",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lsativa_PI251246_Chr8_003489",
+        "target": "Lsativa_ViAE_chr8_003524",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lsativa_Salinas_Chr8_003578",
+        "target": "Lser_US96UC23_Chr8_003522",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lser_Armenian999_Chr8_003412",
+        "target": "Lser_US96UC23_Chr8_003524",
+        "link_type": "dotted_color"
+      },
+      {
+        "source": "Lser_US96UC23_Chr8_003533",
+        "target": "Lser_Armenian999_Chr8_003419",
+        "link_type": "dotted_color"
+      },
+      {
+        "source": "Lsativa_PI251246_Chr8_003479",
+        "target": "Lsativa_ViAE_chr8_003535",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lsativa_ViAE_chr8_003524",
+        "target": "Lsativa_ViAE_chr8_003528",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lser_Armenian999_Chr8_003423",
+        "target": "Lser_US96UC23_Chr8_003526",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lsativa_PI251246_Chr8_003481",
+        "target": "Lsativa_ViAE_chr8_003541",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lser_Armenian999_Chr8_003414",
+        "target": "Lsativa_ViAE_chr8_003524",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lsativa_PI251246_Chr8_003486",
+        "target": "Lsativa_PI251246_Chr8_003479",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lsativa_Salinas_Chr8_003553",
+        "target": "Lsativa_PI251246_Chr8_003476",
+        "link_type": "dotted_color"
+      },
+      {
+        "source": "Lsativa_PI251246_Chr8_003488",
+        "target": "Lsativa_Salinas_Chr8_003577",
+        "link_type": "dotted_color"
+      },
+      {
+        "source": "Lser_US96UC23_Chr8_003536",
+        "target": "Lsativa_PI251246_Chr8_003482",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lsativa_Salinas_Chr8_003575",
+        "target": "Lser_US96UC23_Chr8_003525",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lsativa_ViAE_chr8_003535",
+        "target": "Lsativa_PI251246_Chr8_003486",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lsativa_PI251246_Chr8_003493",
+        "target": "Lsativa_PI251246_Chr8_003484",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lser_US96UC23_Chr8_003529",
+        "target": "Lsativa_ViAE_chr8_003541",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lsativa_ViAE_chr8_003526",
+        "target": "Lser_Armenian999_Chr8_003412",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lsativa_PI251246_Chr8_003484",
+        "target": "Lsativa_ViAE_chr8_003541",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lser_Armenian999_Chr8_003425",
+        "target": "Lser_US96UC23_Chr8_003522",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lser_US96UC23_Chr8_003536",
+        "target": "Lsativa_PI251246_Chr8_003479",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lser_Armenian999_Chr8_003423",
+        "target": "Lsativa_ViAE_chr8_003541",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lsativa_PI251246_Chr8_003486",
+        "target": "Lsativa_PI251246_Chr8_003490",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lsativa_Salinas_Chr8_003567",
+        "target": "Lsativa_Salinas_Chr8_003557",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lsativa_Salinas_Chr8_003566",
+        "target": "Lser_US96UC23_Chr8_003525",
+        "link_type": "dotted_color"
+      },
+      {
+        "source": "Lser_Armenian999_Chr8_003425",
+        "target": "Lser_Armenian999_Chr8_003411",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lsativa_Salinas_Chr8_003559",
+        "target": "Lsativa_Salinas_Chr8_003573",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lsativa_ViAE_chr8_003522",
+        "target": "Lsativa_PI251246_Chr8_003477",
+        "link_type": "dotted_color"
+      },
+      {
+        "source": "Lsativa_ViAE_chr8_003538",
+        "target": "Lser_US96UC23_Chr8_003537",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lsativa_Salinas_Chr8_003575",
+        "target": "Lsativa_ViAE_chr8_003534",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lsativa_PI251246_Chr8_003483",
+        "target": "Lsativa_PI251246_Chr8_003476",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lser_Armenian999_Chr8_003416",
+        "target": "Lsativa_ViAE_chr8_003535",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lser_Armenian999_Chr8_003418",
+        "target": "Lsativa_ViAE_chr8_003522",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lsativa_PI251246_Chr8_003489",
+        "target": "Lser_Armenian999_Chr8_003425",
+        "link_type": "dotted_color"
+      },
+      {
+        "source": "Lsativa_Salinas_Chr8_003574",
+        "target": "Lsativa_PI251246_Chr8_003485",
+        "link_type": "dotted_color"
+      },
+      {
+        "source": "Lsativa_Salinas_Chr8_003553",
+        "target": "Lsativa_Salinas_Chr8_003578",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lsativa_ViAE_chr8_003522",
+        "target": "Lser_US96UC23_Chr8_003525",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lsativa_Salinas_Chr8_003570",
+        "target": "Lsativa_Salinas_Chr8_003578",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lser_Armenian999_Chr8_003415",
+        "target": "Lser_Armenian999_Chr8_003424",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lsativa_PI251246_Chr8_003488",
+        "target": "Lsativa_PI251246_Chr8_003486",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lsativa_PI251246_Chr8_003476",
+        "target": "Lsativa_ViAE_chr8_003522",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lsativa_PI251246_Chr8_003489",
+        "target": "Lsativa_ViAE_chr8_003521",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lsativa_PI251246_Chr8_003483",
+        "target": "Lser_Armenian999_Chr8_003418",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lsativa_PI251246_Chr8_003490",
+        "target": "Lser_US96UC23_Chr8_003537",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lsativa_Salinas_Chr8_003575",
+        "target": "Lsativa_Salinas_Chr8_003553",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lser_US96UC23_Chr8_003522",
+        "target": "Lser_US96UC23_Chr8_003534",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lsativa_Salinas_Chr8_003553",
+        "target": "Lser_US96UC23_Chr8_003521",
+        "link_type": "dotted_color"
+      },
+      {
+        "source": "Lsativa_PI251246_Chr8_003482",
+        "target": "Lsativa_ViAE_chr8_003522",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lser_US96UC23_Chr8_003532",
+        "target": "Lser_Armenian999_Chr8_003418",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lser_Armenian999_Chr8_003410",
+        "target": "Lsativa_ViAE_chr8_003521",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lser_Armenian999_Chr8_003426",
+        "target": "Lsativa_ViAE_chr8_003540",
+        "link_type": "dotted_color"
+      },
+      {
+        "source": "Lser_US96UC23_Chr8_003538",
+        "target": "Lser_US96UC23_Chr8_003537",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lser_Armenian999_Chr8_003420",
+        "target": "Lser_Armenian999_Chr8_003425",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lser_Armenian999_Chr8_003412",
+        "target": "Lsativa_Salinas_Chr8_003578",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lsativa_ViAE_chr8_003524",
+        "target": "Lsativa_PI251246_Chr8_003478",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lsativa_Salinas_Chr8_003566",
+        "target": "Lser_Armenian999_Chr8_003411",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lsativa_PI251246_Chr8_003479",
+        "target": "Lsativa_PI251246_Chr8_003490",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lsativa_Salinas_Chr8_003559",
+        "target": "Lsativa_PI251246_Chr8_003478",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lsativa_PI251246_Chr8_003486",
+        "target": "Lser_Armenian999_Chr8_003424",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lsativa_Salinas_Chr8_003553",
+        "target": "Lsativa_ViAE_chr8_003521",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lsativa_PI251246_Chr8_003481",
+        "target": "Lsativa_ViAE_chr8_003528",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lser_Armenian999_Chr8_003423",
+        "target": "Lsativa_ViAE_chr8_003524",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lser_Armenian999_Chr8_003419",
+        "target": "Lser_Armenian999_Chr8_003410",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lsativa_PI251246_Chr8_003493",
+        "target": "Lser_US96UC23_Chr8_003533",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lsativa_PI251246_Chr8_003479",
+        "target": "Lsativa_ViAE_chr8_003522",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lsativa_PI251246_Chr8_003477",
+        "target": "Lser_US96UC23_Chr8_003522",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lsativa_ViAE_chr8_003541",
+        "target": "Lser_US96UC23_Chr8_003533",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lsativa_PI251246_Chr8_003480",
+        "target": "Lsativa_PI251246_Chr8_003482",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lser_Armenian999_Chr8_003411",
+        "target": "Lsativa_Salinas_Chr8_003557",
+        "link_type": "dotted_color"
+      },
+      {
+        "source": "Lsativa_ViAE_chr8_003535",
+        "target": "Lsativa_ViAE_chr8_003536",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lser_Armenian999_Chr8_003427",
+        "target": "Lsativa_PI251246_Chr8_003493",
+        "link_type": "dotted_color"
+      },
+      {
+        "source": "Lsativa_ViAE_chr8_003536",
+        "target": "Lsativa_ViAE_chr8_003540",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lsativa_PI251246_Chr8_003478",
+        "target": "Lsativa_PI251246_Chr8_003477",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lsativa_PI251246_Chr8_003485",
+        "target": "Lser_Armenian999_Chr8_003420",
+        "link_type": "dotted_color"
+      },
+      {
+        "source": "Lser_Armenian999_Chr8_003416",
+        "target": "Lsativa_PI251246_Chr8_003482",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lsativa_Salinas_Chr8_003571",
+        "target": "Lser_Armenian999_Chr8_003415",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lsativa_PI251246_Chr8_003481",
+        "target": "Lsativa_Salinas_Chr8_003570",
+        "link_type": "dotted_color"
+      },
+      {
+        "source": "Lsativa_ViAE_chr8_003535",
+        "target": "Lser_US96UC23_Chr8_003525",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lser_US96UC23_Chr8_003533",
+        "target": "Lser_US96UC23_Chr8_003522",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lsativa_ViAE_chr8_003528",
+        "target": "Lsativa_Salinas_Chr8_003573",
+        "link_type": "dotted_color"
+      },
+      {
+        "source": "Lser_Armenian999_Chr8_003419",
+        "target": "Lser_Armenian999_Chr8_003412",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lser_US96UC23_Chr8_003528",
+        "target": "Lser_Armenian999_Chr8_LOC111906314",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lser_Armenian999_Chr8_003424",
+        "target": "Lsativa_PI251246_Chr8_003488",
+        "link_type": "dotted_color"
+      },
+      {
+        "source": "Lsativa_PI251246_Chr8_003485",
+        "target": "Lsativa_PI251246_Chr8_003477",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lsativa_Salinas_Chr8_003557",
+        "target": "Lsativa_ViAE_chr8_003522",
+        "link_type": "dotted_color"
+      },
+      {
+        "source": "Lsativa_PI251246_Chr8_003489",
+        "target": "Lsativa_Salinas_Chr8_003564",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lser_US96UC23_Chr8_003524",
+        "target": "Lsativa_ViAE_chr8_003526",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lser_US96UC23_Chr8_003536",
+        "target": "Lser_Armenian999_Chr8_003411",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lsativa_Salinas_Chr8_003573",
+        "target": "Lsativa_Salinas_Chr8_003557",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lsativa_ViAE_chr8_003521",
+        "target": "Lsativa_ViAE_chr8_003541",
+        "link_type": "dotted_color"
+      },
+      {
+        "source": "Lsativa_PI251246_Chr8_003485",
+        "target": "Lsativa_Salinas_Chr8_003574",
+        "link_type": "dotted_color"
+      },
+      {
+        "source": "Lser_US96UC23_Chr8_003521",
+        "target": "Lsativa_ViAE_chr8_003521",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lsativa_Salinas_Chr8_003573",
+        "target": "Lsativa_ViAE_chr8_003528",
+        "link_type": "dotted_color"
+      },
+      {
+        "source": "Lser_Armenian999_Chr8_LOC111906314",
+        "target": "Lsativa_Salinas_Chr8_003578",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lser_US96UC23_Chr8_003536",
+        "target": "Lsativa_ViAE_chr8_003538",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lsativa_ViAE_chr8_003540",
+        "target": "Lser_US96UC23_Chr8_003537",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lsativa_PI251246_Chr8_003476",
+        "target": "Lsativa_PI251246_Chr8_003486",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lsativa_Salinas_Chr8_003575",
+        "target": "Lser_Armenian999_Chr8_003424",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lsativa_ViAE_chr8_003535",
+        "target": "Lser_Armenian999_Chr8_003419",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lsativa_PI251246_Chr8_003489",
+        "target": "Lsativa_Salinas_Chr8_003557",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lser_US96UC23_Chr8_003526",
+        "target": "Lsativa_ViAE_chr8_003522",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lsativa_PI251246_Chr8_003482",
+        "target": "Lsativa_PI251246_Chr8_003486",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lsativa_PI251246_Chr8_003482",
+        "target": "Lser_US96UC23_Chr8_003530",
+        "link_type": "dotted_color"
+      },
+      {
+        "source": "Lser_Armenian999_Chr8_003410",
+        "target": "Lsativa_Salinas_Chr8_003553",
+        "link_type": "dotted_color"
+      },
+      {
+        "source": "Lser_Armenian999_Chr8_003427",
+        "target": "Lsativa_Salinas_Chr8_003574",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lsativa_PI251246_Chr8_000683",
+        "target": "Lsativa_PI251246_Chr8_003476",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lsativa_ViAE_chr8_003521",
+        "target": "Lser_US96UC23_Chr8_003525",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lser_Armenian999_Chr8_003422",
+        "target": "Lsativa_PI251246_Chr8_003477",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lser_US96UC23_Chr8_003538",
+        "target": "Lser_Armenian999_Chr8_003426",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lser_US96UC23_Chr8_003526",
+        "target": "Lsativa_ViAE_chr8_003528",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lsativa_ViAE_chr8_003538",
+        "target": "Lser_Armenian999_Chr8_003426",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lsativa_Salinas_Chr8_003566",
+        "target": "Lsativa_ViAE_chr8_003536",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lser_Armenian999_Chr8_003424",
+        "target": "Lser_Armenian999_Chr8_003426",
+        "link_type": "dotted_color"
+      },
+      {
+        "source": "Lser_US96UC23_Chr8_003536",
+        "target": "Lsativa_Salinas_Chr8_003557",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lsativa_Salinas_Chr8_003573",
+        "target": "Lser_US96UC23_Chr8_003533",
+        "link_type": "dotted_color"
+      },
+      {
+        "source": "Lsativa_Salinas_Chr8_003571",
+        "target": "Lsativa_ViAE_chr8_003522",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lser_Armenian999_Chr8_003420",
+        "target": "Lsativa_Salinas_Chr8_003574",
+        "link_type": "dotted_color"
+      },
+      {
+        "source": "Lsativa_ViAE_chr8_003538",
+        "target": "Lsativa_ViAE_chr8_003541",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lser_US96UC23_Chr8_003526",
+        "target": "Lser_Armenian999_Chr8_003411",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lsativa_PI251246_Chr8_003480",
+        "target": "Lsativa_Salinas_Chr8_003569",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lser_US96UC23_Chr8_003535",
+        "target": "Lsativa_ViAE_chr8_003528",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lsativa_Salinas_Chr8_003569",
+        "target": "Lsativa_Salinas_Chr8_003570",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lsativa_PI251246_Chr8_003486",
+        "target": "Lser_Armenian999_Chr8_003426",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lsativa_PI251246_Chr8_003479",
+        "target": "Lser_Armenian999_Chr8_003426",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lsativa_PI251246_Chr8_003489",
+        "target": "Lser_US96UC23_Chr8_003521",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lsativa_Salinas_Chr8_003570",
+        "target": "Lsativa_ViAE_chr8_003528",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lsativa_ViAE_chr8_003541",
+        "target": "Lsativa_Salinas_Chr8_003578",
+        "link_type": "dotted_color"
+      },
+      {
+        "source": "Lsativa_ViAE_chr8_003539",
+        "target": "Lsativa_PI251246_Chr8_003477",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lsativa_ViAE_chr8_003534",
+        "target": "Lser_Armenian999_Chr8_003424",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lsativa_ViAE_chr8_003541",
+        "target": "Lsativa_PI251246_Chr8_003493",
+        "link_type": "dotted_color"
+      },
+      {
+        "source": "Lsativa_Salinas_Chr8_003566",
+        "target": "Lsativa_Salinas_Chr8_003577",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lsativa_ViAE_chr8_003540",
+        "target": "Lser_US96UC23_Chr8_003538",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lser_Armenian999_Chr8_003418",
+        "target": "Lsativa_PI251246_Chr8_003483",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lser_US96UC23_Chr8_003530",
+        "target": "Lsativa_ViAE_chr8_003538",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lser_Armenian999_Chr8_LOC111906314",
+        "target": "Lser_US96UC23_Chr8_003530",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lser_Armenian999_Chr8_003423",
+        "target": "Lsativa_PI251246_Chr8_003477",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lser_Armenian999_Chr8_LOC111906314",
+        "target": "Lsativa_PI251246_Chr8_003477",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lsativa_Salinas_Chr8_003570",
+        "target": "Lsativa_Salinas_Chr8_003557",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lsativa_ViAE_chr8_003522",
+        "target": "Lsativa_ViAE_chr8_003528",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lsativa_ViAE_chr8_003540",
+        "target": "Lsativa_PI251246_Chr8_003490",
+        "link_type": "dotted_color"
+      },
+      {
+        "source": "Lsativa_PI251246_Chr8_003486",
+        "target": "Lsativa_ViAE_chr8_003522",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lser_Armenian999_Chr8_003423",
+        "target": "Lsativa_PI251246_Chr8_003480",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lser_Armenian999_Chr8_003410",
+        "target": "Lser_US96UC23_Chr8_003521",
+        "link_type": "dotted_color"
+      },
+      {
+        "source": "Lsativa_Salinas_Chr8_003570",
+        "target": "Lsativa_ViAE_chr8_003541",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lsativa_Salinas_Chr8_003573",
+        "target": "Lsativa_ViAE_chr8_003541",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lser_Armenian999_Chr8_003411",
+        "target": "Lser_Armenian999_Chr8_003420",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lser_Armenian999_Chr8_003422",
+        "target": "Lsativa_ViAE_chr8_003524",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lsativa_Salinas_Chr8_003575",
+        "target": "Lsativa_ViAE_chr8_003535",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lser_US96UC23_Chr8_003524",
+        "target": "Lser_US96UC23_Chr8_003533",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lsativa_PI251246_Chr8_003489",
+        "target": "Lser_US96UC23_Chr8_003522",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lser_US96UC23_Chr8_003521",
+        "target": "Lser_US96UC23_Chr8_003525",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lsativa_Salinas_Chr8_003557",
+        "target": "Lser_Armenian999_Chr8_003411",
+        "link_type": "dotted_color"
+      },
+      {
+        "source": "Lsativa_PI251246_Chr8_003486",
+        "target": "Lsativa_Salinas_Chr8_003575",
+        "link_type": "dotted_color"
+      },
+      {
+        "source": "Lsativa_ViAE_chr8_003535",
+        "target": "Lsativa_Salinas_Chr8_003575",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lsativa_PI251246_Chr8_003488",
+        "target": "Lsativa_PI251246_Chr8_003477",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lsativa_PI251246_Chr8_003484",
+        "target": "Lsativa_Salinas_Chr8_003573",
+        "link_type": "dotted_color"
+      },
+      {
+        "source": "Lsativa_Salinas_Chr8_003564",
+        "target": "Lser_Armenian999_Chr8_003411",
+        "link_type": "dotted_color"
+      },
+      {
+        "source": "Lsativa_ViAE_chr8_003532",
+        "target": "Lser_Armenian999_Chr8_003420",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lser_US96UC23_Chr8_003536",
+        "target": "Lsativa_PI251246_Chr8_003477",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lser_US96UC23_Chr8_003521",
+        "target": "Lsativa_ViAE_chr8_003522",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lsativa_ViAE_chr8_003540",
+        "target": "Lsativa_Salinas_Chr8_003577",
+        "link_type": "dotted_color"
+      },
+      {
+        "source": "Lsativa_PI251246_Chr8_003490",
+        "target": "Lsativa_Salinas_Chr8_003577",
+        "link_type": "dotted_color"
+      },
+      {
+        "source": "Lser_US96UC23_Chr8_003524",
+        "target": "Lser_US96UC23_Chr8_003525",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lser_Armenian999_Chr8_003427",
+        "target": "Lser_US96UC23_Chr8_003534",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lser_US96UC23_Chr8_003535",
+        "target": "Lsativa_ViAE_chr8_003524",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lser_US96UC23_Chr8_003529",
+        "target": "Lsativa_Salinas_Chr8_003570",
+        "link_type": "dotted_color"
+      },
+      {
+        "source": "Lsativa_Salinas_Chr8_003573",
+        "target": "Lsativa_Salinas_Chr8_003578",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lser_US96UC23_Chr8_003537",
+        "target": "Lsativa_Salinas_Chr8_003577",
+        "link_type": "dotted_color"
+      },
+      {
+        "source": "Lsativa_PI251246_Chr8_003482",
+        "target": "Lsativa_PI251246_Chr8_003488",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lser_Armenian999_Chr8_003425",
+        "target": "Lser_US96UC23_Chr8_003525",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lsativa_Salinas_Chr8_003572",
+        "target": "Lser_Armenian999_Chr8_003418",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lsativa_ViAE_chr8_003540",
+        "target": "Lsativa_ViAE_chr8_003536",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lsativa_PI251246_Chr8_003489",
+        "target": "Lsativa_PI251246_Chr8_003493",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lsativa_ViAE_chr8_003532",
+        "target": "Lser_US96UC23_Chr8_003534",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lser_US96UC23_Chr8_003533",
+        "target": "Lser_US96UC23_Chr8_003521",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lser_US96UC23_Chr8_003521",
+        "target": "Lsativa_ViAE_chr8_003541",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lsativa_Salinas_Chr8_003566",
+        "target": "Lsativa_ViAE_chr8_003541",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lser_US96UC23_Chr8_003534",
+        "target": "Lser_US96UC23_Chr8_003538",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lser_Armenian999_Chr8_003427",
+        "target": "Lser_Armenian999_Chr8_003420",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lser_US96UC23_Chr8_003525",
+        "target": "Lsativa_PI251246_Chr8_003479",
+        "link_type": "dotted_color"
+      },
+      {
+        "source": "Lsativa_Salinas_Chr8_003577",
+        "target": "Lsativa_PI251246_Chr8_003488",
+        "link_type": "dotted_color"
+      },
+      {
+        "source": "Lsativa_Salinas_Chr8_003578",
+        "target": "Lser_US96UC23_Chr8_003525",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lsativa_ViAE_chr8_003524",
+        "target": "Lser_Armenian999_Chr8_003412",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lsativa_Salinas_Chr8_003566",
+        "target": "Lser_Armenian999_Chr8_003426",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lser_Armenian999_Chr8_003427",
+        "target": "Lser_US96UC23_Chr8_003533",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lsativa_PI251246_Chr8_003481",
+        "target": "Lsativa_PI251246_Chr8_003482",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lser_Armenian999_Chr8_003412",
+        "target": "Lser_Armenian999_Chr8_003411",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lsativa_Salinas_Chr8_003571",
+        "target": "Lsativa_Salinas_Chr8_003575",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lsativa_ViAE_chr8_003539",
+        "target": "Lsativa_ViAE_chr8_003538",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lsativa_PI251246_Chr8_003483",
+        "target": "Lsativa_PI251246_Chr8_003479",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lser_US96UC23_Chr8_003530",
+        "target": "Lser_Armenian999_Chr8_003415",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lsativa_Salinas_Chr8_003553",
+        "target": "Lsativa_Salinas_Chr8_003575",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lser_US96UC23_Chr8_003529",
+        "target": "Lser_US96UC23_Chr8_003535",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lser_Armenian999_Chr8_LOC111906314",
+        "target": "Lser_US96UC23_Chr8_003521",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lsativa_Salinas_Chr8_003577",
+        "target": "Lser_Armenian999_Chr8_003424",
+        "link_type": "dotted_color"
+      },
+      {
+        "source": "Lsativa_Salinas_Chr8_003557",
+        "target": "Lser_US96UC23_Chr8_003522",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lser_Armenian999_Chr8_003423",
+        "target": "Lsativa_Salinas_Chr8_003578",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lser_Armenian999_Chr8_LOC111906314",
+        "target": "Lsativa_ViAE_chr8_003522",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lsativa_Salinas_Chr8_003564",
+        "target": "Lser_US96UC23_Chr8_003533",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lsativa_PI251246_Chr8_000683",
+        "target": "Lser_US96UC23_Chr8_003522",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lsativa_ViAE_chr8_003522",
+        "target": "Lsativa_ViAE_chr8_003541",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lser_US96UC23_Chr8_003525",
+        "target": "Lser_Armenian999_Chr8_003426",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lser_US96UC23_Chr8_003524",
+        "target": "Lsativa_PI251246_Chr8_003478",
+        "link_type": "dotted_color"
+      },
+      {
+        "source": "Lser_US96UC23_Chr8_003536",
+        "target": "Lsativa_Salinas_Chr8_003566",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lsativa_PI251246_Chr8_003479",
+        "target": "Lsativa_PI251246_Chr8_003484",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lsativa_ViAE_chr8_003521",
+        "target": "Lser_US96UC23_Chr8_003533",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lsativa_PI251246_Chr8_003478",
+        "target": "Lsativa_ViAE_chr8_003526",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lser_Armenian999_Chr8_003418",
+        "target": "Lsativa_Salinas_Chr8_003572",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lser_Armenian999_Chr8_LOC111906314",
+        "target": "Lser_Armenian999_Chr8_003427",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lsativa_ViAE_chr8_003522",
+        "target": "Lsativa_ViAE_chr8_003521",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lser_US96UC23_Chr8_003532",
+        "target": "Lsativa_Salinas_Chr8_003572",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lsativa_PI251246_Chr8_003476",
+        "target": "Lser_Armenian999_Chr8_003410",
+        "link_type": "dotted_color"
+      },
+      {
+        "source": "Lser_Armenian999_Chr8_003420",
+        "target": "Lsativa_PI251246_Chr8_003485",
+        "link_type": "dotted_color"
+      },
+      {
+        "source": "Lser_US96UC23_Chr8_003525",
+        "target": "Lser_Armenian999_Chr8_003425",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lsativa_PI251246_Chr8_003484",
+        "target": "Lsativa_PI251246_Chr8_003477",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lser_US96UC23_Chr8_003536",
+        "target": "Lser_US96UC23_Chr8_003525",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lsativa_ViAE_chr8_003536",
+        "target": "Lsativa_ViAE_chr8_003528",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lser_US96UC23_Chr8_003524",
+        "target": "Lsativa_Salinas_Chr8_003573",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lser_Armenian999_Chr8_003425",
+        "target": "Lser_US96UC23_Chr8_003521",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lser_US96UC23_Chr8_003525",
+        "target": "Lser_US96UC23_Chr8_003538",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lser_US96UC23_Chr8_003526",
+        "target": "Lsativa_Salinas_Chr8_003569",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lser_US96UC23_Chr8_003534",
+        "target": "Lsativa_PI251246_Chr8_003485",
+        "link_type": "dotted_color"
+      },
+      {
+        "source": "Lsativa_Salinas_Chr8_003571",
+        "target": "Lsativa_ViAE_chr8_003538",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lsativa_ViAE_chr8_003538",
+        "target": "Lsativa_PI251246_Chr8_003477",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lsativa_PI251246_Chr8_003484",
+        "target": "Lser_Armenian999_Chr8_003419",
+        "link_type": "dotted_color"
+      },
+      {
+        "source": "Lsativa_Salinas_Chr8_003569",
+        "target": "Lsativa_ViAE_chr8_003536",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lsativa_ViAE_chr8_003538",
+        "target": "Lser_US96UC23_Chr8_003522",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lsativa_ViAE_chr8_003521",
+        "target": "Lsativa_Salinas_Chr8_003578",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lser_Armenian999_Chr8_003420",
+        "target": "Lser_Armenian999_Chr8_003411",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lsativa_Salinas_Chr8_003573",
+        "target": "Lsativa_PI251246_Chr8_003484",
+        "link_type": "dotted_color"
+      },
+      {
+        "source": "Lser_Armenian999_Chr8_003423",
+        "target": "Lser_US96UC23_Chr8_003535",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lsativa_PI251246_Chr8_003478",
+        "target": "Lser_Armenian999_Chr8_003412",
+        "link_type": "dotted_color"
+      },
+      {
+        "source": "Lser_Armenian999_Chr8_003416",
+        "target": "Lsativa_Salinas_Chr8_003571",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lsativa_PI251246_Chr8_003478",
+        "target": "Lsativa_PI251246_Chr8_003484",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lsativa_PI251246_Chr8_003490",
+        "target": "Lser_US96UC23_Chr8_003538",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lser_Armenian999_Chr8_LOC111906314",
+        "target": "Lsativa_ViAE_chr8_003541",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lsativa_PI251246_Chr8_003485",
+        "target": "Lsativa_PI251246_Chr8_003493",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lser_Armenian999_Chr8_003427",
+        "target": "Lser_Armenian999_Chr8_003411",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lsativa_Salinas_Chr8_003574",
+        "target": "Lsativa_Salinas_Chr8_003578",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lsativa_ViAE_chr8_003521",
+        "target": "Lsativa_PI251246_Chr8_003476",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lsativa_Salinas_Chr8_003569",
+        "target": "Lser_Armenian999_Chr8_003414",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lsativa_Salinas_Chr8_003575",
+        "target": "Lsativa_ViAE_chr8_003522",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lsativa_PI251246_Chr8_000683",
+        "target": "Lser_Armenian999_Chr8_003410",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lser_Armenian999_Chr8_003425",
+        "target": "Lsativa_Salinas_Chr8_003564",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lsativa_ViAE_chr8_003528",
+        "target": "Lser_US96UC23_Chr8_003533",
+        "link_type": "dotted_color"
+      },
+      {
+        "source": "Lsativa_PI251246_Chr8_003481",
+        "target": "Lsativa_PI251246_Chr8_003493",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lsativa_Salinas_Chr8_003578",
+        "target": "Lsativa_ViAE_chr8_003541",
+        "link_type": "dotted_color"
+      },
+      {
+        "source": "Lsativa_ViAE_chr8_003538",
+        "target": "Lser_Armenian999_Chr8_003419",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lser_Armenian999_Chr8_003422",
+        "target": "Lsativa_Salinas_Chr8_003557",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lsativa_Salinas_Chr8_003572",
+        "target": "Lser_US96UC23_Chr8_003532",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lsativa_ViAE_chr8_003524",
+        "target": "Lser_US96UC23_Chr8_003524",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lsativa_ViAE_chr8_003539",
+        "target": "Lsativa_ViAE_chr8_003541",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lser_Armenian999_Chr8_003410",
+        "target": "Lsativa_ViAE_chr8_003522",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lser_US96UC23_Chr8_003536",
+        "target": "Lser_US96UC23_Chr8_003522",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lser_Armenian999_Chr8_003425",
+        "target": "Lsativa_ViAE_chr8_003539",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lser_US96UC23_Chr8_003530",
+        "target": "Lser_Armenian999_Chr8_LOC111906314",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lser_US96UC23_Chr8_003537",
+        "target": "Lser_US96UC23_Chr8_003538",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lser_Armenian999_Chr8_003419",
+        "target": "Lsativa_Salinas_Chr8_003573",
+        "link_type": "dotted_color"
+      },
+      {
+        "source": "Lser_Armenian999_Chr8_003419",
+        "target": "Lsativa_PI251246_Chr8_003484",
+        "link_type": "dotted_color"
+      },
+      {
+        "source": "Lser_US96UC23_Chr8_003525",
+        "target": "Lser_Armenian999_Chr8_003411",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lsativa_Salinas_Chr8_003572",
+        "target": "Lsativa_ViAE_chr8_003541",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lsativa_ViAE_chr8_003534",
+        "target": "Lsativa_Salinas_Chr8_003575",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lsativa_PI251246_Chr8_003493",
+        "target": "Lsativa_Salinas_Chr8_003578",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lser_Armenian999_Chr8_003415",
+        "target": "Lser_US96UC23_Chr8_003530",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lsativa_PI251246_Chr8_000683",
+        "target": "Lser_Armenian999_Chr8_003423",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lsativa_Salinas_Chr8_003564",
+        "target": "Lsativa_ViAE_chr8_003522",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lser_US96UC23_Chr8_003532",
+        "target": "Lsativa_ViAE_chr8_003541",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lser_US96UC23_Chr8_003534",
+        "target": "Lsativa_ViAE_chr8_003541",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lsativa_PI251246_Chr8_003489",
+        "target": "Lsativa_ViAE_chr8_003539",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lser_US96UC23_Chr8_003537",
+        "target": "Lser_US96UC23_Chr8_003530",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lser_Armenian999_Chr8_003427",
+        "target": "Lsativa_ViAE_chr8_003541",
+        "link_type": "dotted_color"
+      },
+      {
+        "source": "Lsativa_PI251246_Chr8_003484",
+        "target": "Lsativa_PI251246_Chr8_003476",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lser_US96UC23_Chr8_003537",
+        "target": "Lser_Armenian999_Chr8_003424",
+        "link_type": "dotted_color"
+      },
+      {
+        "source": "Lsativa_PI251246_Chr8_003481",
+        "target": "Lser_US96UC23_Chr8_003529",
+        "link_type": "dotted_color"
+      },
+      {
+        "source": "Lser_Armenian999_Chr8_003423",
+        "target": "Lsativa_PI251246_Chr8_003481",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lsativa_PI251246_Chr8_000683",
+        "target": "Lsativa_Salinas_Chr8_003557",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lsativa_Salinas_Chr8_003571",
+        "target": "Lsativa_PI251246_Chr8_003482",
+        "link_type": "dotted_color"
+      },
+      {
+        "source": "Lser_US96UC23_Chr8_003532",
+        "target": "Lser_US96UC23_Chr8_003522",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lsativa_Salinas_Chr8_003569",
+        "target": "Lsativa_ViAE_chr8_003524",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lsativa_ViAE_chr8_003532",
+        "target": "Lsativa_Salinas_Chr8_003574",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lser_Armenian999_Chr8_003414",
+        "target": "Lsativa_PI251246_Chr8_003481",
+        "link_type": "dotted_color"
+      },
+      {
+        "source": "Lser_US96UC23_Chr8_003525",
+        "target": "Lser_US96UC23_Chr8_003522",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lser_Armenian999_Chr8_LOC111906314",
+        "target": "Lser_US96UC23_Chr8_003525",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lsativa_ViAE_chr8_003521",
+        "target": "Lsativa_Salinas_Chr8_003573",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lsativa_ViAE_chr8_003521",
+        "target": "Lser_Armenian999_Chr8_003410",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lsativa_PI251246_Chr8_003478",
+        "target": "Lsativa_Salinas_Chr8_003573",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lsativa_PI251246_Chr8_003477",
+        "target": "Lsativa_PI251246_Chr8_003484",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lsativa_ViAE_chr8_003521",
+        "target": "Lser_US96UC23_Chr8_003521",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lsativa_Salinas_Chr8_003570",
+        "target": "Lser_US96UC23_Chr8_003529",
+        "link_type": "dotted_color"
+      },
+      {
+        "source": "Lser_US96UC23_Chr8_003526",
+        "target": "Lsativa_Salinas_Chr8_003567",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lsativa_PI251246_Chr8_003476",
+        "target": "Lsativa_ViAE_chr8_003521",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lser_Armenian999_Chr8_003419",
+        "target": "Lsativa_ViAE_chr8_003541",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lser_US96UC23_Chr8_003533",
+        "target": "Lsativa_ViAE_chr8_003528",
+        "link_type": "dotted_color"
+      },
+      {
+        "source": "Lsativa_PI251246_Chr8_003479",
+        "target": "Lser_Armenian999_Chr8_003411",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lsativa_PI251246_Chr8_003479",
+        "target": "Lsativa_ViAE_chr8_003536",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lsativa_PI251246_Chr8_003489",
+        "target": "Lsativa_PI251246_Chr8_003477",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lser_Armenian999_Chr8_003425",
+        "target": "Lser_Armenian999_Chr8_003410",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lsativa_ViAE_chr8_003541",
+        "target": "Lser_US96UC23_Chr8_003522",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lsativa_PI251246_Chr8_003482",
+        "target": "Lsativa_ViAE_chr8_003538",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lser_Armenian999_Chr8_003418",
+        "target": "Lsativa_ViAE_chr8_003541",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lser_US96UC23_Chr8_003521",
+        "target": "Lser_US96UC23_Chr8_003522",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lsativa_Salinas_Chr8_003566",
+        "target": "Lser_Armenian999_Chr8_003422",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lser_Armenian999_Chr8_003415",
+        "target": "Lsativa_PI251246_Chr8_003482",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lsativa_Salinas_Chr8_003570",
+        "target": "Lser_Armenian999_Chr8_003414",
+        "link_type": "dotted_color"
+      },
+      {
+        "source": "Lsativa_ViAE_chr8_003538",
+        "target": "Lsativa_ViAE_chr8_003540",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lsativa_PI251246_Chr8_003483",
+        "target": "Lsativa_Salinas_Chr8_003572",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lser_US96UC23_Chr8_003535",
+        "target": "Lser_US96UC23_Chr8_003522",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lsativa_PI251246_Chr8_003488",
+        "target": "Lser_US96UC23_Chr8_003537",
+        "link_type": "dotted_color"
+      },
+      {
+        "source": "Lser_Armenian999_Chr8_003426",
+        "target": "Lsativa_Salinas_Chr8_003577",
+        "link_type": "dotted_color"
+      },
+      {
+        "source": "Lsativa_PI251246_Chr8_003480",
+        "target": "Lsativa_ViAE_chr8_003536",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lser_US96UC23_Chr8_003525",
+        "target": "Lsativa_ViAE_chr8_003536",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lser_Armenian999_Chr8_003422",
+        "target": "Lsativa_ViAE_chr8_003540",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lser_US96UC23_Chr8_003538",
+        "target": "Lsativa_ViAE_chr8_003540",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lser_Armenian999_Chr8_003422",
+        "target": "Lser_Armenian999_Chr8_003426",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lser_Armenian999_Chr8_003412",
+        "target": "Lser_Armenian999_Chr8_003419",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lsativa_Salinas_Chr8_003559",
+        "target": "Lser_US96UC23_Chr8_003524",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lser_US96UC23_Chr8_003521",
+        "target": "Lser_Armenian999_Chr8_003410",
+        "link_type": "dotted_color"
+      },
+      {
+        "source": "Lsativa_PI251246_Chr8_003476",
+        "target": "Lsativa_Salinas_Chr8_003553",
+        "link_type": "dotted_color"
+      },
+      {
+        "source": "Lsativa_PI251246_Chr8_003478",
+        "target": "Lsativa_Salinas_Chr8_003578",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lser_US96UC23_Chr8_003530",
+        "target": "Lsativa_ViAE_chr8_003522",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lsativa_Salinas_Chr8_003573",
+        "target": "Lser_Armenian999_Chr8_003419",
+        "link_type": "dotted_color"
+      },
+      {
+        "source": "Lsativa_Salinas_Chr8_003569",
+        "target": "Lser_US96UC23_Chr8_003526",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lsativa_PI251246_Chr8_003476",
+        "target": "Lsativa_PI251246_Chr8_003479",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lser_US96UC23_Chr8_003535",
+        "target": "Lsativa_ViAE_chr8_003540",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lser_Armenian999_Chr8_003422",
+        "target": "Lser_US96UC23_Chr8_003535",
+        "link_type": "dotted_color"
+      },
+      {
+        "source": "Lsativa_Salinas_Chr8_003567",
+        "target": "Lser_US96UC23_Chr8_003526",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lsativa_PI251246_Chr8_003483",
+        "target": "Lsativa_ViAE_chr8_003521",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lsativa_Salinas_Chr8_003574",
+        "target": "Lser_Armenian999_Chr8_003420",
+        "link_type": "dotted_color"
+      },
+      {
+        "source": "Lsativa_Salinas_Chr8_003557",
+        "target": "Lsativa_PI251246_Chr8_003477",
+        "link_type": "dotted_color"
+      },
+      {
+        "source": "Lser_US96UC23_Chr8_003536",
+        "target": "Lser_Armenian999_Chr8_003415",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lsativa_Salinas_Chr8_003564",
+        "target": "Lsativa_ViAE_chr8_003539",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lser_US96UC23_Chr8_003521",
+        "target": "Lsativa_PI251246_Chr8_003476",
+        "link_type": "dotted_color"
+      },
+      {
+        "source": "Lsativa_PI251246_Chr8_003488",
+        "target": "Lser_Armenian999_Chr8_003424",
+        "link_type": "dotted_color"
+      },
+      {
+        "source": "Lsativa_PI251246_Chr8_003476",
+        "target": "Lsativa_ViAE_chr8_003541",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lser_US96UC23_Chr8_003534",
+        "target": "Lser_US96UC23_Chr8_003522",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lser_Armenian999_Chr8_003425",
+        "target": "Lsativa_PI251246_Chr8_003489",
+        "link_type": "dotted_color"
+      },
+      {
+        "source": "Lser_Armenian999_Chr8_003410",
+        "target": "Lser_Armenian999_Chr8_003425",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lser_US96UC23_Chr8_003535",
+        "target": "Lser_US96UC23_Chr8_003525",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lsativa_PI251246_Chr8_003483",
+        "target": "Lser_US96UC23_Chr8_003532",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lser_US96UC23_Chr8_003533",
+        "target": "Lsativa_ViAE_chr8_003541",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lsativa_PI251246_Chr8_000683",
+        "target": "Lser_US96UC23_Chr8_003521",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lser_US96UC23_Chr8_003526",
+        "target": "Lsativa_PI251246_Chr8_003480",
+        "link_type": "dotted_color"
+      },
+      {
+        "source": "Lsativa_Salinas_Chr8_003559",
+        "target": "Lser_Armenian999_Chr8_003412",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lser_Armenian999_Chr8_003423",
+        "target": "Lser_Armenian999_Chr8_003414",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lsativa_Salinas_Chr8_003569",
+        "target": "Lsativa_ViAE_chr8_003528",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lser_Armenian999_Chr8_003412",
+        "target": "Lsativa_PI251246_Chr8_003478",
+        "link_type": "dotted_color"
+      },
+      {
+        "source": "Lser_US96UC23_Chr8_003528",
+        "target": "Lsativa_PI251246_Chr8_003482",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lsativa_ViAE_chr8_003538",
+        "target": "Lsativa_PI251246_Chr8_003490",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lser_Armenian999_Chr8_003422",
+        "target": "Lser_Armenian999_Chr8_003423",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lsativa_PI251246_Chr8_003488",
+        "target": "Lsativa_ViAE_chr8_003536",
+        "link_type": "dotted_color"
+      },
+      {
+        "source": "Lsativa_ViAE_chr8_003528",
+        "target": "Lsativa_PI251246_Chr8_003484",
+        "link_type": "dotted_color"
+      },
+      {
+        "source": "Lsativa_Salinas_Chr8_003573",
+        "target": "Lsativa_Salinas_Chr8_003553",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lsativa_ViAE_chr8_003536",
+        "target": "Lsativa_ViAE_chr8_003534",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lser_Armenian999_Chr8_LOC111906314",
+        "target": "Lsativa_Salinas_Chr8_003571",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lsativa_Salinas_Chr8_003559",
+        "target": "Lsativa_ViAE_chr8_003524",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lser_Armenian999_Chr8_003415",
+        "target": "Lsativa_Salinas_Chr8_003571",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lser_US96UC23_Chr8_003522",
+        "target": "Lsativa_PI251246_Chr8_003477",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lser_US96UC23_Chr8_003532",
+        "target": "Lsativa_PI251246_Chr8_003483",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lser_US96UC23_Chr8_003529",
+        "target": "Lsativa_PI251246_Chr8_003481",
+        "link_type": "dotted_color"
+      },
+      {
+        "source": "Lsativa_ViAE_chr8_003526",
+        "target": "Lsativa_PI251246_Chr8_003478",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lser_US96UC23_Chr8_003524",
+        "target": "Lsativa_Salinas_Chr8_003578",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lser_US96UC23_Chr8_003534",
+        "target": "Lsativa_ViAE_chr8_003532",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lsativa_PI251246_Chr8_003480",
+        "target": "Lsativa_ViAE_chr8_003522",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lsativa_PI251246_Chr8_003479",
+        "target": "Lsativa_PI251246_Chr8_003477",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lsativa_Salinas_Chr8_003566",
+        "target": "Lsativa_Salinas_Chr8_003553",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lsativa_Salinas_Chr8_003574",
+        "target": "Lsativa_ViAE_chr8_003541",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lser_US96UC23_Chr8_003530",
+        "target": "Lsativa_PI251246_Chr8_003482",
+        "link_type": "dotted_color"
+      },
+      {
+        "source": "Lser_US96UC23_Chr8_003533",
+        "target": "Lsativa_Salinas_Chr8_003573",
+        "link_type": "dotted_color"
+      },
+      {
+        "source": "Lsativa_Salinas_Chr8_003577",
+        "target": "Lsativa_Salinas_Chr8_003573",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lser_Armenian999_Chr8_003411",
+        "target": "Lser_US96UC23_Chr8_003522",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lsativa_Salinas_Chr8_003570",
+        "target": "Lsativa_ViAE_chr8_003524",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lsativa_Salinas_Chr8_003566",
+        "target": "Lsativa_ViAE_chr8_003535",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lser_Armenian999_Chr8_LOC111906314",
+        "target": "Lser_Armenian999_Chr8_003410",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lsativa_Salinas_Chr8_003574",
+        "target": "Lsativa_Salinas_Chr8_003577",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lser_Armenian999_Chr8_003419",
+        "target": "Lsativa_ViAE_chr8_003528",
+        "link_type": "dotted_color"
+      },
+      {
+        "source": "Lsativa_ViAE_chr8_003541",
+        "target": "Lsativa_ViAE_chr8_003521",
+        "link_type": "dotted_color"
+      },
+      {
+        "source": "Lser_Armenian999_Chr8_003422",
+        "target": "Lsativa_Salinas_Chr8_003575",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lsativa_Salinas_Chr8_003558",
+        "target": "Lsativa_ViAE_chr8_003531",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lsativa_Salinas_Chr8_003575",
+        "target": "Lser_US96UC23_Chr8_003537",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lsativa_PI251246_Chr8_003477",
+        "target": "Lsativa_ViAE_chr8_003541",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lsativa_Salinas_Chr8_003575",
+        "target": "Lser_US96UC23_Chr8_003538",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lsativa_ViAE_chr8_003538",
+        "target": "Lser_US96UC23_Chr8_003533",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lser_Armenian999_Chr8_003423",
+        "target": "Lser_Armenian999_Chr8_003422",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lsativa_PI251246_Chr8_003478",
+        "target": "Lsativa_ViAE_chr8_003524",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lser_US96UC23_Chr8_003522",
+        "target": "Lsativa_ViAE_chr8_003522",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lsativa_ViAE_chr8_003521",
+        "target": "Lsativa_PI251246_Chr8_003484",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lser_Armenian999_Chr8_003414",
+        "target": "Lsativa_ViAE_chr8_003522",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lser_US96UC23_Chr8_003530",
+        "target": "Lsativa_Salinas_Chr8_003571",
+        "link_type": "dotted_color"
+      },
+      {
+        "source": "Lser_Armenian999_Chr8_003411",
+        "target": "Lsativa_ViAE_chr8_003522",
+        "link_type": "dotted_color"
+      },
+      {
+        "source": "Lsativa_Salinas_Chr8_003577",
+        "target": "Lsativa_Salinas_Chr8_003575",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lsativa_ViAE_chr8_003528",
+        "target": "Lsativa_ViAE_chr8_003524",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lser_US96UC23_Chr8_003535",
+        "target": "Lsativa_PI251246_Chr8_003490",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lsativa_ViAE_chr8_003524",
+        "target": "Lsativa_ViAE_chr8_003522",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lsativa_PI251246_Chr8_003493",
+        "target": "Lser_US96UC23_Chr8_003534",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lsativa_ViAE_chr8_003536",
+        "target": "Lser_US96UC23_Chr8_003537",
+        "link_type": "dotted_color"
+      },
+      {
+        "source": "Lsativa_PI251246_Chr8_003480",
+        "target": "Lser_Armenian999_Chr8_003411",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lsativa_Salinas_Chr8_003571",
+        "target": "Lsativa_Salinas_Chr8_003577",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lsativa_PI251246_Chr8_003493",
+        "target": "Lsativa_PI251246_Chr8_003477",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lsativa_Salinas_Chr8_003570",
+        "target": "Lsativa_Salinas_Chr8_003569",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lsativa_Salinas_Chr8_003572",
+        "target": "Lsativa_ViAE_chr8_003522",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lsativa_PI251246_Chr8_003478",
+        "target": "Lser_US96UC23_Chr8_003524",
+        "link_type": "dotted_color"
+      },
+      {
+        "source": "Lsativa_PI251246_Chr8_003482",
+        "target": "Lsativa_Salinas_Chr8_003571",
+        "link_type": "dotted_color"
+      },
+      {
+        "source": "Lsativa_PI251246_Chr8_003486",
+        "target": "Lsativa_PI251246_Chr8_003488",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lser_Armenian999_Chr8_003412",
+        "target": "Lsativa_Salinas_Chr8_003566",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lser_US96UC23_Chr8_003528",
+        "target": "Lsativa_ViAE_chr8_003528",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lser_US96UC23_Chr8_003537",
+        "target": "Lsativa_PI251246_Chr8_003488",
+        "link_type": "dotted_color"
+      },
+      {
+        "source": "Lsativa_PI251246_Chr8_003477",
+        "target": "Lsativa_Salinas_Chr8_003557",
+        "link_type": "dotted_color"
+      },
+      {
+        "source": "Lser_US96UC23_Chr8_003530",
+        "target": "Lser_US96UC23_Chr8_003528",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lser_Armenian999_Chr8_003416",
+        "target": "Lser_Armenian999_Chr8_LOC111906314",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lser_Armenian999_Chr8_003422",
+        "target": "Lsativa_ViAE_chr8_003528",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lsativa_Salinas_Chr8_003572",
+        "target": "Lsativa_Salinas_Chr8_003566",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lsativa_ViAE_chr8_003528",
+        "target": "Lsativa_ViAE_chr8_003521",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lsativa_PI251246_Chr8_003479",
+        "target": "Lser_US96UC23_Chr8_003525",
+        "link_type": "dotted_color"
+      },
+      {
+        "source": "Lsativa_PI251246_Chr8_003486",
+        "target": "Lsativa_ViAE_chr8_003534",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lser_US96UC23_Chr8_003536",
+        "target": "Lsativa_ViAE_chr8_003536",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lsativa_PI251246_Chr8_003482",
+        "target": "Lser_Armenian999_Chr8_003415",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lser_US96UC23_Chr8_003522",
+        "target": "Lser_US96UC23_Chr8_003536",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lsativa_Salinas_Chr8_003557",
+        "target": "Lsativa_Salinas_Chr8_003564",
+        "link_type": "dotted_color"
+      },
+      {
+        "source": "Lsativa_Salinas_Chr8_003577",
+        "target": "Lsativa_ViAE_chr8_003536",
+        "link_type": "dotted_color"
+      },
+      {
+        "source": "Lsativa_Salinas_Chr8_003572",
+        "target": "Lsativa_PI251246_Chr8_003483",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lser_Armenian999_Chr8_003425",
+        "target": "Lsativa_Salinas_Chr8_003557",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lsativa_Salinas_Chr8_003577",
+        "target": "Lser_US96UC23_Chr8_003537",
+        "link_type": "dotted_color"
+      },
+      {
+        "source": "Lser_Armenian999_Chr8_003412",
+        "target": "Lsativa_ViAE_chr8_003526",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lsativa_Salinas_Chr8_003578",
+        "target": "Lsativa_PI251246_Chr8_003493",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lser_US96UC23_Chr8_003524",
+        "target": "Lsativa_ViAE_chr8_003524",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lser_Armenian999_Chr8_003426",
+        "target": "Lser_US96UC23_Chr8_003537",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lsativa_ViAE_chr8_003532",
+        "target": "Lsativa_PI251246_Chr8_003485",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lsativa_Salinas_Chr8_003575",
+        "target": "Lsativa_Salinas_Chr8_003577",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lser_Armenian999_Chr8_003414",
+        "target": "Lser_US96UC23_Chr8_003529",
+        "link_type": "dotted_color"
+      },
+      {
+        "source": "Lsativa_PI251246_Chr8_000683",
+        "target": "Lsativa_ViAE_chr8_003522",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lsativa_PI251246_Chr8_003490",
+        "target": "Lsativa_ViAE_chr8_003540",
+        "link_type": "dotted_color"
+      },
+      {
+        "source": "Lsativa_Salinas_Chr8_003575",
+        "target": "Lsativa_Salinas_Chr8_003566",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lser_Armenian999_Chr8_003420",
+        "target": "Lser_US96UC23_Chr8_003534",
+        "link_type": "dotted_color"
+      },
+      {
+        "source": "Lsativa_Salinas_Chr8_003575",
+        "target": "Lser_Armenian999_Chr8_003426",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lsativa_ViAE_chr8_003522",
+        "target": "Lsativa_Salinas_Chr8_003557",
+        "link_type": "dotted_color"
+      },
+      {
+        "source": "Lser_US96UC23_Chr8_003521",
+        "target": "Lser_US96UC23_Chr8_003536",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lser_Armenian999_Chr8_LOC111906314",
+        "target": "Lsativa_PI251246_Chr8_003482",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lsativa_ViAE_chr8_003539",
+        "target": "Lsativa_Salinas_Chr8_003564",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lsativa_PI251246_Chr8_003480",
+        "target": "Lser_US96UC23_Chr8_003526",
+        "link_type": "dotted_color"
+      },
+      {
+        "source": "Lsativa_ViAE_chr8_003522",
+        "target": "Lser_US96UC23_Chr8_003522",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lser_Armenian999_Chr8_003423",
+        "target": "Lsativa_PI251246_Chr8_000683",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lsativa_ViAE_chr8_003534",
+        "target": "Lsativa_ViAE_chr8_003536",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lser_Armenian999_Chr8_003410",
+        "target": "Lsativa_PI251246_Chr8_003476",
+        "link_type": "dotted_color"
+      },
+      {
+        "source": "Lsativa_ViAE_chr8_003531",
+        "target": "Lsativa_Salinas_Chr8_003558",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lsativa_ViAE_chr8_003541",
+        "target": "Lsativa_ViAE_chr8_003522",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lser_Armenian999_Chr8_003420",
+        "target": "Lsativa_ViAE_chr8_003532",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lsativa_Salinas_Chr8_003578",
+        "target": "Lsativa_Salinas_Chr8_003573",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lsativa_PI251246_Chr8_003486",
+        "target": "Lser_US96UC23_Chr8_003538",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lsativa_ViAE_chr8_003521",
+        "target": "Lsativa_Salinas_Chr8_003553",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lsativa_PI251246_Chr8_003486",
+        "target": "Lser_Armenian999_Chr8_003419",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lsativa_PI251246_Chr8_003480",
+        "target": "Lsativa_PI251246_Chr8_003477",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lser_Armenian999_Chr8_003422",
+        "target": "Lser_Armenian999_Chr8_003411",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lsativa_ViAE_chr8_003539",
+        "target": "Lsativa_PI251246_Chr8_003489",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lsativa_PI251246_Chr8_000683",
+        "target": "Lsativa_Salinas_Chr8_003553",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lsativa_Salinas_Chr8_003574",
+        "target": "Lser_US96UC23_Chr8_003534",
+        "link_type": "dotted_color"
+      },
+      {
+        "source": "Lsativa_PI251246_Chr8_003476",
+        "target": "Lsativa_PI251246_Chr8_003477",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lser_US96UC23_Chr8_003536",
+        "target": "Lsativa_Salinas_Chr8_003571",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lser_Armenian999_Chr8_003419",
+        "target": "Lser_US96UC23_Chr8_003533",
+        "link_type": "dotted_color"
+      },
+      {
+        "source": "Lsativa_PI251246_Chr8_003490",
+        "target": "Lser_Armenian999_Chr8_003426",
+        "link_type": "dotted_color"
+      },
+      {
+        "source": "Lsativa_ViAE_chr8_003540",
+        "target": "Lsativa_ViAE_chr8_003532",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lsativa_ViAE_chr8_003539",
+        "target": "Lser_Armenian999_Chr8_003425",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lsativa_PI251246_Chr8_003476",
+        "target": "Lsativa_PI251246_Chr8_003484",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lsativa_PI251246_Chr8_003482",
+        "target": "Lser_Armenian999_Chr8_LOC111906314",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lser_US96UC23_Chr8_003535",
+        "target": "Lsativa_PI251246_Chr8_003477",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lsativa_ViAE_chr8_003528",
+        "target": "Lser_Armenian999_Chr8_003419",
+        "link_type": "dotted_color"
+      },
+      {
+        "source": "Lser_US96UC23_Chr8_003526",
+        "target": "Lsativa_ViAE_chr8_003536",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lser_US96UC23_Chr8_003526",
+        "target": "Lser_US96UC23_Chr8_003529",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lser_Armenian999_Chr8_003427",
+        "target": "Lsativa_Salinas_Chr8_003578",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lsativa_PI251246_Chr8_000683",
+        "target": "Lsativa_ViAE_chr8_003541",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lsativa_PI251246_Chr8_003485",
+        "target": "Lsativa_ViAE_chr8_003541",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lsativa_ViAE_chr8_003538",
+        "target": "Lsativa_Salinas_Chr8_003573",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lsativa_PI251246_Chr8_003482",
+        "target": "Lsativa_PI251246_Chr8_003490",
+        "link_type": "solid_color"
+      },
+      {
+        "source": "Lsativa_ViAE_chr8_003539",
+        "target": "Lser_US96UC23_Chr8_003525",
+        "link_type": "solid_color"
+      }
+    ]
   }
-}
+]

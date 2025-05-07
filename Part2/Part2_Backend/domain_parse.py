@@ -136,8 +136,6 @@ def parse_filenames(file_names):
                 except Exception as e:
                     raise ValueError(f"File name is in invalid format: {str(e)}")
 
-    domains.sort(key = lambda x: x[0])
-
     return [name for _, name in domains]
 
 
@@ -425,9 +423,6 @@ def domain_parse(matrix_files, coord_file, file_names):
     all_outputs = {}
 
     genomes_output = []
-    # gene_names_by_genome = get_gene_names_by_genome(coords)
-    #
-    # all_outputs['genes_by_genomes'] = gene_names_by_genome
     all_domain_connections = []
     all_domain_genes = []
     total_genomes = set()

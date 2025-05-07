@@ -145,9 +145,13 @@
       "#9467bd",
       "#8c564b",
       "#e377c2",
-      "#7f7f7f",
       "#bcbd22",
-      "#17becf"
+      "#17becf",
+      "#6b8e23",
+      "#4682b4",
+      "#dda0dd",
+      "#40e0d0",
+      "#ff69b4",
     ];
     const colorScale = d3.scaleOrdinal(customColors).domain(colorRoots);
     // const colorScale = d3.scaleOrdinal([...d3.schemeSet3]).domain(colorRoots);
@@ -157,7 +161,7 @@
         if (!n.is_present) return [n.id, '#e6e6e6']
 
         const root = uf.find(n.id);
-        return [n.id, colorRoots.includes(root) ? colorScale(root) : '#ccc'];
+        return [n.id, colorRoots.includes(root) ? colorScale(root) : '#7f7f7f'];
       })
     );
 

@@ -94,6 +94,7 @@
       }
 
       const data = await response.json();
+      console.log(data)
       graphs = normaliseGraphs(data.graphs);
       selectedGraph = chooseInitialGraph(graphs);
 
@@ -276,6 +277,7 @@
   function selectDomain(idx: number) {
     selectedGraph = graphs[idx];
     filterGraph();  // Reapply the filter to the selected graph
+    console.log(selectedGraph)
   }
 </script>
 

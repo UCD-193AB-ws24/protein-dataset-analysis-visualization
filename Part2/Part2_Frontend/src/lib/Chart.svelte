@@ -13,7 +13,7 @@
     nodes: Node[];
     links: Link[];
   };
-  export let cutoff: number = 0;
+  export let cutoff: number = 55;
 
   interface Node {
     id: string;
@@ -21,14 +21,25 @@
     protein_name: string;
     direction: string;   // "plus" | "minus"
     rel_position: number;
+    is_present?: boolean;
+    gene_type?: string;
     _dup?: boolean;      // internal flag for duplicated bottom‑row copy
   }
-  interface Link {
+
+  type ScoreLink = {
     source: string;
     target: string;
-    score: number;       // 0‑100
+    score: number;
     is_reciprocal: boolean;
-  }
+  };
+
+  type CompareLink = {
+    source: string;
+    target: string;
+    link_type: string; // "solid_color" | "dotted_grey" | etc.
+  };
+
+  type Link = ScoreLink | CompareLink;
 
   // ────────────────────────────────────────────────────────────────
   //  DOM refs / constants
@@ -92,12 +103,10 @@
     // UnionFind to group connected components by color
     const uf = new UnionFind(nodes.map((n) => n.id));
     links.forEach((l) => {
-      if (l.is_reciprocal) {
-        uf.union(l.source, l.target);
-      }
+      if ('is_reciprocal' in l && l.is_reciprocal) uf.union(l.source, l.target);
+      if ('link_type' in l && (l.link_type === 'solid_color' || l.link_type === 'dotted_color')) uf.union(l.source, l.target);
     });
 
-    // TODO: Verify w/client what coloring scheme to use for duplicated nodes
     // Add to union-find structure "links" bewtween first-genome and duplicated nodes
     nodes.forEach((n) => {
       if (n._dup) {
@@ -132,21 +141,27 @@
       "#1f77b4",
       "#ff7f0e",
       "#2ca02c",
-      "#d62728",
+      "#00bfff",
       "#9467bd",
       "#8c564b",
       "#e377c2",
-      "#7f7f7f",
       "#bcbd22",
-      "#17becf"
+      "#17becf",
+      "#6b8e23",
+      "#4682b4",
+      "#dda0dd",
+      "#40e0d0",
+      "#ff69b4",
     ];
     const colorScale = d3.scaleOrdinal(customColors).domain(colorRoots);
     // const colorScale = d3.scaleOrdinal([...d3.schemeSet3]).domain(colorRoots);
     // Gray-out CCs not associated with colorRoots
     const nodeColor = new Map(
       nodes.map((n) => {
+        if (n.is_present === false) return [n.id, '#e6e6e6']
+
         const root = uf.find(n.id);
-        return [n.id, colorRoots.includes(root) ? colorScale(root) : '#ccc'];
+        return [n.id, colorRoots.includes(root) ? colorScale(root) : '#7f7f7f'];
       })
     );
 
@@ -161,7 +176,7 @@
     if (!nodes.length) return;
 
     // apply cutoff filter
-    const visibleLinks = links.filter((l) => l.score >= cutoff);
+    const visibleLinks = links.filter((l) => 'score' in l ? l.score >= cutoff : true);
 
     // scales
     const numRows = genomes.length + 1;
@@ -235,25 +250,45 @@
       .attr('y1', (d) => y(rowOf(nodeById.get(d.source)!))! + y.bandwidth() / 2 + margin.top)
       .attr('x2', (d) => x(nodeById.get(d.target)!.rel_position))
       .attr('y2', (d) => y(rowOf(nodeById.get(d.target)!))! + y.bandwidth() / 2 + margin.top)
-      .attr('stroke-width', (d) => strokeW(d.score) * 2)
-      .attr('stroke-dasharray', (d) => (d.is_reciprocal ? null : '4,4'))
-      .attr('stroke', (d) => (d.is_reciprocal ? nodeColor?.get(d.source)! : '#bbb'))
+      .attr('stroke-width', (d) => strokeW('score' in d ? d.score : 100) * 2)
+      .attr('stroke-dasharray', d => {
+        if ('is_reciprocal' in d) return d.is_reciprocal ? null : '4,4';
+        if ('link_type' in d) return d.link_type.includes('dotted') ? '4,4' : null;
+        return null;
+      })
+      .attr('stroke', d => {
+        if ('is_reciprocal' in d) return d.is_reciprocal ? nodeColor.get(d.source)! : '#bbb';
+        if ('link_type' in d) {
+          if (d.link_type === 'solid_red') return 'red';
+          return d.link_type.includes('color') ? nodeColor.get(d.source)! : '#bbb';
+        }
+        return '#bbb';
+      })
       .on('mouseover', function (event, d) {
-        d3.select(this).transition().duration(150).attr('stroke-width', strokeW(d.score) * 4);
+        d3.select(this).attr('stroke-width', strokeW('score' in d ? d.score : 100) * 4);
         const n1 = nodeById.get(d.source)!;
         const n2 = nodeById.get(d.target)!;
-        d3.select(tooltipEl)
-          .style('opacity', 1)
-          .html(
-            `<strong>${n1.protein_name}</strong> ↔ <strong>${n2.protein_name}</strong><br>` +
-              `Similarity: ${d.score}%` + (d.is_reciprocal ? ' (reciprocal)' : ' (non‑reciprocal)')
-          );
+        let detail = '';
+        if ('score' in d) {
+          detail = `Similarity: ${d.score}%` + (d.is_reciprocal ? ' (Reciprocal)' : ' (Non-Reciprocal)');
+        } else if (d.link_type === 'solid_red') {
+          detail = 'Inconsistent Across Domains';
+        } else if (d.link_type === 'solid_color') {
+          detail = 'Consistent Across Domains';
+        } else if (d.link_type === 'dotted_color') {
+          detail = 'Consistent, but May Have Missing Domains';
+        } else if (d.link_type === 'dotted_gray') {
+          detail = 'Non-Reciprocal Connection';
+        } else {
+          detail = 'Unknown Link Type';
+        }
+        d3.select(tooltipEl).style('opacity', 1).html(`<strong>${n1.protein_name}</strong> ↔ <strong>${n2.protein_name}</strong><br>${detail}`);
       })
       .on('mousemove', function (event) {
         d3.select(tooltipEl).style('left', event.pageX + 10 + 'px').style('top', event.pageY + 10 + 'px');
       })
       .on('mouseout', function (event, d) {
-        d3.select(this).transition().duration(150).attr('stroke-width', strokeW(d.score) * 2);
+        d3.select(this).transition().duration(150).attr('stroke-width', strokeW('score' in d ? d.score : 100) * 2);
         d3.select(tooltipEl).style('opacity', 0);
       });
 
@@ -277,9 +312,11 @@
           .style('opacity', 1)
           .html(
             `<strong>Genome:</strong> ${d.genome_name}<br>` +
-              `<strong>Protein:</strong> ${d.protein_name}<br>` +
-              `<strong>Direction:</strong> ${d.direction === 'plus' ? '+' : '-'}<br>` +
-              `<strong>Position:</strong> ${d.rel_position}`
+            `<strong>Protein:</strong> ${d.protein_name}<br>` +
+            (d.gene_type ? `<strong>Domain:</strong> ${d.gene_type}<br>` : '') +
+            `<strong>Present:</strong> ${d.is_present === false ? 'NO' : 'YES'}<br>` +
+            `<strong>Direction:</strong> ${d.direction === 'plus' ? '+' : '-'}<br>` +
+            `<strong>Position:</strong> ${d.rel_position}`
           );
       })
       .on('mousemove', function (event) {

@@ -1,0 +1,242 @@
+{
+    "nodes": [
+        {
+            "id": "RedBricks_000046",
+            "genome_name": "RedBricks",
+            "protein_name": "000046",
+            "direction:": "plus",
+            "rel_position": 6
+        },
+        {
+            "id":"RedBricks_003427",
+            "genome_name": "RedBricks",
+            "protein_name": "003427",
+            "direction:": "minus",
+            "rel_position": 2
+        },
+        {
+            "id": "RedBricks_003426",
+            "genome_name": "RedBricks",
+            "protein_name": "003426",
+            "direction:": "minus",
+            "rel_position": 4
+        },
+        {
+            "id": "RedBricks_003422",
+            "genome_name": "RedBricks",
+            "protein_name": "003422",
+            "direction:": "minus",
+            "rel_position": 3
+        },
+        {
+            "id": "RedBricks_003429",
+            "genome_name": "RedBricks",
+            "protein_name": "003429",
+            "direction:": "plus",
+            "rel_position": 1
+        },
+        {
+            "id": "RedBricks_003421",
+            "genome_name": "RedBricks",
+            "protein_name": "003421",
+            "direction:": "minus",
+            "rel_position": 5
+        },
+        {
+            "id": "RedBricks_003420",
+            "genome_name": "RedBricks",
+            "protein_name": "003420",
+            "direction:": "minus",
+            "rel_position": 8
+        },
+        {
+            "id": "RedBricks_003419",
+            "genome_name": "RedBricks",
+            "protein_name": "003419",
+            "direction:": "minus",
+            "rel_position": 7
+        },
+        {
+            "id": "BlueWaves_000035",
+            "genome_name": "BlueWaves",
+            "protein_name": "000035",
+            "direction:": "plus",
+            "rel_position": 1
+        },
+        {
+            "id": "BlueWaves_003458",
+            "genome_name": "BlueWaves",
+            "protein_name": "003458",
+            "direction:": "plus",
+            "rel_position": 2
+        },
+        {
+            "id": "BlueWaves_003447",
+            "genome_name": "BlueWaves",
+            "protein_name": "003447",
+            "direction:": "minus",
+            "rel_position": 3
+        },
+        {
+            "id": "BlueWaves_003443",
+            "genome_name": "BlueWaves",
+            "protein_name": "003443",
+            "direction:": "plus",
+            "rel_position": 9
+        },
+        {
+            "id": "BlueWaves_003442",
+            "genome_name": "BlueWaves",
+            "protein_name": "003442",
+            "direction:": "plus",
+            "rel_position": 7
+        },
+        {
+            "id": "BlueWaves_003438",
+            "genome_name": "BlueWaves",
+            "protein_name": "003438",
+            "direction:": "minus",
+            "rel_position": 6
+        },
+        {
+            "id": "BlueWaves_003426",
+            "genome_name": "BlueWaves",
+            "protein_name": "003426",
+            "direction:": "minus",
+            "rel_position": 5
+        },
+        {
+            "id": "BlueWaves_003425",
+            "genome_name": "BlueWaves",
+            "protein_name": "003425",
+            "direction:": "minus",
+            "rel_position": 4
+        },
+        {
+            "id": "BlueWaves_003424",
+            "genome_name": "BlueWaves",
+            "protein_name": "003424",
+            "direction:": "minus",
+            "rel_position": 8
+        },
+        {
+            "id": "BlueWaves_003423",
+            "genome_name": "BlueWaves",
+            "protein_name": "003423",
+            "direction:": "plus",
+            "rel_position": 10
+        }
+    ],
+    "links": [
+        {
+            "source": "RedBricks_000046",
+            "target": "_BlueWaves_003458",
+            "score": 98.0,
+            "is_reciprocal": true
+        },
+        {
+            "source": "RedBricks_003419",
+            "target": "BlueWaves_003424",
+            "score": 95.0,
+            "is_reciprocal": true
+        },
+        {
+            "source": "RedBricks_003420",
+            "target": "BlueWaves_003426",
+            "score": 97.0,
+            "is_reciprocal": true
+        },
+        {
+            "source": "RedBricks_003421",
+            "target": "BlueWaves_000035",
+            "score": 96.0,
+            "is_reciprocal": true
+        },
+        {
+            "source": "RedBricks_003422",
+            "target": "BlueWaves_003425",
+            "score": 80.0,
+            "is_reciprocal": true
+        },
+        {
+            "source": "RedBricks_003426",
+            "target": "BlueWaves_003423",
+            "score": 90.0,
+            "is_reciprocal": false
+        },
+        {
+            "source": "RedBricks_003427",
+            "target": "BlueWaves_003442",
+            "score": 97.0,
+            "is_reciprocal": true
+        },
+        {
+            "source": "RedBricks_003429",
+            "target": "BlueWaves_003458",
+            "score": 94.0,
+            "is_reciprocal": false
+        },
+        {
+           "source": "BlueWaves_000035",
+            "target": "RedBricks_003421",
+            "score": 96.0,
+            "is_reciprocal": true
+        },
+        {
+            "source": "BlueWaves_003423",
+            "target": "RedBricks_Chr10_003419",
+            "score": 94.0,
+            "is_reciprocal": false
+        },
+        {
+            "source": "BlueWaves_003424",
+            "target": "RedBricks_003419",
+            "score": 95.0,
+            "is_reciprocal": true
+        },
+        {
+            "source": "BlueWaves_003425",
+            "target": "RedBricks_003422",
+            "score": 80.0,
+            "is_reciprocal": true
+        },
+        {
+            "source": "BlueWaves_003426",
+            "target": "RedBricks_003420"
+            "score": 97.0,
+            "is_reciprocal": true
+        },
+        {
+            "source": "BlueWaves_003438",
+            "target": "RedBricks_003420",
+            "score": 92.0,
+            "is_reciprocal": false
+        },
+        {
+            "source": "BlueWaves_003442",
+            "target": "RedBricks_003427",
+            "score": 97.0,
+            "is_reciprocal": true
+        },
+        {
+            "source": "BlueWaves_003443",
+            "target": "RedBricks_000046",
+            "score": 79.0,
+            "is_reciprocal": false
+        },
+        {
+            "source": "BlueWaves_003447",
+            "target": "RedBricks_003427",
+            "score": 86.0,
+            "is_reciprocal": false
+        },
+        {
+            "source": "BlueWaves_003458",
+            "target": "RedBricks_000046",
+            "score": 98.0,
+            "is_reciprocal": true
+        }
+        
+    ]
+
+}

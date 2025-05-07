@@ -79,9 +79,11 @@
                     {#if group.files.length > 0}
                         <ul class="group-file-list">
                             {#each group.files as file}
-                                <li style="word-wrap: break-word; overflow-wrap: break-word;">
-                                    <strong>{`${file.file_type}`}</strong>{`: ${file.file_name}`}
-                                </li>
+                                {#if file.file_type !== "graph"}
+                                    <li style="word-wrap: break-word; overflow-wrap: break-word;">
+                                        <strong>{`${file.file_type}`}</strong>{`: ${file.file_name}`}
+                                    </li>
+                                {/if}
                             {/each}
                         </ul>
                         <button on:click={() => goto(`/dashboard/diagram?groupId=${group.id}`)}>

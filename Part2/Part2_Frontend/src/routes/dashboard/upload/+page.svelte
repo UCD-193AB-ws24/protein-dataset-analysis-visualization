@@ -1,13 +1,13 @@
 <script>
-	import { API_BASE_URL } from "$lib/api";
+	  import { API_BASE_URL } from "$lib/api";
 
-    let numFiles = 2;
+    let numFiles = 4;
     let uploads = Array(numFiles).fill(null);
     let username = localStorage.getItem("username") || ""; // Retrieve username
     let uploadedFileUrl = "";
     let errorMessage = "";
     let isUploading = false;
-    let file_names = ["matrix", "coordinate"]
+    let file_names = ["matrix_file_1", "matrix_file_2", "matrix_file_3", "coordinate"]
 
     async function uploadFile() {
         if (uploads.some(file => file === null) || !username) {
@@ -73,7 +73,23 @@
     <h2>📤 Upload a File</h2>
 
     <div class="upload">
-        <p class="description">Please upload the matrix file</p>
+        <p class="description">Please upload the matrix 1 file</p>
+        <input type="file" class="file-input" on:change={(e) => handleFileChange(e, 0)} />
+        <button class="btn upload-btn" on:click={() => addFile(0)} disabled={isUploading}>
+            {#if isUploading} Uploading... {:else} Upload {/if}
+        </button>
+    </div>
+
+    <div class="upload">
+        <p class="description">Please upload the matrix 2 file</p>
+        <input type="file" class="file-input" on:change={(e) => handleFileChange(e, 0)} />
+        <button class="btn upload-btn" on:click={() => addFile(0)} disabled={isUploading}>
+            {#if isUploading} Uploading... {:else} Upload {/if}
+        </button>
+    </div>
+
+    <div class="upload">
+        <p class="description">Please upload the matrix 3 file</p>
         <input type="file" class="file-input" on:change={(e) => handleFileChange(e, 0)} />
         <button class="btn upload-btn" on:click={() => addFile(0)} disabled={isUploading}>
             {#if isUploading} Uploading... {:else} Upload {/if}

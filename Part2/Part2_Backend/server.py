@@ -3,6 +3,7 @@ from flask import Flask, request, jsonify
 from dotenv import load_dotenv
 from flask_cors import CORS
 from parse_matrix import parse_matrix
+from domain_parse import domain_parse
 import json
 from io import BytesIO
 from datetime import datetime
@@ -148,7 +149,6 @@ def generate_graph():
     matrix_files = [file for key, file in request.files.items() if key.startswith('file_matrix_')]
     is_domain_specific = request.form.get('is_domain_specific', 'false').lower() == 'true'
 
-
     if not coordinate_file or not matrix_files:
         return jsonify({"error": "Coordinate file and at least one matrix file are required"}), 400
     if is_domain_specific and len(matrix_files) > 3:
@@ -183,7 +183,6 @@ def generate_graph():
 
     except Exception as e:
         return jsonify({"error": f"Failed to generate graph: {str(e)}"}), 500
-
 
 def guess_content_type(extension):
     mapping = {
@@ -360,7 +359,7 @@ def get_user_files():
         # Get user
         user = session.query(User).filter_by(username=username).first()
         if not user:
-            return jsonify({"error": "User not found"}), 404
+        return jsonify({"error": "User not found"}), 404
 
         # Get all files for the user
         files = session.query(File).filter_by(user_id=user.id).all()

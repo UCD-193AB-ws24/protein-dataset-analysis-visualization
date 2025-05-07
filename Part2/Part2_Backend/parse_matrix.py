@@ -98,12 +98,11 @@ def add_nodes(coords):
 
     return nodes
 
-def add_links(df_only_cutoffs, row_max, col_max):
+def add_links(df_only_cutoffs, row_max, col_max, subsections):
     links = []
 
     for row in df_only_cutoffs.index:
         for col in df_only_cutoffs.columns:
-            entry = {}
             is_col_max = pd.notna(col_max.at[row, col])
             is_row_max = pd.notna(row_max.at[row, col])
 
@@ -122,10 +121,13 @@ def add_links(df_only_cutoffs, row_max, col_max):
             else:
                 continue  # skip non-max values
 
+            if any((genome in source) and (genome in target) for genome in subsections):
+                continue
+
 
             links.append({
-                "source": '_'.join([source.split('_')[0], source.split('_')[-1]]),
-                "target": '_'.join([target.split('_')[0], target.split('_')[-1]]),
+                "source": source,
+                "target": target,
                 "score": float(df_only_cutoffs.at[row, col]),
                 "is_reciprocal": reciprocal_max
             })
@@ -251,7 +253,7 @@ def parse_matrix_data(matrix_file):
 def create_output(matrix_data, coords):
     output = {"genomes": matrix_data['subsections'].tolist()}
     output["nodes"] = add_nodes(coords)
-    output["links"] = add_links(matrix_data['df_only_cutoffs'], matrix_data['row_max'], matrix_data['col_max'])
+    output["links"] = add_links(matrix_data['df_only_cutoffs'], matrix_data['row_max'], matrix_data['col_max'], matrix_data['subsections'])
     return output
 
 # Update the original parse_matrix function to use the new functions

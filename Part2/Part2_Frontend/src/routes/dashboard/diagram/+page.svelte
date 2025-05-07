@@ -3,6 +3,7 @@
   import dummyGraph from '$lib/dummy-graph.json';
   import testGraph from '$lib/test.json';
   import { onMount } from 'svelte';
+  import { API_BASE_URL } from '$lib/api';
 
   interface Node {
     id: string;
@@ -50,7 +51,7 @@
 
     if (groupId) {
       try {
-        const response = await fetch(`https://4aorvlzrd1.execute-api.us-east-1.amazonaws.com/dev/get_group_graph?groupId=${groupId}`);
+        const response = await fetch(`${API_BASE_URL}/get_group_graph?groupId=${groupId}`);
 
         if (!response.ok) {
           throw new Error(`Error fetching graph: ${response.statusText}`);
@@ -94,8 +95,7 @@
     formData.append('username', localStorage.getItem('username') || ''); // Automatically send stored username
 
     try {
-      // https://h47f781wh1.execute-api.us-east-1.amazonaws.com/dev/upload
-      const response = await fetch('https://4aorvlzrd1.execute-api.us-east-1.amazonaws.com/dev/generate_graph', {
+      const response = await fetch(`${API_BASE_URL}/generate_graph`, {
         method: 'POST',
         body: formData,
       });
@@ -156,7 +156,7 @@
     console.log("graph string", JSON.stringify(graph));
 
     try {
-      const response = await fetch('https://4aorvlzrd1.execute-api.us-east-1.amazonaws.com/dev/save', {
+      const response = await fetch(`${API_BASE_URL}/save`, {
         method: 'POST',
         body: formData,
       });

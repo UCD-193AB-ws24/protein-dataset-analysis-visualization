@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
 	import { userManager, signOutRedirect } from '$lib/auth/userManager';
+	import { API_BASE_URL } from '$lib/api';
 
 	let email = '';
 	let accessToken = '';
@@ -19,7 +20,7 @@
 			// Optional: redirect to home or dashboard
 			// window.location.href = '/';
 			console.log('sending token:', accessToken);
-			const response = await fetch('http://localhost:3005/api/user-data', {
+			const response = await fetch(`${API_BASE_URL}/api/user-data`, {
 				method: 'GET',
 				headers: { Authorization: `Bearer ${accessToken}` }
 			});

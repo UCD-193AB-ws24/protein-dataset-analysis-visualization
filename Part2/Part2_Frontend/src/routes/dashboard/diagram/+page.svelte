@@ -54,44 +54,44 @@
 
   onMount(async () => {
     const urlParams = new URLSearchParams(window.location.search);
-    groupId = urlParams.get('groupId');
+    const initialId = urlParams.get('groupId');
 
-    if (groupId) {
-      try {
-        const response = await fetch(`${API_BASE_URL}/get_group_graph?groupId=${groupId}`);
-
-        if (!response.ok) {
-          throw new Error(`Error fetching graph: ${response.statusText}`);
-        }
-
-        const fetchedGraph = await response.json();
-        graph = fetchedGraph.graph;
-        numGenes = fetchedGraph.num_genes;
-        numDomains = fetchedGraph.num_domains;
-        // Reset selected genomes and filtered graph
-        selectedGenomes = [];
-        filteredGraph = { nodes: [], links: [], genomes: [] };
-
-        // Set the title and description if available
-        title = fetchedGraph.title || '';
-        description = fetchedGraph.description || '';
-
-        // Set file data for download
-        matrixFiles = fetchedGraph.matrix_files || [];
-        coordinateFile = fetchedGraph.coordinate_file || null;
-
-        // Log file data for debugging
-        console.log('Matrix files:', matrixFiles);
-        console.log('Coordinate file:', coordinateFile);
-      } catch (error) {
-        errorMessage = error.message || "An error occurred.";
-        console.error('Detailed error:', error);
-      }
+    if (initialId) {
+      groupId = initialId;
+      await fetchGroupData(groupId);
     }
 
     loading = false; // Set loading to false after fetching data
   });
 
+  async function fetchGroupData(id: string) {
+    try {
+      const response = await fetch(`${API_BASE_URL}/get_group_graph?groupId=${id}`);
+
+      if (!response.ok) {
+        throw new Error(`Error fetching graph: ${response.statusText}`);
+      }
+
+      const fetchedGraph = await response.json();
+      graph = fetchedGraph.graph;
+      numGenes = fetchedGraph.num_genes;
+      numDomains = fetchedGraph.num_domains;
+      // Reset selected genomes and filtered graph
+      selectedGenomes = [];
+      filteredGraph = { nodes: [], links: [], genomes: [] };
+
+      // Set the title and description if available
+      title = fetchedGraph.title || '';
+      description = fetchedGraph.description || '';
+
+      // Set file data for download
+      matrixFiles = fetchedGraph.matrix_files || [];
+      coordinateFile = fetchedGraph.coordinate_file || null;
+    } catch (error) {
+      errorMessage = error.message || "An error occurred.";
+      console.error("Detailed error:", error);
+    }
+  }
 
   // Function to handle file uploads
   async function uploadFiles() {
@@ -189,7 +189,9 @@
 
       if (!groupId) {
         // Transition to the view with the new groupId
-        const newGroupId = result.group_id; // Assuming the backend returns the new groupId
+        const newGroupId = result.group_id;
+        groupId = newGroupId; // Update groupId in the component state
+        await fetchGroupData(newGroupId); // Fetch the new group data
         goto(`?groupId=${newGroupId}`);
       }
     } catch (error) {

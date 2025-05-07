@@ -289,6 +289,8 @@ def add_nodes(coords, cutoff_index):
 def add_links(df_only_cutoffs, row_max, col_max, subsections, domain):
     links = []
     domain_connections = {}
+    all_genes = {}
+    all_genes[domain] = df_only_cutoffs.index.tolist()
 
     for row in df_only_cutoffs.index:
         for col in df_only_cutoffs.columns:
@@ -310,7 +312,7 @@ def add_links(df_only_cutoffs, row_max, col_max, subsections, domain):
             else:
                 continue  # skip non-max values
 
-            domain_connections[f'{source}_{target}'] = {'f{domain}': reciprocal_max}
+            domain_connections[f'{source}_{target}'] = {domain: reciprocal_max}
 
 
             if any((genome in source) and (genome in target) for genome in subsections):
@@ -319,11 +321,12 @@ def add_links(df_only_cutoffs, row_max, col_max, subsections, domain):
 
             links.append({
                 "source": source,
-                "target": target
-                # Change to 1 enum with the different types of connection possible: "Solid Red", "Solid Color", "Dotted Color", "Dotted Gray"
+                "target": target,
+                "score": float(df_only_cutoffs.at[row, col]),
+                "is_reciprocal": reciprocal_max
             })
 
-    return links, domain_connections
+    return links, domain_connections, all_genes
 
 def get_gene_names_by_genome(coords):
     gene_names_by_genome = {}
@@ -336,10 +339,11 @@ def create_output(matrix_data, coords, domain):
     
     output = {"genomes": matrix_data['subsections'].tolist()}
     output["nodes"] = add_nodes(coords, matrix_data['df_only_cutoffs'].index)
-    output["links"] = add_links(matrix_data['df_only_cutoffs'], matrix_data['row_max'], matrix_data['col_max'], matrix_data['subsections'], domain)
-    return output
+    links, domain_connections, domain_genes = add_links(matrix_data['df_only_cutoffs'], matrix_data['row_max'], matrix_data['col_max'], matrix_data['subsections'], domain)
+    output["links"] = links
+    return output, domain_connections, domain_genes
 
-def combine_graphs(all_domain_connections):
+def combine_graphs(all_domain_connections, all_domain_genes, domains):
     #for each connection in domain 1 check if the connection exists in domains 2/3 and if those are reciprocal
         #genomeA_gene1-genomeB_gene2 --> domain 1
         #genomeB_gene2-genomeA_gene1 --> domain 2
@@ -348,21 +352,51 @@ def combine_graphs(all_domain_connections):
     
     # Collect all unique connections across all domains
     all_keys = set()
+    unique_links = set()
+    print(all_keys)
+    print(unique_links)
     for domain_dict in all_domain_connections:
-        all_keys.update(domain_dict.keys())
+        for key, value in domain_dict.items():
+            all_keys.add(key)
+            unique_links.add(key, value.key()) # ("source_target", "TIR")
 
     combined = []
-    num_domains = len(all_domain_connections)
+    num_domains = len(domains)
 
     for key in all_keys:
-        reverse_key = key.split('_', 1)
+        source, target = key.split('_', 1)
         reverse_key = f"{target}_{source}"
         # Check if this key exists in all domain dicts
+
+        # Create list of tuples containing (key, domain) for each domain
+        key_domain_pairs = [(key, domain) for domain in domains]
+        reverse_key_pairs = [(reverse_key, domain) for domain in domains]
         present_in_domains = [
-            (key in domain_dict) or (reverse_key in domain_dict)
-            for domain_dict in all_domain_connections
+            all((pair in unique_links or (reverse_key_pairs[i] in unique_links)) for i, pair in enumerate(key_domain_pairs))
         ]
-        # inconsistent = not all(present_in_domains)
+
+        link_type = ""
+
+        if not all(present_in_domains):
+            # Gene doesn't exist in one domain
+            if not all(source in all_domain_genes[i] and target in all_domain_genes[i] 
+                       for i, present in enumerate(present_in_domains) if not present):
+                link_type = "solid_color"
+            # At least one reciprocal
+            elif any(any(domain_dict.get(key, {}).get(domain, False) or domain_dict.get(reverse_key, {}).get(domain, False)
+                        for domain in domains)
+                        for domain_dict in all_domain_connections):
+                link_type = "solid_red"
+            else:
+                link_type = "dotted_grey"
+        else:
+            # Check if any domain type is consistent across all connections
+            if any(all(key in domain_dict and domain_dict[key].get(domain, False) 
+                       for domain_dict in all_domain_connections) 
+                       for domain in domains):
+                link_type = "solid_color"
+            else:
+                link_type = "dotted_color"
         # # Optionally, collect which domains it's missing from
         # # missing_domains = [i for i, present in enumerate(present_in_domains) if not present]
 
@@ -372,14 +406,13 @@ def combine_graphs(all_domain_connections):
             if key in domain_dict:
                 domain_info.update(domain_dict[key])
 
-        source, target = key.split('_', 1)
         combined.append({
             "source": source,
             "target": target,
-            "inconsistent": inconsistent,
-            "domain_info": domain_info  # optional, remove if not needed
-            # You can add more fields as needed
+            "link_type": link_type
+            # Change to 1 enum with the different types of connection possible: "Solid Red", "Solid Color", "Dotted Color", "Dotted Gray"
         })
+    print(combined)
 
     return combined
 
@@ -396,14 +429,18 @@ def domain_parse(matrix_files, coord_file, file_names):
     all_outputs['genes_by_genomes'] = gene_names_by_genome
 
     all_domain_connections = []
+    all_domain_genes = []
 
     for idx, matrix_file in enumerate(matrix_files, 1):
         matrix_file.seek(0)
-        result, domain_connections = create_output(parse_matrix_data(matrix_file), coords, domains[idx - 1])
+        result, domain_connections, domain_genes = create_output(parse_matrix_data(matrix_file), coords, domains[idx - 1])
         all_domain_connections.append(domain_connections)
+        all_domain_genes.append(domain_genes)
         all_outputs[f'graph_{idx}'] = result
 
-    domain_combination = combine_graphs(all_domain_connections)
+    domain_combination = combine_graphs(all_domain_connections, all_domain_genes, domains)
+
+    all_outputs['combined_graph'] = domain_combination
 
     return all_outputs
 

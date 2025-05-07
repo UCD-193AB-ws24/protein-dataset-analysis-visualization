@@ -123,16 +123,14 @@ def get_group_graph():
 
         # Parse graph JSON
         graph = json.loads(graph_str)
-        num_genes = len(graph.get("nodes", []))
-        num_domains = len(matrix_files)  # Adjust based on the number of matrix files
 
         return jsonify({
             "message": "Graph generated successfully",
             "title": group.title,
             "description": group.description,
-            "graph": graph,
-            "num_genes": num_genes,
-            "num_domains": num_domains,
+            "graphs": graph,
+            "num_genes": group.num_genes,
+            "num_domains": group.num_domains,
             "matrix_files": matrix_files,  # Include presigned URLs and original filenames for matrix files
             "coordinate_file": coordinate_file  # Include presigned URL and original filename for coordinate file
         }), 200
@@ -148,29 +146,36 @@ def get_group_graph():
 def generate_graph():
     coordinate_file = request.files.get('file_coordinate')
     matrix_files = [file for key, file in request.files.items() if key.startswith('file_matrix_')]
+    is_domain_specific = request.form.get('is_domain_specific', 'false').lower() == 'true'
+
 
     if not coordinate_file or not matrix_files:
         return jsonify({"error": "Coordinate file and at least one matrix file are required"}), 400
-
-    is_domain_specific = request.form.get('is_domain_specific', 'false').lower() == 'true'
-
     if is_domain_specific and len(matrix_files) > 3:
         return jsonify({"error": "A maximum of three matrix files are allowed for domain-specific graphs"}), 400
     if not is_domain_specific and len(matrix_files) != 1:
         return jsonify({"error": "Exactly one matrix file is required for non-domain-specific graphs"}), 400
 
     try:
-        # Still assuming one coordinate file and one matrix file for non-domain-specific graphs
-        matrix_bytes = matrix_files[0].read()
-        coordinate_bytes = coordinate_file.read()
+        if is_domain_specific:
+            result = domain_parse(
+                matrix_files,
+                coordinate_file,
+                [m.filename for m in matrix_files],
+            )
+        else:
+            matrix_bytes = matrix_files[0].read()
+            coordinate_bytes = coordinate_file.read()
+            graph = parse_matrix(BytesIO(matrix_bytes), BytesIO(coordinate_bytes))
+            result = [{**graph, "domain_name": "general"}]
 
-        graph = parse_matrix(BytesIO(matrix_bytes), BytesIO(coordinate_bytes))
-        num_genes = len(graph["nodes"])
-        num_domains = 1     # Placeholder, adjust in the future
+        combined = next(g for g in result if (g["domain_name"] == "combined" or g["domain_name"] == "general"))
+        num_genes = len(combined["nodes"])
+        num_domains = len(result) - 1  # Exclude the combined graph
 
         return jsonify({
-            "message": "Graph generated successfully",
-            "graph": graph,
+            "message": "Graph(s) generated successfully",
+            "graphs": result,
             "num_genes": num_genes,
             "num_domains": num_domains,
             "is_domain_specific": is_domain_specific

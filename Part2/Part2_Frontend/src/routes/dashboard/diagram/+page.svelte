@@ -23,19 +23,23 @@
   }
 
   interface Graph {
+    domain_name?: string; // optional domain name
     nodes: Node[];
     links: Link[];
     genomes: string[];   // list of genome names
   }
 
   let groupId: string | null = null;    // Group ID for file retrieval
-  let graph: Graph = { nodes: [], links: [], genomes: [] };
+
+  let graphs: Graph[] = [];
+  let selectedGraph: Graph = { nodes: [], links: [], genomes: [] }; // Current graph to be displayed
   let selectedGenomes: string[] = [];
   let filteredGraph: Graph = { nodes: [], links: [], genomes: [] };
 
-  // Variables for uploaded files
+  // Variables for uploaded files/inputs
   let uploadedCoordsFile: File | null = null;
   let uploadedMatrixFiles: File[] = [];
+  let isDomainSpecific = false;
 
   // Variables for downloaded files
   let matrixFiles: { url: string; original_name: string }[] = [];
@@ -44,7 +48,6 @@
   let errorMessage = "";
   let loading = true;        // Loading state for file upload
   let cutoff = 0;             // slider value
-  let isDomainSpecific = false;
 
   // Form information if user choses to save graph
   let title = '';
@@ -64,6 +67,24 @@
     loading = false; // Set loading to false after fetching data
   });
 
+  function normaliseGraphs(data: any): Graph[] {
+    // backend might return {graphs:[…]} (new) or {graph:{…}} (legacy)
+    if (Array.isArray(data?.graphs)) return data.graphs;
+    if (data?.graph) return [data.graph];
+    // direct object passed (e.g. dummyGraph)
+    if (Array.isArray(data)) return data;
+    if (data?.nodes) return [data as Graph];
+    throw new Error('No graph data found');
+  }
+
+  function chooseInitialGraph(graphs: Graph[]) {
+    if (!Array.isArray(graphs)) {
+      console.error("Expected 'graphs' to be an array, but got:", graphs);
+      return { nodes: [], links: [], genomes: [] }; // Return an empty graph as fallback
+    }
+    return graphs.find(g => g.domain_name === 'ALL') || graphs[0];
+  }
+
   async function fetchGroupData(id: string) {
     try {
       const response = await fetch(`${API_BASE_URL}/get_group_graph?groupId=${id}`);
@@ -72,21 +93,22 @@
         throw new Error(`Error fetching graph: ${response.statusText}`);
       }
 
-      const fetchedGraph = await response.json();
-      graph = fetchedGraph.graph;
-      numGenes = fetchedGraph.num_genes;
-      numDomains = fetchedGraph.num_domains;
+      const data = await response.json();
+      graphs = normaliseGraphs(data.graphs);
+      selectedGraph = chooseInitialGraph(graphs);
+
+      numGenes = data.num_genes;
+      numDomains = data.num_domains;
+      title = data.title || '';
+      description = data.description || '';
+
+      // Set file data for download
+      matrixFiles = data.matrix_files || [];
+      coordinateFile = data.coordinate_file || null;
+
       // Reset selected genomes and filtered graph
       selectedGenomes = [];
       filteredGraph = { nodes: [], links: [], genomes: [] };
-
-      // Set the title and description if available
-      title = fetchedGraph.title || '';
-      description = fetchedGraph.description || '';
-
-      // Set file data for download
-      matrixFiles = fetchedGraph.matrix_files || [];
-      coordinateFile = fetchedGraph.coordinate_file || null;
     } catch (error) {
       errorMessage = error.message || "An error occurred.";
       console.error("Detailed error:", error);
@@ -95,20 +117,24 @@
 
   // Function to handle file uploads
   async function uploadFiles() {
-    if (!uploadedCoordsFile || (isDomainSpecific && (uploadedMatrixFiles.length === 0 || uploadedMatrixFiles.length > 3))) {
-      alert('Please select one coordinate file and up to three matrix files if domain-specific.');
+    if (!uploadedCoordsFile || uploadedMatrixFiles.length === 0) {
+      alert('Please select the required files.');
+      return;
+    }
+    if (!isDomainSpecific && uploadedMatrixFiles.length !== 1) {
+      alert('Exactly one matrix file is required for non-domain-specific graphs.');
+      return;
+    }
+    if (isDomainSpecific && uploadedMatrixFiles.length > 3) {
+      alert('Up to three matrix files are supported for domain-specific graphs.');
       return;
     }
 
     const formData = new FormData();
     formData.append('file_coordinate', uploadedCoordsFile); // Use the uploaded coordinate file
-    if (isDomainSpecific) {
-      uploadedMatrixFiles.forEach((file, index) => formData.append(`file_matrix_${index}`, file));
-    } else {
-      formData.append('file_matrix_0', uploadedMatrixFiles[0]); // Only one matrix file allowed if not domain-specific
-    }
+    uploadedMatrixFiles.forEach((file, index) => formData.append(`file_matrix_${index}`, file));
     formData.append('is_domain_specific', isDomainSpecific ? 'true' : 'false');
-    formData.append('username', localStorage.getItem('username') || ''); // Automatically send stored username
+    formData.append('username', localStorage.getItem('username') || '');
 
     try {
       const response = await fetch(`${API_BASE_URL}/generate_graph`, {
@@ -121,11 +147,14 @@
         throw new Error(errorData.error || `Upload failed: ${response.statusText}`);
       }
 
-      const fetchedGraph = await response.json();
-      console.log('Fetched graph:', fetchedGraph);
-      graph = fetchedGraph.graph;
-      numGenes = fetchedGraph.num_genes;
-      numDomains = fetchedGraph.num_domains;
+      const data = await response.json();
+      console.log('Fetched data:', data);
+      graphs = normaliseGraphs(data.graphs);
+      selectedGraph = chooseInitialGraph(graphs);
+      numGenes = data.num_genes;
+      numDomains = data.num_domains;
+      isDomainSpecific = data.is_domain_specific || false;
+
       // Reset selected genomes and filtered graph
       selectedGenomes = [];
       filteredGraph = { nodes: [], links: [], genomes: [] };
@@ -156,19 +185,18 @@
 
       formData.append('file_coordinate', uploadedCoordsFile);
       uploadedMatrixFiles.forEach((file, index) => formData.append(`file_matrix_${index}`, file));
-    }
-
-    if (groupId) {
+    } else {
       formData.append('group_id', groupId); // Include groupId if available
     }
+
     formData.append('username', localStorage.getItem('username') || ''); // Automatically send stored username
     formData.append('title', title);
     formData.append('description', description);
     formData.append('num_genes', numGenes.toString());
     formData.append('num_domains', numDomains.toString());
     formData.append('is_domain_specific', isDomainSpecific ? 'true' : 'false');
-    formData.append('genomes', JSON.stringify(graph.genomes));
-    formData.append('graph', JSON.stringify(graph));
+    formData.append('genomes', JSON.stringify(selectedGraph.genomes));
+    formData.append('graphs', JSON.stringify(graphs));
 
     try {
       const response = await fetch(`${API_BASE_URL}/save`, {
@@ -202,14 +230,11 @@
 
   // Function to switch data source
   function switchDataSource(source: string) {
-    if (source === 'dummy') {
-      graph = dummyGraph;
-    } else if (source === 'test') {
-      graph = testGraph;
-    } else {
-      console.error('Invalid data source:', source);
-      return;
-    }
+    graphs = [source === 'dummy' ? dummyGraph : testGraph];
+    selectedGraph  = graphs[0];
+    isDomainSpecific = false;
+    numGenes = selectedGraph.nodes.length;
+    numDomains = 1;
 
     selectedGenomes = []; // Reset selected genomes when switching data source
     filteredGraph = { nodes: [], links: [], genomes: [] }; // Reset filtered graph
@@ -235,16 +260,22 @@
     filteredGraph.genomes = selectedGenomes;
 
     // Update nodes in filtered graph
-    filteredGraph.nodes = graph.nodes.filter(node =>
+    filteredGraph.nodes = selectedGraph.nodes.filter(node =>
       selectedGenomes.includes(node.genome_name)
     );
 
     // Update links in filtered graph
-    filteredGraph.links = graph.links.filter(link =>
+    filteredGraph.links = selectedGraph.links.filter(link =>
       // Both link.source and link.target should be associated with (contain the name of) genomes in selectedGenomes
       selectedGenomes.some(genome => link.source.includes(genome)) &&
       selectedGenomes.some(genome => link.target.includes(genome))
     );
+  }
+
+  // Select domain/graph to focus on
+  function selectDomain(idx: number) {
+    selectedGraph = graphs[idx];
+    filterGraph();  // Reapply the filter to the selected graph
   }
 </script>
 
@@ -306,7 +337,7 @@
   {/if}
 
   <!-- Save group section -->
-  {#if graph.nodes.length > 0}
+  {#if selectedGraph.nodes.length > 0}
     <div style="margin: 1rem; margin-top: 0px; display: flex; flex-direction: column; gap: 1rem; max-width: 300px;">
       <h3>Save Group</h3>
       <input type="text" placeholder="Title" bind:value={title} />
@@ -315,12 +346,24 @@
     </div>
   {/if}
 
+  <!-- Domain Selector -->
+  {#if graphs.length > 1}
+    <div style="margin: 1rem; display:flex; align-items:center; gap:0.5rem;">
+      <span style="font-weight:600;">View domain:</span>
+      <select on:change={(e) => selectDomain((e.target as HTMLSelectElement).selectedIndex)}>
+        {#each graphs as g, idx}
+          <option value={idx} selected={g === selectedGraph}>{g.domain_name}</option>
+        {/each}
+      </select>
+    </div>
+  {/if}
+
   <!-- Genome selection checkboxes, filter button, and cutoff slider in one row -->
   <div style="margin: 1rem; display: flex; align-items: center; gap: 2rem;">
     <div>
       <h3>Select 3 Genomes:</h3>
-      {#if graph.genomes}
-        {#each graph.genomes as genome}
+      {#if selectedGraph.genomes}
+        {#each selectedGraph.genomes as genome}
           <label style="display: block; margin-top: 1rem; margin-left: 5%;">
             <input
               type="checkbox"

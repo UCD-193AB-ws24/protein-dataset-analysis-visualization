@@ -8506,8 +8506,8 @@
     "genomes": [
       "PI251246",
       "Salinas",
-      "US96UC23",
       "ViAE",
+      "US96UC23",
       "Armenian999"
     ],
     "nodes": [
@@ -8536,7 +8536,7 @@
         "direction": "plus",
         "rel_position": 15,
         "gene_type": "TIR",
-        "is_present": false
+        "is_present": true
       },
       {
         "id": "Lsativa_Salinas_Chr8_003559",
@@ -8545,7 +8545,7 @@
         "direction": "plus",
         "rel_position": 14,
         "gene_type": "NBS",
-        "is_present": false
+        "is_present": true
       },
       {
         "id": "Lsativa_Salinas_Chr8_003560",
@@ -8581,7 +8581,7 @@
         "direction": "plus",
         "rel_position": 10,
         "gene_type": "TIR",
-        "is_present": false
+        "is_present": true
       },
       {
         "id": "Lsativa_Salinas_Chr8_003569",
@@ -8617,7 +8617,7 @@
         "direction": "plus",
         "rel_position": 6,
         "gene_type": "TNBS",
-        "is_present": false
+        "is_present": true
       },
       {
         "id": "Lsativa_Salinas_Chr8_003573",
@@ -8689,7 +8689,7 @@
         "direction": "plus",
         "rel_position": 13,
         "gene_type": "TNBS",
-        "is_present": false
+        "is_present": true
       },
       {
         "id": "Lsativa_ViAE_chr8_003526",
@@ -8716,7 +8716,7 @@
         "direction": "plus",
         "rel_position": 10,
         "gene_type": "TIR",
-        "is_present": false
+        "is_present": true
       },
       {
         "id": "Lsativa_ViAE_chr8_003532",
@@ -8725,7 +8725,7 @@
         "direction": "plus",
         "rel_position": 9,
         "gene_type": "TNBS",
-        "is_present": false
+        "is_present": true
       },
       {
         "id": "Lsativa_ViAE_chr8_003533",
@@ -8743,7 +8743,7 @@
         "direction": "plus",
         "rel_position": 7,
         "gene_type": "TIR",
-        "is_present": false
+        "is_present": true
       },
       {
         "id": "Lsativa_ViAE_chr8_003535",
@@ -8842,7 +8842,7 @@
         "direction": "plus",
         "rel_position": 12,
         "gene_type": "TNBS",
-        "is_present": false
+        "is_present": true
       },
       {
         "id": "Lser_Armenian999_Chr8_003416",
@@ -8851,7 +8851,7 @@
         "direction": "plus",
         "rel_position": 11,
         "gene_type": "NBS",
-        "is_present": false
+        "is_present": true
       },
       {
         "id": "Lser_Armenian999_Chr8_LOC111906314",
@@ -8869,7 +8869,7 @@
         "direction": "plus",
         "rel_position": 9,
         "gene_type": "TNBS",
-        "is_present": false
+        "is_present": true
       },
       {
         "id": "Lser_Armenian999_Chr8_003419",
@@ -9022,7 +9022,7 @@
         "direction": "plus",
         "rel_position": 9,
         "gene_type": "TNBS",
-        "is_present": false
+        "is_present": true
       },
       {
         "id": "Lsativa_PI251246_Chr8_003484",
@@ -9112,7 +9112,7 @@
         "direction": "plus",
         "rel_position": 14,
         "gene_type": "TNBS",
-        "is_present": false
+        "is_present": true
       },
       {
         "id": "Lser_US96UC23_Chr8_003524",
@@ -9175,7 +9175,7 @@
         "direction": "plus",
         "rel_position": 7,
         "gene_type": "TNBS",
-        "is_present": false
+        "is_present": true
       },
       {
         "id": "Lser_US96UC23_Chr8_003533",
@@ -9234,479 +9234,79 @@
     ],
     "links": [
       {
-        "source": "Lser_US96UC23_Chr8_003530",
-        "target": "Lsativa_ViAE_chr8_003522",
-        "link_type": "solid_color"
+        "source": "Lser_US96UC23_Chr8_003534",
+        "target": "Lsativa_Salinas_Chr8_003574",
+        "link_type": "dotted_color"
       },
       {
         "source": "Lser_Armenian999_Chr8_003412",
-        "target": "Lsativa_Salinas_Chr8_003566",
-        "link_type": "solid_color"
+        "target": "Lsativa_PI251246_Chr8_003478",
+        "link_type": "dotted_color"
+      },
+      {
+        "source": "Lsativa_PI251246_Chr8_003489",
+        "target": "Lsativa_Salinas_Chr8_003557",
+        "link_type": "dotted_grey"
       },
       {
         "source": "Lser_US96UC23_Chr8_003536",
-        "target": "Lser_US96UC23_Chr8_003530",
-        "link_type": "solid_color"
-      },
-      {
-        "source": "Lser_US96UC23_Chr8_003537",
-        "target": "Lsativa_PI251246_Chr8_003488",
-        "link_type": "dotted_color"
-      },
-      {
-        "source": "Lsativa_Salinas_Chr8_003567",
-        "target": "Lsativa_PI251246_Chr8_003480",
-        "link_type": "solid_color"
-      },
-      {
-        "source": "Lsativa_ViAE_chr8_003540",
-        "target": "Lsativa_ViAE_chr8_003538",
-        "link_type": "solid_color"
-      },
-      {
-        "source": "Lsativa_Salinas_Chr8_003569",
-        "target": "Lsativa_PI251246_Chr8_003480",
-        "link_type": "solid_color"
-      },
-      {
-        "source": "Lser_Armenian999_Chr8_003414",
-        "target": "Lsativa_ViAE_chr8_003524",
-        "link_type": "solid_color"
-      },
-      {
-        "source": "Lsativa_ViAE_chr8_003522",
-        "target": "Lsativa_Salinas_Chr8_003557",
-        "link_type": "dotted_color"
-      },
-      {
-        "source": "Lsativa_ViAE_chr8_003528",
-        "target": "Lsativa_PI251246_Chr8_003484",
-        "link_type": "dotted_color"
-      },
-      {
-        "source": "Lsativa_PI251246_Chr8_003488",
-        "target": "Lsativa_PI251246_Chr8_003486",
-        "link_type": "solid_color"
-      },
-      {
-        "source": "Lser_US96UC23_Chr8_003537",
-        "target": "Lser_Armenian999_Chr8_003424",
-        "link_type": "dotted_color"
-      },
-      {
-        "source": "Lser_US96UC23_Chr8_003533",
-        "target": "Lsativa_PI251246_Chr8_003484",
-        "link_type": "dotted_color"
-      },
-      {
-        "source": "Lser_Armenian999_Chr8_003420",
-        "target": "Lsativa_ViAE_chr8_003541",
-        "link_type": "solid_color"
-      },
-      {
-        "source": "Lsativa_PI251246_Chr8_003480",
-        "target": "Lsativa_PI251246_Chr8_003481",
-        "link_type": "solid_color"
-      },
-      {
-        "source": "Lsativa_ViAE_chr8_003521",
         "target": "Lser_US96UC23_Chr8_003525",
-        "link_type": "solid_color"
+        "link_type": "dotted_grey"
       },
       {
-        "source": "Lsativa_PI251246_Chr8_003484",
-        "target": "Lser_US96UC23_Chr8_003533",
-        "link_type": "dotted_color"
-      },
-      {
-        "source": "Lser_US96UC23_Chr8_003524",
-        "target": "Lser_US96UC23_Chr8_003533",
-        "link_type": "solid_color"
-      },
-      {
-        "source": "Lser_Armenian999_Chr8_003423",
-        "target": "Lsativa_PI251246_Chr8_003481",
-        "link_type": "solid_color"
-      },
-      {
-        "source": "Lsativa_ViAE_chr8_003521",
-        "target": "Lsativa_PI251246_Chr8_003484",
-        "link_type": "solid_color"
-      },
-      {
-        "source": "Lsativa_ViAE_chr8_003534",
-        "target": "Lsativa_PI251246_Chr8_003488",
-        "link_type": "solid_color"
-      },
-      {
-        "source": "Lser_Armenian999_Chr8_003418",
+        "source": "Lsativa_PI251246_Chr8_000683",
         "target": "Lsativa_ViAE_chr8_003541",
-        "link_type": "solid_color"
+        "link_type": "dotted_grey"
       },
       {
-        "source": "Lsativa_ViAE_chr8_003535",
-        "target": "Lsativa_ViAE_chr8_003536",
-        "link_type": "solid_color"
+        "source": "Lser_US96UC23_Chr8_003529",
+        "target": "Lsativa_ViAE_chr8_003524",
+        "link_type": "dotted_grey"
       },
       {
-        "source": "Lser_US96UC23_Chr8_003536",
-        "target": "Lsativa_Salinas_Chr8_003557",
-        "link_type": "solid_color"
-      },
-      {
-        "source": "Lser_US96UC23_Chr8_003536",
-        "target": "Lsativa_ViAE_chr8_003536",
-        "link_type": "solid_color"
-      },
-      {
-        "source": "Lsativa_PI251246_Chr8_003481",
-        "target": "Lsativa_PI251246_Chr8_003482",
-        "link_type": "solid_color"
-      },
-      {
-        "source": "Lser_US96UC23_Chr8_003528",
-        "target": "Lsativa_Salinas_Chr8_003571",
-        "link_type": "solid_color"
-      },
-      {
-        "source": "Lsativa_Salinas_Chr8_003557",
+        "source": "Lsativa_Salinas_Chr8_003564",
         "target": "Lsativa_ViAE_chr8_003522",
-        "link_type": "dotted_color"
+        "link_type": "dotted_grey"
       },
       {
-        "source": "Lser_Armenian999_Chr8_003419",
-        "target": "Lser_Armenian999_Chr8_003412",
-        "link_type": "solid_color"
-      },
-      {
-        "source": "Lsativa_PI251246_Chr8_003484",
-        "target": "Lsativa_ViAE_chr8_003528",
-        "link_type": "dotted_color"
-      },
-      {
-        "source": "Lsativa_ViAE_chr8_003541",
-        "target": "Lsativa_PI251246_Chr8_003493",
-        "link_type": "dotted_color"
-      },
-      {
-        "source": "Lsativa_Salinas_Chr8_003571",
-        "target": "Lser_Armenian999_Chr8_003415",
-        "link_type": "solid_color"
-      },
-      {
-        "source": "Lsativa_Salinas_Chr8_003566",
-        "target": "Lsativa_ViAE_chr8_003535",
-        "link_type": "solid_color"
-      },
-      {
-        "source": "Lsativa_ViAE_chr8_003521",
+        "source": "Lser_US96UC23_Chr8_003521",
         "target": "Lsativa_PI251246_Chr8_003476",
-        "link_type": "solid_color"
-      },
-      {
-        "source": "Lsativa_PI251246_Chr8_003477",
-        "target": "Lsativa_ViAE_chr8_003541",
-        "link_type": "solid_color"
-      },
-      {
-        "source": "Lsativa_Salinas_Chr8_003571",
-        "target": "Lser_US96UC23_Chr8_003530",
-        "link_type": "dotted_color"
-      },
-      {
-        "source": "Lser_Armenian999_Chr8_003422",
-        "target": "Lser_Armenian999_Chr8_003423",
-        "link_type": "solid_color"
-      },
-      {
-        "source": "Lsativa_Salinas_Chr8_003558",
-        "target": "Lsativa_ViAE_chr8_003531",
-        "link_type": "solid_color"
-      },
-      {
-        "source": "Lser_US96UC23_Chr8_003521",
-        "target": "Lsativa_ViAE_chr8_003522",
-        "link_type": "solid_color"
-      },
-      {
-        "source": "Lsativa_ViAE_chr8_003522",
-        "target": "Lsativa_ViAE_chr8_003528",
-        "link_type": "solid_color"
-      },
-      {
-        "source": "Lser_US96UC23_Chr8_003526",
-        "target": "Lser_Armenian999_Chr8_003414",
-        "link_type": "solid_color"
-      },
-      {
-        "source": "Lser_Armenian999_Chr8_003425",
-        "target": "Lsativa_Salinas_Chr8_003557",
-        "link_type": "solid_color"
-      },
-      {
-        "source": "Lsativa_ViAE_chr8_003531",
-        "target": "Lsativa_Salinas_Chr8_003558",
-        "link_type": "solid_color"
-      },
-      {
-        "source": "Lser_US96UC23_Chr8_003521",
-        "target": "Lsativa_ViAE_chr8_003541",
-        "link_type": "solid_color"
-      },
-      {
-        "source": "Lser_Armenian999_Chr8_003412",
-        "target": "Lser_Armenian999_Chr8_003419",
-        "link_type": "solid_color"
-      },
-      {
-        "source": "Lser_US96UC23_Chr8_003535",
-        "target": "Lser_Armenian999_Chr8_003422",
         "link_type": "dotted_color"
       },
       {
         "source": "Lsativa_Salinas_Chr8_003574",
-        "target": "Lsativa_PI251246_Chr8_003485",
-        "link_type": "dotted_color"
-      },
-      {
-        "source": "Lsativa_ViAE_chr8_003538",
-        "target": "Lser_US96UC23_Chr8_003533",
-        "link_type": "solid_color"
-      },
-      {
-        "source": "Lser_Armenian999_Chr8_003415",
-        "target": "Lsativa_Salinas_Chr8_003571",
-        "link_type": "solid_color"
-      },
-      {
-        "source": "Lsativa_Salinas_Chr8_003570",
-        "target": "Lser_US96UC23_Chr8_003529",
-        "link_type": "dotted_color"
-      },
-      {
-        "source": "Lsativa_PI251246_Chr8_003486",
-        "target": "Lsativa_ViAE_chr8_003535",
-        "link_type": "solid_color"
-      },
-      {
-        "source": "Lser_Armenian999_Chr8_003410",
-        "target": "Lsativa_PI251246_Chr8_003476",
-        "link_type": "dotted_color"
-      },
-      {
-        "source": "Lser_Armenian999_Chr8_003425",
-        "target": "Lsativa_ViAE_chr8_003539",
-        "link_type": "solid_color"
-      },
-      {
-        "source": "Lser_US96UC23_Chr8_003530",
-        "target": "Lser_Armenian999_Chr8_003415",
-        "link_type": "solid_color"
-      },
-      {
-        "source": "Lser_US96UC23_Chr8_003526",
-        "target": "Lser_Armenian999_Chr8_003411",
-        "link_type": "solid_color"
-      },
-      {
-        "source": "Lsativa_PI251246_Chr8_003476",
-        "target": "Lsativa_PI251246_Chr8_003484",
-        "link_type": "solid_color"
-      },
-      {
-        "source": "Lser_US96UC23_Chr8_003521",
-        "target": "Lsativa_PI251246_Chr8_003476",
-        "link_type": "dotted_color"
-      },
-      {
-        "source": "Lsativa_Salinas_Chr8_003566",
-        "target": "Lser_US96UC23_Chr8_003525",
-        "link_type": "dotted_color"
-      },
-      {
-        "source": "Lser_US96UC23_Chr8_003521",
-        "target": "Lsativa_Salinas_Chr8_003553",
-        "link_type": "dotted_color"
-      },
-      {
-        "source": "Lser_US96UC23_Chr8_003532",
-        "target": "Lser_US96UC23_Chr8_003521",
-        "link_type": "solid_color"
-      },
-      {
-        "source": "Lsativa_Salinas_Chr8_003577",
-        "target": "Lsativa_PI251246_Chr8_003488",
-        "link_type": "dotted_color"
-      },
-      {
-        "source": "Lsativa_PI251246_Chr8_003482",
-        "target": "Lsativa_Salinas_Chr8_003571",
-        "link_type": "dotted_color"
-      },
-      {
-        "source": "Lsativa_ViAE_chr8_003539",
-        "target": "Lsativa_Salinas_Chr8_003557",
-        "link_type": "solid_color"
-      },
-      {
-        "source": "Lsativa_Salinas_Chr8_003578",
-        "target": "Lsativa_Salinas_Chr8_003573",
-        "link_type": "solid_color"
-      },
-      {
-        "source": "Lsativa_PI251246_Chr8_003482",
-        "target": "Lser_US96UC23_Chr8_003530",
-        "link_type": "dotted_color"
-      },
-      {
-        "source": "Lsativa_Salinas_Chr8_003577",
-        "target": "Lsativa_Salinas_Chr8_003575",
-        "link_type": "solid_color"
-      },
-      {
-        "source": "Lsativa_Salinas_Chr8_003571",
-        "target": "Lsativa_ViAE_chr8_003538",
-        "link_type": "solid_color"
-      },
-      {
-        "source": "Lser_US96UC23_Chr8_003529",
-        "target": "Lser_US96UC23_Chr8_003535",
-        "link_type": "solid_color"
-      },
-      {
-        "source": "Lser_Armenian999_Chr8_003415",
-        "target": "Lsativa_PI251246_Chr8_003482",
-        "link_type": "solid_color"
-      },
-      {
-        "source": "Lsativa_ViAE_chr8_003538",
-        "target": "Lsativa_PI251246_Chr8_003490",
-        "link_type": "solid_color"
-      },
-      {
-        "source": "Lsativa_PI251246_Chr8_003482",
-        "target": "Lser_Armenian999_Chr8_LOC111906314",
-        "link_type": "solid_color"
-      },
-      {
-        "source": "Lsativa_PI251246_Chr8_003493",
-        "target": "Lser_US96UC23_Chr8_003533",
-        "link_type": "solid_color"
-      },
-      {
-        "source": "Lsativa_PI251246_Chr8_003490",
-        "target": "Lsativa_ViAE_chr8_003540",
-        "link_type": "dotted_color"
-      },
-      {
-        "source": "Lser_Armenian999_Chr8_003423",
-        "target": "Lser_US96UC23_Chr8_003535",
-        "link_type": "solid_color"
-      },
-      {
-        "source": "Lsativa_PI251246_Chr8_000683",
-        "target": "Lser_Armenian999_Chr8_003423",
-        "link_type": "solid_color"
-      },
-      {
-        "source": "Lsativa_PI251246_Chr8_003485",
         "target": "Lsativa_ViAE_chr8_003541",
-        "link_type": "solid_color"
-      },
-      {
-        "source": "Lser_Armenian999_Chr8_003414",
-        "target": "Lser_Armenian999_Chr8_003422",
-        "link_type": "solid_color"
-      },
-      {
-        "source": "Lser_Armenian999_Chr8_003420",
-        "target": "Lsativa_PI251246_Chr8_003485",
-        "link_type": "dotted_color"
-      },
-      {
-        "source": "Lsativa_Salinas_Chr8_003575",
-        "target": "Lsativa_ViAE_chr8_003535",
-        "link_type": "solid_color"
-      },
-      {
-        "source": "Lser_Armenian999_Chr8_LOC111906314",
-        "target": "Lsativa_PI251246_Chr8_003482",
-        "link_type": "solid_color"
-      },
-      {
-        "source": "Lsativa_Salinas_Chr8_003557",
-        "target": "Lser_Armenian999_Chr8_003411",
-        "link_type": "dotted_color"
-      },
-      {
-        "source": "Lser_Armenian999_Chr8_003415",
-        "target": "Lsativa_ViAE_chr8_003538",
-        "link_type": "solid_color"
-      },
-      {
-        "source": "Lser_Armenian999_Chr8_003411",
-        "target": "Lser_US96UC23_Chr8_003522",
-        "link_type": "solid_color"
-      },
-      {
-        "source": "Lser_US96UC23_Chr8_003525",
-        "target": "Lsativa_ViAE_chr8_003540",
-        "link_type": "solid_color"
-      },
-      {
-        "source": "Lser_US96UC23_Chr8_003521",
-        "target": "Lser_US96UC23_Chr8_003522",
-        "link_type": "solid_color"
-      },
-      {
-        "source": "Lsativa_ViAE_chr8_003536",
-        "target": "Lsativa_PI251246_Chr8_003488",
-        "link_type": "dotted_color"
-      },
-      {
-        "source": "Lsativa_ViAE_chr8_003538",
-        "target": "Lser_US96UC23_Chr8_003522",
-        "link_type": "solid_color"
+        "link_type": "dotted_grey"
       },
       {
         "source": "Lser_US96UC23_Chr8_003536",
-        "target": "Lser_US96UC23_Chr8_003525",
-        "link_type": "solid_color"
+        "target": "Lsativa_Salinas_Chr8_003557",
+        "link_type": "dotted_grey"
+      },
+      {
+        "source": "Lsativa_ViAE_chr8_003534",
+        "target": "Lser_Armenian999_Chr8_003424",
+        "link_type": "dotted_grey"
       },
       {
         "source": "Lser_Armenian999_Chr8_003422",
-        "target": "Lsativa_ViAE_chr8_003524",
-        "link_type": "solid_color"
+        "target": "Lser_Armenian999_Chr8_003423",
+        "link_type": "solid_red"
       },
       {
-        "source": "Lser_US96UC23_Chr8_003534",
-        "target": "Lsativa_ViAE_chr8_003541",
-        "link_type": "solid_color"
+        "source": "Lsativa_PI251246_Chr8_003476",
+        "target": "Lsativa_ViAE_chr8_003522",
+        "link_type": "dotted_grey"
       },
       {
-        "source": "Lsativa_Salinas_Chr8_003564",
-        "target": "Lser_US96UC23_Chr8_003522",
-        "link_type": "solid_color"
+        "source": "Lser_US96UC23_Chr8_003528",
+        "target": "Lsativa_PI251246_Chr8_003482",
+        "link_type": "dotted_grey"
       },
       {
-        "source": "Lsativa_ViAE_chr8_003528",
-        "target": "Lsativa_ViAE_chr8_003524",
-        "link_type": "solid_color"
-      },
-      {
-        "source": "Lsativa_Salinas_Chr8_003578",
-        "target": "Lser_Armenian999_Chr8_003411",
-        "link_type": "solid_color"
-      },
-      {
-        "source": "Lsativa_Salinas_Chr8_003575",
-        "target": "Lsativa_ViAE_chr8_003534",
-        "link_type": "solid_color"
-      },
-      {
-        "source": "Lsativa_PI251246_Chr8_003478",
-        "target": "Lsativa_PI251246_Chr8_003477",
-        "link_type": "solid_color"
+        "source": "Lser_Armenian999_Chr8_003415",
+        "target": "Lsativa_Salinas_Chr8_003571",
+        "link_type": "solid_red"
       },
       {
         "source": "Lsativa_Salinas_Chr8_003553",
@@ -9714,184 +9314,184 @@
         "link_type": "dotted_color"
       },
       {
-        "source": "Lsativa_ViAE_chr8_003536",
-        "target": "Lsativa_ViAE_chr8_003540",
-        "link_type": "solid_color"
-      },
-      {
-        "source": "Lser_Armenian999_Chr8_003425",
-        "target": "Lsativa_PI251246_Chr8_003477",
-        "link_type": "solid_color"
-      },
-      {
-        "source": "Lsativa_Salinas_Chr8_003575",
-        "target": "Lsativa_Salinas_Chr8_003566",
-        "link_type": "solid_color"
-      },
-      {
-        "source": "Lsativa_ViAE_chr8_003522",
-        "target": "Lsativa_ViAE_chr8_003521",
-        "link_type": "solid_color"
-      },
-      {
-        "source": "Lsativa_PI251246_Chr8_003486",
-        "target": "Lser_US96UC23_Chr8_003525",
-        "link_type": "solid_color"
-      },
-      {
-        "source": "Lser_Armenian999_Chr8_003419",
-        "target": "Lsativa_PI251246_Chr8_003484",
-        "link_type": "dotted_color"
-      },
-      {
-        "source": "Lsativa_Salinas_Chr8_003575",
-        "target": "Lser_Armenian999_Chr8_003424",
-        "link_type": "solid_color"
-      },
-      {
-        "source": "Lsativa_ViAE_chr8_003522",
-        "target": "Lsativa_PI251246_Chr8_003477",
-        "link_type": "dotted_color"
-      },
-      {
-        "source": "Lsativa_PI251246_Chr8_003489",
-        "target": "Lsativa_Salinas_Chr8_003557",
-        "link_type": "solid_color"
-      },
-      {
-        "source": "Lsativa_ViAE_chr8_003522",
-        "target": "Lsativa_ViAE_chr8_003541",
-        "link_type": "solid_color"
-      },
-      {
         "source": "Lsativa_PI251246_Chr8_003485",
-        "target": "Lser_Armenian999_Chr8_003420",
-        "link_type": "dotted_color"
+        "target": "Lsativa_PI251246_Chr8_003477",
+        "link_type": "dotted_grey"
+      },
+      {
+        "source": "Lsativa_ViAE_chr8_003539",
+        "target": "Lsativa_PI251246_Chr8_003477",
+        "link_type": "dotted_grey"
+      },
+      {
+        "source": "Lsativa_ViAE_chr8_003541",
+        "target": "Lser_US96UC23_Chr8_003533",
+        "link_type": "dotted_grey"
+      },
+      {
+        "source": "Lsativa_PI251246_Chr8_003490",
+        "target": "Lser_US96UC23_Chr8_003538",
+        "link_type": "solid_red"
+      },
+      {
+        "source": "Lser_Armenian999_Chr8_003412",
+        "target": "Lser_Armenian999_Chr8_003411",
+        "link_type": "dotted_grey"
+      },
+      {
+        "source": "Lsativa_Salinas_Chr8_003573",
+        "target": "Lsativa_Salinas_Chr8_003557",
+        "link_type": "dotted_grey"
+      },
+      {
+        "source": "Lsativa_PI251246_Chr8_003482",
+        "target": "Lsativa_PI251246_Chr8_003488",
+        "link_type": "dotted_grey"
+      },
+      {
+        "source": "Lser_Armenian999_Chr8_003410",
+        "target": "Lsativa_ViAE_chr8_003521",
+        "link_type": "solid_red"
+      },
+      {
+        "source": "Lsativa_Salinas_Chr8_003567",
+        "target": "Lser_US96UC23_Chr8_003526",
+        "link_type": "solid_red"
+      },
+      {
+        "source": "Lsativa_ViAE_chr8_003538",
+        "target": "Lsativa_ViAE_chr8_003541",
+        "link_type": "dotted_grey"
       },
       {
         "source": "Lsativa_ViAE_chr8_003538",
         "target": "Lsativa_Salinas_Chr8_003573",
-        "link_type": "solid_color"
+        "link_type": "dotted_grey"
       },
       {
-        "source": "Lsativa_PI251246_Chr8_003489",
-        "target": "Lser_US96UC23_Chr8_003525",
-        "link_type": "solid_color"
-      },
-      {
-        "source": "Lser_Armenian999_Chr8_LOC111906314",
-        "target": "Lsativa_ViAE_chr8_003541",
-        "link_type": "solid_color"
-      },
-      {
-        "source": "Lsativa_ViAE_chr8_003521",
-        "target": "Lsativa_Salinas_Chr8_003573",
-        "link_type": "solid_color"
-      },
-      {
-        "source": "Lser_US96UC23_Chr8_003533",
-        "target": "Lser_Armenian999_Chr8_003419",
-        "link_type": "dotted_color"
-      },
-      {
-        "source": "Lsativa_ViAE_chr8_003524",
-        "target": "Lsativa_ViAE_chr8_003528",
-        "link_type": "solid_color"
-      },
-      {
-        "source": "Lsativa_Salinas_Chr8_003575",
-        "target": "Lser_US96UC23_Chr8_003537",
-        "link_type": "solid_color"
-      },
-      {
-        "source": "Lsativa_ViAE_chr8_003541",
-        "target": "Lsativa_ViAE_chr8_003522",
-        "link_type": "solid_color"
-      },
-      {
-        "source": "Lsativa_PI251246_Chr8_003485",
-        "target": "Lsativa_Salinas_Chr8_003574",
-        "link_type": "dotted_color"
-      },
-      {
-        "source": "Lsativa_Salinas_Chr8_003557",
-        "target": "Lsativa_Salinas_Chr8_003578",
-        "link_type": "solid_color"
-      },
-      {
-        "source": "Lsativa_Salinas_Chr8_003569",
-        "target": "Lser_US96UC23_Chr8_003526",
-        "link_type": "solid_color"
-      },
-      {
-        "source": "Lsativa_ViAE_chr8_003540",
-        "target": "Lser_US96UC23_Chr8_003538",
-        "link_type": "solid_color"
-      },
-      {
-        "source": "Lsativa_PI251246_Chr8_003483",
-        "target": "Lsativa_PI251246_Chr8_003479",
-        "link_type": "solid_color"
-      },
-      {
-        "source": "Lser_US96UC23_Chr8_003538",
-        "target": "Lsativa_ViAE_chr8_003540",
-        "link_type": "solid_color"
+        "source": "Lser_Armenian999_Chr8_003422",
+        "target": "Lser_Armenian999_Chr8_003411",
+        "link_type": "dotted_grey"
       },
       {
         "source": "Lsativa_PI251246_Chr8_000683",
-        "target": "Lser_US96UC23_Chr8_003522",
-        "link_type": "solid_color"
+        "target": "Lsativa_Salinas_Chr8_003557",
+        "link_type": "dotted_grey"
       },
       {
-        "source": "Lser_Armenian999_Chr8_003424",
+        "source": "Lsativa_PI251246_Chr8_003484",
+        "target": "Lsativa_PI251246_Chr8_003479",
+        "link_type": "dotted_grey"
+      },
+      {
+        "source": "Lsativa_PI251246_Chr8_003476",
+        "target": "Lsativa_PI251246_Chr8_003484",
+        "link_type": "solid_red"
+      },
+      {
+        "source": "Lser_US96UC23_Chr8_003521",
+        "target": "Lsativa_ViAE_chr8_003522",
+        "link_type": "dotted_grey"
+      },
+      {
+        "source": "Lsativa_PI251246_Chr8_003488",
         "target": "Lsativa_Salinas_Chr8_003577",
         "link_type": "dotted_color"
       },
       {
-        "source": "Lsativa_ViAE_chr8_003524",
-        "target": "Lser_Armenian999_Chr8_003412",
-        "link_type": "solid_color"
+        "source": "Lsativa_PI251246_Chr8_003479",
+        "target": "Lsativa_PI251246_Chr8_003490",
+        "link_type": "dotted_grey"
+      },
+      {
+        "source": "Lsativa_PI251246_Chr8_000683",
+        "target": "Lser_US96UC23_Chr8_003522",
+        "link_type": "dotted_grey"
+      },
+      {
+        "source": "Lser_Armenian999_Chr8_003416",
+        "target": "Lsativa_ViAE_chr8_003535",
+        "link_type": "solid_red"
+      },
+      {
+        "source": "Lsativa_Salinas_Chr8_003572",
+        "target": "Lsativa_Salinas_Chr8_003553",
+        "link_type": "dotted_grey"
+      },
+      {
+        "source": "Lsativa_PI251246_Chr8_003478",
+        "target": "Lsativa_PI251246_Chr8_003477",
+        "link_type": "dotted_grey"
+      },
+      {
+        "source": "Lsativa_ViAE_chr8_003538",
+        "target": "Lser_US96UC23_Chr8_003533",
+        "link_type": "dotted_grey"
+      },
+      {
+        "source": "Lser_US96UC23_Chr8_003525",
+        "target": "Lser_Armenian999_Chr8_003425",
+        "link_type": "dotted_grey"
+      },
+      {
+        "source": "Lsativa_Salinas_Chr8_003569",
+        "target": "Lsativa_ViAE_chr8_003536",
+        "link_type": "dotted_grey"
+      },
+      {
+        "source": "Lser_US96UC23_Chr8_003532",
+        "target": "Lser_US96UC23_Chr8_003521",
+        "link_type": "dotted_grey"
+      },
+      {
+        "source": "Lser_US96UC23_Chr8_003536",
+        "target": "Lsativa_PI251246_Chr8_003482",
+        "link_type": "dotted_grey"
+      },
+      {
+        "source": "Lsativa_PI251246_Chr8_003489",
+        "target": "Lser_Armenian999_Chr8_003425",
+        "link_type": "dotted_color"
+      },
+      {
+        "source": "Lsativa_PI251246_Chr8_003488",
+        "target": "Lsativa_ViAE_chr8_003536",
+        "link_type": "dotted_color"
+      },
+      {
+        "source": "Lsativa_PI251246_Chr8_003483",
+        "target": "Lsativa_Salinas_Chr8_003572",
+        "link_type": "solid_red"
+      },
+      {
+        "source": "Lser_Armenian999_Chr8_003427",
+        "target": "Lser_Armenian999_Chr8_003420",
+        "link_type": "dotted_grey"
+      },
+      {
+        "source": "Lsativa_PI251246_Chr8_003488",
+        "target": "Lsativa_PI251246_Chr8_003486",
+        "link_type": "solid_red"
+      },
+      {
+        "source": "Lsativa_PI251246_Chr8_003484",
+        "target": "Lsativa_ViAE_chr8_003541",
+        "link_type": "dotted_grey"
       },
       {
         "source": "Lsativa_ViAE_chr8_003521",
-        "target": "Lser_US96UC23_Chr8_003533",
-        "link_type": "solid_color"
+        "target": "Lser_Armenian999_Chr8_003419",
+        "link_type": "dotted_grey"
       },
       {
-        "source": "Lsativa_Salinas_Chr8_003577",
-        "target": "Lser_Armenian999_Chr8_003424",
-        "link_type": "dotted_color"
-      },
-      {
-        "source": "Lser_US96UC23_Chr8_003528",
-        "target": "Lser_US96UC23_Chr8_003530",
-        "link_type": "solid_color"
-      },
-      {
-        "source": "Lsativa_ViAE_chr8_003541",
-        "target": "Lsativa_ViAE_chr8_003521",
-        "link_type": "dotted_color"
-      },
-      {
-        "source": "Lsativa_Salinas_Chr8_003571",
+        "source": "Lser_US96UC23_Chr8_003530",
         "target": "Lsativa_ViAE_chr8_003522",
-        "link_type": "solid_color"
+        "link_type": "dotted_grey"
       },
       {
-        "source": "Lser_Armenian999_Chr8_003422",
-        "target": "Lsativa_Salinas_Chr8_003575",
-        "link_type": "solid_color"
-      },
-      {
-        "source": "Lsativa_PI251246_Chr8_003481",
-        "target": "Lsativa_ViAE_chr8_003524",
-        "link_type": "solid_color"
-      },
-      {
-        "source": "Lsativa_PI251246_Chr8_003486",
-        "target": "Lser_Armenian999_Chr8_003424",
-        "link_type": "solid_color"
+        "source": "Lsativa_ViAE_chr8_003536",
+        "target": "Lser_US96UC23_Chr8_003537",
+        "link_type": "dotted_color"
       },
       {
         "source": "Lser_Armenian999_Chr8_003426",
@@ -9899,74 +9499,274 @@
         "link_type": "dotted_color"
       },
       {
-        "source": "Lser_Armenian999_Chr8_003427",
-        "target": "Lser_US96UC23_Chr8_003533",
-        "link_type": "solid_color"
+        "source": "Lser_Armenian999_Chr8_003415",
+        "target": "Lser_US96UC23_Chr8_003530",
+        "link_type": "solid_red"
       },
       {
-        "source": "Lsativa_Salinas_Chr8_003553",
-        "target": "Lsativa_ViAE_chr8_003521",
-        "link_type": "solid_color"
+        "source": "Lser_Armenian999_Chr8_003420",
+        "target": "Lsativa_Salinas_Chr8_003574",
+        "link_type": "dotted_color"
+      },
+      {
+        "source": "Lser_US96UC23_Chr8_003536",
+        "target": "Lser_Armenian999_Chr8_003415",
+        "link_type": "dotted_grey"
       },
       {
         "source": "Lsativa_PI251246_Chr8_003478",
-        "target": "Lser_US96UC23_Chr8_003524",
+        "target": "Lser_Armenian999_Chr8_003412",
         "link_type": "dotted_color"
-      },
-      {
-        "source": "Lsativa_PI251246_Chr8_003489",
-        "target": "Lsativa_ViAE_chr8_003539",
-        "link_type": "solid_color"
-      },
-      {
-        "source": "Lsativa_ViAE_chr8_003539",
-        "target": "Lsativa_ViAE_chr8_003538",
-        "link_type": "solid_color"
-      },
-      {
-        "source": "Lsativa_Salinas_Chr8_003571",
-        "target": "Lsativa_PI251246_Chr8_003482",
-        "link_type": "dotted_color"
-      },
-      {
-        "source": "Lser_Armenian999_Chr8_003422",
-        "target": "Lser_US96UC23_Chr8_003535",
-        "link_type": "dotted_color"
-      },
-      {
-        "source": "Lsativa_PI251246_Chr8_003476",
-        "target": "Lsativa_ViAE_chr8_003521",
-        "link_type": "solid_color"
-      },
-      {
-        "source": "Lsativa_PI251246_Chr8_003478",
-        "target": "Lsativa_Salinas_Chr8_003573",
-        "link_type": "solid_color"
-      },
-      {
-        "source": "Lser_US96UC23_Chr8_003535",
-        "target": "Lser_US96UC23_Chr8_003522",
-        "link_type": "solid_color"
-      },
-      {
-        "source": "Lsativa_Salinas_Chr8_003578",
-        "target": "Lser_Armenian999_Chr8_003427",
-        "link_type": "solid_color"
       },
       {
         "source": "Lsativa_PI251246_Chr8_000683",
         "target": "Lsativa_ViAE_chr8_003522",
-        "link_type": "solid_color"
+        "link_type": "dotted_grey"
+      },
+      {
+        "source": "Lser_US96UC23_Chr8_003526",
+        "target": "Lser_US96UC23_Chr8_003522",
+        "link_type": "dotted_grey"
+      },
+      {
+        "source": "Lsativa_PI251246_Chr8_003489",
+        "target": "Lsativa_PI251246_Chr8_003477",
+        "link_type": "solid_red"
+      },
+      {
+        "source": "Lser_US96UC23_Chr8_003534",
+        "target": "Lser_Armenian999_Chr8_003420",
+        "link_type": "dotted_color"
+      },
+      {
+        "source": "Lsativa_Salinas_Chr8_003557",
+        "target": "Lser_US96UC23_Chr8_003522",
+        "link_type": "solid_red"
+      },
+      {
+        "source": "Lser_Armenian999_Chr8_003424",
+        "target": "Lser_US96UC23_Chr8_003537",
+        "link_type": "dotted_color"
+      },
+      {
+        "source": "Lser_US96UC23_Chr8_003535",
+        "target": "Lsativa_ViAE_chr8_003524",
+        "link_type": "dotted_grey"
+      },
+      {
+        "source": "Lser_Armenian999_Chr8_003415",
+        "target": "Lser_Armenian999_Chr8_003424",
+        "link_type": "dotted_grey"
+      },
+      {
+        "source": "Lsativa_ViAE_chr8_003524",
+        "target": "Lsativa_ViAE_chr8_003528",
+        "link_type": "dotted_grey"
+      },
+      {
+        "source": "Lsativa_ViAE_chr8_003528",
+        "target": "Lsativa_Salinas_Chr8_003573",
+        "link_type": "dotted_color"
+      },
+      {
+        "source": "Lser_Armenian999_Chr8_003412",
+        "target": "Lsativa_ViAE_chr8_003526",
+        "link_type": "solid_red"
+      },
+      {
+        "source": "Lser_US96UC23_Chr8_003526",
+        "target": "Lser_Armenian999_Chr8_003411",
+        "link_type": "dotted_grey"
+      },
+      {
+        "source": "Lsativa_Salinas_Chr8_003571",
+        "target": "Lsativa_Salinas_Chr8_003577",
+        "link_type": "dotted_grey"
+      },
+      {
+        "source": "Lsativa_PI251246_Chr8_000683",
+        "target": "Lsativa_PI251246_Chr8_003486",
+        "link_type": "dotted_grey"
+      },
+      {
+        "source": "Lsativa_ViAE_chr8_003521",
+        "target": "Lsativa_Salinas_Chr8_003578",
+        "link_type": "dotted_grey"
+      },
+      {
+        "source": "Lsativa_ViAE_chr8_003538",
+        "target": "Lsativa_ViAE_chr8_003540",
+        "link_type": "solid_red"
+      },
+      {
+        "source": "Lsativa_Salinas_Chr8_003566",
+        "target": "Lsativa_Salinas_Chr8_003577",
+        "link_type": "dotted_grey"
+      },
+      {
+        "source": "Lser_US96UC23_Chr8_003525",
+        "target": "Lsativa_ViAE_chr8_003536",
+        "link_type": "dotted_grey"
+      },
+      {
+        "source": "Lsativa_PI251246_Chr8_003493",
+        "target": "Lser_Armenian999_Chr8_003427",
+        "link_type": "dotted_color"
+      },
+      {
+        "source": "Lsativa_Salinas_Chr8_003564",
+        "target": "Lsativa_PI251246_Chr8_003477",
+        "link_type": "dotted_color"
+      },
+      {
+        "source": "Lsativa_PI251246_Chr8_003488",
+        "target": "Lser_Armenian999_Chr8_003424",
+        "link_type": "dotted_color"
+      },
+      {
+        "source": "Lser_US96UC23_Chr8_003529",
+        "target": "Lser_Armenian999_Chr8_003414",
+        "link_type": "dotted_color"
+      },
+      {
+        "source": "Lser_US96UC23_Chr8_003526",
+        "target": "Lsativa_ViAE_chr8_003528",
+        "link_type": "dotted_grey"
+      },
+      {
+        "source": "Lser_US96UC23_Chr8_003538",
+        "target": "Lsativa_PI251246_Chr8_003490",
+        "link_type": "solid_red"
+      },
+      {
+        "source": "Lsativa_Salinas_Chr8_003577",
+        "target": "Lser_US96UC23_Chr8_003537",
+        "link_type": "dotted_color"
+      },
+      {
+        "source": "Lser_Armenian999_Chr8_003415",
+        "target": "Lsativa_PI251246_Chr8_003482",
+        "link_type": "solid_red"
+      },
+      {
+        "source": "Lsativa_Salinas_Chr8_003566",
+        "target": "Lser_Armenian999_Chr8_003422",
+        "link_type": "dotted_grey"
+      },
+      {
+        "source": "Lsativa_PI251246_Chr8_003488",
+        "target": "Lsativa_PI251246_Chr8_003490",
+        "link_type": "dotted_color"
+      },
+      {
+        "source": "Lsativa_ViAE_chr8_003532",
+        "target": "Lsativa_PI251246_Chr8_003485",
+        "link_type": "solid_red"
+      },
+      {
+        "source": "Lser_US96UC23_Chr8_003535",
+        "target": "Lsativa_Salinas_Chr8_003557",
+        "link_type": "dotted_grey"
+      },
+      {
+        "source": "Lsativa_Salinas_Chr8_003571",
+        "target": "Lser_Armenian999_Chr8_LOC111906314",
+        "link_type": "solid_red"
+      },
+      {
+        "source": "Lsativa_Salinas_Chr8_003572",
+        "target": "Lsativa_ViAE_chr8_003522",
+        "link_type": "dotted_grey"
+      },
+      {
+        "source": "Lsativa_Salinas_Chr8_003578",
+        "target": "Lser_US96UC23_Chr8_003525",
+        "link_type": "dotted_grey"
+      },
+      {
+        "source": "Lsativa_ViAE_chr8_003536",
+        "target": "Lsativa_ViAE_chr8_003540",
+        "link_type": "solid_red"
+      },
+      {
+        "source": "Lser_Armenian999_Chr8_003426",
+        "target": "Lsativa_Salinas_Chr8_003577",
+        "link_type": "dotted_color"
+      },
+      {
+        "source": "Lsativa_Salinas_Chr8_003566",
+        "target": "Lsativa_Salinas_Chr8_003553",
+        "link_type": "dotted_grey"
+      },
+      {
+        "source": "Lser_Armenian999_Chr8_003423",
+        "target": "Lsativa_PI251246_Chr8_000683",
+        "link_type": "solid_red"
+      },
+      {
+        "source": "Lser_US96UC23_Chr8_003532",
+        "target": "Lsativa_ViAE_chr8_003522",
+        "link_type": "dotted_grey"
+      },
+      {
+        "source": "Lsativa_PI251246_Chr8_003488",
+        "target": "Lsativa_PI251246_Chr8_003477",
+        "link_type": "dotted_grey"
+      },
+      {
+        "source": "Lsativa_ViAE_chr8_003535",
+        "target": "Lser_Armenian999_Chr8_003419",
+        "link_type": "dotted_grey"
       },
       {
         "source": "Lser_US96UC23_Chr8_003524",
         "target": "Lser_US96UC23_Chr8_003525",
-        "link_type": "solid_color"
+        "link_type": "dotted_grey"
       },
       {
-        "source": "Lsativa_PI251246_Chr8_003476",
-        "target": "Lsativa_PI251246_Chr8_003477",
-        "link_type": "solid_color"
+        "source": "Lsativa_ViAE_chr8_003536",
+        "target": "Lsativa_ViAE_chr8_003528",
+        "link_type": "dotted_grey"
+      },
+      {
+        "source": "Lsativa_ViAE_chr8_003524",
+        "target": "Lser_Armenian999_Chr8_003412",
+        "link_type": "solid_red"
+      },
+      {
+        "source": "Lser_US96UC23_Chr8_003532",
+        "target": "Lsativa_ViAE_chr8_003541",
+        "link_type": "dotted_grey"
+      },
+      {
+        "source": "Lser_US96UC23_Chr8_003522",
+        "target": "Lsativa_Salinas_Chr8_003557",
+        "link_type": "solid_red"
+      },
+      {
+        "source": "Lser_Armenian999_Chr8_003416",
+        "target": "Lsativa_PI251246_Chr8_003482",
+        "link_type": "dotted_grey"
+      },
+      {
+        "source": "Lser_US96UC23_Chr8_003522",
+        "target": "Lser_US96UC23_Chr8_003536",
+        "link_type": "solid_red"
+      },
+      {
+        "source": "Lsativa_PI251246_Chr8_003477",
+        "target": "Lsativa_Salinas_Chr8_003557",
+        "link_type": "dotted_color"
+      },
+      {
+        "source": "Lsativa_PI251246_Chr8_003481",
+        "target": "Lsativa_ViAE_chr8_003524",
+        "link_type": "dotted_grey"
+      },
+      {
+        "source": "Lsativa_Salinas_Chr8_003577",
+        "target": "Lser_Armenian999_Chr8_003424",
+        "link_type": "dotted_color"
       },
       {
         "source": "Lser_US96UC23_Chr8_003521",
@@ -9974,124 +9774,869 @@
         "link_type": "dotted_color"
       },
       {
-        "source": "Lser_US96UC23_Chr8_003532",
-        "target": "Lser_US96UC23_Chr8_003522",
-        "link_type": "solid_color"
+        "source": "Lsativa_Salinas_Chr8_003567",
+        "target": "Lser_Armenian999_Chr8_003411",
+        "link_type": "dotted_grey"
       },
       {
-        "source": "Lser_US96UC23_Chr8_003525",
-        "target": "Lser_Armenian999_Chr8_003425",
-        "link_type": "solid_color"
+        "source": "Lsativa_ViAE_chr8_003536",
+        "target": "Lsativa_ViAE_chr8_003534",
+        "link_type": "solid_red"
       },
       {
-        "source": "Lsativa_PI251246_Chr8_003486",
-        "target": "Lsativa_Salinas_Chr8_003575",
+        "source": "Lsativa_Salinas_Chr8_003578",
+        "target": "Lsativa_ViAE_chr8_003541",
         "link_type": "dotted_color"
       },
       {
-        "source": "Lsativa_PI251246_Chr8_003484",
-        "target": "Lsativa_Salinas_Chr8_003573",
-        "link_type": "dotted_color"
+        "source": "Lsativa_ViAE_chr8_003521",
+        "target": "Lsativa_Salinas_Chr8_003553",
+        "link_type": "solid_red"
       },
       {
-        "source": "Lsativa_PI251246_Chr8_003486",
+        "source": "Lser_Armenian999_Chr8_003414",
+        "target": "Lsativa_ViAE_chr8_003524",
+        "link_type": "dotted_grey"
+      },
+      {
+        "source": "Lser_US96UC23_Chr8_003533",
         "target": "Lser_Armenian999_Chr8_003419",
-        "link_type": "solid_color"
+        "link_type": "dotted_color"
+      },
+      {
+        "source": "Lsativa_Salinas_Chr8_003575",
+        "target": "Lsativa_Salinas_Chr8_003553",
+        "link_type": "solid_red"
+      },
+      {
+        "source": "Lsativa_ViAE_chr8_003539",
+        "target": "Lsativa_Salinas_Chr8_003564",
+        "link_type": "dotted_grey"
+      },
+      {
+        "source": "Lsativa_ViAE_chr8_003539",
+        "target": "Lsativa_ViAE_chr8_003538",
+        "link_type": "dotted_grey"
+      },
+      {
+        "source": "Lsativa_Salinas_Chr8_003564",
+        "target": "Lser_US96UC23_Chr8_003522",
+        "link_type": "dotted_grey"
+      },
+      {
+        "source": "Lsativa_ViAE_chr8_003532",
+        "target": "Lsativa_ViAE_chr8_003521",
+        "link_type": "dotted_grey"
+      },
+      {
+        "source": "Lsativa_ViAE_chr8_003538",
+        "target": "Lser_Armenian999_Chr8_003411",
+        "link_type": "dotted_grey"
+      },
+      {
+        "source": "Lsativa_Salinas_Chr8_003572",
+        "target": "Lser_Armenian999_Chr8_003418",
+        "link_type": "solid_red"
+      },
+      {
+        "source": "Lser_Armenian999_Chr8_LOC111906314",
+        "target": "Lsativa_ViAE_chr8_003522",
+        "link_type": "dotted_grey"
+      },
+      {
+        "source": "Lsativa_PI251246_Chr8_003489",
+        "target": "Lser_US96UC23_Chr8_003521",
+        "link_type": "dotted_grey"
+      },
+      {
+        "source": "Lser_Armenian999_Chr8_003420",
+        "target": "Lsativa_PI251246_Chr8_003485",
+        "link_type": "dotted_color"
+      },
+      {
+        "source": "Lsativa_Salinas_Chr8_003559",
+        "target": "Lser_US96UC23_Chr8_003524",
+        "link_type": "dotted_grey"
+      },
+      {
+        "source": "Lser_US96UC23_Chr8_003535",
+        "target": "Lser_US96UC23_Chr8_003525",
+        "link_type": "dotted_grey"
+      },
+      {
+        "source": "Lsativa_ViAE_chr8_003538",
+        "target": "Lser_Armenian999_Chr8_003426",
+        "link_type": "dotted_grey"
+      },
+      {
+        "source": "Lsativa_ViAE_chr8_003521",
+        "target": "Lsativa_ViAE_chr8_003541",
+        "link_type": "dotted_color"
+      },
+      {
+        "source": "Lser_US96UC23_Chr8_003536",
+        "target": "Lsativa_ViAE_chr8_003538",
+        "link_type": "dotted_grey"
+      },
+      {
+        "source": "Lsativa_ViAE_chr8_003521",
+        "target": "Lser_US96UC23_Chr8_003521",
+        "link_type": "solid_red"
+      },
+      {
+        "source": "Lser_Armenian999_Chr8_003411",
+        "target": "Lsativa_PI251246_Chr8_003477",
+        "link_type": "dotted_color"
+      },
+      {
+        "source": "Lser_US96UC23_Chr8_003530",
+        "target": "Lsativa_Salinas_Chr8_003571",
+        "link_type": "dotted_color"
       },
       {
         "source": "Lsativa_Salinas_Chr8_003566",
-        "target": "Lsativa_PI251246_Chr8_003479",
+        "target": "Lsativa_ViAE_chr8_003536",
+        "link_type": "dotted_grey"
+      },
+      {
+        "source": "Lser_US96UC23_Chr8_003526",
+        "target": "Lsativa_ViAE_chr8_003536",
+        "link_type": "dotted_grey"
+      },
+      {
+        "source": "Lsativa_PI251246_Chr8_003481",
+        "target": "Lsativa_PI251246_Chr8_003482",
+        "link_type": "dotted_grey"
+      },
+      {
+        "source": "Lsativa_Salinas_Chr8_003572",
+        "target": "Lser_US96UC23_Chr8_003532",
+        "link_type": "solid_red"
+      },
+      {
+        "source": "Lsativa_Salinas_Chr8_003574",
+        "target": "Lser_US96UC23_Chr8_003534",
         "link_type": "dotted_color"
       },
       {
-        "source": "Lser_US96UC23_Chr8_003537",
-        "target": "Lser_US96UC23_Chr8_003538",
-        "link_type": "solid_color"
+        "source": "Lser_Armenian999_Chr8_003422",
+        "target": "Lser_US96UC23_Chr8_003535",
+        "link_type": "dotted_color"
       },
       {
-        "source": "Lsativa_PI251246_Chr8_003480",
-        "target": "Lsativa_PI251246_Chr8_003482",
-        "link_type": "solid_color"
+        "source": "Lser_Armenian999_Chr8_003410",
+        "target": "Lser_Armenian999_Chr8_003411",
+        "link_type": "dotted_grey"
       },
       {
-        "source": "Lsativa_ViAE_chr8_003524",
-        "target": "Lsativa_Salinas_Chr8_003559",
-        "link_type": "solid_color"
+        "source": "Lsativa_ViAE_chr8_003535",
+        "target": "Lser_US96UC23_Chr8_003525",
+        "link_type": "dotted_grey"
       },
       {
-        "source": "Lsativa_Salinas_Chr8_003553",
-        "target": "Lsativa_ViAE_chr8_003522",
-        "link_type": "solid_color"
+        "source": "Lsativa_Salinas_Chr8_003569",
+        "target": "Lser_Armenian999_Chr8_003414",
+        "link_type": "dotted_grey"
+      },
+      {
+        "source": "Lser_Armenian999_Chr8_003425",
+        "target": "Lsativa_ViAE_chr8_003521",
+        "link_type": "dotted_grey"
+      },
+      {
+        "source": "Lser_US96UC23_Chr8_003529",
+        "target": "Lsativa_PI251246_Chr8_003481",
+        "link_type": "dotted_color"
+      },
+      {
+        "source": "Lsativa_Salinas_Chr8_003559",
+        "target": "Lsativa_ViAE_chr8_003524",
+        "link_type": "solid_red"
+      },
+      {
+        "source": "Lser_US96UC23_Chr8_003526",
+        "target": "Lser_US96UC23_Chr8_003529",
+        "link_type": "dotted_grey"
+      },
+      {
+        "source": "Lser_US96UC23_Chr8_003536",
+        "target": "Lsativa_PI251246_Chr8_003479",
+        "link_type": "dotted_grey"
+      },
+      {
+        "source": "Lsativa_PI251246_Chr8_000683",
+        "target": "Lser_Armenian999_Chr8_003410",
+        "link_type": "dotted_grey"
+      },
+      {
+        "source": "Lsativa_PI251246_Chr8_003489",
+        "target": "Lsativa_PI251246_Chr8_003493",
+        "link_type": "dotted_grey"
+      },
+      {
+        "source": "Lser_Armenian999_Chr8_003423",
+        "target": "Lser_Armenian999_Chr8_003422",
+        "link_type": "solid_red"
       },
       {
         "source": "Lsativa_PI251246_Chr8_003476",
         "target": "Lsativa_PI251246_Chr8_003479",
-        "link_type": "solid_color"
-      },
-      {
-        "source": "Lser_Armenian999_Chr8_003426",
-        "target": "Lser_Armenian999_Chr8_003420",
-        "link_type": "solid_color"
-      },
-      {
-        "source": "Lsativa_Salinas_Chr8_003570",
-        "target": "Lsativa_Salinas_Chr8_003569",
-        "link_type": "solid_color"
-      },
-      {
-        "source": "Lser_US96UC23_Chr8_003524",
-        "target": "Lser_Armenian999_Chr8_003412",
-        "link_type": "dotted_color"
-      },
-      {
-        "source": "Lser_Armenian999_Chr8_003412",
-        "target": "Lsativa_ViAE_chr8_003526",
-        "link_type": "solid_color"
-      },
-      {
-        "source": "Lsativa_ViAE_chr8_003538",
-        "target": "Lsativa_ViAE_chr8_003541",
-        "link_type": "solid_color"
-      },
-      {
-        "source": "Lser_US96UC23_Chr8_003529",
-        "target": "Lsativa_ViAE_chr8_003528",
-        "link_type": "solid_color"
-      },
-      {
-        "source": "Lsativa_PI251246_Chr8_000683",
-        "target": "Lsativa_ViAE_chr8_003541",
-        "link_type": "solid_color"
+        "link_type": "dotted_grey"
       },
       {
         "source": "Lser_US96UC23_Chr8_003521",
-        "target": "Lser_US96UC23_Chr8_003525",
-        "link_type": "solid_color"
-      },
-      {
-        "source": "Lsativa_ViAE_chr8_003524",
-        "target": "Lsativa_Salinas_Chr8_003578",
-        "link_type": "solid_color"
-      },
-      {
-        "source": "Lser_Armenian999_Chr8_003418",
-        "target": "Lser_Armenian999_Chr8_003411",
-        "link_type": "solid_color"
-      },
-      {
-        "source": "Lser_Armenian999_Chr8_003426",
-        "target": "Lsativa_ViAE_chr8_003540",
+        "target": "Lsativa_Salinas_Chr8_003553",
         "link_type": "dotted_color"
       },
       {
-        "source": "Lser_US96UC23_Chr8_003529",
+        "source": "Lser_US96UC23_Chr8_003536",
+        "target": "Lser_Armenian999_Chr8_003424",
+        "link_type": "dotted_grey"
+      },
+      {
+        "source": "Lsativa_PI251246_Chr8_003482",
+        "target": "Lsativa_ViAE_chr8_003538",
+        "link_type": "dotted_grey"
+      },
+      {
+        "source": "Lsativa_PI251246_Chr8_003485",
+        "target": "Lser_US96UC23_Chr8_003534",
+        "link_type": "dotted_color"
+      },
+      {
+        "source": "Lsativa_ViAE_chr8_003538",
+        "target": "Lsativa_Salinas_Chr8_003577",
+        "link_type": "dotted_grey"
+      },
+      {
+        "source": "Lsativa_Salinas_Chr8_003578",
+        "target": "Lsativa_Salinas_Chr8_003573",
+        "link_type": "solid_red"
+      },
+      {
+        "source": "Lser_Armenian999_Chr8_003411",
+        "target": "Lser_US96UC23_Chr8_003522",
+        "link_type": "solid_red"
+      },
+      {
+        "source": "Lsativa_Salinas_Chr8_003569",
+        "target": "Lsativa_Salinas_Chr8_003570",
+        "link_type": "solid_red"
+      },
+      {
+        "source": "Lser_US96UC23_Chr8_003536",
+        "target": "Lsativa_Salinas_Chr8_003566",
+        "link_type": "dotted_grey"
+      },
+      {
+        "source": "Lser_US96UC23_Chr8_003537",
+        "target": "Lser_US96UC23_Chr8_003538",
+        "link_type": "solid_red"
+      },
+      {
+        "source": "Lsativa_ViAE_chr8_003540",
+        "target": "Lsativa_ViAE_chr8_003536",
+        "link_type": "solid_red"
+      },
+      {
+        "source": "Lser_US96UC23_Chr8_003533",
+        "target": "Lser_US96UC23_Chr8_003522",
+        "link_type": "dotted_grey"
+      },
+      {
+        "source": "Lsativa_ViAE_chr8_003526",
+        "target": "Lsativa_PI251246_Chr8_003478",
+        "link_type": "solid_red"
+      },
+      {
+        "source": "Lsativa_Salinas_Chr8_003570",
         "target": "Lser_Armenian999_Chr8_003414",
         "link_type": "dotted_color"
       },
       {
-        "source": "Lsativa_PI251246_Chr8_003483",
+        "source": "Lser_Armenian999_Chr8_003427",
+        "target": "Lser_Armenian999_Chr8_003411",
+        "link_type": "dotted_grey"
+      },
+      {
+        "source": "Lser_Armenian999_Chr8_003425",
+        "target": "Lsativa_PI251246_Chr8_003489",
+        "link_type": "dotted_color"
+      },
+      {
+        "source": "Lsativa_PI251246_Chr8_003480",
+        "target": "Lsativa_PI251246_Chr8_003477",
+        "link_type": "dotted_grey"
+      },
+      {
+        "source": "Lser_Armenian999_Chr8_003419",
+        "target": "Lsativa_ViAE_chr8_003528",
+        "link_type": "dotted_color"
+      },
+      {
+        "source": "Lser_Armenian999_Chr8_003423",
+        "target": "Lsativa_Salinas_Chr8_003578",
+        "link_type": "dotted_grey"
+      },
+      {
+        "source": "Lsativa_ViAE_chr8_003526",
+        "target": "Lser_US96UC23_Chr8_003524",
+        "link_type": "solid_red"
+      },
+      {
+        "source": "Lsativa_PI251246_Chr8_003478",
+        "target": "Lsativa_ViAE_chr8_003524",
+        "link_type": "solid_red"
+      },
+      {
+        "source": "Lsativa_PI251246_Chr8_003477",
+        "target": "Lsativa_PI251246_Chr8_003484",
+        "link_type": "solid_red"
+      },
+      {
+        "source": "Lser_Armenian999_Chr8_003411",
+        "target": "Lser_Armenian999_Chr8_003420",
+        "link_type": "solid_red"
+      },
+      {
+        "source": "Lser_Armenian999_Chr8_003415",
+        "target": "Lsativa_ViAE_chr8_003538",
+        "link_type": "dotted_grey"
+      },
+      {
+        "source": "Lser_Armenian999_Chr8_003424",
+        "target": "Lsativa_Salinas_Chr8_003577",
+        "link_type": "dotted_color"
+      },
+      {
+        "source": "Lser_US96UC23_Chr8_003535",
+        "target": "Lsativa_ViAE_chr8_003528",
+        "link_type": "dotted_grey"
+      },
+      {
+        "source": "Lsativa_PI251246_Chr8_003476",
+        "target": "Lsativa_ViAE_chr8_003541",
+        "link_type": "dotted_grey"
+      },
+      {
+        "source": "Lsativa_Salinas_Chr8_003566",
+        "target": "Lser_US96UC23_Chr8_003525",
+        "link_type": "dotted_color"
+      },
+      {
+        "source": "Lsativa_PI251246_Chr8_003478",
+        "target": "Lsativa_Salinas_Chr8_003578",
+        "link_type": "dotted_grey"
+      },
+      {
+        "source": "Lser_US96UC23_Chr8_003529",
+        "target": "Lsativa_ViAE_chr8_003541",
+        "link_type": "dotted_grey"
+      },
+      {
+        "source": "Lsativa_Salinas_Chr8_003575",
+        "target": "Lser_US96UC23_Chr8_003525",
+        "link_type": "dotted_grey"
+      },
+      {
+        "source": "Lsativa_PI251246_Chr8_003484",
+        "target": "Lser_US96UC23_Chr8_003533",
+        "link_type": "dotted_color"
+      },
+      {
+        "source": "Lsativa_PI251246_Chr8_003476",
+        "target": "Lsativa_PI251246_Chr8_003486",
+        "link_type": "dotted_grey"
+      },
+      {
+        "source": "Lsativa_Salinas_Chr8_003571",
+        "target": "Lsativa_ViAE_chr8_003538",
+        "link_type": "dotted_grey"
+      },
+      {
+        "source": "Lser_Armenian999_Chr8_003416",
+        "target": "Lser_Armenian999_Chr8_LOC111906314",
+        "link_type": "dotted_grey"
+      },
+      {
+        "source": "Lsativa_Salinas_Chr8_003569",
+        "target": "Lsativa_ViAE_chr8_003528",
+        "link_type": "dotted_grey"
+      },
+      {
+        "source": "Lsativa_Salinas_Chr8_003557",
+        "target": "Lsativa_PI251246_Chr8_003477",
+        "link_type": "dotted_color"
+      },
+      {
+        "source": "Lsativa_Salinas_Chr8_003559",
+        "target": "Lser_Armenian999_Chr8_003412",
+        "link_type": "dotted_grey"
+      },
+      {
+        "source": "Lser_US96UC23_Chr8_003534",
+        "target": "Lser_US96UC23_Chr8_003538",
+        "link_type": "dotted_grey"
+      },
+      {
+        "source": "Lser_Armenian999_Chr8_003419",
+        "target": "Lser_Armenian999_Chr8_003410",
+        "link_type": "dotted_grey"
+      },
+      {
+        "source": "Lsativa_PI251246_Chr8_003486",
+        "target": "Lsativa_PI251246_Chr8_003488",
+        "link_type": "solid_red"
+      },
+      {
+        "source": "Lsativa_PI251246_Chr8_003493",
+        "target": "Lser_US96UC23_Chr8_003534",
+        "link_type": "dotted_grey"
+      },
+      {
+        "source": "Lsativa_ViAE_chr8_003524",
+        "target": "Lsativa_PI251246_Chr8_003478",
+        "link_type": "solid_red"
+      },
+      {
+        "source": "Lsativa_ViAE_chr8_003526",
+        "target": "Lser_Armenian999_Chr8_003412",
+        "link_type": "solid_red"
+      },
+      {
+        "source": "Lsativa_Salinas_Chr8_003570",
+        "target": "Lsativa_ViAE_chr8_003524",
+        "link_type": "dotted_grey"
+      },
+      {
+        "source": "Lser_Armenian999_Chr8_003411",
+        "target": "Lsativa_ViAE_chr8_003522",
+        "link_type": "dotted_color"
+      },
+      {
+        "source": "Lsativa_PI251246_Chr8_003478",
+        "target": "Lser_US96UC23_Chr8_003524",
+        "link_type": "dotted_color"
+      },
+      {
+        "source": "Lsativa_PI251246_Chr8_003490",
+        "target": "Lsativa_Salinas_Chr8_003577",
+        "link_type": "dotted_color"
+      },
+      {
+        "source": "Lsativa_PI251246_Chr8_003476",
+        "target": "Lsativa_Salinas_Chr8_003553",
+        "link_type": "dotted_color"
+      },
+      {
+        "source": "Lsativa_Salinas_Chr8_003557",
+        "target": "Lsativa_Salinas_Chr8_003564",
+        "link_type": "dotted_color"
+      },
+      {
+        "source": "Lser_Armenian999_Chr8_003411",
+        "target": "Lsativa_Salinas_Chr8_003557",
+        "link_type": "dotted_color"
+      },
+      {
+        "source": "Lsativa_Salinas_Chr8_003575",
+        "target": "Lser_Armenian999_Chr8_003426",
+        "link_type": "dotted_grey"
+      },
+      {
+        "source": "Lser_Armenian999_Chr8_003412",
+        "target": "Lsativa_Salinas_Chr8_003573",
+        "link_type": "dotted_grey"
+      },
+      {
+        "source": "Lsativa_PI251246_Chr8_003481",
+        "target": "Lsativa_PI251246_Chr8_003493",
+        "link_type": "dotted_grey"
+      },
+      {
+        "source": "Lser_Armenian999_Chr8_003418",
+        "target": "Lsativa_ViAE_chr8_003522",
+        "link_type": "dotted_grey"
+      },
+      {
+        "source": "Lser_US96UC23_Chr8_003534",
+        "target": "Lsativa_ViAE_chr8_003532",
+        "link_type": "solid_red"
+      },
+      {
+        "source": "Lsativa_ViAE_chr8_003521",
+        "target": "Lser_Armenian999_Chr8_003410",
+        "link_type": "solid_red"
+      },
+      {
+        "source": "Lsativa_PI251246_Chr8_003490",
+        "target": "Lsativa_PI251246_Chr8_003488",
+        "link_type": "dotted_color"
+      },
+      {
+        "source": "Lser_US96UC23_Chr8_003526",
+        "target": "Lsativa_PI251246_Chr8_003480",
+        "link_type": "dotted_color"
+      },
+      {
+        "source": "Lsativa_ViAE_chr8_003522",
+        "target": "Lsativa_ViAE_chr8_003528",
+        "link_type": "dotted_grey"
+      },
+      {
+        "source": "Lser_Armenian999_Chr8_003422",
+        "target": "Lsativa_Salinas_Chr8_003557",
+        "link_type": "dotted_grey"
+      },
+      {
+        "source": "Lsativa_Salinas_Chr8_003566",
+        "target": "Lsativa_ViAE_chr8_003541",
+        "link_type": "dotted_grey"
+      },
+      {
+        "source": "Lser_US96UC23_Chr8_003525",
+        "target": "Lsativa_Salinas_Chr8_003566",
+        "link_type": "dotted_color"
+      },
+      {
+        "source": "Lsativa_ViAE_chr8_003539",
+        "target": "Lser_Armenian999_Chr8_003425",
+        "link_type": "solid_red"
+      },
+      {
+        "source": "Lser_Armenian999_Chr8_003423",
+        "target": "Lsativa_PI251246_Chr8_003481",
+        "link_type": "dotted_grey"
+      },
+      {
+        "source": "Lser_Armenian999_Chr8_003422",
+        "target": "Lsativa_Salinas_Chr8_003575",
+        "link_type": "dotted_grey"
+      },
+      {
+        "source": "Lsativa_ViAE_chr8_003522",
+        "target": "Lser_US96UC23_Chr8_003525",
+        "link_type": "dotted_grey"
+      },
+      {
+        "source": "Lsativa_ViAE_chr8_003535",
+        "target": "Lsativa_Salinas_Chr8_003575",
+        "link_type": "solid_red"
+      },
+      {
+        "source": "Lsativa_PI251246_Chr8_003489",
+        "target": "Lsativa_Salinas_Chr8_003564",
+        "link_type": "dotted_grey"
+      },
+      {
+        "source": "Lsativa_Salinas_Chr8_003574",
+        "target": "Lsativa_ViAE_chr8_003532",
+        "link_type": "solid_red"
+      },
+      {
+        "source": "Lser_US96UC23_Chr8_003524",
+        "target": "Lsativa_ViAE_chr8_003524",
+        "link_type": "solid_red"
+      },
+      {
+        "source": "Lser_Armenian999_Chr8_003422",
+        "target": "Lsativa_ViAE_chr8_003528",
+        "link_type": "dotted_grey"
+      },
+      {
+        "source": "Lsativa_PI251246_Chr8_003482",
+        "target": "Lser_US96UC23_Chr8_003530",
+        "link_type": "dotted_color"
+      },
+      {
+        "source": "Lser_US96UC23_Chr8_003525",
+        "target": "Lsativa_PI251246_Chr8_003479",
+        "link_type": "dotted_color"
+      },
+      {
+        "source": "Lsativa_ViAE_chr8_003522",
+        "target": "Lser_US96UC23_Chr8_003522",
+        "link_type": "solid_red"
+      },
+      {
+        "source": "Lsativa_Salinas_Chr8_003575",
+        "target": "Lser_US96UC23_Chr8_003538",
+        "link_type": "dotted_grey"
+      },
+      {
+        "source": "Lsativa_ViAE_chr8_003541",
+        "target": "Lsativa_PI251246_Chr8_003493",
+        "link_type": "dotted_color"
+      },
+      {
+        "source": "Lser_US96UC23_Chr8_003522",
+        "target": "Lsativa_ViAE_chr8_003522",
+        "link_type": "solid_red"
+      },
+      {
+        "source": "Lser_US96UC23_Chr8_003535",
+        "target": "Lsativa_ViAE_chr8_003540",
+        "link_type": "dotted_grey"
+      },
+      {
+        "source": "Lser_US96UC23_Chr8_003521",
+        "target": "Lsativa_ViAE_chr8_003538",
+        "link_type": "dotted_grey"
+      },
+      {
+        "source": "Lser_Armenian999_Chr8_003418",
+        "target": "Lser_Armenian999_Chr8_003410",
+        "link_type": "dotted_grey"
+      },
+      {
+        "source": "Lsativa_Salinas_Chr8_003570",
+        "target": "Lsativa_PI251246_Chr8_003481",
+        "link_type": "dotted_color"
+      },
+      {
+        "source": "Lsativa_Salinas_Chr8_003570",
+        "target": "Lsativa_Salinas_Chr8_003569",
+        "link_type": "solid_red"
+      },
+      {
+        "source": "Lser_Armenian999_Chr8_003410",
+        "target": "Lsativa_ViAE_chr8_003538",
+        "link_type": "dotted_grey"
+      },
+      {
+        "source": "Lsativa_Salinas_Chr8_003553",
+        "target": "Lsativa_Salinas_Chr8_003575",
+        "link_type": "solid_red"
+      },
+      {
+        "source": "Lsativa_ViAE_chr8_003538",
+        "target": "Lsativa_PI251246_Chr8_003484",
+        "link_type": "dotted_grey"
+      },
+      {
+        "source": "Lsativa_PI251246_Chr8_003488",
+        "target": "Lser_US96UC23_Chr8_003537",
+        "link_type": "dotted_color"
+      },
+      {
+        "source": "Lsativa_ViAE_chr8_003524",
+        "target": "Lser_US96UC23_Chr8_003524",
+        "link_type": "solid_red"
+      },
+      {
+        "source": "Lser_US96UC23_Chr8_003525",
+        "target": "Lser_US96UC23_Chr8_003522",
+        "link_type": "dotted_grey"
+      },
+      {
+        "source": "Lser_Armenian999_Chr8_003420",
+        "target": "Lser_Armenian999_Chr8_003425",
+        "link_type": "dotted_grey"
+      },
+      {
+        "source": "Lser_US96UC23_Chr8_003521",
         "target": "Lsativa_ViAE_chr8_003521",
-        "link_type": "solid_color"
+        "link_type": "solid_red"
+      },
+      {
+        "source": "Lsativa_ViAE_chr8_003524",
+        "target": "Lsativa_ViAE_chr8_003522",
+        "link_type": "dotted_grey"
+      },
+      {
+        "source": "Lsativa_PI251246_Chr8_000683",
+        "target": "Lsativa_PI251246_Chr8_003477",
+        "link_type": "dotted_grey"
+      },
+      {
+        "source": "Lser_US96UC23_Chr8_003526",
+        "target": "Lsativa_ViAE_chr8_003522",
+        "link_type": "dotted_grey"
+      },
+      {
+        "source": "Lsativa_PI251246_Chr8_003480",
+        "target": "Lsativa_PI251246_Chr8_003481",
+        "link_type": "dotted_grey"
+      },
+      {
+        "source": "Lsativa_Salinas_Chr8_003553",
+        "target": "Lsativa_ViAE_chr8_003522",
+        "link_type": "dotted_grey"
+      },
+      {
+        "source": "Lsativa_Salinas_Chr8_003572",
+        "target": "Lsativa_Salinas_Chr8_003566",
+        "link_type": "dotted_grey"
+      },
+      {
+        "source": "Lsativa_Salinas_Chr8_003575",
+        "target": "Lsativa_PI251246_Chr8_003486",
+        "link_type": "dotted_color"
+      },
+      {
+        "source": "Lsativa_PI251246_Chr8_003493",
+        "target": "Lsativa_PI251246_Chr8_003477",
+        "link_type": "dotted_grey"
+      },
+      {
+        "source": "Lsativa_ViAE_chr8_003541",
+        "target": "Lsativa_ViAE_chr8_003522",
+        "link_type": "solid_red"
+      },
+      {
+        "source": "Lser_Armenian999_Chr8_003423",
+        "target": "Lser_US96UC23_Chr8_003526",
+        "link_type": "dotted_grey"
+      },
+      {
+        "source": "Lser_Armenian999_Chr8_003414",
+        "target": "Lser_US96UC23_Chr8_003529",
+        "link_type": "dotted_color"
+      },
+      {
+        "source": "Lsativa_ViAE_chr8_003540",
+        "target": "Lser_US96UC23_Chr8_003538",
+        "link_type": "solid_red"
+      },
+      {
+        "source": "Lsativa_Salinas_Chr8_003573",
+        "target": "Lsativa_ViAE_chr8_003528",
+        "link_type": "dotted_color"
+      },
+      {
+        "source": "Lsativa_PI251246_Chr8_003481",
+        "target": "Lser_Armenian999_Chr8_003414",
+        "link_type": "dotted_color"
+      },
+      {
+        "source": "Lsativa_Salinas_Chr8_003566",
+        "target": "Lser_Armenian999_Chr8_003411",
+        "link_type": "dotted_grey"
+      },
+      {
+        "source": "Lsativa_Salinas_Chr8_003559",
+        "target": "Lsativa_PI251246_Chr8_003478",
+        "link_type": "dotted_grey"
+      },
+      {
+        "source": "Lser_US96UC23_Chr8_003524",
+        "target": "Lser_US96UC23_Chr8_003521",
+        "link_type": "dotted_grey"
+      },
+      {
+        "source": "Lsativa_Salinas_Chr8_003571",
+        "target": "Lser_US96UC23_Chr8_003530",
+        "link_type": "dotted_color"
+      },
+      {
+        "source": "Lser_US96UC23_Chr8_003532",
+        "target": "Lser_US96UC23_Chr8_003522",
+        "link_type": "dotted_grey"
+      },
+      {
+        "source": "Lsativa_PI251246_Chr8_003486",
+        "target": "Lsativa_ViAE_chr8_003522",
+        "link_type": "dotted_grey"
+      },
+      {
+        "source": "Lser_US96UC23_Chr8_003524",
+        "target": "Lser_US96UC23_Chr8_003533",
+        "link_type": "dotted_grey"
+      },
+      {
+        "source": "Lser_US96UC23_Chr8_003533",
+        "target": "Lsativa_ViAE_chr8_003541",
+        "link_type": "dotted_grey"
+      },
+      {
+        "source": "Lser_Armenian999_Chr8_003423",
+        "target": "Lsativa_ViAE_chr8_003541",
+        "link_type": "dotted_grey"
+      },
+      {
+        "source": "Lser_Armenian999_Chr8_003418",
+        "target": "Lsativa_PI251246_Chr8_003483",
+        "link_type": "solid_red"
+      },
+      {
+        "source": "Lsativa_Salinas_Chr8_003577",
+        "target": "Lsativa_Salinas_Chr8_003575",
+        "link_type": "solid_red"
+      },
+      {
+        "source": "Lsativa_Salinas_Chr8_003571",
+        "target": "Lsativa_PI251246_Chr8_003482",
+        "link_type": "dotted_color"
+      },
+      {
+        "source": "Lsativa_PI251246_Chr8_003481",
+        "target": "Lsativa_Salinas_Chr8_003570",
+        "link_type": "dotted_color"
+      },
+      {
+        "source": "Lser_Armenian999_Chr8_003423",
+        "target": "Lsativa_ViAE_chr8_003524",
+        "link_type": "dotted_grey"
+      },
+      {
+        "source": "Lsativa_PI251246_Chr8_003486",
+        "target": "Lser_Armenian999_Chr8_003419",
+        "link_type": "dotted_grey"
+      },
+      {
+        "source": "Lser_US96UC23_Chr8_003538",
+        "target": "Lsativa_Salinas_Chr8_003577",
+        "link_type": "dotted_grey"
+      },
+      {
+        "source": "Lser_US96UC23_Chr8_003535",
+        "target": "Lsativa_PI251246_Chr8_003490",
+        "link_type": "dotted_grey"
+      },
+      {
+        "source": "Lsativa_PI251246_Chr8_003482",
+        "target": "Lsativa_PI251246_Chr8_003490",
+        "link_type": "dotted_grey"
+      },
+      {
+        "source": "Lser_Armenian999_Chr8_003412",
+        "target": "Lsativa_Salinas_Chr8_003578",
+        "link_type": "dotted_grey"
+      },
+      {
+        "source": "Lsativa_PI251246_Chr8_003486",
+        "target": "Lser_Armenian999_Chr8_003424",
+        "link_type": "dotted_grey"
+      },
+      {
+        "source": "Lsativa_PI251246_Chr8_003489",
+        "target": "Lsativa_ViAE_chr8_003524",
+        "link_type": "dotted_grey"
+      },
+      {
+        "source": "Lser_Armenian999_Chr8_LOC111906314",
+        "target": "Lser_US96UC23_Chr8_003521",
+        "link_type": "dotted_grey"
+      },
+      {
+        "source": "Lser_US96UC23_Chr8_003524",
+        "target": "Lsativa_Salinas_Chr8_003578",
+        "link_type": "dotted_grey"
+      },
+      {
+        "source": "Lser_US96UC23_Chr8_003535",
+        "target": "Lser_US96UC23_Chr8_003522",
+        "link_type": "dotted_grey"
+      },
+      {
+        "source": "Lsativa_Salinas_Chr8_003553",
+        "target": "Lsativa_ViAE_chr8_003521",
+        "link_type": "solid_red"
+      },
+      {
+        "source": "Lsativa_Salinas_Chr8_003575",
+        "target": "Lsativa_Salinas_Chr8_003577",
+        "link_type": "solid_red"
       },
       {
         "source": "Lser_Armenian999_Chr8_003420",
@@ -10099,39 +10644,64 @@
         "link_type": "dotted_color"
       },
       {
-        "source": "Lsativa_ViAE_chr8_003535",
-        "target": "Lser_US96UC23_Chr8_003525",
-        "link_type": "solid_color"
+        "source": "Lser_Armenian999_Chr8_LOC111906314",
+        "target": "Lser_Armenian999_Chr8_003410",
+        "link_type": "dotted_grey"
       },
       {
-        "source": "Lsativa_PI251246_Chr8_003479",
-        "target": "Lsativa_ViAE_chr8_003536",
-        "link_type": "solid_color"
-      },
-      {
-        "source": "Lsativa_PI251246_Chr8_003489",
-        "target": "Lser_US96UC23_Chr8_003521",
-        "link_type": "solid_color"
-      },
-      {
-        "source": "Lsativa_PI251246_Chr8_003493",
-        "target": "Lsativa_PI251246_Chr8_003477",
-        "link_type": "solid_color"
-      },
-      {
-        "source": "Lsativa_ViAE_chr8_003536",
-        "target": "Lser_Armenian999_Chr8_003424",
+        "source": "Lsativa_PI251246_Chr8_003477",
+        "target": "Lsativa_ViAE_chr8_003522",
         "link_type": "dotted_color"
       },
       {
-        "source": "Lsativa_Salinas_Chr8_003574",
-        "target": "Lsativa_ViAE_chr8_003532",
-        "link_type": "solid_color"
+        "source": "Lsativa_ViAE_chr8_003534",
+        "target": "Lsativa_ViAE_chr8_003536",
+        "link_type": "solid_red"
       },
       {
-        "source": "Lser_US96UC23_Chr8_003536",
-        "target": "Lser_Armenian999_Chr8_003424",
-        "link_type": "solid_color"
+        "source": "Lser_Armenian999_Chr8_003418",
+        "target": "Lser_Armenian999_Chr8_003411",
+        "link_type": "dotted_grey"
+      },
+      {
+        "source": "Lsativa_Salinas_Chr8_003573",
+        "target": "Lser_Armenian999_Chr8_003419",
+        "link_type": "dotted_color"
+      },
+      {
+        "source": "Lsativa_PI251246_Chr8_003483",
+        "target": "Lsativa_ViAE_chr8_003521",
+        "link_type": "dotted_grey"
+      },
+      {
+        "source": "Lsativa_ViAE_chr8_003534",
+        "target": "Lsativa_PI251246_Chr8_003488",
+        "link_type": "dotted_grey"
+      },
+      {
+        "source": "Lsativa_Salinas_Chr8_003577",
+        "target": "Lsativa_PI251246_Chr8_003488",
+        "link_type": "dotted_color"
+      },
+      {
+        "source": "Lser_Armenian999_Chr8_LOC111906314",
+        "target": "Lsativa_PI251246_Chr8_003477",
+        "link_type": "dotted_grey"
+      },
+      {
+        "source": "Lser_Armenian999_Chr8_003420",
+        "target": "Lser_Armenian999_Chr8_003411",
+        "link_type": "solid_red"
+      },
+      {
+        "source": "Lser_Armenian999_Chr8_003420",
+        "target": "Lsativa_ViAE_chr8_003541",
+        "link_type": "dotted_grey"
+      },
+      {
+        "source": "Lser_Armenian999_Chr8_003412",
+        "target": "Lsativa_Salinas_Chr8_003566",
+        "link_type": "dotted_grey"
       },
       {
         "source": "Lser_Armenian999_Chr8_003419",
@@ -10139,69 +10709,249 @@
         "link_type": "dotted_color"
       },
       {
-        "source": "Lser_US96UC23_Chr8_003526",
-        "target": "Lsativa_ViAE_chr8_003528",
-        "link_type": "solid_color"
+        "source": "Lsativa_PI251246_Chr8_003482",
+        "target": "Lsativa_PI251246_Chr8_003480",
+        "link_type": "solid_red"
       },
       {
-        "source": "Lser_US96UC23_Chr8_003522",
-        "target": "Lsativa_PI251246_Chr8_003477",
-        "link_type": "solid_color"
+        "source": "Lsativa_PI251246_Chr8_003485",
+        "target": "Lser_Armenian999_Chr8_003420",
+        "link_type": "dotted_color"
       },
       {
-        "source": "Lsativa_Salinas_Chr8_003559",
-        "target": "Lser_Armenian999_Chr8_003412",
-        "link_type": "solid_color"
-      },
-      {
-        "source": "Lsativa_ViAE_chr8_003521",
-        "target": "Lsativa_Salinas_Chr8_003553",
-        "link_type": "solid_color"
-      },
-      {
-        "source": "Lsativa_Salinas_Chr8_003567",
-        "target": "Lsativa_ViAE_chr8_003522",
-        "link_type": "solid_color"
-      },
-      {
-        "source": "Lser_US96UC23_Chr8_003535",
-        "target": "Lsativa_PI251246_Chr8_003477",
-        "link_type": "solid_color"
-      },
-      {
-        "source": "Lsativa_PI251246_Chr8_000683",
-        "target": "Lsativa_Salinas_Chr8_003553",
-        "link_type": "solid_color"
-      },
-      {
-        "source": "Lsativa_Salinas_Chr8_003573",
-        "target": "Lsativa_ViAE_chr8_003541",
-        "link_type": "solid_color"
-      },
-      {
-        "source": "Lsativa_ViAE_chr8_003528",
-        "target": "Lser_Armenian999_Chr8_003419",
+        "source": "Lser_US96UC23_Chr8_003533",
+        "target": "Lsativa_Salinas_Chr8_003573",
         "link_type": "dotted_color"
       },
       {
         "source": "Lser_US96UC23_Chr8_003532",
-        "target": "Lsativa_ViAE_chr8_003541",
-        "link_type": "solid_color"
+        "target": "Lsativa_Salinas_Chr8_003572",
+        "link_type": "solid_red"
       },
       {
-        "source": "Lsativa_PI251246_Chr8_000683",
-        "target": "Lser_US96UC23_Chr8_003521",
-        "link_type": "solid_color"
+        "source": "Lser_US96UC23_Chr8_003534",
+        "target": "Lsativa_PI251246_Chr8_003485",
+        "link_type": "dotted_color"
+      },
+      {
+        "source": "Lsativa_PI251246_Chr8_003493",
+        "target": "Lsativa_PI251246_Chr8_003484",
+        "link_type": "dotted_grey"
+      },
+      {
+        "source": "Lser_Armenian999_Chr8_003427",
+        "target": "Lsativa_PI251246_Chr8_003493",
+        "link_type": "dotted_color"
+      },
+      {
+        "source": "Lsativa_Salinas_Chr8_003564",
+        "target": "Lser_Armenian999_Chr8_003411",
+        "link_type": "dotted_color"
+      },
+      {
+        "source": "Lser_Armenian999_Chr8_003424",
+        "target": "Lser_Armenian999_Chr8_003426",
+        "link_type": "dotted_color"
+      },
+      {
+        "source": "Lser_US96UC23_Chr8_003526",
+        "target": "Lsativa_Salinas_Chr8_003569",
+        "link_type": "solid_red"
+      },
+      {
+        "source": "Lsativa_PI251246_Chr8_003484",
+        "target": "Lsativa_PI251246_Chr8_003477",
+        "link_type": "solid_red"
+      },
+      {
+        "source": "Lsativa_Salinas_Chr8_003564",
+        "target": "Lser_US96UC23_Chr8_003533",
+        "link_type": "dotted_grey"
+      },
+      {
+        "source": "Lser_Armenian999_Chr8_003418",
+        "target": "Lsativa_ViAE_chr8_003541",
+        "link_type": "dotted_grey"
+      },
+      {
+        "source": "Lsativa_PI251246_Chr8_003477",
+        "target": "Lser_Armenian999_Chr8_003411",
+        "link_type": "dotted_color"
+      },
+      {
+        "source": "Lser_US96UC23_Chr8_003537",
+        "target": "Lsativa_ViAE_chr8_003536",
+        "link_type": "dotted_color"
+      },
+      {
+        "source": "Lser_US96UC23_Chr8_003537",
+        "target": "Lsativa_Salinas_Chr8_003577",
+        "link_type": "dotted_color"
+      },
+      {
+        "source": "Lsativa_PI251246_Chr8_003483",
+        "target": "Lsativa_PI251246_Chr8_003479",
+        "link_type": "dotted_grey"
+      },
+      {
+        "source": "Lsativa_PI251246_Chr8_003490",
+        "target": "Lser_Armenian999_Chr8_003426",
+        "link_type": "dotted_color"
+      },
+      {
+        "source": "Lsativa_PI251246_Chr8_003479",
+        "target": "Lsativa_PI251246_Chr8_003484",
+        "link_type": "dotted_grey"
+      },
+      {
+        "source": "Lser_US96UC23_Chr8_003536",
+        "target": "Lser_Armenian999_Chr8_003411",
+        "link_type": "dotted_grey"
       },
       {
         "source": "Lser_US96UC23_Chr8_003538",
-        "target": "Lsativa_PI251246_Chr8_003490",
-        "link_type": "solid_color"
+        "target": "Lser_US96UC23_Chr8_003537",
+        "link_type": "solid_red"
       },
       {
-        "source": "Lser_US96UC23_Chr8_003528",
-        "target": "Lser_Armenian999_Chr8_LOC111906314",
-        "link_type": "solid_color"
+        "source": "Lsativa_Salinas_Chr8_003575",
+        "target": "Lser_US96UC23_Chr8_003537",
+        "link_type": "dotted_grey"
+      },
+      {
+        "source": "Lsativa_Salinas_Chr8_003570",
+        "target": "Lsativa_ViAE_chr8_003541",
+        "link_type": "dotted_grey"
+      },
+      {
+        "source": "Lsativa_PI251246_Chr8_003484",
+        "target": "Lsativa_PI251246_Chr8_003476",
+        "link_type": "solid_red"
+      },
+      {
+        "source": "Lser_Armenian999_Chr8_003427",
+        "target": "Lsativa_ViAE_chr8_003541",
+        "link_type": "dotted_color"
+      },
+      {
+        "source": "Lsativa_PI251246_Chr8_003489",
+        "target": "Lser_US96UC23_Chr8_003522",
+        "link_type": "dotted_grey"
+      },
+      {
+        "source": "Lsativa_PI251246_Chr8_003479",
+        "target": "Lser_Armenian999_Chr8_003426",
+        "link_type": "dotted_grey"
+      },
+      {
+        "source": "Lser_Armenian999_Chr8_LOC111906314",
+        "target": "Lsativa_Salinas_Chr8_003571",
+        "link_type": "solid_red"
+      },
+      {
+        "source": "Lsativa_PI251246_Chr8_003477",
+        "target": "Lsativa_PI251246_Chr8_003489",
+        "link_type": "solid_red"
+      },
+      {
+        "source": "Lsativa_Salinas_Chr8_003575",
+        "target": "Lsativa_ViAE_chr8_003534",
+        "link_type": "solid_red"
+      },
+      {
+        "source": "Lser_Armenian999_Chr8_003422",
+        "target": "Lsativa_PI251246_Chr8_003477",
+        "link_type": "dotted_grey"
+      },
+      {
+        "source": "Lsativa_ViAE_chr8_003538",
+        "target": "Lsativa_ViAE_chr8_003536",
+        "link_type": "dotted_grey"
+      },
+      {
+        "source": "Lser_Armenian999_Chr8_003414",
+        "target": "Lsativa_ViAE_chr8_003528",
+        "link_type": "dotted_grey"
+      },
+      {
+        "source": "Lsativa_PI251246_Chr8_003485",
+        "target": "Lsativa_PI251246_Chr8_003493",
+        "link_type": "solid_red"
+      },
+      {
+        "source": "Lsativa_PI251246_Chr8_003479",
+        "target": "Lsativa_PI251246_Chr8_003477",
+        "link_type": "dotted_grey"
+      },
+      {
+        "source": "Lser_Armenian999_Chr8_003426",
+        "target": "Lsativa_PI251246_Chr8_003490",
+        "link_type": "dotted_color"
+      },
+      {
+        "source": "Lsativa_ViAE_chr8_003521",
+        "target": "Lsativa_Salinas_Chr8_003573",
+        "link_type": "dotted_grey"
+      },
+      {
+        "source": "Lser_Armenian999_Chr8_003410",
+        "target": "Lsativa_PI251246_Chr8_003476",
+        "link_type": "dotted_color"
+      },
+      {
+        "source": "Lsativa_Salinas_Chr8_003557",
+        "target": "Lsativa_Salinas_Chr8_003578",
+        "link_type": "solid_red"
+      },
+      {
+        "source": "Lsativa_PI251246_Chr8_003479",
+        "target": "Lser_Armenian999_Chr8_003411",
+        "link_type": "dotted_grey"
+      },
+      {
+        "source": "Lsativa_ViAE_chr8_003539",
+        "target": "Lser_US96UC23_Chr8_003522",
+        "link_type": "dotted_grey"
+      },
+      {
+        "source": "Lsativa_ViAE_chr8_003540",
+        "target": "Lser_US96UC23_Chr8_003537",
+        "link_type": "dotted_grey"
+      },
+      {
+        "source": "Lsativa_PI251246_Chr8_003490",
+        "target": "Lser_US96UC23_Chr8_003537",
+        "link_type": "dotted_grey"
+      },
+      {
+        "source": "Lsativa_Salinas_Chr8_003578",
+        "target": "Lsativa_PI251246_Chr8_003477",
+        "link_type": "dotted_grey"
+      },
+      {
+        "source": "Lsativa_PI251246_Chr8_000683",
+        "target": "Lsativa_PI251246_Chr8_003476",
+        "link_type": "dotted_grey"
+      },
+      {
+        "source": "Lser_Armenian999_Chr8_003422",
+        "target": "Lsativa_ViAE_chr8_003540",
+        "link_type": "dotted_grey"
+      },
+      {
+        "source": "Lser_US96UC23_Chr8_003530",
+        "target": "Lser_Armenian999_Chr8_003415",
+        "link_type": "solid_red"
+      },
+      {
+        "source": "Lsativa_PI251246_Chr8_003479",
+        "target": "Lsativa_Salinas_Chr8_003566",
+        "link_type": "dotted_color"
+      },
+      {
+        "source": "Lser_Armenian999_Chr8_003422",
+        "target": "Lser_Armenian999_Chr8_003426",
+        "link_type": "dotted_grey"
       },
       {
         "source": "Lsativa_ViAE_chr8_003540",
@@ -10209,169 +10959,194 @@
         "link_type": "dotted_color"
       },
       {
-        "source": "Lsativa_PI251246_Chr8_003486",
-        "target": "Lsativa_PI251246_Chr8_003490",
-        "link_type": "solid_color"
+        "source": "Lsativa_ViAE_chr8_003528",
+        "target": "Lsativa_ViAE_chr8_003524",
+        "link_type": "dotted_grey"
       },
       {
-        "source": "Lsativa_PI251246_Chr8_003486",
-        "target": "Lsativa_ViAE_chr8_003534",
-        "link_type": "solid_color"
+        "source": "Lsativa_PI251246_Chr8_003483",
+        "target": "Lser_US96UC23_Chr8_003532",
+        "link_type": "solid_red"
       },
       {
-        "source": "Lser_Armenian999_Chr8_003423",
-        "target": "Lser_US96UC23_Chr8_003526",
-        "link_type": "solid_color"
+        "source": "Lser_US96UC23_Chr8_003525",
+        "target": "Lsativa_ViAE_chr8_003540",
+        "link_type": "dotted_grey"
       },
       {
-        "source": "Lsativa_Salinas_Chr8_003575",
-        "target": "Lsativa_ViAE_chr8_003522",
-        "link_type": "solid_color"
+        "source": "Lsativa_Salinas_Chr8_003566",
+        "target": "Lser_Armenian999_Chr8_003426",
+        "link_type": "dotted_grey"
+      },
+      {
+        "source": "Lser_US96UC23_Chr8_003537",
+        "target": "Lser_Armenian999_Chr8_003424",
+        "link_type": "dotted_color"
+      },
+      {
+        "source": "Lser_Armenian999_Chr8_003411",
+        "target": "Lser_Armenian999_Chr8_003425",
+        "link_type": "solid_red"
+      },
+      {
+        "source": "Lser_US96UC23_Chr8_003521",
+        "target": "Lsativa_ViAE_chr8_003541",
+        "link_type": "dotted_grey"
+      },
+      {
+        "source": "Lser_US96UC23_Chr8_003525",
+        "target": "Lser_Armenian999_Chr8_003426",
+        "link_type": "dotted_grey"
+      },
+      {
+        "source": "Lser_Armenian999_Chr8_003424",
+        "target": "Lsativa_PI251246_Chr8_003488",
+        "link_type": "dotted_color"
+      },
+      {
+        "source": "Lsativa_Salinas_Chr8_003570",
+        "target": "Lsativa_Salinas_Chr8_003557",
+        "link_type": "dotted_grey"
+      },
+      {
+        "source": "Lser_US96UC23_Chr8_003522",
+        "target": "Lsativa_PI251246_Chr8_003477",
+        "link_type": "solid_red"
+      },
+      {
+        "source": "Lser_US96UC23_Chr8_003530",
+        "target": "Lser_US96UC23_Chr8_003528",
+        "link_type": "solid_red"
+      },
+      {
+        "source": "Lser_US96UC23_Chr8_003525",
+        "target": "Lser_Armenian999_Chr8_003411",
+        "link_type": "dotted_grey"
       },
       {
         "source": "Lser_Armenian999_Chr8_003425",
-        "target": "Lser_Armenian999_Chr8_003411",
-        "link_type": "solid_color"
+        "target": "Lser_US96UC23_Chr8_003521",
+        "link_type": "dotted_grey"
       },
       {
-        "source": "Lsativa_Salinas_Chr8_003559",
-        "target": "Lser_US96UC23_Chr8_003524",
-        "link_type": "solid_color"
+        "source": "Lser_US96UC23_Chr8_003530",
+        "target": "Lser_Armenian999_Chr8_LOC111906314",
+        "link_type": "solid_red"
+      },
+      {
+        "source": "Lsativa_PI251246_Chr8_003477",
+        "target": "Lser_US96UC23_Chr8_003522",
+        "link_type": "solid_red"
       },
       {
         "source": "Lser_Armenian999_Chr8_003426",
+        "target": "Lser_US96UC23_Chr8_003537",
+        "link_type": "dotted_grey"
+      },
+      {
+        "source": "Lser_Armenian999_Chr8_003414",
+        "target": "Lser_Armenian999_Chr8_003422",
+        "link_type": "dotted_grey"
+      },
+      {
+        "source": "Lsativa_PI251246_Chr8_003476",
+        "target": "Lsativa_ViAE_chr8_003521",
+        "link_type": "solid_red"
+      },
+      {
+        "source": "Lser_Armenian999_Chr8_003420",
+        "target": "Lsativa_ViAE_chr8_003532",
+        "link_type": "solid_red"
+      },
+      {
+        "source": "Lsativa_PI251246_Chr8_003489",
+        "target": "Lsativa_ViAE_chr8_003521",
+        "link_type": "dotted_grey"
+      },
+      {
+        "source": "Lsativa_Salinas_Chr8_003569",
+        "target": "Lsativa_PI251246_Chr8_003480",
+        "link_type": "solid_red"
+      },
+      {
+        "source": "Lser_Armenian999_Chr8_003410",
+        "target": "Lsativa_Salinas_Chr8_003553",
+        "link_type": "dotted_color"
+      },
+      {
+        "source": "Lser_US96UC23_Chr8_003522",
+        "target": "Lser_US96UC23_Chr8_003534",
+        "link_type": "solid_red"
+      },
+      {
+        "source": "Lsativa_PI251246_Chr8_003476",
+        "target": "Lser_US96UC23_Chr8_003521",
+        "link_type": "dotted_color"
+      },
+      {
+        "source": "Lsativa_Salinas_Chr8_003571",
+        "target": "Lser_Armenian999_Chr8_003415",
+        "link_type": "solid_red"
+      },
+      {
+        "source": "Lsativa_Salinas_Chr8_003573",
+        "target": "Lsativa_Salinas_Chr8_003578",
+        "link_type": "solid_red"
+      },
+      {
+        "source": "Lser_US96UC23_Chr8_003535",
+        "target": "Lsativa_PI251246_Chr8_003477",
+        "link_type": "dotted_grey"
+      },
+      {
+        "source": "Lsativa_ViAE_chr8_003540",
         "target": "Lsativa_Salinas_Chr8_003577",
         "link_type": "dotted_color"
       },
       {
-        "source": "Lsativa_ViAE_chr8_003524",
-        "target": "Lsativa_PI251246_Chr8_003478",
-        "link_type": "solid_color"
+        "source": "Lsativa_ViAE_chr8_003532",
+        "target": "Lser_Armenian999_Chr8_003420",
+        "link_type": "solid_red"
       },
       {
-        "source": "Lsativa_PI251246_Chr8_003485",
-        "target": "Lser_US96UC23_Chr8_003534",
+        "source": "Lsativa_Salinas_Chr8_003558",
+        "target": "Lsativa_ViAE_chr8_003531",
+        "link_type": "solid_red"
+      },
+      {
+        "source": "Lsativa_PI251246_Chr8_003486",
+        "target": "Lsativa_ViAE_chr8_003534",
+        "link_type": "dotted_grey"
+      },
+      {
+        "source": "Lsativa_ViAE_chr8_003541",
+        "target": "Lsativa_ViAE_chr8_003521",
+        "link_type": "dotted_color"
+      },
+      {
+        "source": "Lsativa_ViAE_chr8_003522",
+        "target": "Lser_Armenian999_Chr8_003411",
+        "link_type": "dotted_color"
+      },
+      {
+        "source": "Lser_US96UC23_Chr8_003534",
+        "target": "Lsativa_ViAE_chr8_003541",
+        "link_type": "dotted_grey"
+      },
+      {
+        "source": "Lser_US96UC23_Chr8_003535",
+        "target": "Lser_Armenian999_Chr8_003422",
         "link_type": "dotted_color"
       },
       {
         "source": "Lsativa_ViAE_chr8_003535",
         "target": "Lser_Armenian999_Chr8_003416",
-        "link_type": "solid_color"
+        "link_type": "solid_red"
       },
       {
-        "source": "Lsativa_Salinas_Chr8_003567",
-        "target": "Lser_Armenian999_Chr8_003411",
-        "link_type": "solid_color"
-      },
-      {
-        "source": "Lsativa_PI251246_Chr8_003479",
-        "target": "Lsativa_PI251246_Chr8_003477",
-        "link_type": "solid_color"
-      },
-      {
-        "source": "Lser_Armenian999_Chr8_003418",
-        "target": "Lsativa_PI251246_Chr8_003483",
-        "link_type": "solid_color"
-      },
-      {
-        "source": "Lser_US96UC23_Chr8_003535",
-        "target": "Lsativa_PI251246_Chr8_003490",
-        "link_type": "solid_color"
-      },
-      {
-        "source": "Lser_US96UC23_Chr8_003528",
-        "target": "Lser_Armenian999_Chr8_003415",
-        "link_type": "solid_color"
-      },
-      {
-        "source": "Lser_US96UC23_Chr8_003524",
-        "target": "Lsativa_Salinas_Chr8_003578",
-        "link_type": "solid_color"
-      },
-      {
-        "source": "Lser_Armenian999_Chr8_003410",
-        "target": "Lsativa_Salinas_Chr8_003553",
-        "link_type": "dotted_color"
-      },
-      {
-        "source": "Lsativa_PI251246_Chr8_003476",
-        "target": "Lsativa_Salinas_Chr8_003553",
-        "link_type": "dotted_color"
-      },
-      {
-        "source": "Lser_US96UC23_Chr8_003526",
-        "target": "Lsativa_ViAE_chr8_003536",
-        "link_type": "solid_color"
-      },
-      {
-        "source": "Lser_Armenian999_Chr8_003423",
-        "target": "Lsativa_PI251246_Chr8_003477",
-        "link_type": "solid_color"
-      },
-      {
-        "source": "Lsativa_PI251246_Chr8_003489",
-        "target": "Lser_US96UC23_Chr8_003522",
-        "link_type": "solid_color"
-      },
-      {
-        "source": "Lsativa_ViAE_chr8_003539",
-        "target": "Lser_US96UC23_Chr8_003525",
-        "link_type": "solid_color"
-      },
-      {
-        "source": "Lser_Armenian999_Chr8_003411",
-        "target": "Lsativa_ViAE_chr8_003522",
-        "link_type": "dotted_color"
-      },
-      {
-        "source": "Lsativa_Salinas_Chr8_003564",
-        "target": "Lser_US96UC23_Chr8_003533",
-        "link_type": "solid_color"
-      },
-      {
-        "source": "Lsativa_Salinas_Chr8_003553",
-        "target": "Lsativa_PI251246_Chr8_003476",
-        "link_type": "dotted_color"
-      },
-      {
-        "source": "Lsativa_PI251246_Chr8_003481",
-        "target": "Lsativa_ViAE_chr8_003541",
-        "link_type": "solid_color"
-      },
-      {
-        "source": "Lsativa_ViAE_chr8_003526",
-        "target": "Lser_US96UC23_Chr8_003524",
-        "link_type": "solid_color"
-      },
-      {
-        "source": "Lser_US96UC23_Chr8_003536",
-        "target": "Lser_Armenian999_Chr8_003415",
-        "link_type": "solid_color"
-      },
-      {
-        "source": "Lsativa_PI251246_Chr8_003477",
-        "target": "Lser_US96UC23_Chr8_003522",
-        "link_type": "solid_color"
-      },
-      {
-        "source": "Lsativa_PI251246_Chr8_003480",
-        "target": "Lser_Armenian999_Chr8_003411",
-        "link_type": "solid_color"
-      },
-      {
-        "source": "Lsativa_Salinas_Chr8_003577",
-        "target": "Lser_US96UC23_Chr8_003537",
-        "link_type": "dotted_color"
-      },
-      {
-        "source": "Lser_Armenian999_Chr8_003424",
-        "target": "Lser_US96UC23_Chr8_003537",
-        "link_type": "dotted_color"
-      },
-      {
-        "source": "Lsativa_Salinas_Chr8_003574",
-        "target": "Lsativa_Salinas_Chr8_003578",
-        "link_type": "solid_color"
+        "source": "Lsativa_PI251246_Chr8_003478",
+        "target": "Lsativa_ViAE_chr8_003526",
+        "link_type": "solid_red"
       },
       {
         "source": "Lsativa_Salinas_Chr8_003573",
@@ -10379,124 +11154,49 @@
         "link_type": "dotted_color"
       },
       {
-        "source": "Lser_Armenian999_Chr8_003423",
-        "target": "Lser_Armenian999_Chr8_003414",
-        "link_type": "solid_color"
+        "source": "Lsativa_ViAE_chr8_003531",
+        "target": "Lsativa_Salinas_Chr8_003558",
+        "link_type": "solid_red"
+      },
+      {
+        "source": "Lser_US96UC23_Chr8_003521",
+        "target": "Lser_US96UC23_Chr8_003522",
+        "link_type": "dotted_grey"
       },
       {
         "source": "Lsativa_ViAE_chr8_003522",
-        "target": "Lser_US96UC23_Chr8_003525",
-        "link_type": "solid_color"
-      },
-      {
-        "source": "Lser_US96UC23_Chr8_003525",
-        "target": "Lser_Armenian999_Chr8_003426",
-        "link_type": "solid_color"
-      },
-      {
-        "source": "Lser_US96UC23_Chr8_003530",
-        "target": "Lsativa_PI251246_Chr8_003482",
-        "link_type": "dotted_color"
-      },
-      {
-        "source": "Lsativa_PI251246_Chr8_000683",
-        "target": "Lsativa_PI251246_Chr8_003476",
-        "link_type": "solid_color"
-      },
-      {
-        "source": "Lser_US96UC23_Chr8_003529",
-        "target": "Lsativa_ViAE_chr8_003524",
-        "link_type": "solid_color"
-      },
-      {
-        "source": "Lsativa_Salinas_Chr8_003574",
         "target": "Lsativa_ViAE_chr8_003541",
-        "link_type": "solid_color"
+        "link_type": "solid_red"
+      },
+      {
+        "source": "Lsativa_PI251246_Chr8_003478",
+        "target": "Lsativa_Salinas_Chr8_003573",
+        "link_type": "dotted_grey"
       },
       {
         "source": "Lser_Armenian999_Chr8_003427",
-        "target": "Lsativa_Salinas_Chr8_003578",
-        "link_type": "solid_color"
+        "target": "Lser_US96UC23_Chr8_003534",
+        "link_type": "dotted_grey"
       },
       {
-        "source": "Lser_US96UC23_Chr8_003536",
-        "target": "Lser_Armenian999_Chr8_003411",
-        "link_type": "solid_color"
+        "source": "Lser_Armenian999_Chr8_003427",
+        "target": "Lsativa_Salinas_Chr8_003574",
+        "link_type": "dotted_grey"
       },
       {
-        "source": "Lsativa_Salinas_Chr8_003566",
-        "target": "Lsativa_Salinas_Chr8_003553",
-        "link_type": "solid_color"
+        "source": "Lsativa_ViAE_chr8_003539",
+        "target": "Lsativa_PI251246_Chr8_003489",
+        "link_type": "solid_red"
       },
       {
         "source": "Lsativa_Salinas_Chr8_003572",
-        "target": "Lser_Armenian999_Chr8_003418",
-        "link_type": "solid_color"
+        "target": "Lsativa_ViAE_chr8_003541",
+        "link_type": "dotted_grey"
       },
       {
-        "source": "Lsativa_PI251246_Chr8_003482",
-        "target": "Lser_Armenian999_Chr8_003415",
-        "link_type": "solid_color"
-      },
-      {
-        "source": "Lsativa_Salinas_Chr8_003553",
-        "target": "Lsativa_Salinas_Chr8_003575",
-        "link_type": "solid_color"
-      },
-      {
-        "source": "Lser_US96UC23_Chr8_003525",
-        "target": "Lser_US96UC23_Chr8_003538",
-        "link_type": "solid_color"
-      },
-      {
-        "source": "Lser_US96UC23_Chr8_003536",
-        "target": "Lsativa_Salinas_Chr8_003566",
-        "link_type": "solid_color"
-      },
-      {
-        "source": "Lser_US96UC23_Chr8_003526",
-        "target": "Lsativa_PI251246_Chr8_003480",
+        "source": "Lsativa_ViAE_chr8_003528",
+        "target": "Lser_US96UC23_Chr8_003533",
         "link_type": "dotted_color"
-      },
-      {
-        "source": "Lsativa_Salinas_Chr8_003559",
-        "target": "Lsativa_ViAE_chr8_003524",
-        "link_type": "solid_color"
-      },
-      {
-        "source": "Lser_Armenian999_Chr8_003422",
-        "target": "Lsativa_PI251246_Chr8_003477",
-        "link_type": "solid_color"
-      },
-      {
-        "source": "Lser_Armenian999_Chr8_003423",
-        "target": "Lsativa_PI251246_Chr8_003480",
-        "link_type": "solid_color"
-      },
-      {
-        "source": "Lsativa_PI251246_Chr8_003479",
-        "target": "Lsativa_PI251246_Chr8_003484",
-        "link_type": "solid_color"
-      },
-      {
-        "source": "Lsativa_PI251246_Chr8_003484",
-        "target": "Lsativa_PI251246_Chr8_003476",
-        "link_type": "solid_color"
-      },
-      {
-        "source": "Lser_Armenian999_Chr8_003422",
-        "target": "Lsativa_ViAE_chr8_003540",
-        "link_type": "solid_color"
-      },
-      {
-        "source": "Lsativa_ViAE_chr8_003540",
-        "target": "Lser_Armenian999_Chr8_003426",
-        "link_type": "dotted_color"
-      },
-      {
-        "source": "Lsativa_PI251246_Chr8_003482",
-        "target": "Lsativa_PI251246_Chr8_003490",
-        "link_type": "solid_color"
       },
       {
         "source": "Lsativa_ViAE_chr8_003536",
@@ -10504,139 +11204,369 @@
         "link_type": "dotted_color"
       },
       {
-        "source": "Lser_US96UC23_Chr8_003537",
-        "target": "Lsativa_Salinas_Chr8_003577",
+        "source": "Lsativa_PI251246_Chr8_003482",
+        "target": "Lsativa_Salinas_Chr8_003571",
         "link_type": "dotted_color"
       },
       {
-        "source": "Lser_Armenian999_Chr8_003423",
-        "target": "Lsativa_Salinas_Chr8_003570",
-        "link_type": "solid_color"
+        "source": "Lsativa_Salinas_Chr8_003569",
+        "target": "Lsativa_ViAE_chr8_003524",
+        "link_type": "dotted_grey"
       },
       {
-        "source": "Lsativa_Salinas_Chr8_003570",
-        "target": "Lsativa_ViAE_chr8_003528",
-        "link_type": "solid_color"
+        "source": "Lsativa_PI251246_Chr8_003486",
+        "target": "Lser_US96UC23_Chr8_003537",
+        "link_type": "dotted_grey"
       },
       {
-        "source": "Lser_US96UC23_Chr8_003526",
+        "source": "Lser_Armenian999_Chr8_003414",
         "target": "Lsativa_ViAE_chr8_003522",
-        "link_type": "solid_color"
-      },
-      {
-        "source": "Lsativa_PI251246_Chr8_003480",
-        "target": "Lsativa_Salinas_Chr8_003569",
-        "link_type": "solid_color"
-      },
-      {
-        "source": "Lser_US96UC23_Chr8_003525",
-        "target": "Lsativa_PI251246_Chr8_003479",
-        "link_type": "dotted_color"
-      },
-      {
-        "source": "Lsativa_Salinas_Chr8_003564",
-        "target": "Lsativa_ViAE_chr8_003539",
-        "link_type": "solid_color"
+        "link_type": "dotted_grey"
       },
       {
         "source": "Lser_US96UC23_Chr8_003528",
         "target": "Lsativa_ViAE_chr8_003528",
-        "link_type": "solid_color"
+        "link_type": "dotted_grey"
       },
       {
-        "source": "Lsativa_PI251246_Chr8_003489",
-        "target": "Lsativa_PI251246_Chr8_003477",
-        "link_type": "solid_color"
+        "source": "Lsativa_ViAE_chr8_003535",
+        "target": "Lsativa_PI251246_Chr8_003486",
+        "link_type": "solid_red"
       },
       {
-        "source": "Lsativa_PI251246_Chr8_003484",
-        "target": "Lsativa_PI251246_Chr8_003477",
-        "link_type": "solid_color"
+        "source": "Lsativa_Salinas_Chr8_003577",
+        "target": "Lsativa_Salinas_Chr8_003573",
+        "link_type": "dotted_grey"
       },
       {
-        "source": "Lsativa_PI251246_Chr8_003493",
+        "source": "Lsativa_PI251246_Chr8_003485",
         "target": "Lsativa_Salinas_Chr8_003574",
-        "link_type": "solid_color"
-      },
-      {
-        "source": "Lsativa_ViAE_chr8_003540",
-        "target": "Lsativa_ViAE_chr8_003536",
-        "link_type": "solid_color"
-      },
-      {
-        "source": "Lsativa_PI251246_Chr8_003488",
-        "target": "Lsativa_ViAE_chr8_003536",
         "link_type": "dotted_color"
       },
       {
-        "source": "Lsativa_PI251246_Chr8_003477",
-        "target": "Lsativa_ViAE_chr8_003522",
+        "source": "Lser_Armenian999_Chr8_003426",
+        "target": "Lser_Armenian999_Chr8_003420",
+        "link_type": "dotted_grey"
+      },
+      {
+        "source": "Lsativa_ViAE_chr8_003522",
+        "target": "Lsativa_PI251246_Chr8_003477",
         "link_type": "dotted_color"
       },
       {
-        "source": "Lser_US96UC23_Chr8_003522",
-        "target": "Lser_Armenian999_Chr8_003411",
-        "link_type": "solid_color"
+        "source": "Lser_Armenian999_Chr8_003425",
+        "target": "Lser_Armenian999_Chr8_003410",
+        "link_type": "solid_red"
       },
       {
-        "source": "Lsativa_Salinas_Chr8_003557",
-        "target": "Lsativa_Salinas_Chr8_003564",
-        "link_type": "dotted_color"
+        "source": "Lsativa_ViAE_chr8_003521",
+        "target": "Lsativa_PI251246_Chr8_003484",
+        "link_type": "dotted_grey"
       },
       {
-        "source": "Lser_US96UC23_Chr8_003533",
-        "target": "Lser_US96UC23_Chr8_003521",
-        "link_type": "solid_color"
+        "source": "Lsativa_ViAE_chr8_003521",
+        "target": "Lsativa_PI251246_Chr8_003476",
+        "link_type": "solid_red"
       },
       {
         "source": "Lsativa_PI251246_Chr8_003481",
+        "target": "Lsativa_ViAE_chr8_003541",
+        "link_type": "dotted_grey"
+      },
+      {
+        "source": "Lsativa_ViAE_chr8_003538",
+        "target": "Lsativa_PI251246_Chr8_003477",
+        "link_type": "dotted_grey"
+      },
+      {
+        "source": "Lsativa_Salinas_Chr8_003564",
+        "target": "Lsativa_Salinas_Chr8_003557",
+        "link_type": "dotted_color"
+      },
+      {
+        "source": "Lsativa_Salinas_Chr8_003557",
+        "target": "Lser_Armenian999_Chr8_003411",
+        "link_type": "dotted_color"
+      },
+      {
+        "source": "Lser_Armenian999_Chr8_003414",
+        "target": "Lsativa_PI251246_Chr8_003481",
+        "link_type": "dotted_color"
+      },
+      {
+        "source": "Lser_Armenian999_Chr8_003416",
+        "target": "Lsativa_Salinas_Chr8_003571",
+        "link_type": "dotted_grey"
+      },
+      {
+        "source": "Lsativa_PI251246_Chr8_003489",
+        "target": "Lsativa_ViAE_chr8_003539",
+        "link_type": "solid_red"
+      },
+      {
+        "source": "Lsativa_PI251246_Chr8_003486",
+        "target": "Lsativa_PI251246_Chr8_003490",
+        "link_type": "dotted_grey"
+      },
+      {
+        "source": "Lser_Armenian999_Chr8_LOC111906314",
+        "target": "Lser_US96UC23_Chr8_003530",
+        "link_type": "solid_red"
+      },
+      {
+        "source": "Lsativa_PI251246_Chr8_003485",
+        "target": "Lsativa_ViAE_chr8_003541",
+        "link_type": "dotted_grey"
+      },
+      {
+        "source": "Lser_Armenian999_Chr8_003414",
         "target": "Lsativa_Salinas_Chr8_003570",
         "link_type": "dotted_color"
       },
       {
+        "source": "Lsativa_Salinas_Chr8_003570",
+        "target": "Lsativa_Salinas_Chr8_003578",
+        "link_type": "dotted_grey"
+      },
+      {
         "source": "Lsativa_ViAE_chr8_003521",
-        "target": "Lser_Armenian999_Chr8_003410",
-        "link_type": "solid_color"
-      },
-      {
-        "source": "Lser_US96UC23_Chr8_003526",
-        "target": "Lser_US96UC23_Chr8_003522",
-        "link_type": "solid_color"
-      },
-      {
-        "source": "Lser_Armenian999_Chr8_003420",
-        "target": "Lser_Armenian999_Chr8_003411",
-        "link_type": "solid_color"
-      },
-      {
-        "source": "Lsativa_Salinas_Chr8_003575",
-        "target": "Lser_US96UC23_Chr8_003525",
-        "link_type": "solid_color"
-      },
-      {
-        "source": "Lsativa_Salinas_Chr8_003578",
-        "target": "Lsativa_PI251246_Chr8_003477",
-        "link_type": "solid_color"
-      },
-      {
-        "source": "Lsativa_PI251246_Chr8_003489",
-        "target": "Lsativa_Salinas_Chr8_003564",
-        "link_type": "solid_color"
+        "target": "Lser_US96UC23_Chr8_003533",
+        "link_type": "dotted_grey"
       },
       {
         "source": "Lsativa_ViAE_chr8_003541",
-        "target": "Lser_US96UC23_Chr8_003533",
-        "link_type": "solid_color"
-      },
-      {
-        "source": "Lsativa_PI251246_Chr8_003477",
-        "target": "Lser_Armenian999_Chr8_003411",
+        "target": "Lsativa_Salinas_Chr8_003578",
         "link_type": "dotted_color"
       },
       {
-        "source": "Lsativa_PI251246_Chr8_003481",
+        "source": "Lser_US96UC23_Chr8_003526",
+        "target": "Lser_Armenian999_Chr8_003414",
+        "link_type": "dotted_grey"
+      },
+      {
+        "source": "Lsativa_ViAE_chr8_003538",
+        "target": "Lser_Armenian999_Chr8_003419",
+        "link_type": "dotted_grey"
+      },
+      {
+        "source": "Lsativa_PI251246_Chr8_003480",
+        "target": "Lsativa_ViAE_chr8_003536",
+        "link_type": "dotted_grey"
+      },
+      {
+        "source": "Lsativa_Salinas_Chr8_003564",
+        "target": "Lsativa_ViAE_chr8_003539",
+        "link_type": "dotted_grey"
+      },
+      {
+        "source": "Lsativa_PI251246_Chr8_003480",
+        "target": "Lsativa_ViAE_chr8_003522",
+        "link_type": "dotted_grey"
+      },
+      {
+        "source": "Lsativa_PI251246_Chr8_003493",
+        "target": "Lser_US96UC23_Chr8_003533",
+        "link_type": "dotted_grey"
+      },
+      {
+        "source": "Lser_Armenian999_Chr8_003427",
+        "target": "Lser_US96UC23_Chr8_003533",
+        "link_type": "dotted_grey"
+      },
+      {
+        "source": "Lsativa_PI251246_Chr8_003484",
+        "target": "Lser_Armenian999_Chr8_003419",
+        "link_type": "dotted_color"
+      },
+      {
+        "source": "Lsativa_Salinas_Chr8_003570",
+        "target": "Lser_US96UC23_Chr8_003529",
+        "link_type": "dotted_color"
+      },
+      {
+        "source": "Lser_Armenian999_Chr8_LOC111906314",
+        "target": "Lsativa_Salinas_Chr8_003578",
+        "link_type": "dotted_grey"
+      },
+      {
+        "source": "Lser_Armenian999_Chr8_003423",
+        "target": "Lsativa_PI251246_Chr8_003477",
+        "link_type": "dotted_grey"
+      },
+      {
+        "source": "Lsativa_PI251246_Chr8_003486",
+        "target": "Lsativa_PI251246_Chr8_003479",
+        "link_type": "dotted_grey"
+      },
+      {
+        "source": "Lsativa_Salinas_Chr8_003573",
+        "target": "Lsativa_PI251246_Chr8_003484",
+        "link_type": "dotted_color"
+      },
+      {
+        "source": "Lsativa_Salinas_Chr8_003578",
+        "target": "Lsativa_Salinas_Chr8_003557",
+        "link_type": "solid_red"
+      },
+      {
+        "source": "Lser_US96UC23_Chr8_003530",
+        "target": "Lsativa_PI251246_Chr8_003482",
+        "link_type": "dotted_color"
+      },
+      {
+        "source": "Lsativa_Salinas_Chr8_003578",
+        "target": "Lser_US96UC23_Chr8_003522",
+        "link_type": "dotted_grey"
+      },
+      {
+        "source": "Lser_Armenian999_Chr8_003419",
+        "target": "Lser_Armenian999_Chr8_003412",
+        "link_type": "solid_red"
+      },
+      {
+        "source": "Lsativa_ViAE_chr8_003540",
+        "target": "Lser_Armenian999_Chr8_003426",
+        "link_type": "dotted_color"
+      },
+      {
+        "source": "Lsativa_PI251246_Chr8_003479",
+        "target": "Lsativa_ViAE_chr8_003536",
+        "link_type": "dotted_grey"
+      },
+      {
+        "source": "Lsativa_PI251246_Chr8_003483",
+        "target": "Lsativa_PI251246_Chr8_003476",
+        "link_type": "dotted_grey"
+      },
+      {
+        "source": "Lsativa_PI251246_Chr8_003486",
+        "target": "Lsativa_Salinas_Chr8_003575",
+        "link_type": "dotted_color"
+      },
+      {
+        "source": "Lser_US96UC23_Chr8_003526",
+        "target": "Lsativa_Salinas_Chr8_003567",
+        "link_type": "solid_red"
+      },
+      {
+        "source": "Lsativa_Salinas_Chr8_003569",
+        "target": "Lser_US96UC23_Chr8_003526",
+        "link_type": "solid_red"
+      },
+      {
+        "source": "Lser_US96UC23_Chr8_003528",
+        "target": "Lser_Armenian999_Chr8_003415",
+        "link_type": "dotted_grey"
+      },
+      {
+        "source": "Lsativa_ViAE_chr8_003524",
+        "target": "Lsativa_Salinas_Chr8_003573",
+        "link_type": "dotted_grey"
+      },
+      {
+        "source": "Lser_Armenian999_Chr8_003423",
+        "target": "Lsativa_PI251246_Chr8_003480",
+        "link_type": "dotted_grey"
+      },
+      {
+        "source": "Lsativa_PI251246_Chr8_003485",
+        "target": "Lsativa_ViAE_chr8_003532",
+        "link_type": "solid_red"
+      },
+      {
+        "source": "Lsativa_Salinas_Chr8_003578",
+        "target": "Lsativa_PI251246_Chr8_003493",
+        "link_type": "solid_red"
+      },
+      {
+        "source": "Lsativa_Salinas_Chr8_003575",
+        "target": "Lser_Armenian999_Chr8_003424",
+        "link_type": "dotted_grey"
+      },
+      {
+        "source": "Lsativa_PI251246_Chr8_003480",
+        "target": "Lsativa_PI251246_Chr8_003482",
+        "link_type": "solid_red"
+      },
+      {
+        "source": "Lsativa_Salinas_Chr8_003574",
+        "target": "Lsativa_Salinas_Chr8_003578",
+        "link_type": "dotted_grey"
+      },
+      {
+        "source": "Lsativa_ViAE_chr8_003539",
+        "target": "Lser_US96UC23_Chr8_003525",
+        "link_type": "dotted_grey"
+      },
+      {
+        "source": "Lsativa_PI251246_Chr8_003493",
+        "target": "Lsativa_Salinas_Chr8_003578",
+        "link_type": "solid_red"
+      },
+      {
+        "source": "Lser_US96UC23_Chr8_003528",
+        "target": "Lser_US96UC23_Chr8_003530",
+        "link_type": "solid_red"
+      },
+      {
+        "source": "Lser_US96UC23_Chr8_003524",
+        "target": "Lsativa_ViAE_chr8_003526",
+        "link_type": "solid_red"
+      },
+      {
+        "source": "Lser_US96UC23_Chr8_003529",
         "target": "Lsativa_ViAE_chr8_003528",
-        "link_type": "solid_color"
+        "link_type": "dotted_grey"
+      },
+      {
+        "source": "Lsativa_PI251246_Chr8_003482",
+        "target": "Lser_Armenian999_Chr8_003415",
+        "link_type": "solid_red"
+      },
+      {
+        "source": "Lser_Armenian999_Chr8_003423",
+        "target": "Lsativa_Salinas_Chr8_003570",
+        "link_type": "dotted_grey"
+      },
+      {
+        "source": "Lsativa_PI251246_Chr8_003493",
+        "target": "Lsativa_PI251246_Chr8_003485",
+        "link_type": "solid_red"
+      },
+      {
+        "source": "Lser_US96UC23_Chr8_003524",
+        "target": "Lsativa_PI251246_Chr8_003478",
+        "link_type": "dotted_color"
+      },
+      {
+        "source": "Lsativa_PI251246_Chr8_003486",
+        "target": "Lser_US96UC23_Chr8_003525",
+        "link_type": "dotted_grey"
+      },
+      {
+        "source": "Lser_Armenian999_Chr8_003412",
+        "target": "Lser_US96UC23_Chr8_003524",
+        "link_type": "dotted_color"
+      },
+      {
+        "source": "Lsativa_PI251246_Chr8_003476",
+        "target": "Lser_Armenian999_Chr8_003410",
+        "link_type": "dotted_color"
+      },
+      {
+        "source": "Lsativa_PI251246_Chr8_003493",
+        "target": "Lsativa_ViAE_chr8_003541",
+        "link_type": "dotted_color"
+      },
+      {
+        "source": "Lsativa_Salinas_Chr8_003571",
+        "target": "Lsativa_Salinas_Chr8_003575",
+        "link_type": "dotted_grey"
+      },
+      {
+        "source": "Lser_US96UC23_Chr8_003532",
+        "target": "Lsativa_PI251246_Chr8_003483",
+        "link_type": "solid_red"
       },
       {
         "source": "Lsativa_Salinas_Chr8_003553",
@@ -10644,769 +11574,104 @@
         "link_type": "dotted_color"
       },
       {
-        "source": "Lsativa_ViAE_chr8_003535",
-        "target": "Lser_Armenian999_Chr8_003419",
-        "link_type": "solid_color"
-      },
-      {
-        "source": "Lsativa_PI251246_Chr8_003490",
-        "target": "Lser_US96UC23_Chr8_003538",
-        "link_type": "solid_color"
-      },
-      {
-        "source": "Lsativa_PI251246_Chr8_003476",
-        "target": "Lsativa_PI251246_Chr8_003486",
-        "link_type": "solid_color"
-      },
-      {
-        "source": "Lsativa_Salinas_Chr8_003569",
-        "target": "Lsativa_ViAE_chr8_003536",
-        "link_type": "solid_color"
-      },
-      {
-        "source": "Lsativa_ViAE_chr8_003538",
-        "target": "Lser_US96UC23_Chr8_003537",
-        "link_type": "solid_color"
-      },
-      {
-        "source": "Lser_Armenian999_Chr8_003423",
-        "target": "Lser_Armenian999_Chr8_003422",
-        "link_type": "solid_color"
-      },
-      {
-        "source": "Lser_Armenian999_Chr8_003412",
-        "target": "Lsativa_ViAE_chr8_003524",
-        "link_type": "solid_color"
-      },
-      {
-        "source": "Lsativa_PI251246_Chr8_003476",
-        "target": "Lser_Armenian999_Chr8_003410",
-        "link_type": "dotted_color"
-      },
-      {
-        "source": "Lsativa_PI251246_Chr8_003482",
-        "target": "Lsativa_PI251246_Chr8_003480",
-        "link_type": "solid_color"
-      },
-      {
-        "source": "Lsativa_Salinas_Chr8_003578",
-        "target": "Lsativa_ViAE_chr8_003541",
-        "link_type": "dotted_color"
-      },
-      {
-        "source": "Lser_Armenian999_Chr8_003426",
-        "target": "Lsativa_PI251246_Chr8_003490",
-        "link_type": "dotted_color"
-      },
-      {
-        "source": "Lsativa_PI251246_Chr8_003477",
-        "target": "Lsativa_PI251246_Chr8_003489",
-        "link_type": "solid_color"
-      },
-      {
-        "source": "Lser_US96UC23_Chr8_003537",
-        "target": "Lser_US96UC23_Chr8_003530",
-        "link_type": "solid_color"
-      },
-      {
-        "source": "Lser_Armenian999_Chr8_003427",
-        "target": "Lsativa_ViAE_chr8_003541",
-        "link_type": "dotted_color"
-      },
-      {
-        "source": "Lsativa_PI251246_Chr8_003481",
-        "target": "Lsativa_PI251246_Chr8_003493",
-        "link_type": "solid_color"
-      },
-      {
-        "source": "Lsativa_ViAE_chr8_003538",
-        "target": "Lsativa_PI251246_Chr8_003484",
-        "link_type": "solid_color"
-      },
-      {
-        "source": "Lsativa_Salinas_Chr8_003569",
-        "target": "Lsativa_ViAE_chr8_003528",
-        "link_type": "solid_color"
-      },
-      {
-        "source": "Lser_US96UC23_Chr8_003536",
-        "target": "Lsativa_PI251246_Chr8_003477",
-        "link_type": "solid_color"
-      },
-      {
-        "source": "Lsativa_PI251246_Chr8_003493",
-        "target": "Lsativa_PI251246_Chr8_003485",
-        "link_type": "solid_color"
-      },
-      {
-        "source": "Lsativa_PI251246_Chr8_003489",
-        "target": "Lsativa_PI251246_Chr8_003493",
-        "link_type": "solid_color"
-      },
-      {
-        "source": "Lsativa_ViAE_chr8_003532",
-        "target": "Lser_Armenian999_Chr8_003420",
-        "link_type": "solid_color"
-      },
-      {
-        "source": "Lser_US96UC23_Chr8_003526",
-        "target": "Lser_US96UC23_Chr8_003529",
-        "link_type": "solid_color"
-      },
-      {
-        "source": "Lser_US96UC23_Chr8_003530",
-        "target": "Lsativa_ViAE_chr8_003538",
-        "link_type": "solid_color"
-      },
-      {
-        "source": "Lser_Armenian999_Chr8_003422",
-        "target": "Lsativa_Salinas_Chr8_003557",
-        "link_type": "solid_color"
-      },
-      {
-        "source": "Lsativa_PI251246_Chr8_000683",
-        "target": "Lser_Armenian999_Chr8_003410",
-        "link_type": "solid_color"
-      },
-      {
-        "source": "Lser_Armenian999_Chr8_LOC111906314",
-        "target": "Lser_Armenian999_Chr8_003427",
-        "link_type": "solid_color"
-      },
-      {
-        "source": "Lser_Armenian999_Chr8_003426",
-        "target": "Lser_US96UC23_Chr8_003538",
-        "link_type": "solid_color"
-      },
-      {
-        "source": "Lser_Armenian999_Chr8_003422",
-        "target": "Lser_Armenian999_Chr8_003426",
-        "link_type": "solid_color"
-      },
-      {
-        "source": "Lsativa_ViAE_chr8_003535",
-        "target": "Lsativa_PI251246_Chr8_003486",
-        "link_type": "solid_color"
-      },
-      {
-        "source": "Lsativa_Salinas_Chr8_003575",
-        "target": "Lsativa_Salinas_Chr8_003577",
-        "link_type": "solid_color"
-      },
-      {
-        "source": "Lser_Armenian999_Chr8_003410",
-        "target": "Lsativa_ViAE_chr8_003521",
-        "link_type": "solid_color"
-      },
-      {
-        "source": "Lser_Armenian999_Chr8_003423",
-        "target": "Lsativa_PI251246_Chr8_000683",
-        "link_type": "solid_color"
-      },
-      {
-        "source": "Lsativa_ViAE_chr8_003535",
-        "target": "Lsativa_Salinas_Chr8_003575",
-        "link_type": "solid_color"
-      },
-      {
-        "source": "Lser_Armenian999_Chr8_003411",
-        "target": "Lser_Armenian999_Chr8_003420",
-        "link_type": "solid_color"
-      },
-      {
-        "source": "Lser_Armenian999_Chr8_LOC111906314",
-        "target": "Lser_US96UC23_Chr8_003525",
-        "link_type": "solid_color"
-      },
-      {
-        "source": "Lsativa_PI251246_Chr8_003477",
-        "target": "Lsativa_PI251246_Chr8_003484",
-        "link_type": "solid_color"
-      },
-      {
-        "source": "Lser_US96UC23_Chr8_003534",
-        "target": "Lsativa_ViAE_chr8_003532",
-        "link_type": "solid_color"
-      },
-      {
-        "source": "Lser_Armenian999_Chr8_003410",
-        "target": "Lser_US96UC23_Chr8_003521",
-        "link_type": "dotted_color"
-      },
-      {
-        "source": "Lsativa_PI251246_Chr8_003483",
-        "target": "Lsativa_Salinas_Chr8_003572",
-        "link_type": "solid_color"
-      },
-      {
-        "source": "Lsativa_PI251246_Chr8_003488",
-        "target": "Lsativa_Salinas_Chr8_003577",
-        "link_type": "dotted_color"
-      },
-      {
-        "source": "Lsativa_Salinas_Chr8_003574",
-        "target": "Lser_US96UC23_Chr8_003534",
-        "link_type": "dotted_color"
-      },
-      {
-        "source": "Lsativa_Salinas_Chr8_003567",
-        "target": "Lsativa_Salinas_Chr8_003557",
-        "link_type": "solid_color"
-      },
-      {
-        "source": "Lser_Armenian999_Chr8_003416",
-        "target": "Lsativa_Salinas_Chr8_003571",
-        "link_type": "solid_color"
-      },
-      {
-        "source": "Lsativa_PI251246_Chr8_003478",
-        "target": "Lsativa_ViAE_chr8_003526",
-        "link_type": "solid_color"
-      },
-      {
-        "source": "Lsativa_ViAE_chr8_003521",
-        "target": "Lsativa_ViAE_chr8_003541",
-        "link_type": "dotted_color"
-      },
-      {
-        "source": "Lsativa_PI251246_Chr8_003480",
-        "target": "Lsativa_ViAE_chr8_003536",
-        "link_type": "solid_color"
-      },
-      {
-        "source": "Lser_Armenian999_Chr8_003418",
-        "target": "Lsativa_ViAE_chr8_003522",
-        "link_type": "solid_color"
-      },
-      {
-        "source": "Lsativa_ViAE_chr8_003538",
-        "target": "Lser_Armenian999_Chr8_003426",
-        "link_type": "solid_color"
-      },
-      {
-        "source": "Lsativa_Salinas_Chr8_003566",
-        "target": "Lsativa_ViAE_chr8_003536",
-        "link_type": "solid_color"
-      },
-      {
-        "source": "Lsativa_Salinas_Chr8_003573",
-        "target": "Lsativa_PI251246_Chr8_003484",
-        "link_type": "dotted_color"
-      },
-      {
-        "source": "Lsativa_ViAE_chr8_003538",
-        "target": "Lsativa_ViAE_chr8_003540",
-        "link_type": "solid_color"
-      },
-      {
-        "source": "Lsativa_PI251246_Chr8_003486",
-        "target": "Lser_US96UC23_Chr8_003537",
-        "link_type": "solid_color"
-      },
-      {
-        "source": "Lsativa_PI251246_Chr8_003483",
-        "target": "Lsativa_PI251246_Chr8_003476",
-        "link_type": "solid_color"
-      },
-      {
-        "source": "Lsativa_PI251246_Chr8_003476",
-        "target": "Lsativa_ViAE_chr8_003541",
-        "link_type": "solid_color"
-      },
-      {
-        "source": "Lsativa_PI251246_Chr8_003488",
-        "target": "Lsativa_PI251246_Chr8_003490",
-        "link_type": "dotted_color"
-      },
-      {
-        "source": "Lsativa_PI251246_Chr8_003477",
-        "target": "Lsativa_Salinas_Chr8_003557",
-        "link_type": "dotted_color"
-      },
-      {
-        "source": "Lsativa_PI251246_Chr8_003485",
-        "target": "Lsativa_PI251246_Chr8_003493",
-        "link_type": "solid_color"
-      },
-      {
-        "source": "Lsativa_ViAE_chr8_003538",
-        "target": "Lsativa_Salinas_Chr8_003577",
-        "link_type": "solid_color"
-      },
-      {
-        "source": "Lser_US96UC23_Chr8_003525",
-        "target": "Lsativa_ViAE_chr8_003522",
-        "link_type": "solid_color"
-      },
-      {
-        "source": "Lser_US96UC23_Chr8_003528",
-        "target": "Lsativa_PI251246_Chr8_003482",
-        "link_type": "solid_color"
-      },
-      {
-        "source": "Lsativa_Salinas_Chr8_003570",
-        "target": "Lsativa_PI251246_Chr8_003481",
-        "link_type": "dotted_color"
-      },
-      {
-        "source": "Lser_US96UC23_Chr8_003532",
-        "target": "Lsativa_PI251246_Chr8_003483",
-        "link_type": "solid_color"
-      },
-      {
-        "source": "Lsativa_ViAE_chr8_003526",
-        "target": "Lsativa_PI251246_Chr8_003478",
-        "link_type": "solid_color"
-      },
-      {
-        "source": "Lser_Armenian999_Chr8_003411",
-        "target": "Lser_Armenian999_Chr8_003425",
-        "link_type": "solid_color"
-      },
-      {
-        "source": "Lsativa_ViAE_chr8_003540",
-        "target": "Lser_US96UC23_Chr8_003537",
-        "link_type": "solid_color"
-      },
-      {
-        "source": "Lser_US96UC23_Chr8_003535",
-        "target": "Lsativa_ViAE_chr8_003524",
-        "link_type": "solid_color"
-      },
-      {
-        "source": "Lsativa_ViAE_chr8_003540",
-        "target": "Lsativa_ViAE_chr8_003532",
-        "link_type": "solid_color"
-      },
-      {
-        "source": "Lser_US96UC23_Chr8_003535",
-        "target": "Lsativa_ViAE_chr8_003540",
-        "link_type": "solid_color"
-      },
-      {
-        "source": "Lser_US96UC23_Chr8_003534",
-        "target": "Lsativa_Salinas_Chr8_003574",
-        "link_type": "dotted_color"
-      },
-      {
-        "source": "Lser_Armenian999_Chr8_LOC111906314",
-        "target": "Lser_US96UC23_Chr8_003521",
-        "link_type": "solid_color"
-      },
-      {
-        "source": "Lser_Armenian999_Chr8_003416",
-        "target": "Lsativa_ViAE_chr8_003535",
-        "link_type": "solid_color"
-      },
-      {
-        "source": "Lser_Armenian999_Chr8_003425",
-        "target": "Lser_US96UC23_Chr8_003521",
-        "link_type": "solid_color"
-      },
-      {
-        "source": "Lsativa_PI251246_Chr8_003493",
-        "target": "Lsativa_ViAE_chr8_003541",
-        "link_type": "dotted_color"
-      },
-      {
-        "source": "Lser_Armenian999_Chr8_003422",
-        "target": "Lser_Armenian999_Chr8_003411",
-        "link_type": "solid_color"
-      },
-      {
-        "source": "Lsativa_Salinas_Chr8_003578",
-        "target": "Lsativa_Salinas_Chr8_003557",
-        "link_type": "solid_color"
-      },
-      {
-        "source": "Lsativa_PI251246_Chr8_003482",
-        "target": "Lsativa_PI251246_Chr8_003488",
-        "link_type": "solid_color"
-      },
-      {
-        "source": "Lser_US96UC23_Chr8_003533",
-        "target": "Lsativa_ViAE_chr8_003541",
-        "link_type": "solid_color"
-      },
-      {
-        "source": "Lsativa_Salinas_Chr8_003573",
-        "target": "Lsativa_Salinas_Chr8_003553",
-        "link_type": "solid_color"
-      },
-      {
-        "source": "Lser_Armenian999_Chr8_003414",
-        "target": "Lser_US96UC23_Chr8_003529",
-        "link_type": "dotted_color"
-      },
-      {
-        "source": "Lsativa_ViAE_chr8_003539",
-        "target": "Lsativa_ViAE_chr8_003541",
-        "link_type": "solid_color"
-      },
-      {
-        "source": "Lser_Armenian999_Chr8_003422",
-        "target": "Lsativa_ViAE_chr8_003528",
-        "link_type": "solid_color"
-      },
-      {
-        "source": "Lser_US96UC23_Chr8_003526",
-        "target": "Lsativa_Salinas_Chr8_003567",
-        "link_type": "solid_color"
-      },
-      {
-        "source": "Lsativa_PI251246_Chr8_003490",
-        "target": "Lsativa_Salinas_Chr8_003577",
-        "link_type": "dotted_color"
-      },
-      {
-        "source": "Lser_US96UC23_Chr8_003534",
-        "target": "Lser_Armenian999_Chr8_003420",
-        "link_type": "dotted_color"
-      },
-      {
-        "source": "Lsativa_Salinas_Chr8_003575",
-        "target": "Lsativa_Salinas_Chr8_003553",
-        "link_type": "solid_color"
-      },
-      {
-        "source": "Lser_Armenian999_Chr8_003419",
-        "target": "Lsativa_ViAE_chr8_003541",
-        "link_type": "solid_color"
-      },
-      {
-        "source": "Lsativa_PI251246_Chr8_003486",
-        "target": "Lser_US96UC23_Chr8_003538",
-        "link_type": "solid_color"
-      },
-      {
-        "source": "Lser_US96UC23_Chr8_003522",
-        "target": "Lser_US96UC23_Chr8_003534",
-        "link_type": "solid_color"
-      },
-      {
-        "source": "Lser_US96UC23_Chr8_003533",
-        "target": "Lsativa_ViAE_chr8_003528",
-        "link_type": "dotted_color"
-      },
-      {
-        "source": "Lser_Armenian999_Chr8_003410",
-        "target": "Lser_Armenian999_Chr8_003411",
-        "link_type": "solid_color"
-      },
-      {
-        "source": "Lsativa_Salinas_Chr8_003573",
-        "target": "Lsativa_ViAE_chr8_003528",
-        "link_type": "dotted_color"
-      },
-      {
-        "source": "Lser_Armenian999_Chr8_003412",
-        "target": "Lser_Armenian999_Chr8_003411",
-        "link_type": "solid_color"
-      },
-      {
-        "source": "Lser_US96UC23_Chr8_003536",
-        "target": "Lsativa_PI251246_Chr8_003479",
-        "link_type": "solid_color"
-      },
-      {
-        "source": "Lsativa_ViAE_chr8_003538",
-        "target": "Lser_Armenian999_Chr8_003419",
-        "link_type": "solid_color"
-      },
-      {
-        "source": "Lser_Armenian999_Chr8_003412",
-        "target": "Lsativa_Salinas_Chr8_003578",
-        "link_type": "solid_color"
-      },
-      {
-        "source": "Lser_Armenian999_Chr8_003425",
-        "target": "Lsativa_PI251246_Chr8_003489",
-        "link_type": "dotted_color"
-      },
-      {
-        "source": "Lser_US96UC23_Chr8_003521",
-        "target": "Lser_US96UC23_Chr8_003536",
-        "link_type": "solid_color"
-      },
-      {
-        "source": "Lsativa_ViAE_chr8_003538",
-        "target": "Lsativa_ViAE_chr8_003536",
-        "link_type": "solid_color"
-      },
-      {
-        "source": "Lser_US96UC23_Chr8_003525",
-        "target": "Lsativa_Salinas_Chr8_003566",
-        "link_type": "dotted_color"
-      },
-      {
-        "source": "Lsativa_Salinas_Chr8_003557",
-        "target": "Lsativa_PI251246_Chr8_003477",
-        "link_type": "dotted_color"
-      },
-      {
-        "source": "Lsativa_Salinas_Chr8_003571",
-        "target": "Lsativa_Salinas_Chr8_003577",
-        "link_type": "solid_color"
-      },
-      {
-        "source": "Lser_Armenian999_Chr8_003412",
-        "target": "Lsativa_PI251246_Chr8_003478",
-        "link_type": "dotted_color"
-      },
-      {
-        "source": "Lsativa_ViAE_chr8_003528",
-        "target": "Lsativa_Salinas_Chr8_003573",
-        "link_type": "dotted_color"
-      },
-      {
-        "source": "Lsativa_Salinas_Chr8_003572",
-        "target": "Lsativa_PI251246_Chr8_003483",
-        "link_type": "solid_color"
-      },
-      {
-        "source": "Lser_US96UC23_Chr8_003537",
-        "target": "Lser_US96UC23_Chr8_003536",
-        "link_type": "solid_color"
-      },
-      {
-        "source": "Lsativa_Salinas_Chr8_003566",
-        "target": "Lsativa_Salinas_Chr8_003575",
-        "link_type": "solid_color"
-      },
-      {
-        "source": "Lsativa_ViAE_chr8_003532",
-        "target": "Lsativa_ViAE_chr8_003521",
-        "link_type": "solid_color"
-      },
-      {
-        "source": "Lsativa_ViAE_chr8_003528",
-        "target": "Lser_US96UC23_Chr8_003533",
-        "link_type": "dotted_color"
-      },
-      {
-        "source": "Lser_Armenian999_Chr8_003424",
-        "target": "Lser_Armenian999_Chr8_003426",
-        "link_type": "dotted_color"
-      },
-      {
-        "source": "Lser_Armenian999_Chr8_003410",
-        "target": "Lsativa_ViAE_chr8_003538",
-        "link_type": "solid_color"
-      },
-      {
-        "source": "Lser_US96UC23_Chr8_003535",
-        "target": "Lser_US96UC23_Chr8_003525",
-        "link_type": "solid_color"
-      },
-      {
-        "source": "Lsativa_PI251246_Chr8_003489",
-        "target": "Lsativa_ViAE_chr8_003524",
-        "link_type": "solid_color"
-      },
-      {
-        "source": "Lser_Armenian999_Chr8_003411",
-        "target": "Lsativa_PI251246_Chr8_003477",
-        "link_type": "dotted_color"
-      },
-      {
-        "source": "Lsativa_PI251246_Chr8_003479",
-        "target": "Lsativa_Salinas_Chr8_003566",
-        "link_type": "dotted_color"
-      },
-      {
-        "source": "Lsativa_Salinas_Chr8_003577",
-        "target": "Lsativa_Salinas_Chr8_003573",
-        "link_type": "solid_color"
-      },
-      {
-        "source": "Lsativa_PI251246_Chr8_000683",
-        "target": "Lsativa_PI251246_Chr8_003477",
-        "link_type": "solid_color"
-      },
-      {
-        "source": "Lsativa_Salinas_Chr8_003572",
-        "target": "Lser_US96UC23_Chr8_003532",
-        "link_type": "solid_color"
-      },
-      {
-        "source": "Lsativa_PI251246_Chr8_003482",
-        "target": "Lsativa_ViAE_chr8_003522",
-        "link_type": "solid_color"
-      },
-      {
-        "source": "Lsativa_ViAE_chr8_003540",
-        "target": "Lsativa_Salinas_Chr8_003577",
-        "link_type": "dotted_color"
-      },
-      {
-        "source": "Lsativa_PI251246_Chr8_003488",
-        "target": "Lser_Armenian999_Chr8_003424",
-        "link_type": "dotted_color"
-      },
-      {
-        "source": "Lser_Armenian999_Chr8_LOC111906314",
-        "target": "Lsativa_Salinas_Chr8_003571",
-        "link_type": "solid_color"
-      },
-      {
-        "source": "Lsativa_Salinas_Chr8_003570",
-        "target": "Lsativa_Salinas_Chr8_003578",
-        "link_type": "solid_color"
-      },
-      {
-        "source": "Lser_US96UC23_Chr8_003536",
-        "target": "Lsativa_Salinas_Chr8_003571",
-        "link_type": "solid_color"
-      },
-      {
-        "source": "Lsativa_PI251246_Chr8_003493",
-        "target": "Lsativa_PI251246_Chr8_003484",
-        "link_type": "solid_color"
-      },
-      {
-        "source": "Lser_US96UC23_Chr8_003522",
-        "target": "Lsativa_Salinas_Chr8_003557",
-        "link_type": "solid_color"
-      },
-      {
-        "source": "Lsativa_PI251246_Chr8_003478",
-        "target": "Lsativa_PI251246_Chr8_003484",
-        "link_type": "solid_color"
-      },
-      {
-        "source": "Lsativa_Salinas_Chr8_003571",
-        "target": "Lser_Armenian999_Chr8_LOC111906314",
-        "link_type": "solid_color"
-      },
-      {
-        "source": "Lser_Armenian999_Chr8_003427",
-        "target": "Lsativa_Salinas_Chr8_003574",
-        "link_type": "solid_color"
-      },
-      {
         "source": "Lsativa_ViAE_chr8_003541",
+        "target": "Lser_Armenian999_Chr8_003427",
+        "link_type": "dotted_color"
+      },
+      {
+        "source": "Lsativa_PI251246_Chr8_003477",
+        "target": "Lsativa_ViAE_chr8_003541",
+        "link_type": "dotted_grey"
+      },
+      {
+        "source": "Lser_Armenian999_Chr8_003427",
         "target": "Lsativa_Salinas_Chr8_003578",
-        "link_type": "dotted_color"
+        "link_type": "solid_red"
       },
       {
-        "source": "Lsativa_Salinas_Chr8_003573",
-        "target": "Lsativa_Salinas_Chr8_003578",
-        "link_type": "solid_color"
-      },
-      {
-        "source": "Lsativa_ViAE_chr8_003538",
-        "target": "Lsativa_PI251246_Chr8_003477",
-        "link_type": "solid_color"
-      },
-      {
-        "source": "Lser_Armenian999_Chr8_003426",
-        "target": "Lser_US96UC23_Chr8_003537",
-        "link_type": "solid_color"
-      },
-      {
-        "source": "Lser_Armenian999_Chr8_003425",
-        "target": "Lser_US96UC23_Chr8_003522",
-        "link_type": "solid_color"
-      },
-      {
-        "source": "Lsativa_Salinas_Chr8_003572",
-        "target": "Lsativa_Salinas_Chr8_003553",
-        "link_type": "solid_color"
-      },
-      {
-        "source": "Lser_US96UC23_Chr8_003525",
-        "target": "Lsativa_ViAE_chr8_003536",
-        "link_type": "solid_color"
-      },
-      {
-        "source": "Lser_Armenian999_Chr8_003410",
-        "target": "Lsativa_ViAE_chr8_003522",
-        "link_type": "solid_color"
-      },
-      {
-        "source": "Lsativa_Salinas_Chr8_003578",
-        "target": "Lser_US96UC23_Chr8_003522",
-        "link_type": "solid_color"
-      },
-      {
-        "source": "Lsativa_PI251246_Chr8_003479",
-        "target": "Lsativa_ViAE_chr8_003535",
-        "link_type": "solid_color"
-      },
-      {
-        "source": "Lser_US96UC23_Chr8_003534",
-        "target": "Lsativa_PI251246_Chr8_003485",
-        "link_type": "dotted_color"
-      },
-      {
-        "source": "Lsativa_Salinas_Chr8_003564",
-        "target": "Lsativa_PI251246_Chr8_003477",
-        "link_type": "dotted_color"
-      },
-      {
-        "source": "Lser_Armenian999_Chr8_003420",
-        "target": "Lser_Armenian999_Chr8_003425",
-        "link_type": "solid_color"
-      },
-      {
-        "source": "Lsativa_ViAE_chr8_003534",
-        "target": "Lsativa_Salinas_Chr8_003575",
-        "link_type": "solid_color"
-      },
-      {
-        "source": "Lser_US96UC23_Chr8_003534",
-        "target": "Lser_US96UC23_Chr8_003522",
-        "link_type": "solid_color"
-      },
-      {
-        "source": "Lsativa_Salinas_Chr8_003572",
-        "target": "Lsativa_Salinas_Chr8_003566",
-        "link_type": "solid_color"
-      },
-      {
-        "source": "Lsativa_ViAE_chr8_003539",
-        "target": "Lser_Armenian999_Chr8_003425",
-        "link_type": "solid_color"
-      },
-      {
-        "source": "Lsativa_ViAE_chr8_003524",
-        "target": "Lser_US96UC23_Chr8_003524",
-        "link_type": "solid_color"
-      },
-      {
-        "source": "Lser_Armenian999_Chr8_003414",
+        "source": "Lser_US96UC23_Chr8_003529",
         "target": "Lsativa_Salinas_Chr8_003570",
         "link_type": "dotted_color"
       },
       {
-        "source": "Lser_Armenian999_Chr8_003420",
-        "target": "Lsativa_ViAE_chr8_003532",
-        "link_type": "solid_color"
+        "source": "Lser_US96UC23_Chr8_003536",
+        "target": "Lser_US96UC23_Chr8_003530",
+        "link_type": "dotted_grey"
+      },
+      {
+        "source": "Lsativa_Salinas_Chr8_003573",
+        "target": "Lsativa_ViAE_chr8_003541",
+        "link_type": "dotted_grey"
+      },
+      {
+        "source": "Lser_US96UC23_Chr8_003536",
+        "target": "Lsativa_ViAE_chr8_003539",
+        "link_type": "dotted_grey"
+      },
+      {
+        "source": "Lser_Armenian999_Chr8_LOC111906314",
+        "target": "Lsativa_PI251246_Chr8_003482",
+        "link_type": "solid_red"
+      },
+      {
+        "source": "Lsativa_PI251246_Chr8_003478",
+        "target": "Lsativa_PI251246_Chr8_003484",
+        "link_type": "dotted_grey"
+      },
+      {
+        "source": "Lsativa_Salinas_Chr8_003559",
+        "target": "Lsativa_Salinas_Chr8_003573",
+        "link_type": "dotted_grey"
+      },
+      {
+        "source": "Lsativa_Salinas_Chr8_003567",
+        "target": "Lsativa_PI251246_Chr8_003480",
+        "link_type": "solid_red"
+      },
+      {
+        "source": "Lser_Armenian999_Chr8_003425",
+        "target": "Lser_Armenian999_Chr8_003411",
+        "link_type": "solid_red"
+      },
+      {
+        "source": "Lsativa_Salinas_Chr8_003578",
+        "target": "Lser_Armenian999_Chr8_003411",
+        "link_type": "dotted_grey"
+      },
+      {
+        "source": "Lsativa_PI251246_Chr8_003482",
+        "target": "Lsativa_PI251246_Chr8_003486",
+        "link_type": "dotted_grey"
+      },
+      {
+        "source": "Lsativa_ViAE_chr8_003528",
+        "target": "Lsativa_ViAE_chr8_003521",
+        "link_type": "solid_red"
+      },
+      {
+        "source": "Lsativa_Salinas_Chr8_003575",
+        "target": "Lsativa_Salinas_Chr8_003566",
+        "link_type": "solid_red"
       },
       {
         "source": "Lsativa_ViAE_chr8_003534",
-        "target": "Lser_Armenian999_Chr8_003424",
-        "link_type": "solid_color"
+        "target": "Lsativa_Salinas_Chr8_003575",
+        "link_type": "solid_red"
       },
       {
-        "source": "Lser_Armenian999_Chr8_003416",
-        "target": "Lser_Armenian999_Chr8_LOC111906314",
-        "link_type": "solid_color"
+        "source": "Lser_US96UC23_Chr8_003537",
+        "target": "Lser_US96UC23_Chr8_003536",
+        "link_type": "dotted_grey"
       },
       {
-        "source": "Lsativa_ViAE_chr8_003534",
-        "target": "Lsativa_ViAE_chr8_003536",
-        "link_type": "solid_color"
+        "source": "Lser_Armenian999_Chr8_003410",
+        "target": "Lser_US96UC23_Chr8_003521",
+        "link_type": "dotted_color"
       },
       {
         "source": "Lsativa_PI251246_Chr8_003483",
         "target": "Lsativa_ViAE_chr8_003522",
-        "link_type": "solid_color"
-      },
-      {
-        "source": "Lsativa_PI251246_Chr8_003480",
-        "target": "Lsativa_Salinas_Chr8_003567",
-        "link_type": "solid_color"
+        "link_type": "dotted_grey"
       },
       {
         "source": "Lsativa_PI251246_Chr8_003480",
@@ -11414,89 +11679,54 @@
         "link_type": "dotted_color"
       },
       {
-        "source": "Lsativa_PI251246_Chr8_003482",
+        "source": "Lser_Armenian999_Chr8_003426",
+        "target": "Lsativa_ViAE_chr8_003540",
+        "link_type": "dotted_color"
+      },
+      {
+        "source": "Lsativa_ViAE_chr8_003540",
         "target": "Lsativa_ViAE_chr8_003538",
-        "link_type": "solid_color"
+        "link_type": "solid_red"
       },
       {
-        "source": "Lsativa_PI251246_Chr8_003489",
-        "target": "Lser_Armenian999_Chr8_003425",
-        "link_type": "dotted_color"
-      },
-      {
-        "source": "Lsativa_PI251246_Chr8_003476",
+        "source": "Lsativa_PI251246_Chr8_000683",
         "target": "Lser_US96UC23_Chr8_003521",
-        "link_type": "dotted_color"
+        "link_type": "dotted_grey"
       },
       {
-        "source": "Lser_Armenian999_Chr8_003425",
-        "target": "Lsativa_ViAE_chr8_003521",
-        "link_type": "solid_color"
+        "source": "Lsativa_ViAE_chr8_003534",
+        "target": "Lser_US96UC23_Chr8_003537",
+        "link_type": "dotted_grey"
       },
       {
-        "source": "Lsativa_Salinas_Chr8_003566",
-        "target": "Lser_Armenian999_Chr8_003411",
-        "link_type": "solid_color"
+        "source": "Lsativa_ViAE_chr8_003539",
+        "target": "Lsativa_ViAE_chr8_003541",
+        "link_type": "dotted_grey"
       },
       {
-        "source": "Lser_Armenian999_Chr8_003415",
-        "target": "Lser_Armenian999_Chr8_003424",
-        "link_type": "solid_color"
+        "source": "Lser_US96UC23_Chr8_003525",
+        "target": "Lser_US96UC23_Chr8_003538",
+        "link_type": "dotted_grey"
       },
       {
-        "source": "Lsativa_PI251246_Chr8_003483",
-        "target": "Lser_US96UC23_Chr8_003532",
-        "link_type": "solid_color"
-      },
-      {
-        "source": "Lsativa_ViAE_chr8_003536",
-        "target": "Lsativa_ViAE_chr8_003528",
-        "link_type": "solid_color"
-      },
-      {
-        "source": "Lsativa_ViAE_chr8_003532",
-        "target": "Lsativa_Salinas_Chr8_003574",
-        "link_type": "solid_color"
-      },
-      {
-        "source": "Lsativa_PI251246_Chr8_003486",
-        "target": "Lser_Armenian999_Chr8_003426",
-        "link_type": "solid_color"
+        "source": "Lsativa_Salinas_Chr8_003575",
+        "target": "Lsativa_ViAE_chr8_003522",
+        "link_type": "dotted_grey"
       },
       {
         "source": "Lsativa_PI251246_Chr8_003490",
-        "target": "Lser_Armenian999_Chr8_003426",
+        "target": "Lsativa_ViAE_chr8_003540",
         "link_type": "dotted_color"
       },
       {
-        "source": "Lsativa_ViAE_chr8_003521",
-        "target": "Lsativa_Salinas_Chr8_003578",
-        "link_type": "solid_color"
+        "source": "Lsativa_Salinas_Chr8_003574",
+        "target": "Lsativa_Salinas_Chr8_003577",
+        "link_type": "dotted_grey"
       },
       {
-        "source": "Lsativa_PI251246_Chr8_003480",
-        "target": "Lser_Armenian999_Chr8_003414",
-        "link_type": "solid_color"
-      },
-      {
-        "source": "Lser_US96UC23_Chr8_003524",
-        "target": "Lsativa_ViAE_chr8_003526",
-        "link_type": "solid_color"
-      },
-      {
-        "source": "Lser_Armenian999_Chr8_003418",
-        "target": "Lser_US96UC23_Chr8_003532",
-        "link_type": "solid_color"
-      },
-      {
-        "source": "Lsativa_PI251246_Chr8_003488",
-        "target": "Lser_US96UC23_Chr8_003537",
-        "link_type": "dotted_color"
-      },
-      {
-        "source": "Lser_US96UC23_Chr8_003536",
-        "target": "Lsativa_PI251246_Chr8_003482",
-        "link_type": "solid_color"
+        "source": "Lsativa_PI251246_Chr8_003483",
+        "target": "Lser_Armenian999_Chr8_003418",
+        "link_type": "solid_red"
       },
       {
         "source": "Lsativa_PI251246_Chr8_003479",
@@ -11504,59 +11734,39 @@
         "link_type": "dotted_color"
       },
       {
-        "source": "Lser_US96UC23_Chr8_003526",
-        "target": "Lsativa_Salinas_Chr8_003569",
-        "link_type": "solid_color"
+        "source": "Lsativa_Salinas_Chr8_003566",
+        "target": "Lsativa_Salinas_Chr8_003575",
+        "link_type": "solid_red"
       },
       {
-        "source": "Lsativa_ViAE_chr8_003521",
-        "target": "Lsativa_ViAE_chr8_003528",
-        "link_type": "solid_color"
+        "source": "Lser_Armenian999_Chr8_003425",
+        "target": "Lsativa_Salinas_Chr8_003564",
+        "link_type": "dotted_grey"
       },
       {
-        "source": "Lser_US96UC23_Chr8_003536",
-        "target": "Lser_US96UC23_Chr8_003522",
-        "link_type": "solid_color"
+        "source": "Lser_US96UC23_Chr8_003538",
+        "target": "Lsativa_ViAE_chr8_003540",
+        "link_type": "solid_red"
       },
       {
-        "source": "Lsativa_Salinas_Chr8_003573",
-        "target": "Lsativa_Salinas_Chr8_003557",
-        "link_type": "solid_color"
+        "source": "Lsativa_ViAE_chr8_003522",
+        "target": "Lsativa_ViAE_chr8_003521",
+        "link_type": "dotted_grey"
       },
       {
-        "source": "Lsativa_Salinas_Chr8_003570",
-        "target": "Lsativa_ViAE_chr8_003524",
-        "link_type": "solid_color"
+        "source": "Lser_US96UC23_Chr8_003538",
+        "target": "Lser_Armenian999_Chr8_003426",
+        "link_type": "solid_red"
       },
       {
-        "source": "Lsativa_ViAE_chr8_003534",
-        "target": "Lser_US96UC23_Chr8_003537",
-        "link_type": "solid_color"
-      },
-      {
-        "source": "Lsativa_PI251246_Chr8_003485",
-        "target": "Lsativa_ViAE_chr8_003532",
-        "link_type": "solid_color"
-      },
-      {
-        "source": "Lsativa_Salinas_Chr8_003564",
-        "target": "Lsativa_Salinas_Chr8_003557",
+        "source": "Lsativa_ViAE_chr8_003536",
+        "target": "Lsativa_PI251246_Chr8_003488",
         "link_type": "dotted_color"
       },
       {
-        "source": "Lsativa_Salinas_Chr8_003574",
-        "target": "Lser_Armenian999_Chr8_003420",
-        "link_type": "dotted_color"
-      },
-      {
-        "source": "Lsativa_PI251246_Chr8_003479",
-        "target": "Lsativa_PI251246_Chr8_003490",
-        "link_type": "solid_color"
-      },
-      {
-        "source": "Lser_Armenian999_Chr8_003423",
-        "target": "Lsativa_ViAE_chr8_003541",
-        "link_type": "solid_color"
+        "source": "Lsativa_Salinas_Chr8_003553",
+        "target": "Lsativa_Salinas_Chr8_003578",
+        "link_type": "dotted_grey"
       },
       {
         "source": "Lsativa_PI251246_Chr8_003481",
@@ -11564,299 +11774,124 @@
         "link_type": "dotted_color"
       },
       {
-        "source": "Lsativa_ViAE_chr8_003532",
-        "target": "Lsativa_PI251246_Chr8_003485",
-        "link_type": "solid_color"
-      },
-      {
-        "source": "Lser_Armenian999_Chr8_003419",
-        "target": "Lsativa_ViAE_chr8_003528",
-        "link_type": "dotted_color"
-      },
-      {
-        "source": "Lser_US96UC23_Chr8_003521",
-        "target": "Lsativa_ViAE_chr8_003521",
-        "link_type": "solid_color"
-      },
-      {
-        "source": "Lsativa_Salinas_Chr8_003575",
-        "target": "Lsativa_PI251246_Chr8_003486",
-        "link_type": "dotted_color"
-      },
-      {
-        "source": "Lsativa_PI251246_Chr8_003476",
-        "target": "Lsativa_ViAE_chr8_003522",
-        "link_type": "solid_color"
-      },
-      {
-        "source": "Lser_US96UC23_Chr8_003533",
-        "target": "Lsativa_Salinas_Chr8_003573",
-        "link_type": "dotted_color"
-      },
-      {
-        "source": "Lsativa_ViAE_chr8_003522",
-        "target": "Lser_US96UC23_Chr8_003522",
-        "link_type": "solid_color"
-      },
-      {
-        "source": "Lsativa_PI251246_Chr8_003483",
-        "target": "Lser_Armenian999_Chr8_003418",
-        "link_type": "solid_color"
-      },
-      {
-        "source": "Lser_US96UC23_Chr8_003538",
-        "target": "Lsativa_Salinas_Chr8_003577",
-        "link_type": "solid_color"
+        "source": "Lser_US96UC23_Chr8_003536",
+        "target": "Lsativa_PI251246_Chr8_003477",
+        "link_type": "dotted_grey"
       },
       {
         "source": "Lsativa_PI251246_Chr8_003480",
-        "target": "Lsativa_ViAE_chr8_003522",
-        "link_type": "solid_color"
-      },
-      {
-        "source": "Lser_US96UC23_Chr8_003522",
-        "target": "Lsativa_ViAE_chr8_003522",
-        "link_type": "solid_color"
-      },
-      {
-        "source": "Lsativa_ViAE_chr8_003528",
-        "target": "Lsativa_ViAE_chr8_003521",
-        "link_type": "solid_color"
-      },
-      {
-        "source": "Lser_US96UC23_Chr8_003525",
-        "target": "Lser_US96UC23_Chr8_003522",
-        "link_type": "solid_color"
-      },
-      {
-        "source": "Lsativa_PI251246_Chr8_003479",
-        "target": "Lsativa_ViAE_chr8_003522",
-        "link_type": "solid_color"
-      },
-      {
-        "source": "Lsativa_Salinas_Chr8_003578",
-        "target": "Lser_US96UC23_Chr8_003525",
-        "link_type": "solid_color"
-      },
-      {
-        "source": "Lsativa_PI251246_Chr8_003488",
-        "target": "Lsativa_PI251246_Chr8_003477",
-        "link_type": "solid_color"
-      },
-      {
-        "source": "Lsativa_Salinas_Chr8_003572",
-        "target": "Lsativa_ViAE_chr8_003541",
-        "link_type": "solid_color"
-      },
-      {
-        "source": "Lsativa_Salinas_Chr8_003572",
-        "target": "Lsativa_ViAE_chr8_003522",
-        "link_type": "solid_color"
-      },
-      {
-        "source": "Lsativa_PI251246_Chr8_003478",
-        "target": "Lsativa_ViAE_chr8_003524",
-        "link_type": "solid_color"
-      },
-      {
-        "source": "Lsativa_ViAE_chr8_003521",
-        "target": "Lser_US96UC23_Chr8_003521",
-        "link_type": "solid_color"
-      },
-      {
-        "source": "Lsativa_PI251246_Chr8_003478",
-        "target": "Lsativa_Salinas_Chr8_003578",
-        "link_type": "solid_color"
-      },
-      {
-        "source": "Lser_Armenian999_Chr8_003414",
-        "target": "Lsativa_PI251246_Chr8_003481",
-        "link_type": "dotted_color"
-      },
-      {
-        "source": "Lser_US96UC23_Chr8_003530",
-        "target": "Lser_Armenian999_Chr8_LOC111906314",
-        "link_type": "solid_color"
-      },
-      {
-        "source": "Lser_Armenian999_Chr8_003425",
-        "target": "Lser_US96UC23_Chr8_003525",
-        "link_type": "solid_color"
-      },
-      {
-        "source": "Lsativa_Salinas_Chr8_003569",
         "target": "Lser_Armenian999_Chr8_003414",
-        "link_type": "solid_color"
+        "link_type": "dotted_grey"
       },
       {
-        "source": "Lsativa_Salinas_Chr8_003557",
-        "target": "Lser_US96UC23_Chr8_003522",
-        "link_type": "solid_color"
-      },
-      {
-        "source": "Lser_Armenian999_Chr8_003427",
-        "target": "Lsativa_PI251246_Chr8_003493",
-        "link_type": "dotted_color"
-      },
-      {
-        "source": "Lsativa_ViAE_chr8_003524",
-        "target": "Lsativa_Salinas_Chr8_003573",
-        "link_type": "solid_color"
-      },
-      {
-        "source": "Lser_US96UC23_Chr8_003533",
-        "target": "Lser_US96UC23_Chr8_003522",
-        "link_type": "solid_color"
-      },
-      {
-        "source": "Lsativa_Salinas_Chr8_003559",
-        "target": "Lsativa_Salinas_Chr8_003573",
-        "link_type": "solid_color"
-      },
-      {
-        "source": "Lsativa_PI251246_Chr8_003484",
-        "target": "Lsativa_ViAE_chr8_003541",
-        "link_type": "solid_color"
-      },
-      {
-        "source": "Lser_Armenian999_Chr8_003424",
-        "target": "Lsativa_PI251246_Chr8_003488",
-        "link_type": "dotted_color"
-      },
-      {
-        "source": "Lsativa_PI251246_Chr8_000683",
-        "target": "Lsativa_PI251246_Chr8_003486",
-        "link_type": "solid_color"
-      },
-      {
-        "source": "Lsativa_Salinas_Chr8_003566",
-        "target": "Lsativa_ViAE_chr8_003541",
-        "link_type": "solid_color"
-      },
-      {
-        "source": "Lsativa_Salinas_Chr8_003570",
-        "target": "Lsativa_Salinas_Chr8_003557",
-        "link_type": "solid_color"
-      },
-      {
-        "source": "Lsativa_ViAE_chr8_003522",
-        "target": "Lser_Armenian999_Chr8_003411",
-        "link_type": "dotted_color"
-      },
-      {
-        "source": "Lsativa_Salinas_Chr8_003575",
-        "target": "Lser_Armenian999_Chr8_003426",
-        "link_type": "solid_color"
-      },
-      {
-        "source": "Lsativa_ViAE_chr8_003526",
-        "target": "Lser_Armenian999_Chr8_003412",
-        "link_type": "solid_color"
-      },
-      {
-        "source": "Lsativa_PI251246_Chr8_003490",
-        "target": "Lsativa_PI251246_Chr8_003488",
-        "link_type": "dotted_color"
-      },
-      {
-        "source": "Lsativa_Salinas_Chr8_003571",
-        "target": "Lsativa_Salinas_Chr8_003575",
-        "link_type": "solid_color"
-      },
-      {
-        "source": "Lser_Armenian999_Chr8_003423",
-        "target": "Lsativa_Salinas_Chr8_003578",
-        "link_type": "solid_color"
-      },
-      {
-        "source": "Lser_US96UC23_Chr8_003532",
-        "target": "Lsativa_Salinas_Chr8_003572",
-        "link_type": "solid_color"
-      },
-      {
-        "source": "Lsativa_ViAE_chr8_003539",
-        "target": "Lsativa_PI251246_Chr8_003477",
-        "link_type": "solid_color"
-      },
-      {
-        "source": "Lsativa_Salinas_Chr8_003559",
-        "target": "Lsativa_PI251246_Chr8_003478",
-        "link_type": "solid_color"
-      },
-      {
-        "source": "Lsativa_Salinas_Chr8_003566",
-        "target": "Lsativa_Salinas_Chr8_003577",
-        "link_type": "solid_color"
-      },
-      {
-        "source": "Lser_US96UC23_Chr8_003536",
-        "target": "Lsativa_ViAE_chr8_003539",
-        "link_type": "solid_color"
-      },
-      {
-        "source": "Lsativa_PI251246_Chr8_003490",
-        "target": "Lser_US96UC23_Chr8_003537",
-        "link_type": "solid_color"
-      },
-      {
-        "source": "Lser_Armenian999_Chr8_003415",
-        "target": "Lser_US96UC23_Chr8_003530",
-        "link_type": "solid_color"
-      },
-      {
-        "source": "Lser_US96UC23_Chr8_003530",
-        "target": "Lser_US96UC23_Chr8_003528",
-        "link_type": "solid_color"
-      },
-      {
-        "source": "Lsativa_Salinas_Chr8_003567",
-        "target": "Lser_US96UC23_Chr8_003526",
-        "link_type": "solid_color"
-      },
-      {
-        "source": "Lser_Armenian999_Chr8_003427",
-        "target": "Lser_US96UC23_Chr8_003534",
-        "link_type": "solid_color"
+        "source": "Lsativa_PI251246_Chr8_003480",
+        "target": "Lsativa_Salinas_Chr8_003569",
+        "link_type": "solid_red"
       },
       {
         "source": "Lser_Armenian999_Chr8_003425",
-        "target": "Lser_Armenian999_Chr8_003410",
-        "link_type": "solid_color"
+        "target": "Lsativa_PI251246_Chr8_003477",
+        "link_type": "dotted_grey"
       },
       {
-        "source": "Lser_Armenian999_Chr8_LOC111906314",
-        "target": "Lser_Armenian999_Chr8_003410",
-        "link_type": "solid_color"
+        "source": "Lsativa_ViAE_chr8_003538",
+        "target": "Lser_US96UC23_Chr8_003537",
+        "link_type": "dotted_grey"
       },
       {
         "source": "Lsativa_PI251246_Chr8_003486",
-        "target": "Lsativa_PI251246_Chr8_003488",
-        "link_type": "solid_color"
+        "target": "Lser_US96UC23_Chr8_003538",
+        "link_type": "dotted_grey"
       },
       {
-        "source": "Lser_US96UC23_Chr8_003535",
-        "target": "Lsativa_Salinas_Chr8_003557",
-        "link_type": "solid_color"
+        "source": "Lsativa_Salinas_Chr8_003573",
+        "target": "Lsativa_Salinas_Chr8_003553",
+        "link_type": "dotted_grey"
       },
       {
-        "source": "Lsativa_ViAE_chr8_003541",
+        "source": "Lser_US96UC23_Chr8_003534",
         "target": "Lser_US96UC23_Chr8_003522",
-        "link_type": "solid_color"
+        "link_type": "solid_red"
       },
       {
-        "source": "Lser_Armenian999_Chr8_003427",
-        "target": "Lser_Armenian999_Chr8_003420",
-        "link_type": "solid_color"
+        "source": "Lsativa_ViAE_chr8_003521",
+        "target": "Lser_US96UC23_Chr8_003525",
+        "link_type": "dotted_grey"
       },
       {
-        "source": "Lsativa_Salinas_Chr8_003564",
-        "target": "Lser_Armenian999_Chr8_003411",
+        "source": "Lsativa_PI251246_Chr8_003484",
+        "target": "Lsativa_Salinas_Chr8_003573",
         "link_type": "dotted_color"
       },
       {
+        "source": "Lser_Armenian999_Chr8_003410",
+        "target": "Lser_Armenian999_Chr8_003425",
+        "link_type": "solid_red"
+      },
+      {
         "source": "Lser_US96UC23_Chr8_003536",
-        "target": "Lsativa_ViAE_chr8_003538",
-        "link_type": "solid_color"
+        "target": "Lser_US96UC23_Chr8_003522",
+        "link_type": "solid_red"
+      },
+      {
+        "source": "Lser_Armenian999_Chr8_003423",
+        "target": "Lser_US96UC23_Chr8_003535",
+        "link_type": "dotted_grey"
+      },
+      {
+        "source": "Lsativa_PI251246_Chr8_003493",
+        "target": "Lsativa_Salinas_Chr8_003574",
+        "link_type": "dotted_grey"
+      },
+      {
+        "source": "Lser_US96UC23_Chr8_003525",
+        "target": "Lsativa_ViAE_chr8_003522",
+        "link_type": "dotted_grey"
+      },
+      {
+        "source": "Lsativa_Salinas_Chr8_003574",
+        "target": "Lser_Armenian999_Chr8_003420",
+        "link_type": "dotted_color"
+      },
+      {
+        "source": "Lser_US96UC23_Chr8_003532",
+        "target": "Lser_Armenian999_Chr8_003418",
+        "link_type": "solid_red"
+      },
+      {
+        "source": "Lser_US96UC23_Chr8_003521",
+        "target": "Lser_US96UC23_Chr8_003536",
+        "link_type": "dotted_grey"
+      },
+      {
+        "source": "Lsativa_PI251246_Chr8_003482",
+        "target": "Lsativa_ViAE_chr8_003522",
+        "link_type": "dotted_grey"
+      },
+      {
+        "source": "Lsativa_ViAE_chr8_003538",
+        "target": "Lser_US96UC23_Chr8_003522",
+        "link_type": "dotted_grey"
+      },
+      {
+        "source": "Lsativa_PI251246_Chr8_003481",
+        "target": "Lsativa_ViAE_chr8_003528",
+        "link_type": "dotted_grey"
+      },
+      {
+        "source": "Lser_Armenian999_Chr8_LOC111906314",
+        "target": "Lsativa_ViAE_chr8_003541",
+        "link_type": "dotted_grey"
+      },
+      {
+        "source": "Lser_US96UC23_Chr8_003528",
+        "target": "Lser_Armenian999_Chr8_LOC111906314",
+        "link_type": "dotted_grey"
+      },
+      {
+        "source": "Lser_Armenian999_Chr8_003412",
+        "target": "Lser_Armenian999_Chr8_003419",
+        "link_type": "solid_red"
       },
       {
         "source": "Lsativa_Salinas_Chr8_003577",
@@ -11864,104 +11899,189 @@
         "link_type": "dotted_color"
       },
       {
-        "source": "Lsativa_PI251246_Chr8_003493",
-        "target": "Lser_Armenian999_Chr8_003427",
-        "link_type": "dotted_color"
-      },
-      {
-        "source": "Lser_Armenian999_Chr8_003414",
-        "target": "Lsativa_ViAE_chr8_003528",
-        "link_type": "solid_color"
-      },
-      {
-        "source": "Lsativa_PI251246_Chr8_003489",
-        "target": "Lsativa_ViAE_chr8_003521",
-        "link_type": "solid_color"
-      },
-      {
-        "source": "Lsativa_Salinas_Chr8_003574",
-        "target": "Lsativa_Salinas_Chr8_003577",
-        "link_type": "solid_color"
-      },
-      {
-        "source": "Lser_US96UC23_Chr8_003538",
-        "target": "Lser_Armenian999_Chr8_003426",
-        "link_type": "solid_color"
-      },
-      {
-        "source": "Lser_Armenian999_Chr8_003411",
-        "target": "Lsativa_Salinas_Chr8_003557",
-        "link_type": "dotted_color"
-      },
-      {
         "source": "Lser_US96UC23_Chr8_003521",
-        "target": "Lsativa_ViAE_chr8_003538",
-        "link_type": "solid_color"
+        "target": "Lser_US96UC23_Chr8_003525",
+        "link_type": "dotted_grey"
       },
       {
         "source": "Lser_Armenian999_Chr8_LOC111906314",
-        "target": "Lsativa_PI251246_Chr8_003477",
-        "link_type": "solid_color"
-      },
-      {
-        "source": "Lsativa_ViAE_chr8_003538",
-        "target": "Lser_Armenian999_Chr8_003411",
-        "link_type": "solid_color"
-      },
-      {
-        "source": "Lser_Armenian999_Chr8_003410",
-        "target": "Lser_Armenian999_Chr8_003425",
-        "link_type": "solid_color"
-      },
-      {
-        "source": "Lser_US96UC23_Chr8_003537",
-        "target": "Lsativa_ViAE_chr8_003536",
-        "link_type": "dotted_color"
-      },
-      {
-        "source": "Lsativa_ViAE_chr8_003539",
-        "target": "Lsativa_PI251246_Chr8_003489",
-        "link_type": "solid_color"
-      },
-      {
-        "source": "Lser_Armenian999_Chr8_003412",
-        "target": "Lsativa_Salinas_Chr8_003573",
-        "link_type": "solid_color"
-      },
-      {
-        "source": "Lser_US96UC23_Chr8_003532",
-        "target": "Lser_Armenian999_Chr8_003418",
-        "link_type": "solid_color"
+        "target": "Lser_US96UC23_Chr8_003525",
+        "link_type": "dotted_grey"
       },
       {
         "source": "Lser_Armenian999_Chr8_003419",
-        "target": "Lser_Armenian999_Chr8_003410",
-        "link_type": "solid_color"
-      },
-      {
-        "source": "Lsativa_Salinas_Chr8_003575",
-        "target": "Lser_US96UC23_Chr8_003538",
-        "link_type": "solid_color"
-      },
-      {
-        "source": "Lser_Armenian999_Chr8_003416",
-        "target": "Lsativa_PI251246_Chr8_003482",
-        "link_type": "solid_color"
-      },
-      {
-        "source": "Lsativa_ViAE_chr8_003541",
-        "target": "Lser_Armenian999_Chr8_003427",
+        "target": "Lsativa_PI251246_Chr8_003484",
         "link_type": "dotted_color"
       },
       {
-        "source": "Lser_Armenian999_Chr8_LOC111906314",
+        "source": "Lsativa_Salinas_Chr8_003571",
         "target": "Lsativa_ViAE_chr8_003522",
-        "link_type": "solid_color"
+        "link_type": "dotted_grey"
       },
       {
-        "source": "Lsativa_Salinas_Chr8_003578",
-        "target": "Lsativa_PI251246_Chr8_003493",
-        "link_type": "solid_color"
+        "source": "Lser_Armenian999_Chr8_003425",
+        "target": "Lser_US96UC23_Chr8_003522",
+        "link_type": "dotted_grey"
+      },
+      {
+        "source": "Lser_US96UC23_Chr8_003533",
+        "target": "Lsativa_ViAE_chr8_003528",
+        "link_type": "dotted_color"
+      },
+      {
+        "source": "Lser_Armenian999_Chr8_003423",
+        "target": "Lser_Armenian999_Chr8_003414",
+        "link_type": "dotted_grey"
+      },
+      {
+        "source": "Lser_US96UC23_Chr8_003529",
+        "target": "Lser_US96UC23_Chr8_003535",
+        "link_type": "dotted_grey"
+      },
+      {
+        "source": "Lser_US96UC23_Chr8_003533",
+        "target": "Lsativa_PI251246_Chr8_003484",
+        "link_type": "dotted_color"
+      },
+      {
+        "source": "Lsativa_PI251246_Chr8_003480",
+        "target": "Lser_Armenian999_Chr8_003411",
+        "link_type": "dotted_grey"
+      },
+      {
+        "source": "Lsativa_Salinas_Chr8_003557",
+        "target": "Lsativa_ViAE_chr8_003522",
+        "link_type": "dotted_color"
+      },
+      {
+        "source": "Lsativa_Salinas_Chr8_003570",
+        "target": "Lsativa_ViAE_chr8_003528",
+        "link_type": "dotted_grey"
+      },
+      {
+        "source": "Lser_US96UC23_Chr8_003533",
+        "target": "Lser_US96UC23_Chr8_003521",
+        "link_type": "dotted_grey"
+      },
+      {
+        "source": "Lser_US96UC23_Chr8_003524",
+        "target": "Lser_Armenian999_Chr8_003412",
+        "link_type": "dotted_color"
+      },
+      {
+        "source": "Lser_Armenian999_Chr8_003419",
+        "target": "Lsativa_ViAE_chr8_003541",
+        "link_type": "dotted_grey"
+      },
+      {
+        "source": "Lsativa_ViAE_chr8_003532",
+        "target": "Lsativa_Salinas_Chr8_003574",
+        "link_type": "solid_red"
+      },
+      {
+        "source": "Lser_US96UC23_Chr8_003530",
+        "target": "Lsativa_ViAE_chr8_003538",
+        "link_type": "dotted_grey"
+      },
+      {
+        "source": "Lsativa_Salinas_Chr8_003566",
+        "target": "Lsativa_PI251246_Chr8_003479",
+        "link_type": "dotted_color"
+      },
+      {
+        "source": "Lsativa_Salinas_Chr8_003575",
+        "target": "Lsativa_ViAE_chr8_003535",
+        "link_type": "solid_red"
+      },
+      {
+        "source": "Lser_Armenian999_Chr8_003418",
+        "target": "Lsativa_Salinas_Chr8_003572",
+        "link_type": "solid_red"
+      },
+      {
+        "source": "Lser_US96UC23_Chr8_003537",
+        "target": "Lsativa_PI251246_Chr8_003488",
+        "link_type": "dotted_color"
+      },
+      {
+        "source": "Lsativa_PI251246_Chr8_003486",
+        "target": "Lser_Armenian999_Chr8_003426",
+        "link_type": "dotted_grey"
+      },
+      {
+        "source": "Lsativa_ViAE_chr8_003532",
+        "target": "Lser_US96UC23_Chr8_003534",
+        "link_type": "solid_red"
+      },
+      {
+        "source": "Lser_Armenian999_Chr8_003410",
+        "target": "Lsativa_ViAE_chr8_003522",
+        "link_type": "dotted_grey"
+      },
+      {
+        "source": "Lsativa_ViAE_chr8_003541",
+        "target": "Lser_US96UC23_Chr8_003522",
+        "link_type": "dotted_grey"
+      },
+      {
+        "source": "Lser_Armenian999_Chr8_003419",
+        "target": "Lsativa_Salinas_Chr8_003573",
+        "link_type": "dotted_color"
+      },
+      {
+        "source": "Lser_US96UC23_Chr8_003524",
+        "target": "Lsativa_Salinas_Chr8_003573",
+        "link_type": "dotted_grey"
+      },
+      {
+        "source": "Lsativa_PI251246_Chr8_003480",
+        "target": "Lsativa_Salinas_Chr8_003567",
+        "link_type": "solid_red"
+      },
+      {
+        "source": "Lsativa_PI251246_Chr8_003479",
+        "target": "Lsativa_ViAE_chr8_003535",
+        "link_type": "dotted_grey"
+      },
+      {
+        "source": "Lsativa_PI251246_Chr8_003482",
+        "target": "Lser_Armenian999_Chr8_LOC111906314",
+        "link_type": "solid_red"
+      },
+      {
+        "source": "Lsativa_ViAE_chr8_003536",
+        "target": "Lser_Armenian999_Chr8_003424",
+        "link_type": "dotted_color"
+      },
+      {
+        "source": "Lsativa_ViAE_chr8_003535",
+        "target": "Lsativa_ViAE_chr8_003536",
+        "link_type": "dotted_grey"
+      },
+      {
+        "source": "Lsativa_Salinas_Chr8_003567",
+        "target": "Lsativa_Salinas_Chr8_003557",
+        "link_type": "dotted_grey"
+      },
+      {
+        "source": "Lser_Armenian999_Chr8_003425",
+        "target": "Lsativa_Salinas_Chr8_003557",
+        "link_type": "dotted_grey"
+      },
+      {
+        "source": "Lser_US96UC23_Chr8_003528",
+        "target": "Lsativa_Salinas_Chr8_003571",
+        "link_type": "dotted_grey"
+      },
+      {
+        "source": "Lsativa_PI251246_Chr8_003479",
+        "target": "Lsativa_ViAE_chr8_003522",
+        "link_type": "dotted_grey"
+      },
+      {
+        "source": "Lsativa_PI251246_Chr8_003476",
+        "target": "Lsativa_PI251246_Chr8_003477",
+        "link_type": "dotted_grey"
       },
       {
         "source": "Lser_Armenian999_Chr8_003424",
@@ -11969,277 +12089,157 @@
         "link_type": "dotted_color"
       },
       {
-        "source": "Lsativa_PI251246_Chr8_003493",
-        "target": "Lsativa_Salinas_Chr8_003578",
-        "link_type": "solid_color"
+        "source": "Lser_Armenian999_Chr8_003426",
+        "target": "Lser_US96UC23_Chr8_003538",
+        "link_type": "solid_red"
       },
       {
-        "source": "Lsativa_ViAE_chr8_003536",
-        "target": "Lsativa_ViAE_chr8_003534",
-        "link_type": "solid_color"
-      },
-      {
-        "source": "Lser_US96UC23_Chr8_003524",
-        "target": "Lsativa_PI251246_Chr8_003478",
-        "link_type": "dotted_color"
-      },
-      {
-        "source": "Lsativa_PI251246_Chr8_003479",
-        "target": "Lser_Armenian999_Chr8_003411",
-        "link_type": "solid_color"
-      },
-      {
-        "source": "Lser_US96UC23_Chr8_003530",
+        "source": "Lser_US96UC23_Chr8_003536",
         "target": "Lsativa_Salinas_Chr8_003571",
+        "link_type": "dotted_grey"
+      },
+      {
+        "source": "Lsativa_ViAE_chr8_003522",
+        "target": "Lsativa_Salinas_Chr8_003557",
         "link_type": "dotted_color"
       },
       {
-        "source": "Lsativa_ViAE_chr8_003532",
-        "target": "Lser_US96UC23_Chr8_003534",
-        "link_type": "solid_color"
+        "source": "Lsativa_Salinas_Chr8_003578",
+        "target": "Lser_Armenian999_Chr8_003427",
+        "link_type": "solid_red"
       },
       {
-        "source": "Lsativa_PI251246_Chr8_003493",
-        "target": "Lser_US96UC23_Chr8_003534",
-        "link_type": "solid_color"
+        "source": "Lsativa_PI251246_Chr8_000683",
+        "target": "Lsativa_Salinas_Chr8_003553",
+        "link_type": "dotted_grey"
       },
       {
-        "source": "Lser_US96UC23_Chr8_003529",
-        "target": "Lsativa_Salinas_Chr8_003570",
+        "source": "Lsativa_PI251246_Chr8_003489",
+        "target": "Lser_US96UC23_Chr8_003525",
+        "link_type": "dotted_grey"
+      },
+      {
+        "source": "Lser_US96UC23_Chr8_003537",
+        "target": "Lser_US96UC23_Chr8_003530",
+        "link_type": "dotted_grey"
+      },
+      {
+        "source": "Lsativa_ViAE_chr8_003524",
+        "target": "Lsativa_Salinas_Chr8_003559",
+        "link_type": "solid_red"
+      },
+      {
+        "source": "Lser_Armenian999_Chr8_003425",
+        "target": "Lser_US96UC23_Chr8_003525",
+        "link_type": "dotted_grey"
+      },
+      {
+        "source": "Lser_Armenian999_Chr8_003422",
+        "target": "Lsativa_ViAE_chr8_003524",
+        "link_type": "dotted_grey"
+      },
+      {
+        "source": "Lsativa_Salinas_Chr8_003574",
+        "target": "Lsativa_PI251246_Chr8_003485",
         "link_type": "dotted_color"
       },
       {
-        "source": "Lser_US96UC23_Chr8_003529",
-        "target": "Lsativa_ViAE_chr8_003541",
-        "link_type": "solid_color"
+        "source": "Lser_Armenian999_Chr8_003412",
+        "target": "Lsativa_ViAE_chr8_003524",
+        "link_type": "solid_red"
       },
       {
-        "source": "Lsativa_PI251246_Chr8_003481",
-        "target": "Lser_Armenian999_Chr8_003414",
+        "source": "Lsativa_PI251246_Chr8_003486",
+        "target": "Lsativa_ViAE_chr8_003535",
+        "link_type": "solid_red"
+      },
+      {
+        "source": "Lsativa_ViAE_chr8_003538",
+        "target": "Lsativa_PI251246_Chr8_003490",
+        "link_type": "dotted_grey"
+      },
+      {
+        "source": "Lsativa_ViAE_chr8_003539",
+        "target": "Lsativa_Salinas_Chr8_003557",
+        "link_type": "dotted_grey"
+      },
+      {
+        "source": "Lsativa_Salinas_Chr8_003572",
+        "target": "Lsativa_PI251246_Chr8_003483",
+        "link_type": "solid_red"
+      },
+      {
+        "source": "Lsativa_ViAE_chr8_003528",
+        "target": "Lsativa_PI251246_Chr8_003484",
+        "link_type": "dotted_color"
+      },
+      {
+        "source": "Lsativa_PI251246_Chr8_000683",
+        "target": "Lser_Armenian999_Chr8_003423",
+        "link_type": "solid_red"
+      },
+      {
+        "source": "Lser_Armenian999_Chr8_003425",
+        "target": "Lsativa_ViAE_chr8_003539",
+        "link_type": "solid_red"
+      },
+      {
+        "source": "Lsativa_ViAE_chr8_003524",
+        "target": "Lsativa_Salinas_Chr8_003578",
+        "link_type": "dotted_grey"
+      },
+      {
+        "source": "Lsativa_Salinas_Chr8_003566",
+        "target": "Lsativa_ViAE_chr8_003535",
+        "link_type": "dotted_grey"
+      },
+      {
+        "source": "Lsativa_Salinas_Chr8_003553",
+        "target": "Lsativa_PI251246_Chr8_003476",
         "link_type": "dotted_color"
       },
       {
         "source": "Lsativa_ViAE_chr8_003521",
-        "target": "Lser_Armenian999_Chr8_003419",
-        "link_type": "solid_color"
+        "target": "Lsativa_ViAE_chr8_003528",
+        "link_type": "solid_red"
       },
       {
         "source": "Lser_Armenian999_Chr8_003418",
-        "target": "Lser_Armenian999_Chr8_003410",
-        "link_type": "solid_color"
-      },
-      {
-        "source": "Lsativa_Salinas_Chr8_003573",
-        "target": "Lser_Armenian999_Chr8_003419",
-        "link_type": "dotted_color"
-      },
-      {
-        "source": "Lsativa_ViAE_chr8_003536",
-        "target": "Lser_US96UC23_Chr8_003537",
-        "link_type": "dotted_color"
-      },
-      {
-        "source": "Lser_US96UC23_Chr8_003524",
-        "target": "Lsativa_ViAE_chr8_003524",
-        "link_type": "solid_color"
-      },
-      {
-        "source": "Lsativa_PI251246_Chr8_003486",
-        "target": "Lsativa_ViAE_chr8_003522",
-        "link_type": "solid_color"
-      },
-      {
-        "source": "Lsativa_Salinas_Chr8_003569",
-        "target": "Lsativa_ViAE_chr8_003524",
-        "link_type": "solid_color"
-      },
-      {
-        "source": "Lser_US96UC23_Chr8_003532",
-        "target": "Lsativa_ViAE_chr8_003522",
-        "link_type": "solid_color"
-      },
-      {
-        "source": "Lser_US96UC23_Chr8_003525",
-        "target": "Lser_Armenian999_Chr8_003411",
-        "link_type": "solid_color"
-      },
-      {
-        "source": "Lsativa_PI251246_Chr8_003486",
-        "target": "Lsativa_PI251246_Chr8_003479",
-        "link_type": "solid_color"
-      },
-      {
-        "source": "Lser_Armenian999_Chr8_003420",
-        "target": "Lsativa_Salinas_Chr8_003574",
-        "link_type": "dotted_color"
-      },
-      {
-        "source": "Lsativa_Salinas_Chr8_003566",
-        "target": "Lser_Armenian999_Chr8_003426",
-        "link_type": "solid_color"
-      },
-      {
-        "source": "Lser_US96UC23_Chr8_003534",
-        "target": "Lser_US96UC23_Chr8_003538",
-        "link_type": "solid_color"
-      },
-      {
-        "source": "Lsativa_Salinas_Chr8_003564",
-        "target": "Lsativa_ViAE_chr8_003522",
-        "link_type": "solid_color"
-      },
-      {
-        "source": "Lser_Armenian999_Chr8_003414",
-        "target": "Lsativa_ViAE_chr8_003522",
-        "link_type": "solid_color"
-      },
-      {
-        "source": "Lsativa_ViAE_chr8_003539",
-        "target": "Lsativa_Salinas_Chr8_003564",
-        "link_type": "solid_color"
-      },
-      {
-        "source": "Lser_Armenian999_Chr8_003423",
-        "target": "Lsativa_ViAE_chr8_003524",
-        "link_type": "solid_color"
-      },
-      {
-        "source": "Lser_US96UC23_Chr8_003524",
-        "target": "Lsativa_Salinas_Chr8_003573",
-        "link_type": "solid_color"
-      },
-      {
-        "source": "Lsativa_PI251246_Chr8_003485",
-        "target": "Lsativa_PI251246_Chr8_003477",
-        "link_type": "solid_color"
-      },
-      {
-        "source": "Lsativa_Salinas_Chr8_003570",
-        "target": "Lsativa_ViAE_chr8_003541",
-        "link_type": "solid_color"
-      },
-      {
-        "source": "Lser_Armenian999_Chr8_003412",
-        "target": "Lser_US96UC23_Chr8_003524",
-        "link_type": "dotted_color"
-      },
-      {
-        "source": "Lser_Armenian999_Chr8_LOC111906314",
-        "target": "Lsativa_Salinas_Chr8_003578",
-        "link_type": "solid_color"
-      },
-      {
-        "source": "Lsativa_PI251246_Chr8_003479",
-        "target": "Lser_Armenian999_Chr8_003426",
-        "link_type": "solid_color"
-      },
-      {
-        "source": "Lser_Armenian999_Chr8_003418",
-        "target": "Lsativa_Salinas_Chr8_003572",
-        "link_type": "solid_color"
-      },
-      {
-        "source": "Lser_Armenian999_Chr8_003425",
-        "target": "Lsativa_Salinas_Chr8_003564",
-        "link_type": "solid_color"
-      },
-      {
-        "source": "Lser_US96UC23_Chr8_003524",
-        "target": "Lser_US96UC23_Chr8_003521",
-        "link_type": "solid_color"
-      },
-      {
-        "source": "Lsativa_ViAE_chr8_003539",
-        "target": "Lser_US96UC23_Chr8_003522",
-        "link_type": "solid_color"
-      },
-      {
-        "source": "Lser_US96UC23_Chr8_003538",
-        "target": "Lser_US96UC23_Chr8_003537",
-        "link_type": "solid_color"
-      },
-      {
-        "source": "Lser_Armenian999_Chr8_003419",
-        "target": "Lsativa_Salinas_Chr8_003573",
-        "link_type": "dotted_color"
-      },
-      {
-        "source": "Lsativa_PI251246_Chr8_003478",
-        "target": "Lser_Armenian999_Chr8_003412",
-        "link_type": "dotted_color"
-      },
-      {
-        "source": "Lsativa_Salinas_Chr8_003553",
-        "target": "Lsativa_Salinas_Chr8_003578",
-        "link_type": "solid_color"
-      },
-      {
-        "source": "Lsativa_ViAE_chr8_003524",
-        "target": "Lsativa_ViAE_chr8_003522",
-        "link_type": "solid_color"
+        "target": "Lser_US96UC23_Chr8_003532",
+        "link_type": "solid_red"
       },
       {
         "source": "Lsativa_PI251246_Chr8_003484",
-        "target": "Lsativa_PI251246_Chr8_003479",
-        "link_type": "solid_color"
-      },
-      {
-        "source": "Lser_US96UC23_Chr8_003529",
-        "target": "Lsativa_PI251246_Chr8_003481",
+        "target": "Lsativa_ViAE_chr8_003528",
         "link_type": "dotted_color"
       },
       {
-        "source": "Lsativa_Salinas_Chr8_003570",
-        "target": "Lser_Armenian999_Chr8_003414",
-        "link_type": "dotted_color"
+        "source": "Lser_US96UC23_Chr8_003536",
+        "target": "Lsativa_ViAE_chr8_003536",
+        "link_type": "dotted_grey"
       },
       {
-        "source": "Lsativa_PI251246_Chr8_003480",
-        "target": "Lsativa_PI251246_Chr8_003477",
-        "link_type": "solid_color"
-      },
-      {
-        "source": "Lsativa_Salinas_Chr8_003566",
-        "target": "Lser_Armenian999_Chr8_003422",
-        "link_type": "solid_color"
-      },
-      {
-        "source": "Lsativa_PI251246_Chr8_000683",
-        "target": "Lsativa_Salinas_Chr8_003557",
-        "link_type": "solid_color"
-      },
-      {
-        "source": "Lsativa_Salinas_Chr8_003569",
-        "target": "Lsativa_Salinas_Chr8_003570",
-        "link_type": "solid_color"
+        "source": "Lsativa_Salinas_Chr8_003567",
+        "target": "Lsativa_ViAE_chr8_003522",
+        "link_type": "dotted_grey"
       },
       {
         "source": "Lser_US96UC23_Chr8_003522",
-        "target": "Lser_US96UC23_Chr8_003536",
-        "link_type": "solid_color"
+        "target": "Lser_Armenian999_Chr8_003411",
+        "link_type": "solid_red"
+      },
+      {
+        "source": "Lsativa_ViAE_chr8_003540",
+        "target": "Lsativa_ViAE_chr8_003532",
+        "link_type": "dotted_grey"
       },
       {
         "source": "Lser_Armenian999_Chr8_LOC111906314",
-        "target": "Lser_US96UC23_Chr8_003530",
-        "link_type": "solid_color"
+        "target": "Lser_Armenian999_Chr8_003427",
+        "link_type": "dotted_grey"
       },
       {
-        "source": "Lser_US96UC23_Chr8_003535",
-        "target": "Lsativa_ViAE_chr8_003528",
-        "link_type": "solid_color"
-      },
-      {
-        "source": "Lsativa_PI251246_Chr8_003482",
-        "target": "Lsativa_PI251246_Chr8_003486",
-        "link_type": "solid_color"
-      },
-      {
-        "source": "Lser_Armenian999_Chr8_003427",
-        "target": "Lser_Armenian999_Chr8_003411",
-        "link_type": "solid_color"
-      },
-      {
-        "source": "Lsativa_PI251246_Chr8_003484",
+        "source": "Lsativa_ViAE_chr8_003528",
         "target": "Lser_Armenian999_Chr8_003419",
         "link_type": "dotted_color"
       }

@@ -326,13 +326,6 @@ def add_links(df_only_cutoffs, row_max, col_max, subsections, domain):
 
     return links, domain_connections, all_genes
 
-# def get_gene_names_by_genome(coords):
-#     gene_names_by_genome = {}
-#     all_names = coords['name'].tolist()
-#     for genome in coords['genome']:
-#         gene_names_by_genome[genome] = [name for name in all_names if genome in name]
-#     return gene_names_by_genome
-
 def create_output(matrix_data, coords, domain):
 
     genomes = matrix_data['subsections'].tolist()
@@ -371,14 +364,15 @@ def combine_graphs(all_domain_connections, all_domain_genes, domains):
         key_domain_pairs = [(key, domain) for domain in domains]
         reverse_key_pairs = [(reverse_key, domain) for domain in domains]
         present_in_domains = [
-            all((pair in unique_links or (reverse_key_pairs[i] in unique_links)) for i, pair in enumerate(key_domain_pairs))
+            (pair in unique_links) or (reverse_key_pairs[i] in unique_links)
+            for i, pair in enumerate(key_domain_pairs)
         ]
 
         link_type = ""
 
         if not all(present_in_domains):
             # Gene doesn't exist in one domain
-            if not all(source in all_domain_genes[i] and target in all_domain_genes[i]
+            if all(source in all_domain_genes[i] and target in all_domain_genes[i]
                        for i, present in enumerate(present_in_domains) if not present):
                 link_type = "solid_color"
             # At least one reciprocal
@@ -440,7 +434,12 @@ def domain_parse(matrix_files, coord_file, file_names):
         graph_output["links"] = links
         genomes_output.append(graph_output)
 
+    
+    print(total_genomes)
+
     domain_graph_nodes = add_nodes(coords, total_gene_list)
+    for node in domain_graph_nodes:
+        node["is_present"] = True
     domain_graph = {
         "domain_name": "ALL",
         "genomes": list(total_genomes),

@@ -92,37 +92,39 @@ def get_group_graph():
         if not files:
             return jsonify({"error": "No files associated with this group"}), 404
 
-        matrix_s3_key = None
-        coordinate_s3_key = None
+        matrix_files = []
+        coordinate_file = None
         graph_s3_key = None
 
         for file in files:
+            presigned_url = s3_client.generate_presigned_url(
+                'get_object',
+                Params={
+                    'Bucket': os.getenv('S3_BUCKET_NAME'),
+                    'Key': file.s3_key,
+                    'ResponseContentDisposition': f'attachment; filename="{file.file_name}"'
+                },
+                ExpiresIn=3600
+            )
+            file_info = {"url": presigned_url, "original_name": file.file_name}
+
             if file.file_type == "matrix":
-                matrix_s3_key = file.s3_key
+                matrix_files.append(file_info)
             elif file.file_type == "coordinate":
-                coordinate_s3_key = file.s3_key
+                coordinate_file = file_info
             elif file.file_type == "graph":
                 graph_s3_key = file.s3_key
 
-        if not (matrix_s3_key and coordinate_s3_key and graph_s3_key):
+        if not (matrix_files and coordinate_file and graph_s3_key):
             return jsonify({"error": "Matrix/coordinate/graph file not found for this group"}), 400
 
-        # Retrieve files **privately** with boto3
-        bucket_name = os.getenv('S3_BUCKET_NAME')
-
-        matrix_bytes = s3_client.get_object(
-            Bucket=bucket_name, Key=matrix_s3_key)["Body"].read()
-
-        coordinate_bytes = s3_client.get_object(
-            Bucket=bucket_name, Key=coordinate_s3_key)["Body"].read()
-
         graph_str = s3_client.get_object(
-            Bucket=bucket_name, Key=graph_s3_key)["Body"].read().decode()
+            Bucket=os.getenv('S3_BUCKET_NAME'), Key=graph_s3_key)["Body"].read().decode()
 
         # Parse graph JSON
         graph = json.loads(graph_str)
         num_genes = len(graph.get("nodes", []))
-        num_domains = 1  # Adjust as needed
+        num_domains = len(matrix_files)  # Adjust based on the number of matrix files
 
         return jsonify({
             "message": "Graph generated successfully",
@@ -130,11 +132,16 @@ def get_group_graph():
             "description": group.description,
             "graph": graph,
             "num_genes": num_genes,
-            "num_domains": num_domains
+            "num_domains": num_domains,
+            "matrix_files": matrix_files,  # Include presigned URLs and original filenames for matrix files
+            "coordinate_file": coordinate_file  # Include presigned URL and original filename for coordinate file
         }), 200
 
     except Exception as e:
         return jsonify({"error": str(e)}), 500
+
+    finally:
+        session.close()
 
 
 @app.route('/generate_graph', methods=['POST'])
@@ -394,6 +401,25 @@ def get_user_data():
 @app.route('/pokemon', methods=['GET'])
 def nintendo():
     return "Hello Pokemon"
+
+@app.route('/download_file', methods=['GET'])
+def download_file():
+    s3_key = request.args.get('key')
+    if not s3_key:
+        return jsonify({"error": "Missing file key"}), 400
+
+    bucket_name = os.getenv('S3_BUCKET_NAME')
+
+    try:
+        # Generate a presigned URL for downloading the file
+        presigned_url = s3_client.generate_presigned_url(
+            'get_object',
+            Params={'Bucket': bucket_name, 'Key': s3_key},
+            ExpiresIn=3600  # URL expires in 1 hour
+        )
+        return jsonify({"url": presigned_url}), 200
+    except Exception as e:
+        return jsonify({"error": f"Failed to generate download URL: {str(e)}"}), 500
 
 @app.route('/', methods=['GET'])
 def home():

@@ -31,8 +31,8 @@
   let graph: Graph = { nodes: [], links: [], genomes: [] };
   let selectedGenomes: string[] = [];
   let filteredGraph: Graph = { nodes: [], links: [], genomes: [] };
-  let matrixFiles: File[] = [];   // Support up to three files
-  let coordsFile: File | null = null;   // Single coordinate file
+  let matrixFiles: { url: string; original_name: string }[] = []; // Matrix files with URLs and original names
+  let coordinateFile: { url: string; original_name: string } | null = null; // Coordinate file with URL and original name
 
   let errorMessage = "";
   let loading = true;        // Loading state for file upload
@@ -44,6 +44,9 @@
   let description = '';
   let numGenes = 0;
   let numDomains = 1;
+
+  let matrixFileUrls: string[] = []; // URLs for matrix files
+  let coordinateFileUrl: string | null = null; // URL for coordinate file
 
   onMount(async () => {
     const urlParams = new URLSearchParams(window.location.search);
@@ -68,12 +71,17 @@
         // Set the title and description if available
         title = fetchedGraph.title || '';
         description = fetchedGraph.description || '';
+
+        // Set file data for download
+        matrixFiles = fetchedGraph.matrix_files || [];
+        coordinateFile = fetchedGraph.coordinate_file || null;
+
+        // Log file data for debugging
+        console.log('Matrix files:', matrixFiles);
+        console.log('Coordinate file:', coordinateFile);
       } catch (error) {
         errorMessage = error.message || "An error occurred.";
-        console.error('Detailed error:', {
-            status: error.response?.status,
-            data: await error.response?.text()
-        });
+        console.error('Detailed error:', error);
       }
     }
 
@@ -228,6 +236,27 @@
 {#if loading}
   <p>Loading...</p>
 {:else}
+  <!-- File download section -->
+  {#if groupId && (matrixFiles.length > 0 || coordinateFile)}
+    <div style="margin: 1rem;">
+      <h3>Download Files</h3>
+      {#if coordinateFile}
+        <div>
+          <a href={coordinateFile.url} target="_blank" rel="noopener noreferrer">
+            <button>Download Coordinate File ({coordinateFile.original_name})</button>
+          </a>
+        </div>
+      {/if}
+      {#each matrixFiles as file, index}
+        <div>
+          <a href={file.url} target="_blank" rel="noopener noreferrer">
+            <button>Download Matrix File {index + 1} ({file.original_name})</button>
+          </a>
+        </div>
+      {/each}
+    </div>
+  {/if}
+
   <!-- File upload/data source section only available if not reviewing a specific group -->
   {#if !groupId}
     <!-- File upload section -->

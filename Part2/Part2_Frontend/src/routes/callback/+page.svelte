@@ -3,7 +3,6 @@
 	import { userManager, signOutRedirect } from '$lib/auth/userManager';
 	import { API_BASE_URL } from '$lib/api';
 	import {goto} from '$app/navigation';
-	import getUserInfo from '$lib/auth/utils_user_info';
 
 	let email = '';
 	let accessToken = '';

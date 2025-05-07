@@ -46,6 +46,7 @@
   let numGenes = 0;
   let numDomains = 1;
 
+  let isAuthenticated = false;
 	let accessToken = '';
 	let idToken = '';
 
@@ -55,8 +56,11 @@
 
     const user = await userManager.getUser();
 
-    accessToken = user?.access_token;
-    idToken = user?.id_token;
+    if (user && !user.expired) {
+    isAuthenticated = true;
+    accessToken = user.access_token;
+    idToken = user.id_token;
+    }
 
     if (groupId) {
       try {
@@ -274,7 +278,7 @@
   {/if}
 
   <!-- Save group section -->
-  {#if graph.nodes.length > 0}
+  {#if graph.nodes.length > 0 && isAuthenticated}
     <div style="margin: 1rem; margin-top: 0px; display: flex; flex-direction: column; gap: 1rem; max-width: 300px;">
       <h3>Save Group</h3>
       <input type="text" placeholder="Title" bind:value={title} />

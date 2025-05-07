@@ -2,7 +2,7 @@
     import { onMount } from "svelte";
     import { goto } from "$app/navigation";
 	import { API_BASE_URL } from "$lib/api";
-    import { userManager } from "$lib/auth/userManager";
+    import { userManager, signOutRedirect } from "$lib/auth/userManager";
 
     let username = "";
     let userFiles = [];

@@ -4,6 +4,7 @@
   import testGraph from '$lib/test.json';
   import { onMount } from 'svelte';
   import { API_BASE_URL } from '$lib/api';
+  import { goto } from '$app/navigation'; // Import SvelteKit's navigation function
 
   interface Node {
     id: string;
@@ -11,33 +12,44 @@
     protein_name: string;
     direction: string;   // "plus" | "minus"
     rel_position: number;
+    is_present: boolean;
+    gene_type?: string;
     _dup?: boolean;      // internal flag for duplicated bottom‑row copy
   }
 
   interface Link {
     source: string;
     target: string;
-    score: number;       // 0‑100
+    score: number;       // 55‑100
     is_reciprocal: boolean;
   }
 
   interface Graph {
+    domain_name?: string; // optional domain name
     nodes: Node[];
     links: Link[];
     genomes: string[];   // list of genome names
   }
 
   let groupId: string | null = null;    // Group ID for file retrieval
-  let graph: Graph = { nodes: [], links: [], genomes: [] };
+
+  let graphs: Graph[] = [];
+  let selectedGraph: Graph = { nodes: [], links: [], genomes: [] }; // Current graph to be displayed
   let selectedGenomes: string[] = [];
   let filteredGraph: Graph = { nodes: [], links: [], genomes: [] };
-  let matrixFile: File | null = null;   // TODO: update to support multiple files
-  let coordsFile: File | null = null;
+
+  // Variables for uploaded files/inputs
+  let uploadedCoordsFile: File | null = null;
+  let uploadedMatrixFiles: File[] = [];
+  let isDomainSpecific = false;
+
+  // Variables for downloaded files
+  let matrixFiles: { url: string; original_name: string }[] = [];
+  let coordinateFile: { url: string; original_name: string } | null = null;
 
   let errorMessage = "";
   let loading = true;        // Loading state for file upload
-  let cutoff = 0;             // slider value
-  let isDomainSpecific = false;
+  let cutoff = 55;           // slider value
 
   // Form information if user choses to save graph
   let title = '';
@@ -47,52 +59,85 @@
 
   onMount(async () => {
     const urlParams = new URLSearchParams(window.location.search);
-    groupId = urlParams.get('groupId');
+    const initialId = urlParams.get('groupId');
 
-    if (groupId) {
-      try {
-        const response = await fetch(`${API_BASE_URL}/get_group_graph?groupId=${groupId}`);
-
-        if (!response.ok) {
-          throw new Error(`Error fetching graph: ${response.statusText}`);
-        }
-
-        const fetchedGraph = await response.json();
-        graph = fetchedGraph.graph;
-        numGenes = fetchedGraph.num_genes;
-        numDomains = fetchedGraph.num_domains;
-        // Reset selected genomes and filtered graph
-        selectedGenomes = [];
-        filteredGraph = { nodes: [], links: [], genomes: [] };
-
-        // Set the title and description if available
-        title = fetchedGraph.title || '';
-        description = fetchedGraph.description || '';
-      } catch (error) {
-        errorMessage = error.message || "An error occurred.";
-        console.error('Detailed error:', {
-            status: error.response?.status,
-            data: await error.response?.text()
-        });
-      }
+    if (initialId) {
+      groupId = initialId;
+      await fetchGroupData(groupId);
     }
 
     loading = false; // Set loading to false after fetching data
   });
 
+  function normaliseGraphs(data: any): Graph[] {
+    // backend might return {graphs:[…]} (new) or {graph:{…}} (legacy)
+    if (Array.isArray(data?.graphs)) return data.graphs;
+    if (data?.graph) return [data.graph];
+    // direct object passed (e.g. dummyGraph)
+    if (Array.isArray(data)) return data;
+    if (data?.nodes) return [data as Graph];
+    throw new Error('No graph data found');
+  }
+
+  function chooseInitialGraph(graphs: Graph[]) {
+    if (!Array.isArray(graphs)) {
+      console.error("Expected 'graphs' to be an array, but got:", graphs);
+      return { nodes: [], links: [], genomes: [] }; // Return an empty graph as fallback
+    }
+    return graphs.find(g => g.domain_name === 'ALL') || graphs[0];
+  }
+
+  async function fetchGroupData(id: string) {
+    try {
+      const response = await fetch(`${API_BASE_URL}/get_group_graph?groupId=${id}`);
+
+      if (!response.ok) {
+        throw new Error(`Error fetching graph: ${response.statusText}`);
+      }
+
+      const data = await response.json();
+      console.log(data)
+      graphs = normaliseGraphs(data.graphs);
+      selectedGraph = chooseInitialGraph(graphs);
+
+      numGenes = data.num_genes;
+      numDomains = data.num_domains;
+      title = data.title || '';
+      description = data.description || '';
+
+      // Set file data for download
+      matrixFiles = data.matrix_files || [];
+      coordinateFile = data.coordinate_file || null;
+
+      // Reset selected genomes and filtered graph
+      selectedGenomes = [];
+      filteredGraph = { nodes: [], links: [], genomes: [] };
+    } catch (error) {
+      errorMessage = error.message || "An error occurred.";
+      console.error("Detailed error:", error);
+    }
+  }
 
   // Function to handle file uploads
   async function uploadFiles() {
-    if (!coordsFile || !matrixFile) {
-      alert('Please select matrix and coordinates files to upload.');
+    if (!uploadedCoordsFile || uploadedMatrixFiles.length === 0) {
+      alert('Please select the required files.');
+      return;
+    }
+    if (!isDomainSpecific && uploadedMatrixFiles.length !== 1) {
+      alert('Exactly one matrix file is required for non-domain-specific graphs.');
+      return;
+    }
+    if (isDomainSpecific && uploadedMatrixFiles.length > 3) {
+      alert('Up to three matrix files are supported for domain-specific graphs.');
       return;
     }
 
     const formData = new FormData();
-    formData.append('file_coordinate', coordsFile);
-    formData.append('file_matrix', matrixFile);
+    formData.append('file_coordinate', uploadedCoordsFile); // Use the uploaded coordinate file
+    uploadedMatrixFiles.forEach((file, index) => formData.append(`file_matrix_${index}`, file));
     formData.append('is_domain_specific', isDomainSpecific ? 'true' : 'false');
-    formData.append('username', localStorage.getItem('username') || ''); // Automatically send stored username
+    formData.append('username', localStorage.getItem('username') || '');
 
     try {
       const response = await fetch(`${API_BASE_URL}/generate_graph`, {
@@ -105,11 +150,14 @@
         throw new Error(errorData.error || `Upload failed: ${response.statusText}`);
       }
 
-      const fetchedGraph = await response.json();
-      console.log('Fetched graph:', fetchedGraph);
-      graph = fetchedGraph.graph;
-      numGenes = fetchedGraph.num_genes;
-      numDomains = fetchedGraph.num_domains;
+      const data = await response.json();
+      console.log('Fetched data:', data);
+      graphs = normaliseGraphs(data.graphs);
+      selectedGraph = chooseInitialGraph(graphs);
+      numGenes = data.num_genes;
+      numDomains = data.num_domains;
+      isDomainSpecific = data.is_domain_specific || false;
+
       // Reset selected genomes and filtered graph
       selectedGenomes = [];
       filteredGraph = { nodes: [], links: [], genomes: [] };
@@ -130,30 +178,28 @@
       return;
     }
 
-    // if (!coordsFile || !matrixFile) {
-    //   alert('Please select matrix and coordinates files to upload.');
-    //   return;
-    // }
-
     const formData = new FormData();
+    if (!groupId) {
+      // For new groups, validate uploaded files
+      if (!uploadedCoordsFile || uploadedMatrixFiles.length === 0) {
+        alert('Please select at least one coordinate file and one matrix file to save.');
+        return;
+      }
 
-    if (coordsFile && matrixFile) {
-      formData.append('file_coordinate', coordsFile);
-      formData.append('file_matrix', matrixFile);
-    }
-
-    if (groupId) {
+      formData.append('file_coordinate', uploadedCoordsFile);
+      uploadedMatrixFiles.forEach((file, index) => formData.append(`file_matrix_${index}`, file));
+    } else {
       formData.append('group_id', groupId); // Include groupId if available
     }
+
     formData.append('username', localStorage.getItem('username') || ''); // Automatically send stored username
     formData.append('title', title);
     formData.append('description', description);
     formData.append('num_genes', numGenes.toString());
     formData.append('num_domains', numDomains.toString());
     formData.append('is_domain_specific', isDomainSpecific ? 'true' : 'false');
-    formData.append('genomes', JSON.stringify(graph.genomes));
-    formData.append('graph', JSON.stringify(graph));
-    console.log("graph string", JSON.stringify(graph));
+    formData.append('genomes', JSON.stringify(selectedGraph.genomes));
+    formData.append('graphs', JSON.stringify(graphs));
 
     try {
       const response = await fetch(`${API_BASE_URL}/save`, {
@@ -170,7 +216,15 @@
 
       const result = await response.json();
       console.log('Group saved successfully:', result);
-      alert('Group saved successfully!');
+      alert('Group updated successfully!');
+
+      if (!groupId) {
+        // Transition to the view with the new groupId
+        const newGroupId = result.group_id;
+        groupId = newGroupId; // Update groupId in the component state
+        await fetchGroupData(newGroupId); // Fetch the new group data
+        goto(`?groupId=${newGroupId}`);
+      }
     } catch (error) {
       console.error('Error saving group:', error);
       alert('Failed to save group. Please try again.');
@@ -179,14 +233,11 @@
 
   // Function to switch data source
   function switchDataSource(source: string) {
-    if (source === 'dummy') {
-      graph = dummyGraph;
-    } else if (source === 'test') {
-      graph = testGraph;
-    } else {
-      console.error('Invalid data source:', source);
-      return;
-    }
+    graphs = [source === 'dummy' ? dummyGraph : testGraph];
+    selectedGraph  = graphs[0];
+    isDomainSpecific = false;
+    numGenes = selectedGraph.nodes.length;
+    numDomains = 1;
 
     selectedGenomes = []; // Reset selected genomes when switching data source
     filteredGraph = { nodes: [], links: [], genomes: [] }; // Reset filtered graph
@@ -212,39 +263,68 @@
     filteredGraph.genomes = selectedGenomes;
 
     // Update nodes in filtered graph
-    filteredGraph.nodes = graph.nodes.filter(node =>
+    filteredGraph.nodes = selectedGraph.nodes.filter(node =>
       selectedGenomes.includes(node.genome_name)
     );
 
     // Update links in filtered graph
-    filteredGraph.links = graph.links.filter(link =>
+    filteredGraph.links = selectedGraph.links.filter(link =>
       // Both link.source and link.target should be associated with (contain the name of) genomes in selectedGenomes
       selectedGenomes.some(genome => link.source.includes(genome)) &&
       selectedGenomes.some(genome => link.target.includes(genome))
     );
+  }
+
+  // Select domain/graph to focus on
+  function selectDomain(idx: number) {
+    selectedGraph = graphs[idx];
+    filterGraph();  // Reapply the filter to the selected graph
+    console.log(selectedGraph)
   }
 </script>
 
 {#if loading}
   <p>Loading...</p>
 {:else}
+  <!-- File download section -->
+  {#if groupId && (matrixFiles.length > 0 || coordinateFile)}
+    <div style="margin: 1rem;">
+      <h3>Download Files</h3>
+      {#if coordinateFile}
+        <div>
+          <a href={coordinateFile.url} target="_blank" rel="noopener noreferrer">
+            <button>Download Coordinate File ({coordinateFile.original_name})</button>
+          </a>
+        </div>
+      {/if}
+      {#each matrixFiles as file, index}
+        <div>
+          <a href={file.url} target="_blank" rel="noopener noreferrer">
+            <button>Download Matrix File {index + 1} ({file.original_name})</button>
+          </a>
+        </div>
+      {/each}
+    </div>
+  {/if}
+
   <!-- File upload/data source section only available if not reviewing a specific group -->
   {#if !groupId}
     <!-- File upload section -->
     <div style="margin: 1rem; display: flex; justify-content: space-between; align-items: center; gap: 1rem;">
       <div>
-        <h3>Upload Coordinates File:</h3>
-        <input type="file" on:change={(e) => coordsFile = (e.target as HTMLInputElement).files?.[0] || null} />
+        <h3>Upload Coordinate File:</h3>
+        <input type="file" on:change={(e) => uploadedCoordsFile = (e.target as HTMLInputElement).files?.[0] || null} />
       </div>
       <div>
-        <h3>Upload Matrix File:</h3>
-        <input type="file" on:change={(e) => matrixFile = (e.target as HTMLInputElement).files?.[0] || null} />
+        <h3>Upload Matrix Files:</h3>
+        <input type="file" multiple={isDomainSpecific} on:change={(e) => uploadedMatrixFiles = Array.from((e.target as HTMLInputElement).files || [])} />
+        <p style="font-size: 0.8rem; color: gray;">{isDomainSpecific ? 'Select up to 3 matrix files.' : 'Select only 1 matrix file.'}</p>
       </div>
       <label>
-        <input type="checkbox" bind:checked={isDomainSpecific} disabled/>
+        <input type="checkbox" bind:checked={isDomainSpecific} />
         Domain-Specific?
       </label>
-      <button on:click={uploadFiles} disabled={!matrixFile || !coordsFile}>Upload and Prepare Graph</button>
+      <button on:click={uploadFiles} disabled={!uploadedCoordsFile || uploadedMatrixFiles.length === 0 || (isDomainSpecific && uploadedMatrixFiles.length > 3)}>Upload and Prepare Graph</button>
       {#if errorMessage}
             <p class="error">{errorMessage}</p>
       {/if}
@@ -261,7 +341,7 @@
   {/if}
 
   <!-- Save group section -->
-  {#if graph.nodes.length > 0}
+  {#if selectedGraph.nodes.length > 0}
     <div style="margin: 1rem; margin-top: 0px; display: flex; flex-direction: column; gap: 1rem; max-width: 300px;">
       <h3>Save Group</h3>
       <input type="text" placeholder="Title" bind:value={title} />
@@ -270,12 +350,24 @@
     </div>
   {/if}
 
+  <!-- Domain Selector -->
+  {#if graphs.length > 1}
+    <div style="margin: 1rem; display:flex; align-items:center; gap:0.5rem;">
+      <span style="font-weight:600;">View domain:</span>
+      <select on:change={(e) => selectDomain((e.target as HTMLSelectElement).selectedIndex)}>
+        {#each graphs as g, idx}
+          <option value={idx} selected={g === selectedGraph}>{g.domain_name}</option>
+        {/each}
+      </select>
+    </div>
+  {/if}
+
   <!-- Genome selection checkboxes, filter button, and cutoff slider in one row -->
   <div style="margin: 1rem; display: flex; align-items: center; gap: 2rem;">
     <div>
       <h3>Select 3 Genomes:</h3>
-      {#if graph.genomes}
-        {#each graph.genomes as genome}
+      {#if selectedGraph.genomes}
+        {#each selectedGraph.genomes as genome}
           <label style="display: block; margin-top: 1rem; margin-left: 5%;">
             <input
               type="checkbox"
@@ -297,7 +389,12 @@
 
     <label style="display: flex; align-items: center; gap: 0.5rem;">
       Adjust Cut-off:
-      <input type="range" min="0" max="100" bind:value={cutoff}/>
+      <input
+        type="range"
+        min="55"
+        max="100"
+        disabled={selectedGraph.domain_name === "ALL"}
+        bind:value={cutoff}/>
       {cutoff}%
     </label>
   </div>

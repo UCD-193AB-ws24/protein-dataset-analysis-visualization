@@ -3,6 +3,7 @@ from flask import Flask, request, jsonify
 from dotenv import load_dotenv
 from flask_cors import CORS
 from parse_matrix import parse_matrix
+from domain_parse import domain_parse
 import json
 from io import BytesIO
 from datetime import datetime
@@ -92,72 +93,89 @@ def get_group_graph():
         if not files:
             return jsonify({"error": "No files associated with this group"}), 404
 
-        matrix_s3_key = None
-        coordinate_s3_key = None
+        matrix_files = []
+        coordinate_file = None
         graph_s3_key = None
 
         for file in files:
+            presigned_url = s3_client.generate_presigned_url(
+                'get_object',
+                Params={
+                    'Bucket': os.getenv('S3_BUCKET_NAME'),
+                    'Key': file.s3_key,
+                    'ResponseContentDisposition': f'attachment; filename="{file.file_name}"'
+                },
+                ExpiresIn=3600
+            )
+            file_info = {"url": presigned_url, "original_name": file.file_name}
+
             if file.file_type == "matrix":
-                matrix_s3_key = file.s3_key
+                matrix_files.append(file_info)
             elif file.file_type == "coordinate":
-                coordinate_s3_key = file.s3_key
+                coordinate_file = file_info
             elif file.file_type == "graph":
                 graph_s3_key = file.s3_key
 
-        if not (matrix_s3_key and coordinate_s3_key and graph_s3_key):
+        if not (matrix_files and coordinate_file and graph_s3_key):
             return jsonify({"error": "Matrix/coordinate/graph file not found for this group"}), 400
 
-        # Retrieve files **privately** with boto3
-        bucket_name = os.getenv('S3_BUCKET_NAME')
-
-        matrix_bytes = s3_client.get_object(
-            Bucket=bucket_name, Key=matrix_s3_key)["Body"].read()
-
-        coordinate_bytes = s3_client.get_object(
-            Bucket=bucket_name, Key=coordinate_s3_key)["Body"].read()
-
         graph_str = s3_client.get_object(
-            Bucket=bucket_name, Key=graph_s3_key)["Body"].read().decode()
+            Bucket=os.getenv('S3_BUCKET_NAME'), Key=graph_s3_key)["Body"].read().decode()
 
         # Parse graph JSON
         graph = json.loads(graph_str)
-        num_genes = len(graph.get("nodes", []))
-        num_domains = 1  # Adjust as needed
 
         return jsonify({
             "message": "Graph generated successfully",
             "title": group.title,
             "description": group.description,
-            "graph": graph,
-            "num_genes": num_genes,
-            "num_domains": num_domains
+            "graphs": graph,
+            "num_genes": group.num_genes,
+            "num_domains": group.num_domains,
+            "matrix_files": matrix_files,  # Include presigned URLs and original filenames for matrix files
+            "coordinate_file": coordinate_file  # Include presigned URL and original filename for coordinate file
         }), 200
 
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
+    finally:
+        session.close()
+
 
 @app.route('/generate_graph', methods=['POST'])
 def generate_graph():
-    if 'file_matrix' not in request.files or 'file_coordinate' not in request.files:
-        return jsonify({"error": "Both matrix and coordinate files are required"}), 400
-
-    # Assumes only one matrix file uploaded, TODO: support multiple in the future
-    file_matrix = request.files['file_matrix']
-    file_coordinate = request.files['file_coordinate']
+    coordinate_file = request.files.get('file_coordinate')
+    matrix_files = [file for key, file in request.files.items() if key.startswith('file_matrix_')]
     is_domain_specific = request.form.get('is_domain_specific', 'false').lower() == 'true'
 
-    try:
-        matrix_bytes = file_matrix.read()
-        coordinate_bytes = file_coordinate.read()
+    if not coordinate_file or not matrix_files:
+        return jsonify({"error": "Coordinate file and at least one matrix file are required"}), 400
+    if is_domain_specific and len(matrix_files) > 3:
+        return jsonify({"error": "A maximum of three matrix files are allowed for domain-specific graphs"}), 400
+    if not is_domain_specific and len(matrix_files) != 1:
+        return jsonify({"error": "Exactly one matrix file is required for non-domain-specific graphs"}), 400
 
-        graph = parse_matrix(BytesIO(matrix_bytes), BytesIO(coordinate_bytes))
-        num_genes = len(graph["nodes"])
-        num_domains = 1     # Placeholder, adjust in the future
+    try:
+        if is_domain_specific:
+            result = domain_parse(
+                matrix_files,
+                coordinate_file,
+                [m.filename for m in matrix_files],
+            )
+        else:
+            matrix_bytes = matrix_files[0].read()
+            coordinate_bytes = coordinate_file.read()
+            graph = parse_matrix(BytesIO(matrix_bytes), BytesIO(coordinate_bytes))
+            result = [{**graph, "domain_name": "general"}]
+
+        combined = next(g for g in result if (g["domain_name"] == "ALL" or g["domain_name"] == "general"))
+        num_genes = len(combined["nodes"])
+        num_domains = len(result) - 1  # Exclude the combined graph
 
         return jsonify({
-            "message": "Graph generated successfully",
-            "graph": graph,
+            "message": "Graph(s) generated successfully",
+            "graphs": result,
             "num_genes": num_genes,
             "num_domains": num_domains,
             "is_domain_specific": is_domain_specific
@@ -165,7 +183,6 @@ def generate_graph():
 
     except Exception as e:
         return jsonify({"error": f"Failed to generate graph: {str(e)}"}), 500
-
 
 def guess_content_type(extension):
     mapping = {
@@ -200,13 +217,6 @@ def upload_to_s3(file_obj):
 
 @app.route('/save', methods=['POST'])
 def save_files():
-    # # More logs for debugging
-    # print("🔧 Entered /save route")
-    # print("Form keys:", request.form.keys())
-    # print("File keys:", request.files.keys())
-    # print("Request headers:", dict(request.headers))
-    # print("Request method:", request.method)
-
     username = request.form.get("username")
     if not username:
         return jsonify({"error": "Username is required"}), 400
@@ -217,25 +227,15 @@ def save_files():
     genomes = json.loads(request.form.get('genomes', '[]'))
     num_genes = request.form.get('num_genes')
     num_domains = request.form.get('num_domains')
-    graph_data = request.form.get('graph')
-    group_id = request.form.get('group_id')     # Optional, for updating existing groups
+    graph_data = request.form.get('graphs')
+    group_id = request.form.get('group_id')  # Optional, for updating existing groups
 
-    file_matrix = request.files.get('file_matrix')
-    file_coordinate = request.files.get('file_coordinate')
-
-    # print("Form keys received: %s", list(request.form.keys()))
-    # print("Type of graph_data: %s, length: %s",
-    #           type(graph_data), len(graph_data) if graph_data else 0)
-    # print("Graph data content preview: %s", graph_data[:200] if graph_data else "No data")
-
+    coordinate_file = request.files.get('file_coordinate')
+    matrix_files = [file for key, file in request.files.items() if key.startswith('file_matrix_')]
 
     session = SessionLocal()
 
     try:
-        # print("→ Saving files for user:", username)
-        # print("→ Received matrix file:", file_matrix.filename if file_matrix else "None")
-        # print("→ Received coordinate file:", file_coordinate.filename if file_coordinate else "None")
-        # print("→ Graph data length:", len(graph_data) if graph_data else "None")
         # Find user first
         user = session.query(User).filter_by(username=username).first()
         if not user:
@@ -251,9 +251,12 @@ def save_files():
             group.description = description
             session.commit()
 
-            return jsonify({"message": "Group updated successfully"}), 200
+            return jsonify({"message": "Group updated successfully", "group_id": group_id}), 200
 
         # Handle new group creation
+        if not coordinate_file or not matrix_files:
+            return jsonify({"error": "Coordinate file and at least one matrix file are required for new groups"}), 400
+
         new_group = Group(
             user_id=user.id,
             title=title,
@@ -268,26 +271,28 @@ def save_files():
         group_id = new_group.id
 
         # Upload files to S3
-        matrix_s3_key, matrix_filename = upload_to_s3(file_matrix)
-        coordinate_s3_key, coordinate_filename = upload_to_s3(file_coordinate)
+        coordinate_s3_key, coordinate_filename = upload_to_s3(coordinate_file)
         graph_file = BytesIO(graph_data.encode('utf-8'))
         timestamp = datetime.now().strftime("%Y%m%d%H%M%S")
         graph_file.filename = f"graph_{timestamp}.json"
         graph_s3_key, graph_filename = upload_to_s3(graph_file)
 
-        # Insert file records into database
+        # Insert coordinate and graph file records into database
         session.add_all([
-            File(group_id=group_id, user_id=user.id, file_name=matrix_filename, s3_key=matrix_s3_key, file_type="matrix"),
             File(group_id=group_id, user_id=user.id, file_name=coordinate_filename, s3_key=coordinate_s3_key, file_type="coordinate"),
             File(group_id=group_id, user_id=user.id, file_name=graph_filename, s3_key=graph_s3_key, file_type="graph")
         ])
+
+        # Insert matrix file records into database
+        for matrix_file in matrix_files:
+            matrix_s3_key, matrix_filename = upload_to_s3(matrix_file)
+            session.add(File(group_id=group_id, user_id=user.id, file_name=matrix_filename, s3_key=matrix_s3_key, file_type="matrix"))
+
         session.commit()
 
-        return jsonify({"message": "Files and group saved successfully"}), 200
+        return jsonify({"message": "Files and group saved successfully", "group_id": group_id}), 200
 
     except Exception as e:
-        # print("❌ Exception in /save:", str(e))
-        # traceback.print_exc()
         session.rollback()
         return jsonify({"error": f"Failed to save files: {str(e)}"}), 500
 
@@ -400,6 +405,25 @@ def get_user_data():
 @app.route('/pokemon', methods=['GET'])
 def nintendo():
     return "Hello Pokemon"
+
+@app.route('/download_file', methods=['GET'])
+def download_file():
+    s3_key = request.args.get('key')
+    if not s3_key:
+        return jsonify({"error": "Missing file key"}), 400
+
+    bucket_name = os.getenv('S3_BUCKET_NAME')
+
+    try:
+        # Generate a presigned URL for downloading the file
+        presigned_url = s3_client.generate_presigned_url(
+            'get_object',
+            Params={'Bucket': bucket_name, 'Key': s3_key},
+            ExpiresIn=3600  # URL expires in 1 hour
+        )
+        return jsonify({"url": presigned_url}), 200
+    except Exception as e:
+        return jsonify({"error": f"Failed to generate download URL: {str(e)}"}), 500
 
 @app.route('/', methods=['GET'])
 def home():

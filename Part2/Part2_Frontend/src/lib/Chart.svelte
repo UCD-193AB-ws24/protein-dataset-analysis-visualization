@@ -36,7 +36,7 @@
   type CompareLink = {
     source: string;
     target: string;
-    link_type: string; // "solid_color" | "dashed_grey" | etc.
+    link_type: string; // "solid_color" | "dotted_grey" | etc.
   };
 
   type Link = ScoreLink | CompareLink;
@@ -104,7 +104,7 @@
     const uf = new UnionFind(nodes.map((n) => n.id));
     links.forEach((l) => {
       if ('is_reciprocal' in l && l.is_reciprocal) uf.union(l.source, l.target);
-      if ('link_type' in l && (l.link_type === 'solid_color' || l.link_type === 'dashed_color')) uf.union(l.source, l.target);
+      if ('link_type' in l && (l.link_type === 'solid_color' || l.link_type === 'dotted_color')) uf.union(l.source, l.target);
     });
 
     // Add to union-find structure "links" bewtween first-genome and duplicated nodes

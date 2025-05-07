@@ -4,6 +4,7 @@
   import testGraph from '$lib/test.json';
   import { onMount } from 'svelte';
   import { API_BASE_URL } from '$lib/api';
+  import { userManager } from '$lib/auth/userManager';
 
   interface Node {
     id: string;
@@ -45,9 +46,17 @@
   let numGenes = 0;
   let numDomains = 1;
 
+	let accessToken = '';
+	let idToken = '';
+
   onMount(async () => {
     const urlParams = new URLSearchParams(window.location.search);
     groupId = urlParams.get('groupId');
+
+    const user = await userManager.getUser();
+
+    accessToken = user?.access_token;
+    idToken = user?.id_token;
 
     if (groupId) {
       try {
@@ -92,7 +101,8 @@
     formData.append('file_coordinate', coordsFile);
     formData.append('file_matrix', matrixFile);
     formData.append('is_domain_specific', isDomainSpecific ? 'true' : 'false');
-    formData.append('username', localStorage.getItem('username') || ''); // Automatically send stored username
+    // formData.append('username', localStorage.getItem('username') || ''); // Automatically send stored username
+    formData.append('access_token', accessToken); // Automatically send stored access token
 
     try {
       const response = await fetch(`${API_BASE_URL}/generate_graph`, {
@@ -145,7 +155,7 @@
     if (groupId) {
       formData.append('group_id', groupId); // Include groupId if available
     }
-    formData.append('username', localStorage.getItem('username') || ''); // Automatically send stored username
+    // formData.append('username', localStorage.getItem('username') || ''); // Automatically send stored username
     formData.append('title', title);
     formData.append('description', description);
     formData.append('num_genes', numGenes.toString());
@@ -158,6 +168,9 @@
     try {
       const response = await fetch(`${API_BASE_URL}/save`, {
         method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${accessToken}`
+        },
         body: formData,
       });
 

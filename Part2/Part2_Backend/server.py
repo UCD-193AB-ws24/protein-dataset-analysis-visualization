@@ -207,9 +207,13 @@ def save_files():
     # print("Request headers:", dict(request.headers))
     # print("Request method:", request.method)
 
-    username = request.form.get("username")
-    if not username:
-        return jsonify({"error": "Username is required"}), 400
+    # username = request.form.get("username")
+    auth_header = request.headers.get('Authorization', '')
+    access_token = auth_header.replace('Bearer ', '')
+    if not access_token:
+        return jsonify({"error": "Not Signed In"}), 400
+    access_claims = verify_token(access_token)
+    user_id = access_claims['sub']
 
     title = request.form.get('title')
     description = request.form.get('description')
@@ -237,7 +241,7 @@ def save_files():
         # print("→ Received coordinate file:", file_coordinate.filename if file_coordinate else "None")
         # print("→ Graph data length:", len(graph_data) if graph_data else "None")
         # Find user first
-        user = session.query(User).filter_by(username=username).first()
+        user = session.query(User).filter_by(id=user_id).first()
         if not user:
             return jsonify({"error": "User not found"}), 404
 
@@ -297,16 +301,17 @@ def save_files():
 
 @app.route('/get_user_file_groups', methods=['POST'])
 def get_user_file_groups():
-    req = request.get_json()
-    username = req.get("username")
-
-    if not username:
-        return jsonify({"error": "Username is required"}), 400
+    auth_header = request.headers.get('Authorization', '')
+    access_token = auth_header.replace('Bearer ', '')
+    if not access_token:
+        return jsonify({"error": "Not Signed In"}), 400
+    access_claims = verify_token(access_token)
+    user_id = access_claims['sub']
 
     session = SessionLocal()
     try:
         # Get user first
-        user = session.query(User).filter_by(username=username).first()
+        user = session.query(User).filter_by(id=user_id).first()
         if not user:
             return jsonify({"error": "User not found"}), 404
 
@@ -381,17 +386,17 @@ def get_user_files():
 @app.route('/verify_user')
 def get_user_data():
     auth_header = request.headers.get('Authorization', '')
-    access_tocken = auth_header.replace('Bearer ', '')
+    access_token = auth_header.replace('Bearer ', '')
     id_token = request.headers.get('X-ID-Token', '')
 
     try:
-        access_claims = verify_token(access_tocken)
+        access_claims = verify_token(access_token)
         user_id = access_claims['sub']
 
         id_claims = None
         email = None
         if id_token:
-            id_claims = verify_token(id_token, access_token=access_tocken)
+            id_claims = verify_token(id_token, access_token=access_token)
             email = id_claims['email']
 
         session = SessionLocal()

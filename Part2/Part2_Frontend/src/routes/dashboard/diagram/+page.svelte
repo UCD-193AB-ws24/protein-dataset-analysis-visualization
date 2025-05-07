@@ -12,13 +12,15 @@
     protein_name: string;
     direction: string;   // "plus" | "minus"
     rel_position: number;
+    is_present: boolean;
+    gene_type?: string;
     _dup?: boolean;      // internal flag for duplicated bottom‑row copy
   }
 
   interface Link {
     source: string;
     target: string;
-    score: number;       // 0‑100
+    score: number;       // 55‑100
     is_reciprocal: boolean;
   }
 
@@ -47,7 +49,7 @@
 
   let errorMessage = "";
   let loading = true;        // Loading state for file upload
-  let cutoff = 0;             // slider value
+  let cutoff = 55;           // slider value
 
   // Form information if user choses to save graph
   let title = '';
@@ -387,7 +389,12 @@
 
     <label style="display: flex; align-items: center; gap: 0.5rem;">
       Adjust Cut-off:
-      <input type="range" min="0" max="100" bind:value={cutoff}/>
+      <input
+        type="range"
+        min="55"
+        max="100"
+        disabled={selectedGraph.domain_name === "ALL"}
+        bind:value={cutoff}/>
       {cutoff}%
     </label>
   </div>

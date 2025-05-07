@@ -13,7 +13,7 @@
     nodes: Node[];
     links: Link[];
   };
-  export let cutoff: number = 0;
+  export let cutoff: number = 55;
 
   interface Node {
     id: string;
@@ -21,7 +21,7 @@
     protein_name: string;
     direction: string;   // "plus" | "minus"
     rel_position: number;
-    is_present: boolean;
+    is_present?: boolean;
     gene_type?: string;
     _dup?: boolean;      // internal flag for duplicated bottom‑row copy
   }
@@ -158,7 +158,7 @@
     // Gray-out CCs not associated with colorRoots
     const nodeColor = new Map(
       nodes.map((n) => {
-        if (!n.is_present) return [n.id, '#e6e6e6']
+        if (n.is_present === false) return [n.id, '#e6e6e6']
 
         const root = uf.find(n.id);
         return [n.id, colorRoots.includes(root) ? colorScale(root) : '#7f7f7f'];
@@ -253,7 +253,7 @@
       .attr('stroke-width', (d) => strokeW('score' in d ? d.score : 100) * 2)
       .attr('stroke-dasharray', d => {
         if ('is_reciprocal' in d) return d.is_reciprocal ? null : '4,4';
-        if ('link_type' in d) return d.link_type.includes('dashed') ? '4,4' : null;
+        if ('link_type' in d) return d.link_type.includes('dotted') ? '4,4' : null;
         return null;
       })
       .attr('stroke', d => {
@@ -268,9 +268,20 @@
         d3.select(this).attr('stroke-width', strokeW('score' in d ? d.score : 100) * 4);
         const n1 = nodeById.get(d.source)!;
         const n2 = nodeById.get(d.target)!;
-        const detail = 'score' in d ?
-          `Similarity: ${d.score}%` + (d.is_reciprocal ? ' (reciprocal)' : ' (non-reciprocal)') :
-          (d.link_type === 'solid_color' ? 'Consistent across domains' : 'Inconsistent across domains');
+        let detail = '';
+        if ('score' in d) {
+          detail = `Similarity: ${d.score}%` + (d.is_reciprocal ? ' (Reciprocal)' : ' (Non-Reciprocal)');
+        } else if (d.link_type === 'solid_red') {
+          detail = 'Inconsistent Across Domains';
+        } else if (d.link_type === 'solid_color') {
+          detail = 'Consistent Across Domains';
+        } else if (d.link_type === 'dotted_color') {
+          detail = 'Consistent, but May Have Missing Domains';
+        } else if (d.link_type === 'dotted_gray') {
+          detail = 'Non-Reciprocal Connection';
+        } else {
+          detail = 'Unknown Link Type';
+        }
         d3.select(tooltipEl).style('opacity', 1).html(`<strong>${n1.protein_name}</strong> ↔ <strong>${n2.protein_name}</strong><br>${detail}`);
       })
       .on('mousemove', function (event) {

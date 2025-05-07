@@ -46,7 +46,7 @@ def get_public_key(kid):
 def verify_token(token, access_token=None):
     headers = jwt.get_unverified_header(token)
     key = get_public_key(headers['kid'])
-    options = {"verify_at_hasgh": bool(access_token)}
+    options = {"verify_at_hash": bool(access_token)}
     return jwt.decode(
         token,
         key,

@@ -20,7 +20,7 @@
 			// Optional: redirect to home or dashboard
 			// window.location.href = '/';
 			console.log('sending token:', accessToken);
-			const response = await fetch(`${API_BASE_URL}/api/user-data`, {
+			const response = await fetch(`${API_BASE_URL}/verify_user`, {
 				method: 'GET',
 				headers: { Authorization: `Bearer ${accessToken}`,
 					'X-ID-Token': idToken,

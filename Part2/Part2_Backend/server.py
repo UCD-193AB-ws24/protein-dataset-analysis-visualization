@@ -378,7 +378,7 @@ def get_user_files():
     finally:
         session.close()
 
-@app.route('/api/user-data')
+@app.route('/verify_user')
 def get_user_data():
     auth_header = request.headers.get('Authorization', '')
     access_tocken = auth_header.replace('Bearer ', '')
@@ -394,16 +394,30 @@ def get_user_data():
             id_claims = verify_token(id_token, access_token=access_tocken)
             email = id_claims['email']
 
+        session = SessionLocal()
+        #check if user exists
+        user = session.query(User).filter_by(id=user_id).first()
+        #if not, create new user
+        if not user:
+            new_user = User(id=user_id, email=email)
+            session.add(new_user)
+            session.commit()
+            user = new_user
+
         # 🧠 Use user_email or user_id to fetch user-specific data from DB
         return jsonify({
             'message': 'Hello, authenticated user!',
             'user': {
                 'id': user_id,
-                'email': email
+                'email': email,
             }
         })
     except Exception as e:
         return jsonify({'error': str(e)}), 401
+    finally:
+        if 'session' in locals():
+            session.close()
+
 
 @app.route('/pokemon', methods=['GET'])
 def nintendo():

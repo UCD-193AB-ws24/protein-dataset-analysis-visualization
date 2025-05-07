@@ -2,6 +2,7 @@
 	import { onMount } from 'svelte';
 	import { userManager, signOutRedirect } from '$lib/auth/userManager';
 	import { API_BASE_URL } from '$lib/api';
+	import {goto} from '$app/navigation';
 
 	let email = '';
 	let accessToken = '';
@@ -20,9 +21,11 @@
 			// Optional: redirect to home or dashboard
 			// window.location.href = '/';
 			console.log('sending token:', accessToken);
-			const response = await fetch(`${API_BASE_URL}/api/user-data`, {
+			const response = await fetch(`${API_BASE_URL}/verify_user`, {
 				method: 'GET',
-				headers: { Authorization: `Bearer ${accessToken}` }
+				headers: { Authorization: `Bearer ${accessToken}`,
+					'X-ID-Token': idToken,
+				 }
 			});
 
 			const data = await response.json();
@@ -32,7 +35,9 @@
 			}
 
 			console.log('user id:', data.user.id);
+			console.log('user email:', data.user.email);
 			console.log('server returned:', data);
+			goto('/dashboard/files'); // Redirect to home page after successful authentication
 		} catch (err) {
 			console.error('Signin callback failed', err);
 		}

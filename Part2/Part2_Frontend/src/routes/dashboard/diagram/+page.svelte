@@ -4,6 +4,7 @@
   import testGraph from '$lib/test.json';
   import { onMount } from 'svelte';
   import { API_BASE_URL } from '$lib/api';
+  import { userManager } from '$lib/auth/userManager';
   import { goto } from '$app/navigation'; // Import SvelteKit's navigation function
 
   interface Node {
@@ -57,8 +58,20 @@
   let numGenes = 0;
   let numDomains = 1;
 
+  let isAuthenticated = false;
+	let accessToken = '';
+	let idToken = '';
+
   onMount(async () => {
     const urlParams = new URLSearchParams(window.location.search);
+    const user = await userManager.getUser();
+
+    if (user && !user.expired) {
+      isAuthenticated = true;
+      accessToken = user.access_token;
+      idToken = user.id_token;
+    }
+
     const initialId = urlParams.get('groupId');
 
     if (initialId) {
@@ -137,7 +150,7 @@
     formData.append('file_coordinate', uploadedCoordsFile); // Use the uploaded coordinate file
     uploadedMatrixFiles.forEach((file, index) => formData.append(`file_matrix_${index}`, file));
     formData.append('is_domain_specific', isDomainSpecific ? 'true' : 'false');
-    formData.append('username', localStorage.getItem('username') || '');
+    formData.append('access_token', accessToken); // Automatically send stored access token
 
     try {
       const response = await fetch(`${API_BASE_URL}/generate_graph`, {
@@ -191,8 +204,6 @@
     } else {
       formData.append('group_id', groupId); // Include groupId if available
     }
-
-    formData.append('username', localStorage.getItem('username') || ''); // Automatically send stored username
     formData.append('title', title);
     formData.append('description', description);
     formData.append('num_genes', numGenes.toString());
@@ -204,6 +215,9 @@
     try {
       const response = await fetch(`${API_BASE_URL}/save`, {
         method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${accessToken}`
+        },
         body: formData,
       });
 
@@ -341,7 +355,7 @@
   {/if}
 
   <!-- Save group section -->
-  {#if selectedGraph.nodes.length > 0}
+  {#if selectedGraph.nodes.length > 0 && isAuthenticated}
     <div style="margin: 1rem; margin-top: 0px; display: flex; flex-direction: column; gap: 1rem; max-width: 300px;">
       <h3>Save Group</h3>
       <input type="text" placeholder="Title" bind:value={title} />

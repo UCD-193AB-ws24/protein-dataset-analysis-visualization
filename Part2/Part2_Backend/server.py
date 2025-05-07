@@ -217,9 +217,12 @@ def upload_to_s3(file_obj):
 
 @app.route('/save', methods=['POST'])
 def save_files():
-    username = request.form.get("username")
-    if not username:
-        return jsonify({"error": "Username is required"}), 400
+    auth_header = request.headers.get('Authorization', '')
+    access_token = auth_header.replace('Bearer ', '')
+    if not access_token:
+        return jsonify({"error": "Not Signed In"}), 400
+    access_claims = verify_token(access_token)
+    user_id = access_claims['sub']
 
     title = request.form.get('title')
     description = request.form.get('description')
@@ -237,7 +240,7 @@ def save_files():
 
     try:
         # Find user first
-        user = session.query(User).filter_by(username=username).first()
+        user = session.query(User).filter_by(id=user_id).first()
         if not user:
             return jsonify({"error": "User not found"}), 404
 
@@ -302,16 +305,17 @@ def save_files():
 
 @app.route('/get_user_file_groups', methods=['POST'])
 def get_user_file_groups():
-    req = request.get_json()
-    username = req.get("username")
-
-    if not username:
-        return jsonify({"error": "Username is required"}), 400
+    auth_header = request.headers.get('Authorization', '')
+    access_token = auth_header.replace('Bearer ', '')
+    if not access_token:
+        return jsonify({"error": "Not Signed In"}), 400
+    access_claims = verify_token(access_token)
+    user_id = access_claims['sub']
 
     session = SessionLocal()
     try:
         # Get user first
-        user = session.query(User).filter_by(username=username).first()
+        user = session.query(User).filter_by(id=user_id).first()
         if not user:
             return jsonify({"error": "User not found"}), 404
 
@@ -383,24 +387,46 @@ def get_user_files():
     finally:
         session.close()
 
-@app.route('/api/user-data')
+@app.route('/verify_user')
 def get_user_data():
     auth_header = request.headers.get('Authorization', '')
-    token = auth_header.replace('Bearer ', '')
+    access_token = auth_header.replace('Bearer ', '')
+    id_token = request.headers.get('X-ID-Token', '')
 
     try:
-        user_info = verify_token(token)
-        user_id = user_info['sub']
+        access_claims = verify_token(access_token)
+        user_id = access_claims['sub']
+
+        id_claims = None
+        email = None
+        if id_token:
+            id_claims = verify_token(id_token, access_token=access_token)
+            email = id_claims['email']
+
+        session = SessionLocal()
+        #check if user exists
+        user = session.query(User).filter_by(id=user_id).first()
+        #if not, create new user
+        if not user:
+            new_user = User(id=user_id, email=email)
+            session.add(new_user)
+            session.commit()
+            user = new_user
 
         # 🧠 Use user_email or user_id to fetch user-specific data from DB
         return jsonify({
             'message': 'Hello, authenticated user!',
             'user': {
-                'id': user_id
+                'id': user_id,
+                'email': email,
             }
         })
     except Exception as e:
         return jsonify({'error': str(e)}), 401
+    finally:
+        if 'session' in locals():
+            session.close()
+
 
 @app.route('/pokemon', methods=['GET'])
 def nintendo():
@@ -431,7 +457,7 @@ def home():
 
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(debug=True, port=3050)
     # app.config['MAX_CONTENT_LENGTH'] = 100 * 1024 * 1024  # 100MB limit
 
 

@@ -229,9 +229,6 @@ def save_files():
     coordinate_file = request.files.get('file_coordinate')
     matrix_files = [file for key, file in request.files.items() if key.startswith('file_matrix_')]
 
-    if not coordinate_file or not matrix_files:
-        return jsonify({"error": "Coordinate file and at least one matrix file are required"}), 400
-
     session = SessionLocal()
 
     try:
@@ -250,9 +247,12 @@ def save_files():
             group.description = description
             session.commit()
 
-            return jsonify({"message": "Group updated successfully"}), 200
+            return jsonify({"message": "Group updated successfully", "group_id": group_id}), 200
 
         # Handle new group creation
+        if not coordinate_file or not matrix_files:
+            return jsonify({"error": "Coordinate file and at least one matrix file are required for new groups"}), 400
+
         new_group = Group(
             user_id=user.id,
             title=title,
@@ -286,7 +286,7 @@ def save_files():
 
         session.commit()
 
-        return jsonify({"message": "Files and group saved successfully"}), 200
+        return jsonify({"message": "Files and group saved successfully", "group_id": group_id}), 200
 
     except Exception as e:
         session.rollback()

@@ -4,6 +4,7 @@
   import testGraph from '$lib/test.json';
   import { onMount } from 'svelte';
   import { API_BASE_URL } from '$lib/api';
+  import { goto } from '$app/navigation'; // Import SvelteKit's navigation function
 
   interface Node {
     id: string;
@@ -31,8 +32,14 @@
   let graph: Graph = { nodes: [], links: [], genomes: [] };
   let selectedGenomes: string[] = [];
   let filteredGraph: Graph = { nodes: [], links: [], genomes: [] };
-  let matrixFiles: { url: string; original_name: string }[] = []; // Matrix files with URLs and original names
-  let coordinateFile: { url: string; original_name: string } | null = null; // Coordinate file with URL and original name
+
+  // Variables for uploaded files
+  let uploadedCoordsFile: File | null = null;
+  let uploadedMatrixFiles: File[] = [];
+
+  // Variables for downloaded files
+  let matrixFiles: { url: string; original_name: string }[] = [];
+  let coordinateFile: { url: string; original_name: string } | null = null;
 
   let errorMessage = "";
   let loading = true;        // Loading state for file upload
@@ -44,9 +51,6 @@
   let description = '';
   let numGenes = 0;
   let numDomains = 1;
-
-  let matrixFileUrls: string[] = []; // URLs for matrix files
-  let coordinateFileUrl: string | null = null; // URL for coordinate file
 
   onMount(async () => {
     const urlParams = new URLSearchParams(window.location.search);
@@ -91,17 +95,17 @@
 
   // Function to handle file uploads
   async function uploadFiles() {
-    if (!coordsFile || (isDomainSpecific && (matrixFiles.length === 0 || matrixFiles.length > 3))) {
+    if (!uploadedCoordsFile || (isDomainSpecific && (uploadedMatrixFiles.length === 0 || uploadedMatrixFiles.length > 3))) {
       alert('Please select one coordinate file and up to three matrix files if domain-specific.');
       return;
     }
 
     const formData = new FormData();
-    formData.append('file_coordinate', coordsFile);
+    formData.append('file_coordinate', uploadedCoordsFile); // Use the uploaded coordinate file
     if (isDomainSpecific) {
-      matrixFiles.forEach((file, index) => formData.append(`file_matrix_${index}`, file));
+      uploadedMatrixFiles.forEach((file, index) => formData.append(`file_matrix_${index}`, file));
     } else {
-      formData.append('file_matrix_0', matrixFiles[0]); // Only one matrix file allowed if not domain-specific
+      formData.append('file_matrix_0', uploadedMatrixFiles[0]); // Only one matrix file allowed if not domain-specific
     }
     formData.append('is_domain_specific', isDomainSpecific ? 'true' : 'false');
     formData.append('username', localStorage.getItem('username') || ''); // Automatically send stored username
@@ -142,14 +146,18 @@
       return;
     }
 
-    if (!coordsFile || matrixFiles.length === 0) {
-      alert('Please select at least one coordinate file and one matrix file to save.');
-      return;
+    const formData = new FormData();
+    if (!groupId) {
+      // For new groups, validate uploaded files
+      if (!uploadedCoordsFile || uploadedMatrixFiles.length === 0) {
+        alert('Please select at least one coordinate file and one matrix file to save.');
+        return;
+      }
+
+      formData.append('file_coordinate', uploadedCoordsFile);
+      uploadedMatrixFiles.forEach((file, index) => formData.append(`file_matrix_${index}`, file));
     }
 
-    const formData = new FormData();
-    formData.append('file_coordinate', coordsFile);
-    matrixFiles.forEach((file, index) => formData.append(`file_matrix_${index}`, file));
     if (groupId) {
       formData.append('group_id', groupId); // Include groupId if available
     }
@@ -161,7 +169,6 @@
     formData.append('is_domain_specific', isDomainSpecific ? 'true' : 'false');
     formData.append('genomes', JSON.stringify(graph.genomes));
     formData.append('graph', JSON.stringify(graph));
-    console.log("graph string", JSON.stringify(graph));
 
     try {
       const response = await fetch(`${API_BASE_URL}/save`, {
@@ -178,7 +185,13 @@
 
       const result = await response.json();
       console.log('Group saved successfully:', result);
-      alert('Group saved successfully!');
+      alert('Group updated successfully!');
+
+      if (!groupId) {
+        // Transition to the view with the new groupId
+        const newGroupId = result.group_id; // Assuming the backend returns the new groupId
+        goto(`?groupId=${newGroupId}`);
+      }
     } catch (error) {
       console.error('Error saving group:', error);
       alert('Failed to save group. Please try again.');
@@ -263,18 +276,18 @@
     <div style="margin: 1rem; display: flex; justify-content: space-between; align-items: center; gap: 1rem;">
       <div>
         <h3>Upload Coordinate File:</h3>
-        <input type="file" on:change={(e) => coordsFile = (e.target as HTMLInputElement).files?.[0] || null} />
+        <input type="file" on:change={(e) => uploadedCoordsFile = (e.target as HTMLInputElement).files?.[0] || null} />
       </div>
       <div>
         <h3>Upload Matrix Files:</h3>
-        <input type="file" multiple={isDomainSpecific} on:change={(e) => matrixFiles = Array.from((e.target as HTMLInputElement).files || [])} />
+        <input type="file" multiple={isDomainSpecific} on:change={(e) => uploadedMatrixFiles = Array.from((e.target as HTMLInputElement).files || [])} />
         <p style="font-size: 0.8rem; color: gray;">{isDomainSpecific ? 'Select up to 3 matrix files.' : 'Select only 1 matrix file.'}</p>
       </div>
       <label>
         <input type="checkbox" bind:checked={isDomainSpecific} />
         Domain-Specific?
       </label>
-      <button on:click={uploadFiles} disabled={!coordsFile || matrixFiles.length === 0 || (isDomainSpecific && matrixFiles.length > 3)}>Upload and Prepare Graph</button>
+      <button on:click={uploadFiles} disabled={!uploadedCoordsFile || uploadedMatrixFiles.length === 0 || (isDomainSpecific && uploadedMatrixFiles.length > 3)}>Upload and Prepare Graph</button>
       {#if errorMessage}
             <p class="error">{errorMessage}</p>
       {/if}

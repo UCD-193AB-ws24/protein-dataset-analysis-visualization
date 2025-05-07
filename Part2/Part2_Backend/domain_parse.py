@@ -7,18 +7,18 @@ import json
 def validate_coordinate_dataframe_basic(df):
     if df.empty:
         raise ValueError("The coordinate file is empty")
-        
+
     required_columns = ['name', 'protein_name', 'genome', 'gene_type', 'orientation']
     missing_columns = [col for col in required_columns if col not in df.columns]
     if missing_columns:
         raise ValueError(f"Missing required columns: {', '.join(missing_columns)}")
-        
+
     if df['name'].isnull().any():
         raise ValueError("Found empty values in the name column")
-        
+
     if df['position'].isnull().any():
         raise ValueError("Found empty values in the position column")
-        
+
     if df['orientation'].isnull().any():
         raise ValueError("Found empty values in the orientation column")
 
@@ -26,7 +26,7 @@ def validate_coordinate_data_types(df):
     # Check if position is numeric
     if not pd.to_numeric(df['position'], errors='coerce').notnull().all():
         raise ValueError("Position column contains non-numeric values")
-        
+
     valid_orientations = {'minus', 'plus', 'negative', 'positive', '+', '-'}
     if not df['orientation'].isin(valid_orientations).all():
         raise ValueError("Orientation column should only contain 'plus', 'minus', 'positive', 'negative', '+' or '-'")
@@ -40,7 +40,7 @@ def process_name_field(df):
     try:
         if df['protein_name'].isnull().any() or df['genome'].isnull().any():
             raise ValueError("Some names don't follow the expected format (should contain '_')")
-            
+
         return df
     except Exception as e:
         raise ValueError(f"Error processing name field: {str(e)}")
@@ -50,7 +50,7 @@ def process_domain_field(df):
         domain_columns = [col for col in df.columns if 'domain' in col]
         if len(domain_columns) == 0:
             raise ValueError("No domain columns found (should be in format 'domainX_NAME_start/end)")
-        
+
         domain_names = set()
         domain_col_names = set()
         for col in domain_columns:
@@ -58,7 +58,7 @@ def process_domain_field(df):
             parts = col.split('_')
             if len(parts) < 2:
                 raise ValueError(f"Invalid domain format, needs underscore: {col}")
-            
+
             if len(parts) == 3:
                 domain_name = '_'.join(parts[1:-1]) # Also handles cases where domain names have underscores
             elif len(parts) == 2:
@@ -72,7 +72,7 @@ def process_domain_field(df):
 
             if (has_start or has_end) and not (has_start and has_end):
                 raise ValueError(f"Domain {domain} is missing start or end position")
-            
+
         return list(domain_names), list(domain_col_names)
     except Exception as e:
         raise ValueError(f"Error processing domain field: {str(e)}")
@@ -88,32 +88,32 @@ def parse_coordinates(coord_file):
     try:
         # Read the Excel file
         df = pd.read_excel(BytesIO(coord_file.read()), engine='openpyxl')
-        
+
         # Validate basic structure
         validate_coordinate_dataframe_basic(df)
-        
+
         # Validate data types
         validate_coordinate_data_types(df)
 
         domain_names, domain_col_names = process_domain_field(df)
-        
+
         # Process name field
         df = process_name_field(df)
-        
+
         # Calculate relative positions
         df = calculate_relative_positions(df)
-        
+
         # Return only the required columns in the specified order
         required_columns = ['name', 'genome', 'protein_name', 'position', 'rel_position', 'orientation', 'gene_type']
         required_columns = required_columns + domain_col_names
         print(required_columns)
         if not all(col in df.columns for col in required_columns):
             raise ValueError("Missing one or more required columns after processing")
-        
+
         print(df[required_columns])
-            
+
         return df[required_columns]
-        
+
     except pd.errors.EmptyDataError:
         raise ValueError("The coordinate file is empty or cannot be read")
     except pd.errors.ParserError:
@@ -135,7 +135,7 @@ def parse_filenames(file_names):
                     domains.append((domain_num, domain_name))
                 except Exception as e:
                     raise ValueError(f"File name is in invalid format: {str(e)}")
-                
+
     domains.sort(key = lambda x: x[0])
 
     return [name for _, name in domains]
@@ -165,13 +165,13 @@ def prepare_dataframe(matrix_file):
     print("Parsing matrix file...")
     df = pd.read_excel(BytesIO(matrix_file.read()), engine='openpyxl')
     validate_dataframe_basic(df)
-    
+
     df = df.reset_index(drop=True)
     df = df.set_index(df.columns[0])
     df.index.name = None
     df = df.dropna(how='all')
     df = df.dropna(axis=1, how='all')
-    
+
     validate_dataframe_structure(df)
     return df
 
@@ -185,14 +185,14 @@ def extract_subsections(df_only_cutoffs):
 def create_subsection_mappings(df_only_cutoffs, subsections):
     row_to_subsection = pd.Series(index=df_only_cutoffs.index, dtype="object")
     col_to_subsection = pd.Series(index=df_only_cutoffs.columns, dtype="object")
-    
+
     # Helper function to get subsection from full name
     def get_subsection(name):
         try:
             return name.split('_')[1]
         except IndexError:
             return None
-    
+
     for section in subsections:
         # Map rows using the second token
         row_subsections = df_only_cutoffs.index.map(get_subsection)
@@ -200,19 +200,19 @@ def create_subsection_mappings(df_only_cutoffs, subsections):
         if not matching_rows.any():
             raise ValueError(f"Subsection {section} has no matching rows")
         row_to_subsection.loc[matching_rows] = section
-        
+
         # Map columns using the second token
         col_subsections = df_only_cutoffs.columns.map(get_subsection)
         matching_cols = col_subsections == section
         if not matching_cols.any():
             raise ValueError(f"Subsection {section} has no matching columns")
         col_to_subsection.loc[matching_cols] = section
-    
+
     return row_to_subsection, col_to_subsection
 
 def calculate_column_maxes(df_only_cutoffs, row_to_subsection):
     col_max = pd.DataFrame(index=df_only_cutoffs.index, columns=df_only_cutoffs.columns)
-    
+
     for col in df_only_cutoffs.columns:
         temp = pd.DataFrame({
             'value': df_only_cutoffs[col],
@@ -220,12 +220,12 @@ def calculate_column_maxes(df_only_cutoffs, row_to_subsection):
         })
         max_vals = temp.groupby('subsection')['value'].transform('max')
         col_max[col] = df_only_cutoffs[col].where(df_only_cutoffs[col] == max_vals)
-    
+
     return col_max
 
 def calculate_row_maxes(df_only_cutoffs, col_to_subsection):
     row_max = pd.DataFrame(index=df_only_cutoffs.index, columns=df_only_cutoffs.columns, dtype=float)
-    
+
     for idx, row in df_only_cutoffs.iterrows():
         temp = pd.DataFrame({
             'value': row,
@@ -233,33 +233,33 @@ def calculate_row_maxes(df_only_cutoffs, col_to_subsection):
         })
         max_vals = temp.groupby('subsection')['value'].transform('max')
         row_max.loc[idx] = row.where(row == max_vals)
-    
+
     return row_max
 
 def parse_matrix_data(matrix_file):
     try:
         # Read and prepare the dataframe
         df = prepare_dataframe(matrix_file)
-        print(df)
-        
+        # print(df)
+
         # Get data above cutoff
         df_only_cutoffs = df_only_cutoffs = df[df > 55]
-        
+
         # Extract subsections and create mappings
         subsections = extract_subsections(df_only_cutoffs)
         row_to_subsection, col_to_subsection = create_subsection_mappings(df_only_cutoffs, subsections)
-        
+
         # Calculate maxes
         col_max = calculate_column_maxes(df_only_cutoffs, row_to_subsection)
         row_max = calculate_row_maxes(df_only_cutoffs, col_to_subsection)
-        
+
         return {
             'df_only_cutoffs': df_only_cutoffs,
             'row_max': row_max,
             'col_max': col_max,
             'subsections': subsections
         }
-        
+
     except pd.errors.EmptyDataError:
         raise ValueError("The matrix file is empty or cannot be read")
     except pd.errors.ParserError:
@@ -336,7 +336,7 @@ def add_links(df_only_cutoffs, row_max, col_max, subsections, domain):
 #     return gene_names_by_genome
 
 def create_output(matrix_data, coords, domain):
-    
+
     genomes = matrix_data['subsections'].tolist()
     nodes = add_nodes(coords, matrix_data['df_only_cutoffs'].index)
     links, domain_connections, domain_genes = add_links(matrix_data['df_only_cutoffs'], matrix_data['row_max'], matrix_data['col_max'], matrix_data['subsections'], domain)
@@ -348,12 +348,12 @@ def combine_graphs(all_domain_connections, all_domain_genes, domains):
         #genomeB_gene2-genomeA_gene1 --> domain 2
     #for each connection in domain 2:
         #check if connection has already been parsed through
-    
+
     # Collect all unique connections across all domains
     all_keys = set()
     unique_links = set()
-    print(all_keys)
-    print(unique_links)
+    # print(all_keys)
+    # print(unique_links)
     for domain_dict in all_domain_connections:
         for key, value in domain_dict.items():
             all_keys.add(key)
@@ -380,7 +380,7 @@ def combine_graphs(all_domain_connections, all_domain_genes, domains):
 
         if not all(present_in_domains):
             # Gene doesn't exist in one domain
-            if not all(source in all_domain_genes[i] and target in all_domain_genes[i] 
+            if not all(source in all_domain_genes[i] and target in all_domain_genes[i]
                        for i, present in enumerate(present_in_domains) if not present):
                 link_type = "solid_color"
             # At least one reciprocal
@@ -392,8 +392,8 @@ def combine_graphs(all_domain_connections, all_domain_genes, domains):
                 link_type = "dotted_grey"
         else:
             # Check if any domain type is consistent across all connections
-            if any(all(key in domain_dict and domain_dict[key].get(domain, False) 
-                       for domain_dict in all_domain_connections) 
+            if any(all(key in domain_dict and domain_dict[key].get(domain, False)
+                       for domain_dict in all_domain_connections)
                        for domain in domains):
                 link_type = "solid_color"
             else:
@@ -413,7 +413,7 @@ def combine_graphs(all_domain_connections, all_domain_genes, domains):
             "link_type": link_type
             # Change to 1 enum with the different types of connection possible: "Solid Red", "Solid Color", "Dotted Color", "Dotted Gray"
         })
-    print(combined)
+    # print(combined)
 
     return combined
 
@@ -461,7 +461,7 @@ def domain_parse(matrix_files, coord_file, file_names):
 if __name__ == "__main__":
     import argparse
     import sys
-    
+
     # Create argument parser
     parser = argparse.ArgumentParser(description='Parse matrix and coordinate files for genome visualization')
     parser.add_argument('matrix_file_1', type=str, help='Path to the first matrix Excel file')
@@ -469,10 +469,10 @@ if __name__ == "__main__":
     parser.add_argument('matrix_file_3', type=str, help='Path to the third matrix Excel file')
     parser.add_argument('coord_file', type=str, help='Path to the coordinate Excel file')
     parser.add_argument('--output', '-o', type=str, help='Output JSON file path (optional, defaults to stdout)')
-    
+
     # Parse arguments
     args = parser.parse_args()
-    
+
     try:
         with open(args.matrix_file_1, 'rb') as matrix_file_1, \
              open(args.matrix_file_2, 'rb') as matrix_file_2, \

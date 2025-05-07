@@ -169,7 +169,7 @@ def generate_graph():
             graph = parse_matrix(BytesIO(matrix_bytes), BytesIO(coordinate_bytes))
             result = [{**graph, "domain_name": "general"}]
 
-        combined = next(g for g in result if (g["domain_name"] == "combined" or g["domain_name"] == "general"))
+        combined = next(g for g in result if (g["domain_name"] == "ALL" or g["domain_name"] == "general"))
         num_genes = len(combined["nodes"])
         num_domains = len(result) - 1  # Exclude the combined graph
 
@@ -227,7 +227,7 @@ def save_files():
     genomes = json.loads(request.form.get('genomes', '[]'))
     num_genes = request.form.get('num_genes')
     num_domains = request.form.get('num_domains')
-    graph_data = request.form.get('graph')
+    graph_data = request.form.get('graphs')
     group_id = request.form.get('group_id')  # Optional, for updating existing groups
 
     coordinate_file = request.files.get('file_coordinate')
@@ -359,7 +359,7 @@ def get_user_files():
         # Get user
         user = session.query(User).filter_by(username=username).first()
         if not user:
-        return jsonify({"error": "User not found"}), 404
+            return jsonify({"error": "User not found"}), 404
 
         # Get all files for the user
         files = session.query(File).filter_by(user_id=user.id).all()

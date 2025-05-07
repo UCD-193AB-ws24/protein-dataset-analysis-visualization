@@ -1,6 +1,7 @@
 <script>
     import { onMount } from "svelte";
     import { goto } from "$app/navigation";
+	import { API_BASE_URL } from "$lib/api";
 
     let username = "";
     let userFiles = [];
@@ -33,7 +34,7 @@
         errorMessage = "";
 
         try {
-            const response = await fetch("https://4aorvlzrd1.execute-api.us-east-1.amazonaws.com/dev/get_user_file_groups", {
+            const response = await fetch(`${API_BASE_URL}/get_user_file_groups`, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ username }),
@@ -57,7 +58,7 @@
         errorMessage = "";
 
         try {
-            const response = await fetch("https://4aorvlzrd1.execute-api.us-east-1.amazonaws.com/dev/get_user_files", {
+            const response = await fetch(`${API_BASE_URL}/get_user_files`, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ username }),
@@ -88,7 +89,7 @@
         retrievedFileUrl = "";
 
         try {
-            const response = await fetch(`https://4aorvlzrd1.execute-api.us-east-1.amazonaws.com/dev/retrieve/${fileName}`);
+            const response = await fetch(`${API_BASE_URL}/retrieve/${fileName}`);
             if (!response.ok) {
                 throw new Error("Failed to retrieve file.");
             }
@@ -128,9 +129,11 @@
                     {#if group.files.length > 0}
                         <ul class="group-file-list">
                             {#each group.files as file}
-                                <li style="word-wrap: break-word; overflow-wrap: break-word;">
-                                    <strong>{`${file.file_type}`}</strong>{`: ${file.file_name}`}
-                                </li>
+                                {#if file.file_type !== "graph"}
+                                    <li style="word-wrap: break-word; overflow-wrap: break-word;">
+                                        <strong>{`${file.file_type}`}</strong>{`: ${file.file_name}`}
+                                    </li>
+                                {/if}
                             {/each}
                         </ul>
                         <button on:click={() => goto(`/dashboard/diagram?groupId=${group.id}`)}>

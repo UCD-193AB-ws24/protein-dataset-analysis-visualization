@@ -22,7 +22,9 @@
 			console.log('sending token:', accessToken);
 			const response = await fetch(`${API_BASE_URL}/api/user-data`, {
 				method: 'GET',
-				headers: { Authorization: `Bearer ${accessToken}` }
+				headers: { Authorization: `Bearer ${accessToken}`,
+					'X-ID-Token': idToken,
+				 }
 			});
 
 			const data = await response.json();
@@ -32,6 +34,7 @@
 			}
 
 			console.log('user id:', data.user.id);
+			console.log('user email:', data.user.email);
 			console.log('server returned:', data);
 		} catch (err) {
 			console.error('Signin callback failed', err);

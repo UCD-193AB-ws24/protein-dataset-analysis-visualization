@@ -381,17 +381,25 @@ def get_user_files():
 @app.route('/api/user-data')
 def get_user_data():
     auth_header = request.headers.get('Authorization', '')
-    token = auth_header.replace('Bearer ', '')
+    access_tocken = auth_header.replace('Bearer ', '')
+    id_token = request.headers.get('X-ID-Token', '')
 
     try:
-        user_info = verify_token(token)
-        user_id = user_info['sub']
+        access_claims = verify_token(access_tocken)
+        user_id = access_claims['sub']
+
+        id_claims = None
+        email = None
+        if id_token:
+            id_claims = verify_token(id_token, access_token=access_tocken)
+            email = id_claims['email']
 
         # 🧠 Use user_email or user_id to fetch user-specific data from DB
         return jsonify({
             'message': 'Hello, authenticated user!',
             'user': {
-                'id': user_id
+                'id': user_id,
+                'email': email
             }
         })
     except Exception as e:
@@ -407,7 +415,7 @@ def home():
 
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(debug=True, port=3050)
     # app.config['MAX_CONTENT_LENGTH'] = 100 * 1024 * 1024  # 100MB limit
 
 

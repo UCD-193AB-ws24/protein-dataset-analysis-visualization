@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - main
+      - fix-cognito-auth
 
   workflow_dispatch:
     inputs:

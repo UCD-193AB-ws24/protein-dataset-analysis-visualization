@@ -348,9 +348,10 @@ def combine_graphs(all_domain_connections, all_domain_genes, domains):
     for domain_dict in all_domain_connections:
         for key, value in domain_dict.items():
             all_keys.add(key)
-            for item in value:
-                if isinstance(item, str):
-                    unique_links.add((key, item)) # ("source_target", "TIR")
+            # unique_links.add((key, value)) # ("src_tgt", {'TIR': True})
+            for key_1, key_2 in value.items():
+                 unique_links.add((key, key_1, key_2)) # ("src_tgt", 'TIR', True})
+            #         unique_links.add((key, item)) # ("source_target", "TIR")
 
     combined = []
     num_domains = len(domains)
@@ -360,12 +361,12 @@ def combine_graphs(all_domain_connections, all_domain_genes, domains):
         reverse_key = f"{target}#{source}"
         # Check if this key exists in all domain dicts
 
-        # Create list of tuples containing (key, domain) for each domain
-        key_domain_pairs = [(key, domain) for domain in domains]
-        reverse_key_pairs = [(reverse_key, domain) for domain in domains]
         present_in_domains = [
-            (pair in unique_links) or (reverse_key_pairs[i] in unique_links)
-            for i, pair in enumerate(key_domain_pairs)
+            any((u_key == key or u_key == reverse_key) and dom_name == domain
+            for u_key, dom_name, dom_bool in unique_links)
+            for domain in domains
+            # (pair in unique_links) or (reverse_key_pairs[i] in unique_links)
+            # for i, pair in enumerate(key_domain_pairs)
         ]
 
         link_type = ""
@@ -376,17 +377,12 @@ def combine_graphs(all_domain_connections, all_domain_genes, domains):
                        for i, present in enumerate(present_in_domains) if not present):
                 link_type = "solid_color"
             # At least one reciprocal
-            elif any(any(domain_dict.get(key, {}).get(domain, False) or domain_dict.get(reverse_key, {}).get(domain, False)
-                        for domain in domains)
-                        for domain_dict in all_domain_connections):
+            elif any(dom_bool for u_key, _, dom_bool in unique_links if u_key == key or u_key == reverse_key):
                 link_type = "solid_red"
             else:
                 link_type = "dotted_grey"
         else:
-            # Check if any domain type is consistent across all connections
-            if any(all(key in domain_dict and domain_dict[key].get(domain, False)
-                       for domain_dict in all_domain_connections)
-                       for domain in domains):
+            if all(dom_bool for u_key, _, dom_bool in unique_links if u_key == key or u_key == reverse_key):
                 link_type = "solid_color"
             else:
                 link_type = "dotted_color"

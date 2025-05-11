@@ -1,4 +1,4 @@
-<script>
+<!-- <script>
     import { userManager } from "$lib/auth/userManager";
   
     const userPromise = userManager.getUser();
@@ -11,4 +11,4 @@
   </script>
   
   <slot />
-  
+   -->

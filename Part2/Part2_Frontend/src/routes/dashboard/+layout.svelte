@@ -1,17 +1,5 @@
 <script>
-    import {userManager, signOutRedirect } from "$lib/auth/userManager";
-
-    async function handleSignOut() {
-        await signOutRedirect();
-	}
-    let isAuthenticated = false;
-    const userPromise = userManager.getUser();
   
-    userPromise.then(user => {
-      if (user && !user.expired) {
-        isAuthenticated = true;
-      }
-    });
 </script>
 
 <nav>
@@ -19,9 +7,6 @@
         <li><a href="/dashboard/upload">📤 Upload File</a></li>
         <li><a href="/dashboard/files">📂Files</a></li>
         <li><a href="/dashboard/diagram">📊diagram</a></li>
-        {#if isAuthenticated}
-        <button on:click={handleSignOut}>Log out</button>
-        {/if}
     </ul>
 </nav>
 
@@ -57,16 +42,6 @@
 
     a:hover {
         color: #60a5fa;
-    }
-
-    button {
-        background-color: #3b82f6;
-        color: white;
-        border: none;
-        padding: 10px 15px;
-        border-radius: 5px;
-        cursor: pointer;
-        transition: background 0.3s;
     }
 </style>
 

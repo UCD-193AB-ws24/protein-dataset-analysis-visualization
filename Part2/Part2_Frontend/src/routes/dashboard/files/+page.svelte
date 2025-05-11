@@ -2,7 +2,6 @@
     import { onMount } from "svelte";
     import { goto } from "$app/navigation";
 	import { API_BASE_URL } from "$lib/api";
-    import { userManager, signOutRedirect } from "$lib/auth/userManager";
 
     let username = "";
     let userFiles = [];
@@ -12,13 +11,7 @@
     let retrievedFileUrl = "";
     let retrievingFile = false;
 
-    let accessToken = '';
-	let idToken = '';
-
     onMount(async () => {
-        const user = await userManager.getUser();
-        accessToken = user?.access_token;
-        idToken = user?.id_token;
         try{
             await fetchUserFileGroups();
         }catch (error) {
@@ -33,10 +26,6 @@
         try {
             const response = await fetch(`${API_BASE_URL}/get_user_file_groups`, {
                 method: "POST",
-                headers: { 
-                    "Content-Type": "application/json",
-                    Authorization: `Bearer ${accessToken}`
-                },
                 body: JSON.stringify({ username }),
             });
 

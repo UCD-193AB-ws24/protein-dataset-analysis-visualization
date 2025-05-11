@@ -17,7 +17,7 @@
 		"@eslint/compat": "^1.2.5",
 		"@eslint/js": "^9.18.0",
 		"@sveltejs/adapter-auto": "^4.0.0",
-		"@sveltejs/adapter-static": "^3.0.8",
+		"@sveltejs/adapter-node": "^5.2.12",
 		"@sveltejs/kit": "^2.16.0",
 		"@sveltejs/vite-plugin-svelte": "^5.0.0",
 		"@types/d3": "^7.4.3",
@@ -34,8 +34,6 @@
 		"vite": "^6.0.0"
 	},
 	"dependencies": {
-		"d3": "^7.9.0",
-		"oidc-client-ts": "^3.2.0",
-		"react-oidc-context": "^3.3.0"
+		"d3": "^7.9.0"
 	}
 }

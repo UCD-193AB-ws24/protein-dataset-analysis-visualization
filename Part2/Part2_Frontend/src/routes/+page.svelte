@@ -4,19 +4,12 @@
     function goToLogin() {
         goto("/login");
     }
-
-    import { userManager } from '$lib/auth/userManager';
-
-    async function handleSignIn() {
-        await userManager.signinRedirect();
-    }
 </script>
 
 <div class="container">
     <h1>👋 Welcome</h1>
 
     <button class="btn login-btn" on:click={goToLogin}>Login</button>
-    <button on:click={handleSignIn}>Sign In</button>
 </div>
 
 <style>

@@ -2,6 +2,8 @@ import pandas as pd
 from io import BytesIO
 from flask import jsonify
 import json
+import argparse
+import sys
 
 
 def validate_coordinate_dataframe_basic(df):
@@ -449,30 +451,24 @@ def domain_parse(matrix_files, coord_file, file_names):
 
 
 if __name__ == "__main__":
-    import argparse
-    import sys
-
-    # Create argument parser
     parser = argparse.ArgumentParser(description='Parse matrix and coordinate files for genome visualization')
-    parser.add_argument('matrix_file_1', type=str, help='Path to the first matrix Excel file')
-    parser.add_argument('matrix_file_2', type=str, help='Path to the second matrix Excel file')
-    parser.add_argument('matrix_file_3', type=str, help='Path to the third matrix Excel file')
+    parser.add_argument('matrix_files', type=str, nargs='+', help='Path(s) to 2 or 3 matrix Excel files')
     parser.add_argument('coord_file', type=str, help='Path to the coordinate Excel file')
     parser.add_argument('--output', '-o', type=str, help='Output JSON file path (optional, defaults to stdout)')
 
-    # Parse arguments
     args = parser.parse_args()
 
+    # Ensure 2 or 3 matrix files are provided
+    if not (2 <= len(args.matrix_files) <= 3):
+        print("Error: You must provide 2 or 3 matrix files.", file=sys.stderr)
+        sys.exit(1)
+
     try:
-        with open(args.matrix_file_1, 'rb') as matrix_file_1, \
-             open(args.matrix_file_2, 'rb') as matrix_file_2, \
-             open(args.matrix_file_3, 'rb') as matrix_file_3, \
-             open(args.coord_file, 'rb') as coord_file:
-
-            matrix_files = [matrix_file_1, matrix_file_2, matrix_file_3]
-            file_names = [matrix_file_1.name, matrix_file_2.name, matrix_file_3.name]
+        # Open matrix files and coordinate file
+        matrix_files = [open(f, 'rb') for f in args.matrix_files]
+        file_names = [f.name for f in matrix_files]
+        with open(args.coord_file, 'rb') as coord_file:
             result_obj = domain_parse(matrix_files, coord_file, file_names)
-
             output_json = json.dumps(result_obj, indent=2)
 
             if args.output:
@@ -481,6 +477,10 @@ if __name__ == "__main__":
                 print(f"Results written to {args.output}")
             else:
                 print(output_json)
+
+        # Close matrix files
+        for f in matrix_files:
+            f.close()
 
     except Exception as e:
         print(f"Error: {str(e)}", file=sys.stderr)

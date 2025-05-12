@@ -1,11 +1,13 @@
-import adapter from '@sveltejs/adapter-node';
+import adapter from '@sveltejs/adapter-static';
 import { vitePreprocess } from '@sveltejs/vite-plugin-svelte';
 import path from 'path';
 
 export default {
   preprocess: vitePreprocess(),
   kit: {
-    adapter: adapter(), // ✅ switch to Node adapter for SSR
+    adapter: adapter({
+      fallback: 'index.html'
+    }),
     alias: {
       $lib: path.resolve('./src/lib')
     }

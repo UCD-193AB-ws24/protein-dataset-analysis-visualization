@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
 	import { oidcClient } from '$lib/auth';
+	import { API_BASE_URL } from '$lib/api';
 
 	onMount(async () => {
 		try {
@@ -14,7 +15,7 @@
 			localStorage.setItem('email', user.profile.email);
 
 			// ✅ Call backend to verify user and register if new
-			const res = await fetch('http://localhost:3050/verify_user', {
+			const res = await fetch(`${API_BASE_URL}/verify_user`, {
 				method: 'GET',
 				headers: {
 					Authorization: `Bearer ${accessToken}`,

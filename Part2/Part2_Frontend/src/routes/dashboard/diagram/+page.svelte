@@ -5,6 +5,8 @@
   import { onMount } from 'svelte';
   import { API_BASE_URL } from '$lib/api';
   import { goto } from '$app/navigation'; // Import SvelteKit's navigation function
+  import { oidcClient } from '$lib/auth'
+	import { getTokens } from '$lib/getTokens';
 
   interface Node {
     id: string;
@@ -57,10 +59,16 @@
   let numGenes = 0;
   let numDomains = 1;
 
+  let idToken = '';
+	let accessToken = '';
+
   onMount(async () => {
     const urlParams = new URLSearchParams(window.location.search);
-
     const initialId = urlParams.get('groupId');
+    const tokens = await getTokens();
+    idToken = tokens.idToken;
+    accessToken = tokens.accessToken;
+
 
     if (initialId) {
       groupId = initialId;
@@ -202,6 +210,9 @@
     try {
       const response = await fetch(`${API_BASE_URL}/save`, {
         method: 'POST',
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
         body: formData,
       });
 

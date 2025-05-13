@@ -2,6 +2,7 @@
 	import { onMount } from 'svelte';
 	import { goto } from '$app/navigation';
 	import { API_BASE_URL } from '$lib/api';
+	import { getTokens } from '$lib/getTokens';
 
 	let userFileGroups = [];
 	let errorMessage = '';
@@ -18,9 +19,10 @@
 	async function fetchUserFileGroups() {
 		loading = true;
 		errorMessage = '';
+		const {idToken, accessToken} = await getTokens();
 
-		const idToken = localStorage.getItem('id_token');
-		const accessToken = localStorage.getItem('access_token');
+		// const idToken = localStorage.getItem('id_token');
+		// const accessToken = localStorage.getItem('access_token');
 
 		if (!idToken || !accessToken) {
 			errorMessage = 'Missing authentication tokens. Please log in again.';

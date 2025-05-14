@@ -89,7 +89,7 @@ def add_nodes(coords):
 
     for i in range(len(coords)):
         nodes.append({
-            "id" : '_'.join([coords['genome_name'][i], coords['protein_name'][i]]),
+            "id" : coords['name'][i],
             "genome_name": coords['genome_name'][i],
             "protein_name": coords['protein_name'][i],
             "direction": coords['orientation'][i],

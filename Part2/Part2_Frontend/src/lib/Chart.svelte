@@ -58,8 +58,8 @@
 
   function arrowPath(dir: string): string {
     return dir === 'plus'
-      ? 'M -40,-10 L 0,-10 L 0,10 L -40,10 Z M 0,-20 L 40,0 L 0,20 Z'
-      : 'M 40,-10 L 0,-10 L 0,10 L 40,10 Z M 0,-20 L -40,0 L 0,20 Z';
+      ? 'M -40,-15 L 0,-15 L 0,15 L -40,15 Z M 0,-15 L 20,0 L 0,15 Z'
+      : 'M 40,-15 L 0,-15 L 0,15 L 40,15 Z M 0,-15 L -20,0 L 0,15 Z';
   }
 
   /* duplicate first‑genome nodes to bottom row */
@@ -129,7 +129,7 @@
     // Select nodes we want to color (non-singletons or CCs of size 2 with a dup)
     const colorRoots = [...componentRoots].filter(root => {
       const size = componentSize.get(root)!;
-      // if it’s a size-2 CC *and* one member is a dup, skip it
+      // if it's a size-2 CC *and* one member is a dup, skip it
       if (size === 2 && nodes.some(n => uf.find(n.id) === root && n._dup)) {
         return false;
       }
@@ -246,9 +246,9 @@
       .data(visibleLinks)
       .enter()
       .append('line')
-      .attr('x1', (d) => x(nodeById.get(d.source)!.rel_position))
+      .attr('x1', (d) => x(nodeById.get(d.source)!.rel_position) + (nodeById.get(d.source)!.direction === 'plus' ? -20 : 20))
       .attr('y1', (d) => y(rowOf(nodeById.get(d.source)!))! + y.bandwidth() / 2 + margin.top)
-      .attr('x2', (d) => x(nodeById.get(d.target)!.rel_position))
+      .attr('x2', (d) => x(nodeById.get(d.target)!.rel_position) + (nodeById.get(d.target)!.direction === 'plus' ? -20 : 20))
       .attr('y2', (d) => y(rowOf(nodeById.get(d.target)!))! + y.bandwidth() / 2 + margin.top)
       .attr('stroke-width', (d) => strokeW('score' in d ? d.score : 100) * 2)
       .attr('stroke-dasharray', d => {

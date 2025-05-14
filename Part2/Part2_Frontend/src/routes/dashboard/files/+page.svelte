@@ -25,7 +25,7 @@
 		if (!idToken || !accessToken) {
 			errorMessage = 'Missing authentication tokens. Please log in again.';
 			loading = false;
-			goto("https://migrate-amplify.dsu4r7f5bomtn.amplifyapp.com/invalid-login")
+			goto("/invalid-login")
 			return;
 		}
 		authenticated = true;

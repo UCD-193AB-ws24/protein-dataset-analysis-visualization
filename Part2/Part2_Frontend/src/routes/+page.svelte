@@ -9,7 +9,7 @@
 <div class="landing">
 	<div class="overlay"></div>
 	<div class="content">
-		<h1>GeneLCGB</h1>
+		<h1>GeneLCGVT</h1>
 		<p>
 			The Locus Comparitive Genomics Visulization Tool, the only tool that creates visualizations of
 			gene and domain comparisons across organisms

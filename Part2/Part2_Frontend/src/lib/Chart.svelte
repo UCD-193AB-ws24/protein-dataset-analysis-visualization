@@ -277,7 +277,7 @@
           detail = 'Consistent Across Domains';
         } else if (d.link_type === 'dotted_color') {
           detail = 'Consistent, but May Have Missing Domains';
-        } else if (d.link_type === 'dotted_gray') {
+        } else if (d.link_type === 'dotted_gray' || d.link_type === 'dotted_grey') {
           detail = 'Non-Reciprocal Connection';
         } else {
           detail = 'Unknown Link Type';

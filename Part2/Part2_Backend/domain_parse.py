@@ -51,7 +51,7 @@ def process_domain_field(df):
     try:
         domain_columns = [col for col in df.columns if 'domain' in col]
         if len(domain_columns) == 0:
-            raise ValueError("No domain columns found (should be in format 'domainX_NAME_start/end)")
+            raise ValueError("No domain columns found (should be in format 'domainX_NAME_start/end/NA)")
 
         domain_names = set()
         domain_col_names = set()
@@ -70,7 +70,7 @@ def process_domain_field(df):
         for domain in domain_names:
             test_domain_cols = [col for col in domain_columns if domain in col]
             has_start = any(col for col in test_domain_cols if col.endswith('_start'))
-            has_end = (col for col in test_domain_cols if col.endswith('_end'))
+            has_end = any(col for col in test_domain_cols if col.endswith('_end')) 
 
             if (has_start or has_end) and not (has_start and has_end):
                 raise ValueError(f"Domain {domain} is missing start or end position")

@@ -1,12 +1,12 @@
 <script>
-    import {oidcClient, signOutRedirect } from "$lib/auth";
+    import { oidcClient, signOutRedirect } from "$lib/auth";
 
     async function handleSignOut() {
         await signOutRedirect();
 	}
     let isAuthenticated = false;
     const userPromise = oidcClient.getUser();
-  
+
     userPromise.then(user => {
       if (user && !user.expired) {
         isAuthenticated = true;
@@ -16,11 +16,10 @@
 
 <nav>
     <ul>
-        <li><a href="/dashboard/upload">📤 Upload File</a></li>
-        <li><a href="/dashboard/files">📂Files</a></li>
-        <li><a href="/dashboard/diagram">📊diagram</a></li>
+        <li><a href="/dashboard/files">📂 Files</a></li>
+        <li><a href="/dashboard/diagram">📊 Diagram</a></li>
         {#if isAuthenticated}
-        <button on:click={handleSignOut}>Log out</button>
+            <button on:click={handleSignOut}>Log out</button>
         {/if}
     </ul>
 </nav>

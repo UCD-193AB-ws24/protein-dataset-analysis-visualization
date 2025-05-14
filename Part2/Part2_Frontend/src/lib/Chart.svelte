@@ -379,7 +379,9 @@
   </div>
 </div>
 <div bind:this={tooltipEl} class="tooltip"></div>
-<button on:click={downloadSVG} class="download-btn">Download SVG</button>
+{#if graph.nodes.length > 0}
+  <button on:click={downloadSVG} class="download-btn">Download SVG</button>
+{/if}
 
 <style>
   .wrapper {

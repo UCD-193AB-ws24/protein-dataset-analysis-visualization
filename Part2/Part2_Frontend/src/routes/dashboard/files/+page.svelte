@@ -7,6 +7,7 @@
 	let userFileGroups = [];
 	let errorMessage = '';
 	let loading = false;
+	let authenticated = false;
 
 	onMount(async () => {
 		try {
@@ -27,6 +28,7 @@
 			goto("https://migrate-amplify.dsu4r7f5bomtn.amplifyapp.com")
 			return;
 		}
+		authenticated = true;
 
 		try {
 			const response = await fetch(`${API_BASE_URL}/get_user_file_groups`, {
@@ -51,7 +53,7 @@
 		}
 	}
 </script>
-
+{#if authenticated}
 <div class="file-groups">
 	<h2>📁 Your File Groups</h2>
 
@@ -97,6 +99,7 @@
 		<p>No file groups found.</p>
 	{/if}
 </div>
+{/if}
 
 <style>
 	.file-groups {

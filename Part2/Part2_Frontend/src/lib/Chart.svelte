@@ -329,8 +329,33 @@
   }
 
   function downloadSVG() {
-    const svg = d3.select(chartSvgEl);
-    const svgData = new XMLSerializer().serializeToString(svg.node()!);
+    // Create a new SVG that will contain both the labels and chart
+    const combinedSvg = d3.select(document.createElementNS('http://www.w3.org/2000/svg', 'svg'))
+      .attr('width', chartSvgEl.getBoundingClientRect().width + labelSvgEl.getBoundingClientRect().width)
+      .attr('height', height);
+
+    // Get the chart SVG content
+    const chartSvg = d3.select(chartSvgEl);
+    const chartContent = chartSvg.select('g').node() as SVGElement;
+
+    // Get the labels SVG content
+    const labelSvg = d3.select(labelSvgEl);
+    const labelContent = labelSvg.select('g').node() as SVGElement;
+
+    // Create a group for the chart content and position it
+    const chartGroup = combinedSvg.append('g')
+      .attr('transform', `translate(${labelWidth}, 0)`);
+
+    // Create a group for the labels and position it
+    const labelGroup = combinedSvg.append('g')
+      .attr('transform', 'translate(0, 0)');
+
+    // Clone and append the contents
+    if (chartContent) chartGroup.node()?.appendChild(chartContent.cloneNode(true));
+    if (labelContent) labelGroup.node()?.appendChild(labelContent.cloneNode(true));
+
+    // Serialize and download
+    const svgData = new XMLSerializer().serializeToString(combinedSvg.node()!);
     const svgBlob = new Blob([svgData], { type: 'image/svg+xml;charset=utf-8' });
     const url = URL.createObjectURL(svgBlob);
     const a = document.createElement('a');

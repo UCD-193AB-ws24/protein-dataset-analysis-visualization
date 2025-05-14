@@ -1,11 +1,11 @@
 <script>
-    import {userManager, signOutRedirect } from "$lib/auth/userManager";
+    import {oidcClient, signOutRedirect } from "$lib/auth";
 
     async function handleSignOut() {
         await signOutRedirect();
 	}
     let isAuthenticated = false;
-    const userPromise = userManager.getUser();
+    const userPromise = oidcClient.getUser();
   
     userPromise.then(user => {
       if (user && !user.expired) {

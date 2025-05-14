@@ -6,13 +6,10 @@ export default {
   preprocess: vitePreprocess(),
   kit: {
     adapter: adapter({
-      fallback: 'index.html' // fallback HTML for unmatched routes
+      fallback: 'index.html'
     }),
-    paths: {
-      base: ''
-    },
     alias: {
-      $lib: path.resolve('./src/lib'),
+      $lib: path.resolve('./src/lib')
     }
   }
 };

@@ -413,7 +413,6 @@ def get_user_data():
             session.commit()
             user = new_user
 
-        # 🧠 Use user_email or user_id to fetch user-specific data from DB
         return jsonify({
             'message': 'Hello, authenticated user!',
             'user': {

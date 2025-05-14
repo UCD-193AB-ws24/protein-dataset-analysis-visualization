@@ -1,56 +1,43 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
-	import { userManager, signOutRedirect } from '$lib/auth/userManager';
+	import { oidcClient } from '$lib/auth';
 	import { API_BASE_URL } from '$lib/api';
-	import {goto} from '$app/navigation';
-
-	let email = '';
-	let accessToken = '';
-	let idToken = '';
-	let refreshToken = '';
 
 	onMount(async () => {
 		try {
-			const user = await userManager.signinRedirectCallback();
+			const user = await oidcClient.signinRedirectCallback();
 
-			email = user.profile?.email ?? '';
-			accessToken = user.access_token;
-			idToken = user.id_token;
-			refreshToken = user.refresh_token;
+			const idToken = user.id_token;
+			const accessToken = user.access_token;
 
-			// Optional: redirect to home or dashboard
-			// window.location.href = '/';
-			console.log('sending token:', accessToken);
-			const response = await fetch(`${API_BASE_URL}/verify_user`, {
+			localStorage.setItem('id_token', idToken);
+			localStorage.setItem('access_token', accessToken);
+			localStorage.setItem('email', user.profile.email);
+
+			// ✅ Call backend to verify user and register if new
+			const res = await fetch(`${API_BASE_URL}/verify_user`, {
 				method: 'GET',
-				headers: { Authorization: `Bearer ${accessToken}`,
-					'X-ID-Token': idToken,
-				 }
+				headers: {
+					Authorization: `Bearer ${accessToken}`,
+					'X-ID-Token': idToken
+				}
 			});
 
-			const data = await response.json();
-			if (!response.ok) {
-				console.error('auth failed:', data.error);
+			if (!res.ok) {
+				console.error('User verification failed:', await res.text());
+				window.location.href = '/invalid-login';
 				return;
 			}
 
-			console.log('user id:', data.user.id);
-			console.log('user email:', data.user.email);
-			console.log('server returned:', data);
-			goto('/dashboard/files'); // Redirect to home page after successful authentication
-		} catch (err) {
-			console.error('Signin callback failed', err);
+			const data = await res.json();
+			console.log('Verified user:', data);
+
+			window.location.href = '/dashboard/files';
+		} catch (e) {
+			console.error('Auth callback error:', e);
+			window.location.href = '/invalid-login';
 		}
 	});
-	async function handleSignOut() {
-		await signOutRedirect();
-	}
 </script>
 
-<div>
-	<p>Hello: {email}</p>
-	<p>Access token: {accessToken}</p>
-	<p>ID token: {idToken}</p>
-	<p>Refresh token: {refreshToken}</p>
-	<button on:click={handleSignOut}>Log out</button>
-</div>
+<p>Verifying login...</p>

@@ -350,7 +350,7 @@
   {/if}
 
   <!-- Save group section -->
-  {#if selectedGraph.nodes.length > 0}
+  {#if selectedGraph.nodes.length > 0 && accessToken && idToken}
     <div style="margin: 1rem; margin-top: 0px; display: flex; flex-direction: column; gap: 1rem; max-width: 300px;">
       <h3>Save Group</h3>
       <input type="text" placeholder="Title" bind:value={title} />

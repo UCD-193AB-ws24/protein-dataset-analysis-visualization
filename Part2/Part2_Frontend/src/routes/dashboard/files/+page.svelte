@@ -21,9 +21,6 @@
 		errorMessage = '';
 		const {idToken, accessToken} = await getTokens();
 
-		// const idToken = localStorage.getItem('id_token');
-		// const accessToken = localStorage.getItem('access_token');
-
 		if (!idToken || !accessToken) {
 			errorMessage = 'Missing authentication tokens. Please log in again.';
 			loading = false;

@@ -1,12 +1,10 @@
 <script lang="ts">
   import Chart from '$lib/Chart.svelte';
-  import dummyGraph from '$lib/dummy-graph.json';
-  import testGraph from '$lib/test.json';
   import { onMount } from 'svelte';
   import { API_BASE_URL } from '$lib/api';
-  import { goto } from '$app/navigation'; // Import SvelteKit's navigation function
+  import { goto } from '$app/navigation';
   import { oidcClient } from '$lib/auth'
-	import { getTokens } from '$lib/getTokens';
+  import { getTokens } from '$lib/getTokens';
 
   interface Node {
     id: string;
@@ -85,7 +83,7 @@
     // backend might return {graphs:[…]} (new) or {graph:{…}} (legacy)
     if (Array.isArray(data?.graphs)) return data.graphs;
     if (data?.graph) return [data.graph];
-    // direct object passed (e.g. dummyGraph)
+    // direct object passed
     if (Array.isArray(data)) return data;
     if (data?.nodes) return [data as Graph];
     throw new Error('No graph data found');
@@ -125,7 +123,7 @@
       selectedGenomes = [];
       filteredGraph = { nodes: [], links: [], genomes: [] };
     } catch (error) {
-      errorMessage = error.message || "An error occurred.";
+      errorMessage = error instanceof Error ? error.message : "An error occurred.";
       console.error("Detailed error:", error);
     }
   }
@@ -146,7 +144,7 @@
     }
 
     const formData = new FormData();
-    formData.append('file_coordinate', uploadedCoordsFile); // Use the uploaded coordinate file
+    formData.append('file_coordinate', uploadedCoordsFile);
     uploadedMatrixFiles.forEach((file, index) => formData.append(`file_matrix_${index}`, file));
     formData.append('is_domain_specific', isDomainSpecific ? 'true' : 'false');
 
@@ -174,11 +172,8 @@
       filteredGraph = { nodes: [], links: [], genomes: [] };
       loading = false;
     } catch (error) {
-      errorMessage = error.message || "An error occurred.";
-      console.error('Detailed error:', {
-          status: error.response?.status,
-          data: await error.response?.text()
-      });
+      errorMessage = error instanceof Error ? error.message : "An error occurred.";
+      console.error('Detailed error:', error);
     }
   }
 
@@ -205,7 +200,7 @@
       formData.append('file_coordinate', uploadedCoordsFile);
       uploadedMatrixFiles.forEach((file, index) => formData.append(`file_matrix_${index}`, file));
     } else {
-      formData.append('group_id', groupId); // Include groupId if available
+      formData.append('group_id', groupId);
     }
     formData.append('title', title);
     formData.append('description', description);
@@ -246,18 +241,6 @@
       console.error('Error saving group:', error);
       alert('Failed to save group. Please try again.');
     }
-  }
-
-  // Function to switch data source
-  function switchDataSource(source: string) {
-    graphs = [source === 'dummy' ? dummyGraph : testGraph];
-    selectedGraph  = graphs[0];
-    isDomainSpecific = false;
-    numGenes = selectedGraph.nodes.length;
-    numDomains = 1;
-
-    selectedGenomes = []; // Reset selected genomes when switching data source
-    filteredGraph = { nodes: [], links: [], genomes: [] }; // Reset filtered graph
   }
 
   // Allow user to select up to 3 genomes
@@ -301,123 +284,194 @@
 </script>
 
 {#if loading}
-  <p>Loading...</p>
+  <div class="flex justify-center items-center py-8">
+    <div class="animate-spin rounded-full h-12 w-12 border-4 border-green-200"></div>
+    <div class="animate-spin rounded-full h-12 w-12 border-4 border-green-600 border-t-transparent absolute"></div>
+  </div>
 {:else}
-  <!-- File download section -->
-  {#if groupId && (matrixFiles.length > 0 || coordinateFile)}
-    <div style="margin: 1rem;">
-      <h3>Download Files</h3>
-      {#if coordinateFile}
-        <div>
-          <a href={coordinateFile.url} target="_blank" rel="noopener noreferrer">
-            <button>Download Coordinate File ({coordinateFile.original_name})</button>
-          </a>
+  <div class="container mx-auto px-4 py-8">
+    <!-- File download and Save group sections side by side -->
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+      <!-- File download section -->
+      {#if groupId && (matrixFiles.length > 0 || coordinateFile)}
+        <div class="p-6 bg-white rounded-lg shadow-sm border border-slate-200">
+          <h3 class="text-xl font-semibold text-slate-800 mb-4">Download Files</h3>
+          <div class="flex flex-col gap-3">
+            {#if coordinateFile}
+              <a href={coordinateFile.url} target="_blank" rel="noopener noreferrer" class="inline-block">
+                <button class="inline-flex items-center px-4 py-2 text-sm font-medium text-white bg-green-600 rounded-lg hover:bg-green-700 transition-colors duration-200 cursor-pointer">
+                  Download Coordinate File ({coordinateFile.original_name})
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="ml-2">
+                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                    <polyline points="7 10 12 15 17 10"/>
+                    <line x1="12" y1="15" x2="12" y2="3"/>
+                  </svg>
+                </button>
+              </a>
+            {/if}
+            {#each matrixFiles as file, index}
+              <a href={file.url} target="_blank" rel="noopener noreferrer" class="inline-block">
+                <button class="inline-flex items-center px-4 py-2 text-sm font-medium text-white bg-green-600 rounded-lg hover:bg-green-700 transition-colors duration-200 cursor-pointer">
+                  Download Matrix File {index + 1} ({file.original_name})
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="ml-2">
+                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                    <polyline points="7 10 12 15 17 10"/>
+                    <line x1="12" y1="15" x2="12" y2="3"/>
+                  </svg>
+                </button>
+              </a>
+            {/each}
+          </div>
         </div>
       {/if}
-      {#each matrixFiles as file, index}
-        <div>
-          <a href={file.url} target="_blank" rel="noopener noreferrer">
-            <button>Download Matrix File {index + 1} ({file.original_name})</button>
-          </a>
-        </div>
-      {/each}
-    </div>
-  {/if}
 
-  <!-- File upload/data source section only available if not reviewing a specific group -->
-  {#if !groupId}
-    <!-- File upload section -->
-    <div style="margin: 1rem; display: flex; justify-content: space-between; align-items: center; gap: 1rem;">
-      <div>
-        <h3>Upload Coordinate File:</h3>
-        <input type="file" on:change={(e) => uploadedCoordsFile = (e.target as HTMLInputElement).files?.[0] || null} />
-      </div>
-      <div>
-        <h3>Upload Matrix Files:</h3>
-        <input type="file" multiple={isDomainSpecific} on:change={(e) => uploadedMatrixFiles = Array.from((e.target as HTMLInputElement).files || [])} />
-        <p style="font-size: 0.8rem; color: gray;">{isDomainSpecific ? 'Select up to 3 matrix files.' : 'Select only 1 matrix file.'}</p>
-      </div>
-      <label>
-        <input type="checkbox" bind:checked={isDomainSpecific} />
-        Domain-Specific?
-      </label>
-      <button on:click={uploadFiles} disabled={!uploadedCoordsFile || uploadedMatrixFiles.length === 0 || (isDomainSpecific && uploadedMatrixFiles.length > 3)}>Upload and Prepare Graph</button>
-      {#if errorMessage}
-            <p class="error">{errorMessage}</p>
+      <!-- Save group section -->
+      {#if selectedGraph.nodes.length > 0 && isAuthenticated}
+        <div class="p-6 bg-white rounded-lg shadow-sm border border-slate-200">
+          <h3 class="text-xl font-semibold text-slate-800 mb-4">Save Group</h3>
+          <div class="space-y-4">
+            <input
+              type="text"
+              placeholder="Title"
+              bind:value={title}
+              class="w-full px-4 py-2 bg-white border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
+            />
+            <textarea
+              placeholder="Description"
+              bind:value={description}
+              class="w-full px-4 py-2 bg-white border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
+              rows="3"
+            ></textarea>
+            <button
+              on:click={saveGroup}
+              class="inline-flex items-center px-4 py-2 text-sm font-medium text-white bg-green-600 rounded-lg hover:bg-green-700 transition-colors duration-200 cursor-pointer"
+            >
+              Save Group
+            </button>
+          </div>
+        </div>
       {/if}
     </div>
 
-    <!-- Buttons to switch data source -->
-    <div style="margin: 1rem; display: flex; align-items: center; gap: 1rem;">
-      <h3>Or, use dummy data:</h3>
-      <button on:click={() => switchDataSource('dummy')}>Dummy Data</button>
-      <button on:click={() => switchDataSource('test')}>Test Data</button>
-    </div>
-
-    <hr>
-  {/if}
-
-  <!-- Save group section -->
-  {#if selectedGraph.nodes.length > 0 && isAuthenticated}
-    <div style="margin: 1rem; margin-top: 0px; display: flex; flex-direction: column; gap: 1rem; max-width: 300px;">
-      <h3>Save Group</h3>
-      <input type="text" placeholder="Title" bind:value={title} />
-      <textarea placeholder="Description" bind:value={description}></textarea>
-      <button on:click={saveGroup}>Save Group</button>
-    </div>
-  {/if}
-
-  <!-- Domain Selector -->
-  {#if graphs.length > 1}
-    <div style="margin: 1rem; display:flex; align-items:center; gap:0.5rem;">
-      <span style="font-weight:600;">View domain:</span>
-      <select on:change={(e) => selectDomain((e.target as HTMLSelectElement).selectedIndex)}>
-        {#each graphs as g, idx}
-          <option value={idx} selected={g === selectedGraph}>{g.domain_name}</option>
-        {/each}
-      </select>
-    </div>
-  {/if}
-
-  <!-- Genome selection checkboxes, filter button, and cutoff slider in one row -->
-  <div style="margin: 1rem; display: flex; align-items: center; gap: 2rem;">
-    <div>
-      <h3>Select 3 Genomes:</h3>
-      {#if selectedGraph.genomes}
-        {#each selectedGraph.genomes as genome}
-          <label style="display: block; margin-top: 1rem; margin-left: 5%;">
+    <!-- File upload/data source section only available if not reviewing a specific group -->
+    {#if !groupId}
+      <!-- File upload section -->
+      <div class="mb-8 p-6 bg-white rounded-lg shadow-sm border border-slate-200">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-4">
+          <div>
+            <h3 class="text-lg font-semibold text-slate-800 mb-2">Upload Coordinate File:</h3>
+            <input
+              type="file"
+              on:change={(e) => uploadedCoordsFile = (e.target as HTMLInputElement).files?.[0] || null}
+              class="w-full px-4 py-2 bg-white border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
+            />
+          </div>
+          <div>
+            <h3 class="text-lg font-semibold text-slate-800 mb-2">Upload Matrix Files:</h3>
+            <input
+              type="file"
+              multiple={isDomainSpecific}
+              on:change={(e) => uploadedMatrixFiles = Array.from((e.target as HTMLInputElement).files || [])}
+              class="w-full px-4 py-2 bg-white border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
+            />
+            <p class="mt-1 text-sm text-slate-500">{isDomainSpecific ? 'Select up to 3 matrix files.' : 'Select only 1 matrix file.'}</p>
+          </div>
+        </div>
+        <div class="flex items-center gap-4 mb-4">
+          <label class="flex items-center gap-2 text-slate-700">
             <input
               type="checkbox"
-              value={genome}
-              on:change={() => toggleGenomeSelection(genome)}
-              checked={selectedGenomes.includes(genome)}
+              bind:checked={isDomainSpecific}
+              class="w-4 h-4 text-green-600 border-slate-300 rounded focus:ring-green-500"
             />
-            {genome}
+            Domain-Specific?
           </label>
-        {/each}
-      {:else}
-        <p>Loading genomes...</p>
-      {/if}
+          <button
+            on:click={uploadFiles}
+            disabled={!uploadedCoordsFile || uploadedMatrixFiles.length === 0 || (isDomainSpecific && uploadedMatrixFiles.length > 3)}
+            class="inline-flex items-center px-4 py-2 text-sm font-medium text-white bg-green-600 rounded-lg hover:bg-green-700 transition-colors duration-200 cursor-pointer disabled:bg-green-300 disabled:cursor-not-allowed"
+          >
+            Upload and Prepare Graph
+          </button>
+        </div>
+        {#if errorMessage}
+          <p class="text-red-600 bg-red-50 p-4 rounded-lg">{errorMessage}</p>
+        {/if}
+      </div>
+    {/if}
+
+    <!-- Genome selection and controls -->
+    <div class="mb-8 p-6 bg-white rounded-lg shadow-sm border border-slate-200">
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6 items-center">
+        <div>
+          <h3 class="text-lg font-semibold text-slate-800 mb-4">Select 3 Genomes:</h3>
+          {#if selectedGraph.genomes}
+            <div class="space-y-2">
+              {#each selectedGraph.genomes as genome}
+                <label class="flex items-center gap-2 text-slate-700">
+                  <input
+                    type="checkbox"
+                    value={genome}
+                    on:change={() => toggleGenomeSelection(genome)}
+                    checked={selectedGenomes.includes(genome)}
+                    class="w-4 h-4 text-green-600 border-slate-300 rounded focus:ring-green-500"
+                  />
+                  {genome}
+                </label>
+              {/each}
+            </div>
+          {:else}
+            <p class="text-slate-600">Loading genomes...</p>
+          {/if}
+        </div>
+
+        <div class="flex flex-col gap-4">
+          <div class="flex justify-center">
+            <button
+              on:click={filterGraph}
+              disabled={selectedGenomes.length !== 3}
+              class="inline-flex items-center px-4 py-2 text-sm font-medium text-white bg-green-600 rounded-lg hover:bg-green-700 transition-colors duration-200 cursor-pointer disabled:bg-green-300 disabled:cursor-not-allowed"
+            >
+              Confirm Selection
+            </button>
+          </div>
+
+          {#if graphs.length > 1}
+            <div class="flex items-center gap-4">
+              <span class="text-lg font-semibold text-slate-800">View domain:</span>
+              <select
+                on:change={(e) => selectDomain((e.target as HTMLSelectElement).selectedIndex)}
+                class="px-4 py-2 bg-white border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
+              >
+                {#each graphs as g, idx}
+                  <option value={idx} selected={g === selectedGraph}>{g.domain_name}</option>
+                {/each}
+              </select>
+            </div>
+          {/if}
+        </div>
+
+        <div>
+          <label class="flex items-center gap-4 text-slate-700">
+            <span class="text-lg font-semibold">Adjust Cut-off:</span>
+            <input
+              type="range"
+              min="55"
+              max="100"
+              disabled={selectedGraph.domain_name === "ALL"}
+              bind:value={cutoff}
+              class="w-full"
+            />
+            <span class="min-w-[3rem] text-center">{cutoff}%</span>
+          </label>
+        </div>
+      </div>
     </div>
 
-    <button on:click={filterGraph} disabled={selectedGenomes.length !== 3}>
-      Confirm Selection
-    </button>
-
-    <label style="display: flex; align-items: center; gap: 0.5rem;">
-      Adjust Cut-off:
-      <input
-        type="range"
-        min="55"
-        max="100"
-        disabled={selectedGraph.domain_name === "ALL"}
-        bind:value={cutoff}/>
-      {cutoff}%
-    </label>
+    <Chart graph={filteredGraph} {cutoff}/>
   </div>
-
-  <Chart graph={filteredGraph} {cutoff}/>
 {/if}
 
-<!-- Removed general styles, only using inline styles for specific elements -->
-<!-- TODO: incorporate tailwindcss for cleaner styling -->
+<style>
+  /* Empty style tag required for Tailwind processing */
+</style>

@@ -21,6 +21,7 @@
 	}
 
 	const sortOptions = [
+		{ label: 'Not functional', value: 'not-functional' },
 		// { label: 'Date Uploaded (Newest)', value: 'uploaded-desc' },
 		// { label: 'Date Uploaded (Oldest)', value: 'uploaded-asc' },
 		// { label: 'Date Modified (Newest)', value: 'modified-desc' },

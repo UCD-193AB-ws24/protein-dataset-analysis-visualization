@@ -34,6 +34,8 @@
   }
 
   let groupId: string | null = null;    // Group ID for file retrieval
+  let user: any = null;
+  let isAuthenticated = false;
 
   let graphs: Graph[] = [];
   let selectedGraph: Graph = { nodes: [], links: [], genomes: [] }; // Current graph to be displayed
@@ -59,23 +61,24 @@
   let numGenes = 0;
   let numDomains = 1;
 
-  let idToken = '';
-	let accessToken = '';
-
   onMount(async () => {
-    const urlParams = new URLSearchParams(window.location.search);
-    const initialId = urlParams.get('groupId');
-    const tokens = await getTokens();
-    idToken = tokens.idToken;
-    accessToken = tokens.accessToken;
+    try {
+      user = await oidcClient.getUser();
+      isAuthenticated = user && !user.expired;
 
+      const urlParams = new URLSearchParams(window.location.search);
+      const initialId = urlParams.get('groupId');
 
-    if (initialId) {
-      groupId = initialId;
-      await fetchGroupData(groupId);
+      if (initialId) {
+        groupId = initialId;
+        await fetchGroupData(groupId);
+      }
+
+      loading = false;
+    } catch (error) {
+      console.error('Auth error:', error);
+      goto('/invalid-login');
     }
-
-    loading = false; // Set loading to false after fetching data
   });
 
   function normaliseGraphs(data: any): Graph[] {
@@ -186,6 +189,11 @@
       return;
     }
 
+    if (!isAuthenticated) {
+      alert('Please log in to save groups.');
+      return;
+    }
+
     const formData = new FormData();
     if (!groupId) {
       // For new groups, validate uploaded files
@@ -211,7 +219,7 @@
       const response = await fetch(`${API_BASE_URL}/save`, {
         method: 'POST',
         headers: {
-          Authorization: `Bearer ${accessToken}`,
+          Authorization: `Bearer ${user.access_token}`,
         },
         body: formData,
       });
@@ -350,7 +358,7 @@
   {/if}
 
   <!-- Save group section -->
-  {#if selectedGraph.nodes.length > 0 && accessToken && idToken}
+  {#if selectedGraph.nodes.length > 0 && isAuthenticated}
     <div style="margin: 1rem; margin-top: 0px; display: flex; flex-direction: column; gap: 1rem; max-width: 300px;">
       <h3>Save Group</h3>
       <input type="text" placeholder="Title" bind:value={title} />

@@ -1,42 +1,63 @@
-<script>
+<script lang="ts">
 	import { onMount } from 'svelte';
 	import { goto } from '$app/navigation';
 	import { API_BASE_URL } from '$lib/api';
-	import { getTokens } from '$lib/getTokens';
+	import { oidcClient } from '$lib/auth';
 
-	let userFileGroups = [];
+	interface FileGroup {
+		id: string;
+		title: string;
+		description: string;
+		genomes: string[];
+		num_genes: number;
+		num_domains: number;
+		is_domain_specific: boolean;
+		files: Array<{
+			file_type: string;
+			file_name: string;
+		}>;
+	}
+
+	let userFileGroups: FileGroup[] = [];
 	let errorMessage = '';
-	let loading = false;
-	let authenticated = false;
+	let loading = true;
+	let isAuthenticated = false;
+	let user: any = null;
 
 	onMount(async () => {
 		try {
-			await fetchUserFileGroups();
+			user = await oidcClient.getUser();
+			isAuthenticated = user && !user.expired;
+
+			if (isAuthenticated) {
+				await fetchUserFileGroups();
+			} else {
+				goto('/invalid-login');
+			}
 		} catch (error) {
-			errorMessage = error.message || 'Failed to load data';
+			console.error('Auth error:', error);
+			goto('/invalid-login');
 		}
 	});
 
 	async function fetchUserFileGroups() {
 		loading = true;
 		errorMessage = '';
-		const {idToken, accessToken} = await getTokens();
 
-		if (!idToken || !accessToken) {
+		if (!user?.access_token) {
 			errorMessage = 'Missing authentication tokens. Please log in again.';
 			loading = false;
-			goto("/invalid-login")
+			goto("/invalid-login");
 			return;
 		}
-		authenticated = true;
 
 		try {
 			const response = await fetch(`${API_BASE_URL}/get_user_file_groups`, {
 				method: 'POST',
 				headers: {
 					'Content-Type': 'application/json',
-					Authorization: `Bearer ${accessToken}`,
-					'X-ID-Token': idToken
+					Authorization: `Bearer ${user.access_token}`,
+					'X-ID-Token': user.id_token
 				}
 			});
 
@@ -47,13 +68,14 @@
 			const data = await response.json();
 			userFileGroups = data.file_groups;
 		} catch (error) {
-			errorMessage = error.message || 'An error occurred.';
+			errorMessage = error instanceof Error ? error.message : 'An error occurred.';
 		} finally {
 			loading = false;
 		}
 	}
 </script>
-{#if authenticated}
+
+{#if isAuthenticated}
 <div class="file-groups">
 	<h2>📁 Your File Groups</h2>
 

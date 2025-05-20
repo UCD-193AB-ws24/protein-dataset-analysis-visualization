@@ -32,7 +32,7 @@
 			const data = await res.json();
 			console.log('Verified user:', data);
 
-			window.location.href = '/dashboard/files';
+			window.location.href = '/dashboard';
 		} catch (e) {
 			console.error('Auth callback error:', e);
 			window.location.href = '/invalid-login';

@@ -86,7 +86,7 @@
 								{/if}
 							{/each}
 						</ul>
-						<button on:click={() => goto(`/dashboard/diagram?groupId=${group.id}`)}>
+						<button on:click={() => goto(`/diagram?groupId=${group.id}`)}>
 							View Diagram
 						</button>
 					{:else}

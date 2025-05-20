@@ -32,7 +32,7 @@
 			localStorage.setItem('username', username);
 
 			message = '✅ Login successful!';
-			setTimeout(() => goto('/dashboard/files'), 1000); // Redirect after 1s
+			setTimeout(() => goto('/dashboard'), 1000); // Redirect after 1s
 		} catch (error) {
 			message = `${error.message}`;
 		}

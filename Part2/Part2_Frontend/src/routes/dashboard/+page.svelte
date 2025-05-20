@@ -4,6 +4,11 @@
 	import { API_BASE_URL } from '$lib/api';
 	import { oidcClient } from '$lib/auth';
 
+	interface File {
+		file_name: string;
+		file_type: string;
+	}
+
 	interface FileGroup {
 		id: string;
 		title: string;
@@ -12,10 +17,7 @@
 		num_genes: number;
 		num_domains: number;
 		is_domain_specific: boolean;
-		files: Array<{
-			file_type: string;
-			file_name: string;
-		}>;
+		files: File[];
 	}
 
 	const sortOptions = [
@@ -40,6 +42,7 @@
 	let searchQuery = '';
 	let sortBy = '';
 	let filterBy = 'all';
+	let deletingGroupId: string | null = null;
 
 	onMount(async () => {
 		try {
@@ -89,6 +92,36 @@
 			errorMessage = error instanceof Error ? error.message : 'An error occurred.';
 		} finally {
 			loading = false;
+		}
+	}
+
+	async function deleteGroup(groupId: string) {
+		if (!confirm('Are you sure you want to delete this file group? This action cannot be undone.')) {
+			return;
+		}
+
+		deletingGroupId = groupId;
+		errorMessage = '';
+
+		try {
+			const response = await fetch(`${API_BASE_URL}/delete_group?groupId=${groupId}`, {
+				method: 'DELETE',
+				headers: {
+					Authorization: `Bearer ${user.access_token}`
+				}
+			});
+
+			if (!response.ok) {
+				throw new Error(`Error deleting group: ${response.statusText}`);
+			}
+
+			// Remove the deleted group from both lists
+			userFileGroups = userFileGroups.filter(group => group.id !== groupId);
+			filteredFileGroups = filteredFileGroups.filter(group => group.id !== groupId);
+		} catch (error) {
+			errorMessage = error instanceof Error ? error.message : 'Failed to delete group';
+		} finally {
+			deletingGroupId = null;
 		}
 	}
 
@@ -216,16 +249,26 @@
 						<span class={`text-xs px-2 py-1 rounded-full ${group.is_domain_specific ? 'bg-blue-100 text-blue-700' : 'bg-green-100 text-green-700'}`}>
 							{group.is_domain_specific ? 'Domain-specific' : 'General'}
 						</span>
-						<button
-							on:click={() => goto(`/diagram?groupId=${group.id}`)}
-							class="inline-flex items-center px-3 py-1.5 text-sm font-medium text-white bg-green-600 rounded-lg hover:bg-green-700 transition-colors duration-200 cursor-pointer"
-						>
-							View Diagram
-							<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="ml-1">
-								<path d="M5 12h14"/>
-								<path d="m12 5 7 7-7 7"/>
-							</svg>
-						</button>
+
+						<div class="flex gap-2">
+							<button
+								on:click={() => deleteGroup(group.id)}
+								disabled={deletingGroupId === group.id}
+								class="inline-flex items-center px-3 py-1.5 text-sm font-medium text-white bg-red-600 rounded-lg hover:bg-red-700 transition-colors duration-200 cursor-pointer disabled:bg-red-300 disabled:cursor-not-allowed"
+							>
+								{deletingGroupId === group.id ? 'Deleting...' : 'Delete'}
+							</button>
+							<button
+								on:click={() => goto(`/diagram?groupId=${group.id}`)}
+								class="inline-flex items-center px-3 py-1.5 text-sm font-medium text-white bg-green-600 rounded-lg hover:bg-green-700 transition-colors duration-200 cursor-pointer"
+							>
+								View Diagram
+								<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="ml-1">
+									<path d="M5 12h14"/>
+									<path d="m12 5 7 7-7 7"/>
+								</svg>
+							</button>
+						</div>
 					</div>
 				</div>
 			{/each}

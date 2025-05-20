@@ -33,10 +33,13 @@ def validate_coordinate_data_types(df):
     if not df['orientation'].isin(valid_orientations).all():
         raise ValueError("Orientation column should only contain 'plus', 'minus', 'positive', 'negative', '+' or '-'")
 
-    if df['orientation'].isin(['positive', '+']).any():
-        df['orientation'] = 'plus'
-    elif df['orientation'].isin(['negative', '-']).any():
-        df['orientation'] = 'minus'
+    # Convert each orientation individually
+    df['orientation'] = df['orientation'].map({
+        'positive': 'plus',
+        '+': 'plus',
+        'negative': 'minus',
+        '-': 'minus'
+    }).fillna(df['orientation'])  # Keep original value if not in mapping
 
 def process_name_field(df):
     try:
@@ -94,8 +97,12 @@ def parse_coordinates(coord_file):
         # Validate basic structure
         validate_coordinate_dataframe_basic(df)
 
+        print(df)
+
         # Validate data types
         validate_coordinate_data_types(df)
+
+        print(df)
 
         domain_names, domain_col_names = process_domain_field(df)
 
@@ -108,11 +115,11 @@ def parse_coordinates(coord_file):
         # Return only the required columns in the specified order
         required_columns = ['name', 'genome', 'protein_name', 'position', 'rel_position', 'orientation', 'gene_type']
         required_columns = required_columns + domain_col_names
-        print(required_columns)
+        #print(required_columns)
         if not all(col in df.columns for col in required_columns):
             raise ValueError("Missing one or more required columns after processing")
 
-        print(df[required_columns])
+        #print(df[required_columns])
 
         return df[required_columns]
 
@@ -179,7 +186,7 @@ def extract_subsections(df_only_cutoffs):
     subsections = df_only_cutoffs.index.to_series().str.split("_").str[1]
     if subsections.isnull().any():
         raise ValueError("Some row names don't follow the expected format (should contain '_')")
-    print(subsections)
+    #print(subsections)
     return subsections.unique()
 
 def create_subsection_mappings(df_only_cutoffs, subsections):
@@ -433,7 +440,7 @@ def domain_parse(matrix_files, coord_file, file_names):
         genomes_output.append(graph_output)
 
     
-    print(total_genomes)
+    #print(total_genomes)
 
     domain_graph_nodes = add_nodes(coords, total_gene_list)
     for node in domain_graph_nodes:

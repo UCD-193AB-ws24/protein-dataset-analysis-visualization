@@ -58,8 +58,8 @@
 
   function arrowPath(dir: string): string {
     return dir === 'plus'
-      ? 'M -40,-15 L 0,-15 L 0,15 L -40,15 Z M 0,-15 L 20,0 L 0,15 Z'
-      : 'M 40,-15 L 0,-15 L 0,15 L 40,15 Z M 0,-15 L -20,0 L 0,15 Z';
+      ? 'M -25,-15 L 10,-15 L 10,15 L -25,15 Z M 10,-15 L 25,0 L 10,15 Z'
+      : 'M 25,-15 L -10,-15 L -10,15 L 25,15 Z M -10,-15 L -25,0 L -10,15 Z';
   }
 
   /* duplicate first‑genome nodes to bottom row */
@@ -75,13 +75,17 @@
 
     const nodes: Node[] = [...original.nodes];
     const dupMap = new Map<string, string>();
-    original.nodes.forEach((n) => {
-      if (n.genome_name === firstGenome) {
-        const dupId = n.id + dupSuffix;
-        dupMap.set(n.id, dupId);
-        nodes.push({ ...n, id: dupId, _dup: true });
-      }
-    });
+    
+    // Only duplicate if there are more than 2 genomes
+    if (genomes.length > 2) {
+      original.nodes.forEach((n) => {
+        if (n.genome_name === firstGenome) {
+          const dupId = n.id + dupSuffix;
+          dupMap.set(n.id, dupId);
+          nodes.push({ ...n, id: dupId, _dup: true });
+        }
+      });
+    }
 
     const genomeOf = new Map(nodes.map((n) => [n.id, n.genome_name]));
     const links: Link[] = original.links.map((l) => {
@@ -107,16 +111,18 @@
       if ('link_type' in l && (l.link_type === 'solid_color' || l.link_type === 'dotted_color')) uf.union(l.source, l.target);
     });
 
-    // Add to union-find structure "links" bewtween first-genome and duplicated nodes
-    nodes.forEach((n) => {
-      if (n._dup) {
-        const originalId = n.id.slice(0, -dupSuffix.length);
-        const originalNode = nodes.find((o) => o.id === originalId);
-        if (originalNode) {
-          uf.union(n.id, originalId);
+    // Add to union-find structure "links" between first-genome and duplicated nodes
+    if (genomes.length > 2) {
+      nodes.forEach((n) => {
+        if (n._dup) {
+          const originalId = n.id.slice(0, -dupSuffix.length);
+          const originalNode = nodes.find((o) => o.id === originalId);
+          if (originalNode) {
+            uf.union(n.id, originalId);
+          }
         }
-      }
-    });
+      });
+    }
 
     // Map CCs to colors
     const componentRoots = new Set(nodes.map((n) => uf.find(n.id)));
@@ -179,10 +185,10 @@
     const visibleLinks = links.filter((l) => 'score' in l ? l.score >= cutoff : true);
 
     // scales
-    const numRows = genomes.length + 1;
+    const numRows = genomes.length > 2 ? genomes.length + 1 : genomes.length; // Updated so no extra line when there are only 2 genomes
     const y = d3.scaleBand<number>().domain(d3.range(numRows)).range([0, height - margin.top - margin.bottom]).padding(0.6);
     const xExtent = d3.extent(nodes, (d) => d.rel_position) as [number, number];
-    const spacing = 120;
+    const spacing = 100;
     const chartWidth = Math.max(viewportWidth, (xExtent[1] - xExtent[0]) * spacing + arrowHalf * 2 + margin.left + margin.right);
     const x = d3.scaleLinear<number, number>().domain(xExtent).range([arrowHalf + margin.left, chartWidth - arrowHalf - margin.right]);
 
@@ -192,7 +198,7 @@
     // ── LABELS ──
     const labelSvg = d3.select(labelSvgEl).attr('width', labelWidth).attr('height', height);
     labelSvg.selectAll('*').remove();
-    const yLabels = [...genomes, genomes[0]];
+    const yLabels = genomes.length > 2 ? [...genomes, genomes[0]] : genomes; // Updated so that the first genome is duplicated only when there are more than 2 genomes
     labelSvg
       .append('g')
       .attr('transform', `translate(${labelWidth - 10},${margin.top})`)
@@ -246,10 +252,28 @@
       .data(visibleLinks)
       .enter()
       .append('line')
-      .attr('x1', (d) => x(nodeById.get(d.source)!.rel_position) + (nodeById.get(d.source)!.direction === 'plus' ? -20 : 20))
-      .attr('y1', (d) => y(rowOf(nodeById.get(d.source)!))! + y.bandwidth() / 2 + margin.top)
-      .attr('x2', (d) => x(nodeById.get(d.target)!.rel_position) + (nodeById.get(d.target)!.direction === 'plus' ? -20 : 20))
-      .attr('y2', (d) => y(rowOf(nodeById.get(d.target)!))! + y.bandwidth() / 2 + margin.top)
+      .attr('x1', (d) => {
+        const sourceNode = nodeById.get(d.source)!;
+        const xBase = x(sourceNode.rel_position);
+        return xBase + (sourceNode.direction === 'plus' ? -5 : 5); // Offset based on direction
+      })
+      .attr('y1', (d) => {
+        const sourceRow = rowOf(nodeById.get(d.source)!);
+        const targetRow = rowOf(nodeById.get(d.target)!);
+        const yBase = y(sourceRow)! + y.bandwidth() / 2 + margin.top;
+        return yBase + (targetRow > sourceRow ? 10 : -10); // Offset by 10 up or down
+      })
+      .attr('x2', (d) => {
+        const targetNode = nodeById.get(d.target)!;
+        const xBase = x(targetNode.rel_position);
+        return xBase + (targetNode.direction === 'plus' ? -5 : 5); // Offset based on direction
+      })
+      .attr('y2', (d) => {
+        const sourceRow = rowOf(nodeById.get(d.source)!);
+        const targetRow = rowOf(nodeById.get(d.target)!);
+        const yBase = y(targetRow)! + y.bandwidth() / 2 + margin.top;
+        return yBase + (targetRow > sourceRow ? -10 : 10); // Offset by 10 up or down
+      })
       .attr('stroke-width', (d) => strokeW('score' in d ? d.score : 100) * 2)
       .attr('stroke-dasharray', d => {
         if ('is_reciprocal' in d) return d.is_reciprocal ? null : '4,4';

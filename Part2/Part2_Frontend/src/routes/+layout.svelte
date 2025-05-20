@@ -1,45 +1,14 @@
 <script>
+    import '../app.css';
+    import Navbar from '../lib/components/Navbar.svelte';
 </script>
 
-<nav>
-    <!-- <ul>
-        <li><a href="/">🏠 Home</a></li>
-        <li><a href="/diagram">📈 Diagram</a></li>
-        <li><a href="/upload">📤 Upload File</a></li>
-        <li><a href="/files">📂Files</a></li>
-    </ul> -->
-</nav>
+<div class="min-h-screen bg-gray-100">
+    <Navbar />
+    <slot />
+</div>
 
 <style>
-    /* nav {
-        background: #1e293b;
-        padding: 15px;
-        text-align: center;
-    }
-
-    ul {
-        list-style: none;
-        display: flex;
-        justify-content: center;
-        gap: 25px;
-        padding: 0;
-    }
-
-    li {
-        display: inline;
-    }
-
-    a {
-        color: white;
-        text-decoration: none;
-        font-size: 18px;
-        font-weight: bold;
-        transition: color 0.3s ease;
-    }
-
-    a:hover {
-        color: #60a5fa;
-    } */
+    /* Empty style tag required for Tailwind processing */
 </style>
 
-<slot />

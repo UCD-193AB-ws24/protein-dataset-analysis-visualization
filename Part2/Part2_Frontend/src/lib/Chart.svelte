@@ -58,8 +58,8 @@
 
   function arrowPath(dir: string): string {
     return dir === 'plus'
-      ? 'M -30,-15 L 10,-15 L 10,15 L -30,15 Z M 10,-15 L 30,0 L 10,15 Z'
-      : 'M 30,-15 L -10,-15 L -10,15 L 30,15 Z M -10,-15 L -30,0 L -10,15 Z';
+      ? 'M -25,-15 L 10,-15 L 10,15 L -25,15 Z M 10,-15 L 25,0 L 10,15 Z'
+      : 'M 25,-15 L -10,-15 L -10,15 L 25,15 Z M -10,-15 L -25,0 L -10,15 Z';
   }
 
   /* duplicate first‑genome nodes to bottom row */
@@ -246,10 +246,28 @@
       .data(visibleLinks)
       .enter()
       .append('line')
-      .attr('x1', (d) => x(nodeById.get(d.source)!.rel_position))
-      .attr('y1', (d) => y(rowOf(nodeById.get(d.source)!))! + y.bandwidth() / 2 + margin.top)
-      .attr('x2', (d) => x(nodeById.get(d.target)!.rel_position))
-      .attr('y2', (d) => y(rowOf(nodeById.get(d.target)!))! + y.bandwidth() / 2 + margin.top)
+      .attr('x1', (d) => {
+        const sourceNode = nodeById.get(d.source)!;
+        const xBase = x(sourceNode.rel_position);
+        return xBase + (sourceNode.direction === 'plus' ? -5 : 5); // Offset based on direction
+      })
+      .attr('y1', (d) => {
+        const sourceRow = rowOf(nodeById.get(d.source)!);
+        const targetRow = rowOf(nodeById.get(d.target)!);
+        const yBase = y(sourceRow)! + y.bandwidth() / 2 + margin.top;
+        return yBase + (targetRow > sourceRow ? 10 : -10); // Offset by 10 up or down
+      })
+      .attr('x2', (d) => {
+        const targetNode = nodeById.get(d.target)!;
+        const xBase = x(targetNode.rel_position);
+        return xBase + (targetNode.direction === 'plus' ? -5 : 5); // Offset based on direction
+      })
+      .attr('y2', (d) => {
+        const sourceRow = rowOf(nodeById.get(d.source)!);
+        const targetRow = rowOf(nodeById.get(d.target)!);
+        const yBase = y(targetRow)! + y.bandwidth() / 2 + margin.top;
+        return yBase + (targetRow > sourceRow ? -10 : 10); // Offset by 10 up or down
+      })
       .attr('stroke-width', (d) => strokeW('score' in d ? d.score : 100) * 2)
       .attr('stroke-dasharray', d => {
         if ('is_reciprocal' in d) return d.is_reciprocal ? null : '4,4';

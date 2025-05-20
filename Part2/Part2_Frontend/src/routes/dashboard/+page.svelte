@@ -18,11 +18,28 @@
 		}>;
 	}
 
+	const sortOptions = [
+		// { label: 'Date Uploaded (Newest)', value: 'uploaded-desc' },
+		// { label: 'Date Uploaded (Oldest)', value: 'uploaded-asc' },
+		// { label: 'Date Modified (Newest)', value: 'modified-desc' },
+		// { label: 'Date Modified (Oldest)', value: 'modified-asc' }
+	];
+
+	const filterOptions = [
+		{ label: 'All Types', value: 'all' },
+		{ label: 'General', value: 'general' },
+		{ label: 'Domain-specific', value: 'domain' }
+	];
+
 	let userFileGroups: FileGroup[] = [];
+	let filteredFileGroups: FileGroup[] = [];
 	let errorMessage = '';
 	let loading = true;
 	let isAuthenticated = false;
 	let user: any = null;
+	let searchQuery = '';
+	let sortBy = '';
+	let filterBy = 'all';
 
 	onMount(async () => {
 		try {
@@ -67,111 +84,160 @@
 
 			const data = await response.json();
 			userFileGroups = data.file_groups;
+			filteredFileGroups = [...userFileGroups];
 		} catch (error) {
 			errorMessage = error instanceof Error ? error.message : 'An error occurred.';
 		} finally {
 			loading = false;
 		}
 	}
+
+	$: {
+		// Apply filters and search
+		filteredFileGroups = userFileGroups.filter(group => {
+			const matchesSearch = searchQuery === '' ||
+				group.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+				group.description.toLowerCase().includes(searchQuery.toLowerCase());
+
+			const matchesFilter = filterBy === 'all' ||
+				(filterBy === 'domain' && group.is_domain_specific) ||
+				(filterBy === 'general' && !group.is_domain_specific);
+
+			return matchesSearch && matchesFilter;
+		});
+
+		// Apply sorting
+		if (sortBy) {
+			filteredFileGroups.sort((a, b) => {
+				// Add sorting logic based on sortBy value
+				// For now, just return 0 to maintain current order
+				return 0;
+			});
+		}
+	}
 </script>
 
 {#if isAuthenticated}
-<div class="file-groups">
-	<h2>📁 Your File Groups</h2>
+<div class="container mx-auto px-4 py-8">
+	<div class="mb-8">
+		<h1 class="text-3xl font-bold text-slate-800 mb-2">Your Uploads</h1>
+		<p class="text-slate-600">Manage and analyze your protein sequence comparisons</p>
+	</div>
+
+	<div class="flex flex-col md:flex-row gap-4 mb-6">
+		<div class="md:w-1/3">
+			<div class="relative">
+				<input
+					type="text"
+					bind:value={searchQuery}
+					placeholder="Search groups..."
+					class="w-full pl-10 pr-4 py-2 bg-white border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
+				/>
+				<svg
+					xmlns="http://www.w3.org/2000/svg"
+					width="20"
+					height="20"
+					viewBox="0 0 24 24"
+					fill="none"
+					stroke="currentColor"
+					stroke-width="2"
+					stroke-linecap="round"
+					stroke-linejoin="round"
+					class="absolute left-3 top-1/2 transform -translate-y-1/2 text-slate-400"
+				>
+					<circle cx="11" cy="11" r="8"/>
+					<path d="m21 21-4.3-4.3"/>
+				</svg>
+			</div>
+		</div>
+		<div class="flex gap-4 md:ml-auto">
+			<div class="w-48">
+				<select
+					bind:value={sortBy}
+					class="w-full px-4 py-2 bg-white border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
+				>
+					<option value="">Sort by</option>
+					{#each sortOptions as option}
+						<option value={option.value}>{option.label}</option>
+					{/each}
+				</select>
+			</div>
+			<div class="w-48">
+				<select
+					bind:value={filterBy}
+					class="w-full px-4 py-2 bg-white border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
+				>
+					{#each filterOptions as option}
+						<option value={option.value}>{option.label}</option>
+					{/each}
+				</select>
+			</div>
+		</div>
+	</div>
 
 	{#if loading}
-		<p>Loading file groups...</p>
+		<div class="flex justify-center items-center py-8">
+			<div class="animate-spin rounded-full h-12 w-12 border-4 border-green-200"></div>
+			<div class="animate-spin rounded-full h-12 w-12 border-4 border-green-600 border-t-transparent absolute"></div>
+		</div>
 	{/if}
 
 	{#if errorMessage}
-		<p class="error">{errorMessage}</p>
+		<p class="text-red-600 bg-red-50 p-4 rounded-lg mb-4">{errorMessage}</p>
 	{/if}
 
-	{#if userFileGroups.length > 0}
-		<div class="card-container">
-			{#each userFileGroups as group}
-				<div class="card">
-					<h3>{group.title}</h3>
-					<p>Description: {group.description}</p>
-					<p>Genomes: {group.genomes.join(', ')}</p>
-					<p>Num Genes: {group.num_genes}</p>
-					<p>Num Domains: {group.num_domains}</p>
-					<p>Domain Specific: {group.is_domain_specific ? 'Yes' : 'No'}</p>
-					<p>Files:</p>
-					{#if group.files.length > 0}
-						<ul class="group-file-list">
-							{#each group.files as file}
-								{#if file.file_type !== 'graph'}
-									<li style="word-wrap: break-word; overflow-wrap: break-word;">
-										<strong>{`${file.file_type}`}</strong>{`: ${file.file_name}`}
-									</li>
-								{/if}
-							{/each}
-						</ul>
-						<button on:click={() => goto(`/diagram?groupId=${group.id}`)}>
+	{#if filteredFileGroups.length > 0}
+		<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+			{#each filteredFileGroups as group}
+				<div class="bg-white rounded-lg shadow-sm border border-slate-200 p-4 hover:shadow-md transition-shadow">
+					<div class="flex items-start justify-between mb-2">
+						<div class="flex items-center">
+							<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-slate-400 mr-2">
+								<circle cx="6" cy="8" r="2"/>
+								<circle cx="18" cy="8" r="2"/>
+								<circle cx="6" cy="16" r="2"/>
+								<circle cx="18" cy="16" r="2"/>
+								<line x1="6" y1="8" x2="18" y2="8"/>
+								<line x1="6" y1="16" x2="18" y2="16"/>
+								<line x1="6" y1="8" x2="18" y2="16"/>
+							</svg>
+							<h3 class="font-medium text-slate-800">{group.title}</h3>
+						</div>
+					</div>
+					<div class="mb-3">
+						<p class="text-sm text-slate-600 line-clamp-2">{group.description}</p>
+					</div>
+					<div class="space-y-2 text-sm text-slate-600">
+						<p>Genomes: {group.genomes.join(', ')}</p>
+						<p>Num Genes: {group.num_genes}</p>
+						<p>Num Domains: {group.num_domains}</p>
+					</div>
+					<div class="mt-4 flex items-center justify-between">
+						<span class={`text-xs px-2 py-1 rounded-full ${group.is_domain_specific ? 'bg-blue-100 text-blue-700' : 'bg-green-100 text-green-700'}`}>
+							{group.is_domain_specific ? 'Domain-specific' : 'General'}
+						</span>
+						<button
+							on:click={() => goto(`/diagram?groupId=${group.id}`)}
+							class="inline-flex items-center px-3 py-1.5 text-sm font-medium text-white bg-green-600 rounded-lg hover:bg-green-700 transition-colors duration-200 cursor-pointer"
+						>
 							View Diagram
+							<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="ml-1">
+								<path d="M5 12h14"/>
+								<path d="m12 5 7 7-7 7"/>
+							</svg>
 						</button>
-					{:else}
-						<p class="no-files">No files included</p>
-					{/if}
+					</div>
 				</div>
 			{/each}
 		</div>
 	{:else if !loading}
-		<p>No file groups found.</p>
+		<div class="text-center py-8">
+			<p class="text-slate-600">No file groups found.</p>
+		</div>
 	{/if}
 </div>
 {/if}
 
 <style>
-	.file-groups {
-		margin-top: 30px;
-	}
-
-	.card-container {
-		display: grid;
-		grid-template-columns: repeat(3, minmax(200px, 1fr));
-		gap: 15px;
-		margin-top: 15px;
-	}
-
-	.card {
-		padding: 15px;
-		background: #f9f9f9;
-		border: 1px solid #ddd;
-		border-radius: 8px;
-		box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-		text-align: left;
-	}
-
-	.card h3 {
-		margin: 0 0 10px;
-		font-size: 18px;
-		color: #333;
-	}
-
-	.card p {
-		margin: 5px 0;
-		font-size: 14px;
-		color: #555;
-	}
-
-	.group-file-list {
-		list-style-type: none;
-		padding: 0;
-		margin-top: 0px;
-		font-size: 14px;
-		color: #555;
-		max-width: 100%;
-	}
-
-	.no-files {
-		font-style: italic;
-		color: #999;
-	}
-
-	.error {
-		color: red;
-		font-size: 14px;
-	}
+	/* Empty style tag required for Tailwind processing */
 </style>

@@ -350,43 +350,6 @@ def get_user_file_groups():
         session.close()
 
 
-@app.route('/get_user_files', methods=['POST'])
-def get_user_files():
-    req = request.get_json()
-    username = req.get("username")
-
-    if not username:
-        return jsonify({"error": "Username is required"}), 400
-
-    session = SessionLocal()
-    try:
-        # Get user
-        user = session.query(User).filter_by(username=username).first()
-        if not user:
-            return jsonify({"error": "User not found"}), 404
-
-        # Get all files for the user
-        files = session.query(File).filter_by(user_id=user.id).all()
-
-        file_list = [
-            {
-                "file_name": f.file_name,
-                "uploaded_at": f.uploaded_at.isoformat() if f.uploaded_at else None,
-                "file_type": f.file_type,
-                "group_id": str(f.group_id) if f.group_id else None
-            }
-            for f in files
-        ]
-
-        return jsonify({"files": file_list}), 200
-
-    except Exception as e:
-        session.rollback()
-        return jsonify({"error": f"Failed to retrieve files: {str(e)}"}), 500
-
-    finally:
-        session.close()
-
 @app.route('/verify_user')
 def get_user_data():
     auth_header = request.headers.get('Authorization', '')

@@ -7,7 +7,7 @@ def validate_coordinate_dataframe_basic(df):
     if df.empty:
         raise ValueError("The coordinate file is empty")
         
-    required_columns = ['name', 'position', 'orientation']
+    required_columns = ['name', 'protein_name', 'genome', 'position', 'orientation']
     missing_columns = [col for col in required_columns if col not in df.columns]
     if missing_columns:
         raise ValueError(f"Missing required columns: {', '.join(missing_columns)}")
@@ -26,19 +26,21 @@ def validate_coordinate_data_types(df):
     if not pd.to_numeric(df['position'], errors='coerce').notnull().all():
         raise ValueError("Position column contains non-numeric values")
         
-    valid_orientations = {'minus', 'plus'}
+    valid_orientations = {'minus', 'plus', 'negative', 'positive', '+', '-'}
     if not df['orientation'].isin(valid_orientations).all():
-        raise ValueError("Orientation column should only contain plus or minus")
+        raise ValueError("Orientation column should only contain 'plus', 'minus', 'positive', 'negative', '+' or '-'")
+
+    # Convert each orientation individually
+    df['orientation'] = df['orientation'].map({
+        'positive': 'plus',
+        '+': 'plus',
+        'negative': 'minus',
+        '-': 'minus'
+    }).fillna(df['orientation'])  # Keep original value if not in mapping
 
 def process_name_field(df):
     try:
-        # Remove Lsativa_ prefix if it exists
-        df['name'] = df['name'].str.replace('^Lsativa_', '', regex=True)
-        
-        df['protein_name'] = df['name'].str.split('_').str[-1]
-        df['genome_name'] = df['name'].str.split('_').str[0]
-        
-        if df['protein_name'].isnull().any() or df['genome_name'].isnull().any():
+        if df['protein_name'].isnull().any() or df['genome'].isnull().any():
             raise ValueError("Some names don't follow the expected format (should contain '_')")
             
         return df
@@ -47,7 +49,7 @@ def process_name_field(df):
 
 def calculate_relative_positions(df):
     try:
-        df['rel_position'] = df.groupby('genome_name')['position'].rank(method='first').astype(int)
+        df['rel_position'] = df.groupby('genome')['position'].rank(method='first').astype(int)
         return df
     except Exception as e:
         raise ValueError(f"Error calculating relative positions: {str(e)}")
@@ -70,7 +72,7 @@ def parse_coordinates(coord_file):
         df = calculate_relative_positions(df)
         
         # Return only the required columns in the specified order
-        required_columns = ['name', 'genome_name', 'protein_name', 'position', 'rel_position', 'orientation']
+        required_columns = ['name', 'genome', 'protein_name', 'position', 'rel_position', 'orientation']
         if not all(col in df.columns for col in required_columns):
             raise ValueError("Missing one or more required columns after processing")
             
@@ -90,7 +92,7 @@ def add_nodes(coords):
     for i in range(len(coords)):
         nodes.append({
             "id" : coords['name'][i],
-            "genome_name": coords['genome_name'][i],
+            "genome_name": coords['genome'][i],
             "protein_name": coords['protein_name'][i],
             "direction": coords['orientation'][i],
             "rel_position": int(coords['rel_position'][i]),
@@ -168,7 +170,7 @@ def prepare_dataframe(matrix_file):
     return df
 
 def extract_subsections(df_only_cutoffs):
-    subsections = df_only_cutoffs.index.to_series().str.split("_").str[0]
+    subsections = df_only_cutoffs.index.to_series().str.split("_").str[1]
     if subsections.isnull().any():
         raise ValueError("Some row names don't follow the expected format (should contain '_')")
     return subsections.unique()
@@ -176,20 +178,29 @@ def extract_subsections(df_only_cutoffs):
 def create_subsection_mappings(df_only_cutoffs, subsections):
     row_to_subsection = pd.Series(index=df_only_cutoffs.index, dtype="object")
     col_to_subsection = pd.Series(index=df_only_cutoffs.columns, dtype="object")
-    
+
+    # Helper function to get subsection from full name
+    def get_subsection(name):
+        try:
+            return name.split('_')[1]
+        except IndexError:
+            return None
+
     for section in subsections:
-        # Map rows
-        matching_rows = df_only_cutoffs.index.str.startswith(section)
+        # Map rows using the second token
+        row_subsections = df_only_cutoffs.index.map(get_subsection)
+        matching_rows = row_subsections == section
         if not matching_rows.any():
             raise ValueError(f"Subsection {section} has no matching rows")
         row_to_subsection.loc[matching_rows] = section
-        
-        # Map columns
-        matching_cols = df_only_cutoffs.columns.str.startswith(section)
+
+        # Map columns using the second token
+        col_subsections = df_only_cutoffs.columns.map(get_subsection)
+        matching_cols = col_subsections == section
         if not matching_cols.any():
             raise ValueError(f"Subsection {section} has no matching columns")
         col_to_subsection.loc[matching_cols] = section
-    
+
     return row_to_subsection, col_to_subsection
 
 def calculate_column_maxes(df_only_cutoffs, row_to_subsection):
@@ -222,7 +233,7 @@ def parse_matrix_data(matrix_file):
     try:
         # Read and prepare the dataframe
         df = prepare_dataframe(matrix_file)
-        print(df)
+        #print(df)
         
         # Get data above cutoff
         df_only_cutoffs = df_only_cutoffs = df[df > 55]

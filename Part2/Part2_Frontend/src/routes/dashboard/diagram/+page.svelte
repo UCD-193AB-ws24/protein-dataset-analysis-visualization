@@ -263,8 +263,8 @@
 
   // Filter graph according to selected genomes
   function filterGraph() {
-    if (selectedGenomes.length !== 3) {
-      console.error('Please select exactly 3 genomes to filter the graph.');
+    if (selectedGenomes.length !== 3 && selectedGenomes.length !== 2) {
+      console.error('Please select exactly 2 or 3 genomes to filter the graph.');
       return;
     }
 
@@ -374,7 +374,7 @@
   <!-- Genome selection checkboxes, filter button, and cutoff slider in one row -->
   <div style="margin: 1rem; display: flex; align-items: center; gap: 2rem;">
     <div>
-      <h3>Select 3 Genomes:</h3>
+      <h3>Select Genomes:</h3>
       {#if selectedGraph.genomes}
         {#each selectedGraph.genomes as genome}
           <label style="display: block; margin-top: 1rem; margin-left: 5%;">
@@ -392,7 +392,7 @@
       {/if}
     </div>
 
-    <button on:click={filterGraph} disabled={selectedGenomes.length !== 3}>
+    <button on:click={filterGraph} disabled={selectedGenomes.length !== 3 && selectedGenomes.length !== 2}>
       Confirm Selection
     </button>
 

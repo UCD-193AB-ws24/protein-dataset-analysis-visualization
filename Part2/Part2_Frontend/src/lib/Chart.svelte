@@ -58,8 +58,8 @@
 
   function arrowPath(dir: string): string {
     return dir === 'plus'
-      ? 'M -40,-15 L 0,-15 L 0,15 L -40,15 Z M 0,-15 L 20,0 L 0,15 Z'
-      : 'M 40,-15 L 0,-15 L 0,15 L 40,15 Z M 0,-15 L -20,0 L 0,15 Z';
+      ? 'M -30,-15 L 10,-15 L 10,15 L -30,15 Z M 10,-15 L 30,0 L 10,15 Z'
+      : 'M 30,-15 L -10,-15 L -10,15 L 30,15 Z M -10,-15 L -30,0 L -10,15 Z';
   }
 
   /* duplicate first‑genome nodes to bottom row */
@@ -182,7 +182,7 @@
     const numRows = genomes.length + 1;
     const y = d3.scaleBand<number>().domain(d3.range(numRows)).range([0, height - margin.top - margin.bottom]).padding(0.6);
     const xExtent = d3.extent(nodes, (d) => d.rel_position) as [number, number];
-    const spacing = 120;
+    const spacing = 100;
     const chartWidth = Math.max(viewportWidth, (xExtent[1] - xExtent[0]) * spacing + arrowHalf * 2 + margin.left + margin.right);
     const x = d3.scaleLinear<number, number>().domain(xExtent).range([arrowHalf + margin.left, chartWidth - arrowHalf - margin.right]);
 
@@ -246,9 +246,9 @@
       .data(visibleLinks)
       .enter()
       .append('line')
-      .attr('x1', (d) => x(nodeById.get(d.source)!.rel_position) + (nodeById.get(d.source)!.direction === 'plus' ? -20 : 20))
+      .attr('x1', (d) => x(nodeById.get(d.source)!.rel_position))
       .attr('y1', (d) => y(rowOf(nodeById.get(d.source)!))! + y.bandwidth() / 2 + margin.top)
-      .attr('x2', (d) => x(nodeById.get(d.target)!.rel_position) + (nodeById.get(d.target)!.direction === 'plus' ? -20 : 20))
+      .attr('x2', (d) => x(nodeById.get(d.target)!.rel_position))
       .attr('y2', (d) => y(rowOf(nodeById.get(d.target)!))! + y.bandwidth() / 2 + margin.top)
       .attr('stroke-width', (d) => strokeW('score' in d ? d.score : 100) * 2)
       .attr('stroke-dasharray', d => {

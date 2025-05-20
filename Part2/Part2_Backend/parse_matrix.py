@@ -26,9 +26,17 @@ def validate_coordinate_data_types(df):
     if not pd.to_numeric(df['position'], errors='coerce').notnull().all():
         raise ValueError("Position column contains non-numeric values")
         
-    valid_orientations = {'minus', 'plus'}
+    valid_orientations = {'minus', 'plus', 'negative', 'positive', '+', '-'}
     if not df['orientation'].isin(valid_orientations).all():
-        raise ValueError("Orientation column should only contain plus or minus")
+        raise ValueError("Orientation column should only contain 'plus', 'minus', 'positive', 'negative', '+' or '-'")
+
+    # Convert each orientation individually
+    df['orientation'] = df['orientation'].map({
+        'positive': 'plus',
+        '+': 'plus',
+        'negative': 'minus',
+        '-': 'minus'
+    }).fillna(df['orientation'])  # Keep original value if not in mapping
 
 def process_name_field(df):
     try:

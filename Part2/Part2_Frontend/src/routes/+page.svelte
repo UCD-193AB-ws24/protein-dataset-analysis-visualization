@@ -8,8 +8,11 @@
 
 <div class="w-full bg-white">
 	<!-- Hero Section -->
-	<section class="w-full bg-green-50 py-24">
-		<div class="max-w-5xl mx-auto px-8">
+	<section class="w-full py-24 relative overflow-hidden">
+		<div class="absolute inset-0 bg-green-50/80"></div>
+		<div class="absolute inset-0 bg-gradient-to-br from-green-50/0 via-green-100/40 to-green-50/0 animate-gradient"></div>
+		<div class="absolute inset-0 bg-gradient-to-tr from-green-50/0 via-green-100/30 to-green-50/0 animate-gradient-reverse"></div>
+		<div class="max-w-5xl mx-auto px-8 relative">
 			<div class="max-w-3xl mx-auto text-center">
 				<h1 class="text-4xl md:text-5xl font-bold text-green-800 mb-6">
 					Visualize lettuce protein similarity like never before.
@@ -49,8 +52,8 @@
 					</p>
 				</div>
 				<div class="md:w-1/2">
-					<div class="bg-green-50 rounded-xl p-12 flex items-center justify-center aspect-square">
-						<svg xmlns="http://www.w3.org/2000/svg" width="120" height="120" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-green-600"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"/><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/></svg>
+					<div class="bg-green-50 rounded-xl p-10 flex items-center justify-center aspect-square max-w-[400px] mx-auto">
+						<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-green-600"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"/><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/></svg>
 					</div>
 				</div>
 			</div>
@@ -73,8 +76,11 @@
 					</p>
 				</div>
 				<div class="md:w-1/2">
-					<div class="bg-green-50 rounded-xl p-12 flex items-center justify-center aspect-square">
-						<svg xmlns="http://www.w3.org/2000/svg" width="120" height="120" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-green-600"><circle cx="12" cy="12" r="10"/><path d="m4.93 4.93 4.24 4.24"/><path d="m14.83 9.17 4.24-4.24"/><path d="m14.83 14.83 4.24 4.24"/><path d="m9.17 14.83-4.24 4.24"/><circle cx="12" cy="12" r="4"/></svg>
+					<div class="bg-green-50 rounded-xl p-10 flex items-center justify-center aspect-square max-w-[400px] mx-auto">
+						<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-green-600">
+							<path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/>
+							<circle cx="12" cy="12" r="3"/>
+						</svg>
 					</div>
 				</div>
 			</div>
@@ -95,8 +101,8 @@
 					</p>
 				</div>
 				<div class="md:w-1/2">
-					<div class="bg-green-50 rounded-xl p-12 flex items-center justify-center aspect-square">
-						<svg xmlns="http://www.w3.org/2000/svg" width="120" height="120" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-green-600"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+					<div class="bg-green-50 rounded-xl p-10 flex items-center justify-center aspect-square max-w-[400px] mx-auto">
+						<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-green-600"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
 					</div>
 				</div>
 			</div>
@@ -116,6 +122,40 @@
 			opacity: 1;
 			transform: scale(1);
 		}
+	}
+
+	@keyframes gradient {
+		0% {
+			background-position: 0% 50%;
+		}
+		50% {
+			background-position: 100% 50%;
+		}
+		100% {
+			background-position: 0% 50%;
+		}
+	}
+
+	@keyframes gradient-reverse {
+		0% {
+			background-position: 100% 50%;
+		}
+		50% {
+			background-position: 0% 50%;
+		}
+		100% {
+			background-position: 100% 50%;
+		}
+	}
+
+	.animate-gradient {
+		background-size: 300% 300%;
+		animation: gradient 8s ease infinite;
+	}
+
+	.animate-gradient-reverse {
+		background-size: 300% 300%;
+		animation: gradient-reverse 12s ease infinite;
 	}
 
 	p {

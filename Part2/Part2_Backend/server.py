@@ -450,6 +450,63 @@ def download_file():
     except Exception as e:
         return jsonify({"error": f"Failed to generate download URL: {str(e)}"}), 500
 
+@app.route('/delete_group', methods=['DELETE'])
+def delete_group():
+    auth_header = request.headers.get('Authorization', '')
+    access_token = auth_header.replace('Bearer ', '')
+    if not access_token:
+        return jsonify({"error": "Not Signed In"}), 400
+
+    access_claims = verify_token(access_token)
+    user_id = access_claims['sub']
+
+    group_id = request.args.get('groupId')
+    if not group_id:
+        return jsonify({"error": "Missing groupId parameter"}), 400
+
+    session = SessionLocal()
+    try:
+        # Find user first
+        user = session.query(User).filter_by(id=user_id).first()
+        if not user:
+            return jsonify({"error": "User not found"}), 404
+
+        # Find group and verify ownership
+        group = session.query(Group).filter_by(id=group_id, user_id=user.id).first()
+        if not group:
+            return jsonify({"error": "Group not found or unauthorized"}), 404
+
+        # Get all files associated with the group
+        files = session.query(File).filter_by(group_id=group_id).all()
+
+        # Delete files from S3
+        for file in files:
+            try:
+                s3_client.delete_object(
+                    Bucket=os.getenv('S3_BUCKET_NAME'),
+                    Key=file.s3_key
+                )
+            except Exception as e:
+                print(f"Error deleting file from S3: {str(e)}")
+                # Continue with deletion even if S3 delete fails
+
+        # Delete file records from database
+        for file in files:
+            session.delete(file)
+
+        # Delete the group
+        session.delete(group)
+        session.commit()
+
+        return jsonify({"message": "Group and associated files deleted successfully"}), 200
+
+    except Exception as e:
+        session.rollback()
+        return jsonify({"error": f"Failed to delete group: {str(e)}"}), 500
+
+    finally:
+        session.close()
+
 @app.route('/', methods=['GET'])
 def home():
     return "Hello World"

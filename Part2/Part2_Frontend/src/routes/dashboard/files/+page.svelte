@@ -1,19 +1,36 @@
-<script>
+<script lang="ts">
 	import { onMount } from 'svelte';
 	import { goto } from '$app/navigation';
 	import { API_BASE_URL } from '$lib/api';
 	import { getTokens } from '$lib/getTokens';
 
-	let userFileGroups = [];
+	interface File {
+		file_name: string;
+		file_type: string;
+	}
+
+	interface FileGroup {
+		id: string;
+		title: string;
+		description: string;
+		genomes: string[];
+		num_genes: number;
+		num_domains: number;
+		is_domain_specific: boolean;
+		files: File[];
+	}
+
+	let userFileGroups: FileGroup[] = [];
 	let errorMessage = '';
 	let loading = false;
 	let authenticated = false;
+	let deletingGroupId: string | null = null;
 
 	onMount(async () => {
 		try {
 			await fetchUserFileGroups();
-		} catch (error) {
-			errorMessage = error.message || 'Failed to load data';
+		} catch (error: unknown) {
+			errorMessage = error instanceof Error ? error.message : 'Failed to load data';
 		}
 	});
 
@@ -46,10 +63,40 @@
 
 			const data = await response.json();
 			userFileGroups = data.file_groups;
-		} catch (error) {
-			errorMessage = error.message || 'An error occurred.';
+		} catch (error: unknown) {
+			errorMessage = error instanceof Error ? error.message : 'An error occurred.';
 		} finally {
 			loading = false;
+		}
+	}
+
+	async function deleteGroup(groupId: string) {
+		if (!confirm('Are you sure you want to delete this file group? This action cannot be undone.')) {
+			return;
+		}
+
+		deletingGroupId = groupId;
+		errorMessage = '';
+
+		try {
+			const {accessToken} = await getTokens();
+			const response = await fetch(`${API_BASE_URL}/delete_group?groupId=${groupId}`, {
+				method: 'DELETE',
+				headers: {
+					Authorization: `Bearer ${accessToken}`
+				}
+			});
+
+			if (!response.ok) {
+				throw new Error(`Error deleting group: ${response.statusText}`);
+			}
+
+			// Remove the deleted group from the list
+			userFileGroups = userFileGroups.filter(group => group.id !== groupId);
+		} catch (error: unknown) {
+			errorMessage = error instanceof Error ? error.message : 'Failed to delete group';
+		} finally {
+			deletingGroupId = null;
 		}
 	}
 </script>
@@ -86,9 +133,18 @@
 								{/if}
 							{/each}
 						</ul>
-						<button on:click={() => goto(`/dashboard/diagram?groupId=${group.id}`)}>
-							View Diagram
-						</button>
+						<div class="button-group">
+							<button on:click={() => goto(`/dashboard/diagram?groupId=${group.id}`)}>
+								View Diagram
+							</button>
+							<button
+								class="delete-button"
+								on:click={() => deleteGroup(group.id)}
+								disabled={deletingGroupId === group.id}
+							>
+								{deletingGroupId === group.id ? 'Deleting...' : 'Delete Group'}
+							</button>
+						</div>
 					{:else}
 						<p class="no-files">No files included</p>
 					{/if}
@@ -151,5 +207,29 @@
 	.error {
 		color: red;
 		font-size: 14px;
+	}
+
+	.button-group {
+		display: flex;
+		gap: 10px;
+		margin-top: 10px;
+	}
+
+	.delete-button {
+		background-color: #ff4444;
+		color: white;
+		border: none;
+		padding: 5px 10px;
+		border-radius: 4px;
+		cursor: pointer;
+	}
+
+	.delete-button:hover {
+		background-color: #cc0000;
+	}
+
+	.delete-button:disabled {
+		background-color: #ff9999;
+		cursor: not-allowed;
 	}
 </style>

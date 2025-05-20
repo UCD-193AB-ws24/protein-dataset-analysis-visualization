@@ -254,8 +254,8 @@
 
   // Filter graph according to selected genomes
   function filterGraph() {
-    if (selectedGenomes.length !== 3) {
-      console.error('Please select exactly 3 genomes to filter the graph.');
+    if (selectedGenomes.length !== 3 && selectedGenomes.length !== 2) {
+      console.error('Please select exactly 2 or 3 genomes to filter the graph.');
       return;
     }
 
@@ -404,7 +404,7 @@
     <div class="mb-8 p-6 bg-white rounded-lg shadow-sm border border-slate-200">
       <div class="grid grid-cols-1 md:grid-cols-3 gap-6 items-center">
         <div>
-          <h3 class="text-lg font-semibold text-slate-800 mb-4">Select 3 Genomes:</h3>
+          <h3 class="text-lg font-semibold text-slate-800 mb-4">Select Genomes:</h3>
           {#if selectedGraph.genomes}
             <div class="space-y-2">
               {#each selectedGraph.genomes as genome}
@@ -429,7 +429,7 @@
           <div class="flex justify-center">
             <button
               on:click={filterGraph}
-              disabled={selectedGenomes.length !== 3}
+              disabled={selectedGenomes.length !== 2 && selectedGenomes.length !== 3}
               class="inline-flex items-center px-4 py-2 text-sm font-medium text-white bg-green-600 rounded-lg hover:bg-green-700 transition-colors duration-200 cursor-pointer disabled:bg-green-300 disabled:cursor-not-allowed"
             >
               Confirm Selection

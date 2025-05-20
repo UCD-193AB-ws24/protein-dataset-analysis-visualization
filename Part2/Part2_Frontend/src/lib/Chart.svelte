@@ -75,13 +75,17 @@
 
     const nodes: Node[] = [...original.nodes];
     const dupMap = new Map<string, string>();
-    original.nodes.forEach((n) => {
-      if (n.genome_name === firstGenome) {
-        const dupId = n.id + dupSuffix;
-        dupMap.set(n.id, dupId);
-        nodes.push({ ...n, id: dupId, _dup: true });
-      }
-    });
+    
+    // Only duplicate if there are more than 2 genomes
+    if (genomes.length > 2) {
+      original.nodes.forEach((n) => {
+        if (n.genome_name === firstGenome) {
+          const dupId = n.id + dupSuffix;
+          dupMap.set(n.id, dupId);
+          nodes.push({ ...n, id: dupId, _dup: true });
+        }
+      });
+    }
 
     const genomeOf = new Map(nodes.map((n) => [n.id, n.genome_name]));
     const links: Link[] = original.links.map((l) => {
@@ -107,16 +111,18 @@
       if ('link_type' in l && (l.link_type === 'solid_color' || l.link_type === 'dotted_color')) uf.union(l.source, l.target);
     });
 
-    // Add to union-find structure "links" bewtween first-genome and duplicated nodes
-    nodes.forEach((n) => {
-      if (n._dup) {
-        const originalId = n.id.slice(0, -dupSuffix.length);
-        const originalNode = nodes.find((o) => o.id === originalId);
-        if (originalNode) {
-          uf.union(n.id, originalId);
+    // Add to union-find structure "links" between first-genome and duplicated nodes
+    if (genomes.length > 2) {
+      nodes.forEach((n) => {
+        if (n._dup) {
+          const originalId = n.id.slice(0, -dupSuffix.length);
+          const originalNode = nodes.find((o) => o.id === originalId);
+          if (originalNode) {
+            uf.union(n.id, originalId);
+          }
         }
-      }
-    });
+      });
+    }
 
     // Map CCs to colors
     const componentRoots = new Set(nodes.map((n) => uf.find(n.id)));
@@ -179,7 +185,7 @@
     const visibleLinks = links.filter((l) => 'score' in l ? l.score >= cutoff : true);
 
     // scales
-    const numRows = genomes.length + 1;
+    const numRows = genomes.length > 2 ? genomes.length + 1 : genomes.length; // Updated so no extra line when there are only 2 genomes
     const y = d3.scaleBand<number>().domain(d3.range(numRows)).range([0, height - margin.top - margin.bottom]).padding(0.6);
     const xExtent = d3.extent(nodes, (d) => d.rel_position) as [number, number];
     const spacing = 100;
@@ -192,7 +198,7 @@
     // ── LABELS ──
     const labelSvg = d3.select(labelSvgEl).attr('width', labelWidth).attr('height', height);
     labelSvg.selectAll('*').remove();
-    const yLabels = [...genomes, genomes[0]];
+    const yLabels = genomes.length > 2 ? [...genomes, genomes[0]] : genomes; // Updated so that the first genome is duplicated only when there are more than 2 genomes
     labelSvg
       .append('g')
       .attr('transform', `translate(${labelWidth - 10},${margin.top})`)

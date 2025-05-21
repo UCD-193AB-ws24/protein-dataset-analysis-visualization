@@ -66,8 +66,8 @@
 
   function arrowPath(dir: string): string {
     return dir === 'plus'
-      ? 'M -25,-15 L 10,-15 L 10,15 L -25,15 Z M 10,-15 L 25,0 L 10,15 Z'
-      : 'M 25,-15 L -10,-15 L -10,15 L 25,15 Z M -10,-15 L -25,0 L -10,15 Z';
+      ? 'M -25,-15 L 10,-15 L 25,0 L 10,15 L -25,15 Z'
+      : 'M 25,-15 L -10,-15 L -25,0 L -10,15 L 25,15 Z';
   }
 
   /* duplicate first‑genome nodes to bottom row */
@@ -361,12 +361,12 @@
       .attr('d', (d) => arrowPath(d.direction))
       .attr('fill', (d) => {
         if (isFocused && !focusedNodes.has(d.id)) return '#e6e6e6';
-        if (selectedNodes.has(d.id)) return '#ffd700'; // Gold color for selected nodes
         return nodeColor?.get(d.id)!;
       })
+      .attr('stroke', (d) => selectedNodes.has(d.id) ? 'black' : 'none')
+      .attr('stroke-width', (d) => selectedNodes.has(d.id) ? '2' : '0')
       .attr('opacity', d => {
         if (isFocused && !focusedNodes.has(d.id)) return 0.3;
-        if (selectedNodes.has(d.id)) return 1;
         return 1;
       })
       .attr('transform', (d) => {
@@ -389,8 +389,12 @@
       })
       .on('mouseover', function (event, d) {
         const currentColor = d3.select(this).attr('fill');
-        const darkerColor = d3.color(currentColor)?.darker(0.3);
-        d3.select(this).attr('fill', darkerColor?.toString());
+        if (currentColor) {
+          const darkerColor = d3.color(currentColor)?.darker(0.3);
+          if (darkerColor) {
+            d3.select(this).attr('fill', darkerColor.toString());
+          }
+        }
         d3.select(tooltipEl)
           .style('opacity', 1)
           .html(
@@ -408,8 +412,6 @@
       .on('mouseout', function (event, d) {
         if (isFocused && !focusedNodes.has(d.id)) {
           d3.select(this).attr('fill', '#e6e6e6');
-        } else if (selectedNodes.has(d.id)) {
-          d3.select(this).attr('fill', '#ffd700');
         } else {
           d3.select(this).attr('fill', nodeColor?.get(d.id)!);
         }

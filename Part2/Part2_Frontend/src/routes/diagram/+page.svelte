@@ -1,7 +1,7 @@
 <script lang="ts">
   import Chart from '$lib/Chart.svelte';
   import { onMount } from 'svelte';
-  import { API_BASE_URL } from '$lib/api';
+  import { API_BASE_URL } from '$lib/envs';
   import { goto } from '$app/navigation';
   import { oidcClient } from '$lib/auth'
   import { getTokens } from '$lib/getTokens';

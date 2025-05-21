@@ -55,6 +55,13 @@
   let loading = true;        // Loading state for file upload
   let cutoff = 55;           // slider value
 
+  // Link filter states
+  let showReciprocal = true;
+  let showNonReciprocal = true;
+  let showConsistent = true;
+  let showInconsistent = true;
+  let showPartiallyConsistent = true;
+
   // Form information if user choses to save graph
   let title = '';
   let description = '';
@@ -460,19 +467,81 @@
           {/if}
         </div>
 
-        <div>
-          <label class="flex items-center gap-4 text-slate-700">
-            <span class="text-lg font-semibold">Adjust Cut-off:</span>
-            <input
-              type="range"
-              min="55"
-              max="100"
-              disabled={selectedGraph.domain_name === "ALL"}
-              bind:value={cutoff}
-              class="w-full"
-            />
-            <span class="min-w-[3rem] text-center">{cutoff}%</span>
-          </label>
+        <div class="space-y-4">
+          <div>
+            <label class="flex items-center gap-4 text-slate-700">
+              <span class="text-lg font-semibold">Adjust Cut-off:</span>
+              <input
+                type="range"
+                min="55"
+                max="100"
+                disabled={selectedGraph.domain_name === "ALL"}
+                bind:value={cutoff}
+                class="w-full"
+              />
+              <span class="min-w-[3rem] text-center">{cutoff}%</span>
+            </label>
+          </div>
+
+          <!-- Link Filters -->
+          <div class="space-y-2">
+            <h3 class="text-lg font-semibold text-slate-800">Link Filters:</h3>
+            {#if selectedGraph.domain_name === "ALL"}
+              <div class="space-y-2">
+                <label class="flex items-center gap-2 text-slate-700">
+                  <input
+                    type="checkbox"
+                    bind:checked={showConsistent}
+                    class="w-4 h-4 text-green-600 border-slate-300 rounded focus:ring-green-500"
+                  />
+                  Consistent Links
+                </label>
+                <label class="flex items-center gap-2 text-slate-700">
+                  <input
+                    type="checkbox"
+                    bind:checked={showInconsistent}
+                    class="w-4 h-4 text-green-600 border-slate-300 rounded focus:ring-green-500"
+                  />
+                  Inconsistent Links
+                </label>
+                <label class="flex items-center gap-2 text-slate-700">
+                  <input
+                    type="checkbox"
+                    bind:checked={showPartiallyConsistent}
+                    class="w-4 h-4 text-green-600 border-slate-300 rounded focus:ring-green-500"
+                  />
+                  Partially Consistent Links
+                </label>
+                <label class="flex items-center gap-2 text-slate-700">
+                  <input
+                    type="checkbox"
+                    bind:checked={showNonReciprocal}
+                    class="w-4 h-4 text-green-600 border-slate-300 rounded focus:ring-green-500"
+                  />
+                  Non-Reciprocal Links
+                </label>
+              </div>
+            {:else}
+              <div class="space-y-2">
+                <label class="flex items-center gap-2 text-slate-700">
+                  <input
+                    type="checkbox"
+                    bind:checked={showReciprocal}
+                    class="w-4 h-4 text-green-600 border-slate-300 rounded focus:ring-green-500"
+                  />
+                  Reciprocal Links
+                </label>
+                <label class="flex items-center gap-2 text-slate-700">
+                  <input
+                    type="checkbox"
+                    bind:checked={showNonReciprocal}
+                    class="w-4 h-4 text-green-600 border-slate-300 rounded focus:ring-green-500"
+                  />
+                  Non-Reciprocal Links
+                </label>
+              </div>
+            {/if}
+          </div>
         </div>
       </div>
 
@@ -507,8 +576,16 @@
       {/if}
     </div>
 
-    <Chart graph={filteredGraph} {cutoff}/>
-
+    <Chart
+      graph={filteredGraph}
+      {cutoff}
+      {showReciprocal}
+      {showNonReciprocal}
+      {showConsistent}
+      {showInconsistent}
+      {showPartiallyConsistent}
+    />
+    
     <UploadModal 
       isOpen={showUploadModal}
       onClose={() => showUploadModal = false}

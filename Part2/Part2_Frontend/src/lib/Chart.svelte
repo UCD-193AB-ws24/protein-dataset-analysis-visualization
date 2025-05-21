@@ -15,6 +15,24 @@
   };
   export let cutoff: number = 55;
 
+  // Link filter props
+  export let showReciprocal = true;
+  export let showNonReciprocal = true;
+  export let showConsistent = true;
+  export let showInconsistent = true;
+  export let showPartiallyConsistent = true;
+
+  const dupSuffix = '__dup';
+
+  // Add selection mode state
+  let isSelectionMode = false;
+  let selectedNodes = new Set<string>();
+  let selectedNodesCount = 0;
+  let selectedLinks = new Set<string>();
+  let isFocused = false;
+  let focusedNodes = new Set<string>();
+  let focusedLinks = new Set<string>();
+
   interface Node {
     id: string;
     genome_name: string;
@@ -58,8 +76,8 @@
 
   function arrowPath(dir: string): string {
     return dir === 'plus'
-      ? 'M -25,-15 L 10,-15 L 10,15 L -25,15 Z M 10,-15 L 25,0 L 10,15 Z'
-      : 'M 25,-15 L -10,-15 L -10,15 L 25,15 Z M -10,-15 L -25,0 L -10,15 Z';
+      ? 'M -25,-15 L 10,-15 L 25,0 L 10,15 L -25,15 Z'
+      : 'M 25,-15 L -10,-15 L -25,0 L -10,15 L 25,15 Z';
   }
 
   /* duplicate first‑genome nodes to bottom row */
@@ -67,15 +85,15 @@
     if (!original) return {
       nodes: [] as Node[],
       links: [] as Link[],
-      genomes: [] as string[]
+      genomes: [] as string[],
+      nodeColor: new Map<string, string>()
     };
     const genomes = original.genomes;
     const firstGenome = genomes[0];
-    const dupSuffix = '__dup';
 
     const nodes: Node[] = [...original.nodes];
     const dupMap = new Map<string, string>();
-    
+
     // Only duplicate if there are more than 2 genomes
     if (genomes.length > 2) {
       original.nodes.forEach((n) => {
@@ -171,18 +189,112 @@
       })
     );
 
-    return { nodes, links, genomes, nodeColor };
+    return { nodes, links, genomes, nodeColor, uf };
   }
 
   // ────────────────────────────────────────────────────────────────
   //  Render
   // ────────────────────────────────────────────────────────────────
   function draw() {
-    const { nodes, links, genomes, nodeColor } = massage(graph);
+    const { nodes, links, genomes, nodeColor, uf } = massage(graph);
     if (!nodes.length) return;
 
     // apply cutoff filter
-    const visibleLinks = links.filter((l) => 'score' in l ? l.score >= cutoff : true);
+    const visibleLinks = links.filter((l) => {
+      // First apply cutoff filter for score-based links
+      if ('score' in l && l.score < cutoff) return false;
+
+      // Then apply link type filters
+      if ('is_reciprocal' in l) {
+        return l.is_reciprocal ? showReciprocal : showNonReciprocal;
+      }
+
+      if ('link_type' in l) {
+        switch (l.link_type) {
+          case 'solid_color':
+            return showConsistent;
+          case 'solid_red':
+            return showInconsistent;
+          case 'dotted_color':
+            return showPartiallyConsistent;
+          case 'dotted_grey':
+          case 'dotted_gray':
+            return showNonReciprocal;
+          default:
+            return true;
+        }
+      }
+
+      return true;
+    });
+
+    // Calculate focused nodes and links if in focus mode
+    if (isFocused && (selectedNodes.size > 0 || selectedLinks.size > 0)) {
+      focusedNodes.clear();
+      focusedLinks.clear();
+
+      // Helper function to get both original and duplicated node IDs
+      const getNodeAndDup = (nodeId: string) => {
+        const node = nodes.find(n => n.id === nodeId);
+        if (!node) return [nodeId];
+
+        if (node._dup) {
+          // If this is a duplicated node, get the original
+          const originalId = nodeId.slice(0, -dupSuffix.length);
+          return [nodeId, originalId];
+        } else {
+          // If this is an original node, check if it has a duplicate
+          const dupId = nodeId + dupSuffix;
+          const hasDup = nodes.some(n => n.id === dupId);
+          return hasDup ? [nodeId, dupId] : [nodeId];
+        }
+      };
+
+      // Add selected nodes and their CC members
+      selectedNodes.forEach(nodeId => {
+        const root = uf!.find(nodeId);
+        nodes.forEach(n => {
+          if (uf!.find(n.id) === root) {
+            focusedNodes.add(n.id);
+          }
+        });
+      });
+
+      // Add all links between focused nodes
+      visibleLinks.forEach(link => {
+        if (focusedNodes.has(link.source) && focusedNodes.has(link.target)) {
+          focusedLinks.add(`${link.source}-${link.target}`);
+        }
+      });
+
+      // Add nodes directly connected to originally selected nodes
+      visibleLinks.forEach(link => {
+        const sourceIds = getNodeAndDup(link.source);
+        const targetIds = getNodeAndDup(link.target);
+
+        // Check if any of the selected nodes (or their duplicates) are involved
+        const isSelected = sourceIds.some(id => selectedNodes.has(id)) ||
+                          targetIds.some(id => selectedNodes.has(id));
+
+        if (isSelected) {
+          // Add all variants of the nodes involved
+          sourceIds.forEach(id => focusedNodes.add(id));
+          targetIds.forEach(id => focusedNodes.add(id));
+          focusedLinks.add(`${link.source}-${link.target}`);
+        }
+      });
+
+      // Add selected links and their nodes
+      selectedLinks.forEach(linkId => {
+        const [source, target] = linkId.split('-');
+        const sourceIds = getNodeAndDup(source);
+        const targetIds = getNodeAndDup(target);
+
+        sourceIds.forEach(id => focusedNodes.add(id));
+        targetIds.forEach(id => focusedNodes.add(id));
+        focusedLinks.add(linkId);
+      });
+    }
 
     // scales
     const numRows = genomes.length > 2 ? genomes.length + 1 : genomes.length; // Updated so no extra line when there are only 2 genomes
@@ -281,12 +393,27 @@
         return null;
       })
       .attr('stroke', d => {
-        if ('is_reciprocal' in d) return d.is_reciprocal ? nodeColor.get(d.source)! : '#bbb';
+        if (isFocused && !focusedLinks.has(`${d.source}-${d.target}`)) return '#e6e6e6';
+        if (selectedLinks.has(`${d.source}-${d.target}`)) return '#000';
+        if ('is_reciprocal' in d) return d.is_reciprocal ? nodeColor?.get(d.source)! : '#bbb';
         if ('link_type' in d) {
           if (d.link_type === 'solid_red') return 'red';
-          return d.link_type.includes('color') ? nodeColor.get(d.source)! : '#bbb';
+          return d.link_type.includes('color') ? nodeColor?.get(d.source)! : '#bbb';
         }
         return '#bbb';
+      })
+      .attr('opacity', d => isFocused && !focusedLinks.has(`${d.source}-${d.target}`) ? 0.3 : 1)
+      .style('cursor', isSelectionMode ? 'pointer' : 'default')
+      .on('click', function(event, d) {
+        if (!isSelectionMode) return;
+
+        const linkId = `${d.source}-${d.target}`;
+        if (selectedLinks.has(linkId)) {
+          selectedLinks.delete(linkId);
+        } else {
+          selectedLinks.add(linkId);
+        }
+        draw();
       })
       .on('mouseover', function (event, d) {
         d3.select(this).attr('stroke-width', strokeW('score' in d ? d.score : 100) * 4);
@@ -324,14 +451,50 @@
       .enter()
       .append('path')
       .attr('d', (d) => arrowPath(d.direction))
-      .attr('fill', (d) => nodeColor?.get(d.id)!)
+      .attr('fill', (d) => {
+        if (isFocused && !focusedNodes.has(d.id)) return '#e6e6e6';
+        return nodeColor?.get(d.id)!;
+      })
+      .attr('stroke', (d) => selectedNodes.has(d.id) ? 'black' : 'none')
+      .attr('stroke-width', (d) => selectedNodes.has(d.id) ? '2' : '0')
+      .attr('opacity', d => {
+        if (isFocused && !focusedNodes.has(d.id)) return 0.3;
+        return 1;
+      })
       .attr('transform', (d) => {
         const px = x(d.rel_position);
         const py = y(rowOf(d))! + y.bandwidth() / 2 + margin.top;
         return `translate(${px},${py})`;
       })
+      .style('cursor', isSelectionMode ? 'pointer' : 'default')
+      .on('click', function(event, d) {
+        if (!isSelectionMode) return;
+
+        // Get both original and duplicated node IDs
+        const nodeIds = d._dup ?
+          [d.id, d.id.slice(0, -dupSuffix.length)] :
+          [d.id, d.id + dupSuffix];
+
+        // Toggle selection for both nodes
+        const isSelected = selectedNodes.has(d.id);
+        nodeIds.forEach(id => {
+          if (isSelected) {
+            selectedNodes.delete(id);
+          } else {
+            selectedNodes.add(id);
+          }
+        });
+        selectedNodesCount = selectedNodes.size;
+        draw();
+      })
       .on('mouseover', function (event, d) {
-        d3.select(this).attr('opacity', 0.8);
+        const currentColor = d3.select(this).attr('fill');
+        if (currentColor) {
+          const darkerColor = d3.color(currentColor)?.darker(0.3);
+          if (darkerColor) {
+            d3.select(this).attr('fill', darkerColor.toString());
+          }
+        }
         d3.select(tooltipEl)
           .style('opacity', 1)
           .html(
@@ -346,8 +509,12 @@
       .on('mousemove', function (event) {
         d3.select(tooltipEl).style('left', event.pageX + 10 + 'px').style('top', event.pageY + 10 + 'px');
       })
-      .on('mouseout', function () {
-        d3.select(this).attr('opacity', 1);
+      .on('mouseout', function (event, d) {
+        if (isFocused && !focusedNodes.has(d.id)) {
+          d3.select(this).attr('fill', '#e6e6e6');
+        } else {
+          d3.select(this).attr('fill', nodeColor?.get(d.id)!);
+        }
         d3.select(tooltipEl).style('opacity', 0);
       });
   }
@@ -391,6 +558,30 @@
     URL.revokeObjectURL(url);
   }
 
+  function toggleSelectionMode() {
+    isSelectionMode = !isSelectionMode;
+    if (!isSelectionMode) {
+      selectedNodes.clear();
+      selectedLinks.clear();
+      selectedNodesCount = 0;
+      isFocused = false;
+    }
+    draw();
+  }
+
+  function applyFocus() {
+    if (selectedNodes.size === 0) return;
+    isFocused = true;
+    draw();
+  }
+
+  function exitFocus() {
+    isFocused = false;
+    selectedNodes.clear();
+    selectedNodesCount = 0;
+    draw();
+  }
+
   onMount(draw);
   afterUpdate(draw);
 </script>
@@ -403,9 +594,35 @@
   </div>
 </div>
 <div bind:this={tooltipEl} class="tooltip"></div>
-{#if graph.nodes.length > 0}
-  <button on:click={downloadSVG} class="download-btn">Download SVG</button>
-{/if}
+<div class="controls">
+  {#if graph.nodes.length > 0}
+    <button on:click={downloadSVG} class="control-btn">Download SVG</button>
+    <button
+      on:click={toggleSelectionMode}
+      class="control-btn"
+      class:active={isSelectionMode}
+    >
+      {isSelectionMode ? 'Exit Selection Mode' : 'Enter Selection Mode'}
+    </button>
+    {#if isSelectionMode && !isFocused}
+      <button
+        on:click={applyFocus}
+        class="control-btn"
+        disabled={selectedNodesCount === 0}
+      >
+        Focus Selected
+      </button>
+    {/if}
+    {#if isFocused}
+      <button
+        on:click={exitFocus}
+        class="control-btn"
+      >
+        Exit Focus
+      </button>
+    {/if}
+  {/if}
+</div>
 
 <style>
   .wrapper {
@@ -433,8 +650,13 @@
     white-space: nowrap;
   }
 
-  .download-btn {
-    margin-left: 40px;
+  .controls {
+    margin: 10px 40px;
+    display: flex;
+    gap: 10px;
+  }
+
+  .control-btn {
     padding: 6px 12px;
     background-color: #007bff;
     color: white;
@@ -442,7 +664,17 @@
     border-radius: 4px;
     cursor: pointer;
   }
-  .download-btn:hover {
+
+  .control-btn:hover {
     background-color: #0056b3;
+  }
+
+  .control-btn:disabled {
+    background-color: #cccccc;
+    cursor: not-allowed;
+  }
+
+  .control-btn.active {
+    background-color: #28a745;
   }
 </style>

@@ -27,7 +27,8 @@
   // Add selection mode state
   let isSelectionMode = false;
   let selectedNodes = new Set<string>();
-  let selectedNodesCount = 0; // Add a reactive counter
+  let selectedNodesCount = 0;
+  let selectedLinks = new Set<string>();
   let isFocused = false;
   let focusedNodes = new Set<string>();
   let focusedLinks = new Set<string>();
@@ -228,7 +229,7 @@
     });
 
     // Calculate focused nodes and links if in focus mode
-    if (isFocused && selectedNodes.size > 0) {
+    if (isFocused && (selectedNodes.size > 0 || selectedLinks.size > 0)) {
       focusedNodes.clear();
       focusedLinks.clear();
 
@@ -281,6 +282,17 @@
           targetIds.forEach(id => focusedNodes.add(id));
           focusedLinks.add(`${link.source}-${link.target}`);
         }
+      });
+
+      // Add selected links and their nodes
+      selectedLinks.forEach(linkId => {
+        const [source, target] = linkId.split('-');
+        const sourceIds = getNodeAndDup(source);
+        const targetIds = getNodeAndDup(target);
+
+        sourceIds.forEach(id => focusedNodes.add(id));
+        targetIds.forEach(id => focusedNodes.add(id));
+        focusedLinks.add(linkId);
       });
     }
 
@@ -382,6 +394,7 @@
       })
       .attr('stroke', d => {
         if (isFocused && !focusedLinks.has(`${d.source}-${d.target}`)) return '#e6e6e6';
+        if (selectedLinks.has(`${d.source}-${d.target}`)) return '#000';
         if ('is_reciprocal' in d) return d.is_reciprocal ? nodeColor?.get(d.source)! : '#bbb';
         if ('link_type' in d) {
           if (d.link_type === 'solid_red') return 'red';
@@ -390,6 +403,18 @@
         return '#bbb';
       })
       .attr('opacity', d => isFocused && !focusedLinks.has(`${d.source}-${d.target}`) ? 0.3 : 1)
+      .style('cursor', isSelectionMode ? 'pointer' : 'default')
+      .on('click', function(event, d) {
+        if (!isSelectionMode) return;
+
+        const linkId = `${d.source}-${d.target}`;
+        if (selectedLinks.has(linkId)) {
+          selectedLinks.delete(linkId);
+        } else {
+          selectedLinks.add(linkId);
+        }
+        draw();
+      })
       .on('mouseover', function (event, d) {
         d3.select(this).attr('stroke-width', strokeW('score' in d ? d.score : 100) * 4);
         const n1 = nodeById.get(d.source)!;
@@ -537,7 +562,8 @@
     isSelectionMode = !isSelectionMode;
     if (!isSelectionMode) {
       selectedNodes.clear();
-      selectedNodesCount = 0; // Reset counter
+      selectedLinks.clear();
+      selectedNodesCount = 0;
       isFocused = false;
     }
     draw();
@@ -552,7 +578,7 @@
   function exitFocus() {
     isFocused = false;
     selectedNodes.clear();
-    selectedNodesCount = 0; // Reset counter
+    selectedNodesCount = 0;
     draw();
   }
 

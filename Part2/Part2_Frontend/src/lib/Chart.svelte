@@ -207,9 +207,9 @@
         });
       });
 
-      // Add nodes one link away (using visible links for display)
+      // Add nodes directly connected to originally selected nodes
       visibleLinks.forEach(link => {
-        if (focusedNodes.has(link.source) || focusedNodes.has(link.target)) {
+        if (selectedNodes.has(link.source) || selectedNodes.has(link.target)) {
           focusedNodes.add(link.source);
           focusedNodes.add(link.target);
           focusedLinks.add(`${link.source}-${link.target}`);

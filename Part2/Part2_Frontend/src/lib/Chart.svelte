@@ -22,6 +22,8 @@
   export let showInconsistent = true;
   export let showPartiallyConsistent = true;
 
+  const dupSuffix = '__dup';
+
   // Add selection mode state
   let isSelectionMode = false;
   let selectedNodes = new Set<string>();
@@ -87,7 +89,6 @@
     };
     const genomes = original.genomes;
     const firstGenome = genomes[0];
-    const dupSuffix = '__dup';
 
     const nodes: Node[] = [...original.nodes];
     const dupMap = new Map<string, string>();
@@ -231,6 +232,23 @@
       focusedNodes.clear();
       focusedLinks.clear();
 
+      // Helper function to get both original and duplicated node IDs
+      const getNodeAndDup = (nodeId: string) => {
+        const node = nodes.find(n => n.id === nodeId);
+        if (!node) return [nodeId];
+
+        if (node._dup) {
+          // If this is a duplicated node, get the original
+          const originalId = nodeId.slice(0, -dupSuffix.length);
+          return [nodeId, originalId];
+        } else {
+          // If this is an original node, check if it has a duplicate
+          const dupId = nodeId + dupSuffix;
+          const hasDup = nodes.some(n => n.id === dupId);
+          return hasDup ? [nodeId, dupId] : [nodeId];
+        }
+      };
+
       // Add selected nodes and their CC members
       selectedNodes.forEach(nodeId => {
         const root = uf!.find(nodeId);
@@ -241,11 +259,26 @@
         });
       });
 
+      // Add all links between focused nodes
+      visibleLinks.forEach(link => {
+        if (focusedNodes.has(link.source) && focusedNodes.has(link.target)) {
+          focusedLinks.add(`${link.source}-${link.target}`);
+        }
+      });
+
       // Add nodes directly connected to originally selected nodes
       visibleLinks.forEach(link => {
-        if (selectedNodes.has(link.source) || selectedNodes.has(link.target)) {
-          focusedNodes.add(link.source);
-          focusedNodes.add(link.target);
+        const sourceIds = getNodeAndDup(link.source);
+        const targetIds = getNodeAndDup(link.target);
+
+        // Check if any of the selected nodes (or their duplicates) are involved
+        const isSelected = sourceIds.some(id => selectedNodes.has(id)) ||
+                          targetIds.some(id => selectedNodes.has(id));
+
+        if (isSelected) {
+          // Add all variants of the nodes involved
+          sourceIds.forEach(id => focusedNodes.add(id));
+          targetIds.forEach(id => focusedNodes.add(id));
           focusedLinks.add(`${link.source}-${link.target}`);
         }
       });
@@ -412,14 +445,22 @@
       .on('click', function(event, d) {
         if (!isSelectionMode) return;
 
-        if (selectedNodes.has(d.id)) {
-          selectedNodes.delete(d.id);
-          selectedNodesCount = selectedNodes.size; // Update reactive counter
-        } else {
-          selectedNodes.add(d.id);
-          selectedNodesCount = selectedNodes.size; // Update reactive counter
-        }
-        draw(); // Redraw to update selection state
+        // Get both original and duplicated node IDs
+        const nodeIds = d._dup ?
+          [d.id, d.id.slice(0, -dupSuffix.length)] :
+          [d.id, d.id + dupSuffix];
+
+        // Toggle selection for both nodes
+        const isSelected = selectedNodes.has(d.id);
+        nodeIds.forEach(id => {
+          if (isSelected) {
+            selectedNodes.delete(id);
+          } else {
+            selectedNodes.add(id);
+          }
+        });
+        selectedNodesCount = selectedNodes.size;
+        draw();
       })
       .on('mouseover', function (event, d) {
         const currentColor = d3.select(this).attr('fill');

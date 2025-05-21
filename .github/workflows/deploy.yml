@@ -124,8 +124,8 @@ jobs:
       - name: Build SvelteKit app with environment variables
         run: |
           VITE_API_URL="$url" \
-          VITE_REDIRECT_URI="https://d37wdymfu5cgqx.cloudfront.net/callback" \
-          VITE_LOGOUT_URI="https://d37wdymfu5cgqx.cloudfront.net" \
+          VITE_REDIRECT_URI="${{ secrets.CLOUDFRONT_URL }}/callback" \
+          VITE_LOGOUT_URI="${{ secrets.CLOUDFRONT_URL }}" \
           npm run build
 
       - name: Deploy to S3

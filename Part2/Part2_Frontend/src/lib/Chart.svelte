@@ -15,6 +15,13 @@
   };
   export let cutoff: number = 55;
 
+  // Link filter props
+  export let showReciprocal = true;
+  export let showNonReciprocal = true;
+  export let showConsistent = true;
+  export let showInconsistent = true;
+  export let showPartiallyConsistent = true;
+
   interface Node {
     id: string;
     genome_name: string;
@@ -67,7 +74,8 @@
     if (!original) return {
       nodes: [] as Node[],
       links: [] as Link[],
-      genomes: [] as string[]
+      genomes: [] as string[],
+      nodeColor: new Map<string, string>()
     };
     const genomes = original.genomes;
     const firstGenome = genomes[0];
@@ -75,7 +83,7 @@
 
     const nodes: Node[] = [...original.nodes];
     const dupMap = new Map<string, string>();
-    
+
     // Only duplicate if there are more than 2 genomes
     if (genomes.length > 2) {
       original.nodes.forEach((n) => {
@@ -182,7 +190,33 @@
     if (!nodes.length) return;
 
     // apply cutoff filter
-    const visibleLinks = links.filter((l) => 'score' in l ? l.score >= cutoff : true);
+    const visibleLinks = links.filter((l) => {
+      // First apply cutoff filter for score-based links
+      if ('score' in l && l.score < cutoff) return false;
+
+      // Then apply link type filters
+      if ('is_reciprocal' in l) {
+        return l.is_reciprocal ? showReciprocal : showNonReciprocal;
+      }
+
+      if ('link_type' in l) {
+        switch (l.link_type) {
+          case 'solid_color':
+            return showConsistent;
+          case 'solid_red':
+            return showInconsistent;
+          case 'dotted_color':
+            return showPartiallyConsistent;
+          case 'dotted_grey':
+          case 'dotted_gray':
+            return showNonReciprocal;
+          default:
+            return true;
+        }
+      }
+
+      return true;
+    });
 
     // scales
     const numRows = genomes.length > 2 ? genomes.length + 1 : genomes.length; // Updated so no extra line when there are only 2 genomes

@@ -121,9 +121,12 @@ jobs:
           url=$(cat decoded_url.txt)
           echo "url=$url" >> $GITHUB_ENV
 
-      - name: Build SvelteKit app with backend URL
+      - name: Build SvelteKit app with environment variables
         run: |
-          VITE_API_URL="$url" npm run build
+          VITE_API_URL="$url" \
+          VITE_REDIRECT_URI="${{ secrets.CLOUDFRONT_URL }}/callback" \
+          VITE_LOGOUT_URI="${{ secrets.CLOUDFRONT_URL }}" \
+          npm run build
 
       - name: Deploy to S3
         uses: jakejarvis/s3-sync-action@master

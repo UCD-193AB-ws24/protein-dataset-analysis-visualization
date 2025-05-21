@@ -1,10 +1,11 @@
 <script lang="ts">
   import Chart from '$lib/Chart.svelte';
   import { onMount } from 'svelte';
-  import { API_BASE_URL } from '$lib/api';
+  import { API_BASE_URL } from '$lib/envs';
   import { goto } from '$app/navigation';
   import { oidcClient } from '$lib/auth'
   import { getTokens } from '$lib/getTokens';
+  import UploadModal from '$lib/components/UploadModal.svelte';
 
   interface Node {
     id: string;
@@ -39,6 +40,7 @@
   let selectedGraph: Graph = { nodes: [], links: [], genomes: [] }; // Current graph to be displayed
   let selectedGenomes: string[] = [];
   let filteredGraph: Graph = { nodes: [], links: [], genomes: [] };
+  let draggedGenome: string | null = null;
 
   // Variables for uploaded files/inputs
   let uploadedCoordsFile: File | null = null;
@@ -65,6 +67,8 @@
   let description = '';
   let numGenes = 0;
   let numDomains = 1;
+
+  let showUploadModal = false;
 
   onMount(async () => {
     try {
@@ -288,6 +292,37 @@
     filterGraph();  // Reapply the filter to the selected graph
     console.log(selectedGraph)
   }
+
+  function handleUpload(coordinateFile: File | null, matrixFiles: File[], domainSpecific: boolean) {
+    uploadedCoordsFile = coordinateFile;
+    uploadedMatrixFiles = matrixFiles;
+    isDomainSpecific = domainSpecific;
+    uploadFiles();
+  }
+
+  function handleDragStart(genome: string) {
+    draggedGenome = genome;
+  }
+
+  function handleDragOver(e: DragEvent) {
+    e.preventDefault();
+  }
+
+  function handleDrop(e: DragEvent, targetGenome: string) {
+    e.preventDefault();
+    if (!draggedGenome || draggedGenome === targetGenome) return;
+    
+    const fromIndex = selectedGenomes.indexOf(draggedGenome);
+    const toIndex = selectedGenomes.indexOf(targetGenome);
+    
+    selectedGenomes = selectedGenomes.map((genome, index) => {
+      if (index === fromIndex) return targetGenome;
+      if (index === toIndex) return draggedGenome!;
+      return genome;
+    });
+    
+    draggedGenome = null;
+  }
 </script>
 
 {#if loading}
@@ -364,46 +399,20 @@
     {#if !groupId}
       <!-- File upload section -->
       <div class="mb-8 p-6 bg-white rounded-lg shadow-sm border border-slate-200">
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-4">
-          <div>
-            <h3 class="text-lg font-semibold text-slate-800 mb-2">Upload Coordinate File:</h3>
-            <input
-              type="file"
-              on:change={(e) => uploadedCoordsFile = (e.target as HTMLInputElement).files?.[0] || null}
-              class="w-full px-4 py-2 bg-white border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
-            />
-          </div>
-          <div>
-            <h3 class="text-lg font-semibold text-slate-800 mb-2">Upload Matrix Files:</h3>
-            <input
-              type="file"
-              multiple={isDomainSpecific}
-              on:change={(e) => uploadedMatrixFiles = Array.from((e.target as HTMLInputElement).files || [])}
-              class="w-full px-4 py-2 bg-white border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
-            />
-            <p class="mt-1 text-sm text-slate-500">{isDomainSpecific ? 'Select up to 3 matrix files.' : 'Select only 1 matrix file.'}</p>
-          </div>
-        </div>
-        <div class="flex items-center gap-4 mb-4">
-          <label class="flex items-center gap-2 text-slate-700">
-            <input
-              type="checkbox"
-              bind:checked={isDomainSpecific}
-              class="w-4 h-4 text-green-600 border-slate-300 rounded focus:ring-green-500"
-            />
-            Domain-Specific?
-          </label>
+        <div class="inline-block">
           <button
-            on:click={uploadFiles}
-            disabled={!uploadedCoordsFile || uploadedMatrixFiles.length === 0 || (isDomainSpecific && uploadedMatrixFiles.length > 3)}
+            on:click={() => showUploadModal = true}
             class="inline-flex items-center px-4 py-2 text-sm font-medium text-white bg-green-600 rounded-lg hover:bg-green-700 transition-colors duration-200 cursor-pointer disabled:bg-green-300 disabled:cursor-not-allowed"
           >
             Upload and Prepare Graph
           </button>
         </div>
-        {#if errorMessage}
-          <p class="text-red-600 bg-red-50 p-4 rounded-lg">{errorMessage}</p>
-        {/if}
+      </div>
+    {/if}
+
+    {#if errorMessage}
+      <div class="mb-8">
+        <p class="text-red-600 bg-red-50 p-4 rounded-lg">{errorMessage}</p>
       </div>
     {/if}
 
@@ -535,6 +544,36 @@
           </div>
         </div>
       </div>
+
+      {#if selectedGenomes.length === 3 || selectedGenomes.length === 2}
+        <div class="mt-8 p-4 bg-slate-50 rounded-lg">
+          <h4 class="text-lg font-semibold text-slate-800 mb-4">Arrange Genome Order:</h4>
+          <div class="flex flex-col gap-2">
+            {#each selectedGenomes as genome}
+              <div
+                class="p-3 bg-white border border-slate-200 rounded-lg shadow-sm cursor-move flex items-center gap-2"
+                draggable="true"
+                on:dragstart={() => handleDragStart(genome)}
+                on:dragover={handleDragOver}
+                on:drop={(e) => handleDrop(e, genome)}
+                role="button"
+                tabindex="0"
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-slate-400">
+                  <line x1="8" y1="6" x2="21" y2="6"></line>
+                  <line x1="8" y1="12" x2="21" y2="12"></line>
+                  <line x1="8" y1="18" x2="21" y2="18"></line>
+                  <line x1="3" y1="6" x2="3.01" y2="6"></line>
+                  <line x1="3" y1="12" x2="3.01" y2="12"></line>
+                  <line x1="3" y1="18" x2="3.01" y2="18"></line>
+                </svg>
+                {genome}
+              </div>
+            {/each}
+          </div>
+          <p class="mt-2 text-sm text-slate-600">Drag to reorder the genomes. The order will affect how they appear in the visualization.</p>
+        </div>
+      {/if}
     </div>
 
     <Chart
@@ -545,6 +584,12 @@
       {showConsistent}
       {showInconsistent}
       {showPartiallyConsistent}
+    />
+    
+    <UploadModal 
+      isOpen={showUploadModal}
+      onClose={() => showUploadModal = false}
+      onUpload={handleUpload}
     />
   </div>
 {/if}

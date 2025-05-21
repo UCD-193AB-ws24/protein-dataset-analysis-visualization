@@ -381,9 +381,10 @@ def combine_graphs(all_domain_connections, all_domain_genes, domains):
         link_type = ""
 
         if not all(present_in_domains):
-            # Gene doesn't exist in one domain
-            if all(source in all_domain_genes[i] and target in all_domain_genes[i]
-                       for i, present in enumerate(present_in_domains) if not present):
+            # Check if connection is reciprocal in domains where it exists AND nodes don't exist in domains where connection is missing
+            if (all(dom_bool for u_key, _, dom_bool in unique_links if u_key == key or u_key == reverse_key) and
+                all(not (source in all_domain_genes[i] and target in all_domain_genes[i])
+                    for i, present in enumerate(present_in_domains) if not present)):
                 link_type = "solid_color"
             # At least one reciprocal
             elif any(dom_bool for u_key, _, dom_bool in unique_links if u_key == key or u_key == reverse_key):

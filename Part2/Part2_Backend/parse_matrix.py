@@ -5,6 +5,7 @@ from file_utils import (
     read_file, 
     validate_dataframe_basic, 
     validate_dataframe_structure,
+    validate_coordinate_data_types
 )
 
 

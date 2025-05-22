@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
 	import { goto } from '$app/navigation';
-	import { API_BASE_URL } from '$lib/api';
+	import { API_BASE_URL } from '$lib/envs';
 	import { oidcClient } from '$lib/auth';
 
 	interface File {

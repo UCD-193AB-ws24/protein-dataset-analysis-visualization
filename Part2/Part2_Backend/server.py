@@ -16,6 +16,7 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.pool import NullPool
 from sqlalchemy.orm.attributes import flag_modified
+from uuid import UUID
 from auth_utils import verify_token
 
 # import traceback
@@ -515,45 +516,47 @@ def delete_group():
     access_claims = verify_token(access_token)
     user_id = access_claims['sub']
 
-    group_id = request.args.get('groupId')
-    if not group_id:
+    group_id_str = request.args.get('groupId')
+    if not group_id_str:
         return jsonify({"error": "Missing groupId parameter"}), 400
+
+    try:
+        group_id = UUID(group_id_str)
+    except ValueError:
+        return jsonify({"error": "Invalid UUID format for groupId"}), 400
 
     session = SessionLocal()
     try:
-        # Find user first
         user = session.query(User).filter_by(id=user_id).first()
         if not user:
             return jsonify({"error": "User not found"}), 404
 
-        # Find group and verify ownership
         group = session.query(Group).filter_by(id=group_id, user_id=user.id).first()
         if not group:
             return jsonify({"error": "Group not found or unauthorized"}), 404
 
-        # Get all files associated with the group
-        files = session.query(File).filter_by(group_id=group_id).all()
+        files = session.query(File).filter(File.group_ids.any(group_id)).all()
 
-        # Delete files from S3
         for file in files:
-            try:
-                s3_client.delete_object(
-                    Bucket=os.getenv('S3_BUCKET_NAME'),
-                    Key=file.s3_key
-                )
-            except Exception as e:
-                print(f"Error deleting file from S3: {str(e)}")
-                # Continue with deletion even if S3 delete fails
+            if group_id in file.group_ids:
+                file.group_ids.remove(group_id)
+                flag_modified(file, "group_ids")  # this is essential!
+                file.ref_count = max(0, (file.ref_count or 1) - 1)
 
-        # Delete file records from database
+        session.commit()
+
         for file in files:
-            session.delete(file)
+            if file.ref_count == 0:
+                try:
+                    s3_client.delete_object(Bucket=os.getenv('S3_BUCKET_NAME'), Key=file.s3_key)
+                except Exception as e:
+                    print(f"Warning: Failed to delete from S3: {file.s3_key} — {e}")
+                session.delete(file)
 
-        # Delete the group
         session.delete(group)
         session.commit()
 
-        return jsonify({"message": "Group and associated files deleted successfully"}), 200
+        return jsonify({"message": "Group and associated unreferenced files deleted successfully"}), 200
 
     except Exception as e:
         session.rollback()

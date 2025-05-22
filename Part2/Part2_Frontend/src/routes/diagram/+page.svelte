@@ -423,7 +423,7 @@
       {/if}
 
       <!-- Save group section -->
-      {#if selectedGraph.nodes.length > 0 && isAuthenticated}
+      {#if selectedGraph.nodes.length > 0 && isAuthenticated && user?.profile?.sub == groupUserId}
         <div class="p-6 bg-white rounded-lg shadow-sm border border-slate-200">
           <h3 class="text-xl font-semibold text-slate-800 mb-4">Save Group</h3>
           <div class="space-y-4">
@@ -450,7 +450,9 @@
       {/if}
 
       {#if isAuthenticated && user?.profile?.sub !== groupUserId}
-      <div class="mb-8 text-right">
+      <div class="p-6 bg-white rounded-lg shadow-sm border border-slate-200">
+        <h3 class="text-xl font-semibold text-slate-800 mb-4">Add Group</h3>
+        <p class="text-slate-600 mb-4">Add group to your account for easy access and tracking.</p>
         <button
           on:click={saveSharedGroup}
           class="inline-flex items-center px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-lg hover:bg-blue-700 transition-colors duration-200"
@@ -458,7 +460,7 @@
           Add Group
         </button>
       </div>
-      {/if}
+      {/if}    
     </div>
 
     <!-- File upload/data source section only available if not reviewing a specific group -->

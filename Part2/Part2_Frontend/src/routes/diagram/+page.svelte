@@ -34,6 +34,7 @@
   let groupId: string | null = null;    // Group ID for file retrieval
   let user: any = null;
   let isAuthenticated = false;
+  let groupUserId: any = null;
 
   let graphs: Graph[] = [];
   let selectedGraph: Graph = { nodes: [], links: [], genomes: [] }; // Current graph to be displayed
@@ -110,6 +111,7 @@
       graphs = normaliseGraphs(data.graphs);
       selectedGraph = chooseInitialGraph(graphs);
 
+      groupUserId = data.user_id;
       numGenes = data.num_genes;
       numDomains = data.num_domains;
       title = data.title || '';
@@ -243,6 +245,59 @@
     }
   }
 
+  async function saveSharedGroup() {
+  if (!groupId) {
+    alert('Missing group ID for the shared group.');
+    return;
+  }
+
+  if (!isAuthenticated || !user?.access_token) {
+    alert('Please log in to access shared groups.');
+    return;
+  }
+
+  // Validate required group data
+  if (!title || !numGenes || !numDomains || !selectedGraph?.genomes) {
+    alert('Missing required group information.');
+    return;
+  }
+
+  const formData = new FormData();
+  formData.append('group_id', groupId); // original group being shared
+  formData.append('title', title);
+  formData.append('description', description);
+  formData.append('is_domain_specific', isDomainSpecific ? 'true' : 'false');
+  formData.append('genomes', JSON.stringify(selectedGraph.genomes));
+  formData.append('num_genes', numGenes.toString());
+  formData.append('num_domains', numDomains.toString());
+
+  try {
+    const response = await fetch(`${API_BASE_URL}/save_shared`, {
+      method: 'POST',
+      headers: {
+        Authorization: `Bearer ${user.access_token}`
+      },
+      body: formData
+    });
+
+    const result = await response.json();
+
+    if (!response.ok) {
+      const errorMessage = result.error || 'Unknown error';
+      console.error('Error saving shared group:', errorMessage);
+      alert(`Failed to save shared group: ${errorMessage}`);
+      return;
+    }
+
+    console.log('Shared group saved:', result);
+    alert('Shared group saved successfully!');
+  } catch (error) {
+    console.error('Error in saveSharedGroup:', error);
+    alert('Failed to save shared group. Please try again.');
+  }
+}
+
+
   // Allow user to select up to 3 genomes
   function toggleGenomeSelection(genome: string) {
     if (selectedGenomes.includes(genome)) {
@@ -350,6 +405,17 @@
             </button>
           </div>
         </div>
+      {/if}
+
+      {#if isAuthenticated && user?.profile?.sub !== groupUserId}
+      <div class="mb-8 text-right">
+        <button
+          on:click={saveSharedGroup}
+          class="inline-flex items-center px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-lg hover:bg-blue-700 transition-colors duration-200"
+        >
+          Add Group
+        </button>
+      </div>
       {/if}
     </div>
 

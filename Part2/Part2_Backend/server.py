@@ -15,6 +15,7 @@ from models import Base, User, Group, File
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.pool import NullPool
+from sqlalchemy.orm.attributes import flag_modified
 from auth_utils import verify_token
 
 # import traceback
@@ -88,8 +89,8 @@ def get_group_graph():
         if not group:
             return jsonify({"error": "Group not found"}), 404
 
-        # Fetch associated files
-        files = session.query(File).filter_by(group_id=group_id).all()
+        # Fetch files where group_id is in the file's group_id array
+        files = session.query(File).filter(File.group_ids.any(group_id)).all()
         if not files:
             return jsonify({"error": "No files associated with this group"}), 404
 
@@ -122,18 +123,18 @@ def get_group_graph():
         graph_str = s3_client.get_object(
             Bucket=os.getenv('S3_BUCKET_NAME'), Key=graph_s3_key)["Body"].read().decode()
 
-        # Parse graph JSON
         graph = json.loads(graph_str)
 
         return jsonify({
+            "user_id": group.user_id,
             "message": "Graph generated successfully",
             "title": group.title,
             "description": group.description,
             "graphs": graph,
             "num_genes": group.num_genes,
             "num_domains": group.num_domains,
-            "matrix_files": matrix_files,  # Include presigned URLs and original filenames for matrix files
-            "coordinate_file": coordinate_file  # Include presigned URL and original filename for coordinate file
+            "matrix_files": matrix_files,
+            "coordinate_file": coordinate_file
         }), 200
 
     except Exception as e:
@@ -141,6 +142,7 @@ def get_group_graph():
 
     finally:
         session.close()
+
 
 
 @app.route('/generate_graph', methods=['POST'])
@@ -282,14 +284,35 @@ def save_files():
 
         # Insert coordinate and graph file records into database
         session.add_all([
-            File(group_id=group_id, user_id=user.id, file_name=coordinate_filename, s3_key=coordinate_s3_key, file_type="coordinate"),
-            File(group_id=group_id, user_id=user.id, file_name=graph_filename, s3_key=graph_s3_key, file_type="graph")
+            File(
+                group_ids=[group_id],  # Array of group_id
+                user_id=user.id,
+                file_name=coordinate_filename,
+                s3_key=coordinate_s3_key,
+                file_type="coordinate",
+                ref_count=1
+            ),
+            File(
+                group_ids=[group_id],  # Array of group_id
+                user_id=user.id,
+                file_name=graph_filename,
+                s3_key=graph_s3_key,
+                file_type="graph",
+                ref_count=1
+            )
         ])
 
         # Insert matrix file records into database
         for matrix_file in matrix_files:
             matrix_s3_key, matrix_filename = upload_to_s3(matrix_file)
-            session.add(File(group_id=group_id, user_id=user.id, file_name=matrix_filename, s3_key=matrix_s3_key, file_type="matrix"))
+            session.add(File(
+                group_ids=[group_id],  # Array of group_id
+                user_id=user.id,
+                file_name=matrix_filename,
+                s3_key=matrix_s3_key,
+                file_type="matrix",
+                ref_count=1
+            ))
 
         session.commit()
 
@@ -301,6 +324,75 @@ def save_files():
 
     finally:
         session.close()
+
+
+@app.route('/save_shared', methods=['POST'])
+def save_shared_group():
+    auth_header = request.headers.get('Authorization', '')
+    access_token = auth_header.replace('Bearer ', '')
+    if not access_token:
+        return jsonify({"error": "Not Signed In"}), 400
+
+    access_claims = verify_token(access_token)
+    user_id = access_claims['sub']
+
+    group_id = request.form.get('group_id')  # original group being shared
+    if not group_id:
+        return jsonify({"error": "Missing group_id"}), 400
+
+    session = SessionLocal()
+
+    try:
+        # Get the user
+        user = session.query(User).filter_by(id=user_id).first()
+        if not user:
+            return jsonify({"error": "User not found"}), 404
+
+        # Get the original group
+        original_group = session.query(Group).filter_by(id=group_id).first()
+        if not original_group:
+            return jsonify({"error": "Invalid group_id provided"}), 400
+
+        # Duplicate the group for the new user
+        new_group = Group(
+            user_id=user.id,
+            title=original_group.title,
+            description=original_group.description,
+            is_domain_specific=original_group.is_domain_specific,
+            genomes=original_group.genomes,
+            num_genes=original_group.num_genes,
+            num_domains=original_group.num_domains
+        )
+        session.add(new_group)
+        session.commit()  # commit first to get new_group.id
+
+        # Now associate files with the new group
+        files = session.query(File).filter(File.group_ids.any(original_group.id)).all()
+
+        for file in files:
+            # Add new group_id to group_id array if not already there
+            if new_group.id not in file.group_ids:
+                file.group_ids.append(new_group.id)
+                flag_modified(file, "group_ids")  # <-- This is key!
+
+            # Increment the reference count
+            file.ref_count = (file.ref_count or 0) + 1
+
+        session.commit()
+
+        return jsonify({
+            "message": "Shared group saved successfully",
+            "new_group_id": str(new_group.id),
+            "linked_file_count": len(files)
+        }), 200
+
+    except Exception as e:
+        session.rollback()
+        return jsonify({"error": f"Failed to save shared group: {str(e)}"}), 500
+
+    finally:
+        session.close()
+
 
 
 @app.route('/get_user_file_groups', methods=['POST'])
@@ -325,7 +417,7 @@ def get_user_file_groups():
         result = []
         for group in groups:
             # Get files associated with the group
-            files = session.query(File).filter_by(group_id=group.id).all()
+            files = session.query(File).filter(File.group_ids.any(group.id)).all()
             file_list = [{"file_name": file.file_name, "file_type": file.file_type} for file in files]
 
             # Assemble group data

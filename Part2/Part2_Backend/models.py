@@ -33,8 +33,10 @@ class File(Base):
 
     id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
     group_id = Column(UUID(as_uuid=True), ForeignKey('groups.id'), nullable=True)
+    group_ids = Column(ARRAY(UUID(as_uuid=True)), nullable=True)  # Updated: now an array of UUIDs
     user_id = Column(UUID(as_uuid=True), ForeignKey('users.id'), nullable=False)
     file_name = Column(String, nullable=False)
     s3_key = Column(String, nullable=False)
     file_type = Column(String)
     uploaded_at = Column(TIMESTAMP(timezone=True), server_default=func.now())
+    ref_count = Column(Integer, default=0)  # New field: reference count

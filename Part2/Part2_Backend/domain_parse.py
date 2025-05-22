@@ -293,16 +293,27 @@ def add_nodes(coords, cutoff_index):
 
     for i in range(len(coords)):
         present = coords['name'][i] in cutoff_index
-        nodes.append({
-            "id" : coords['name'][i],
+        node_data = {
+            "id": coords['name'][i],
             "genome_name": coords['genome'][i],
             "protein_name": coords['protein_name'][i],
             "direction": coords['orientation'][i],
             "rel_position": int(coords['rel_position'][i]),
             "gene_type": coords['gene_type'][i],
             "is_present": present
-            # Extra flag "inconsistent": T/F
-        })
+        }
+
+        # Add domain coordinates if they exist
+        domain_cols = [col for col in coords.columns if 'domain' in col]
+        for col in domain_cols:
+            if col.endswith('_start') or col.endswith('_end'):
+                value = coords[col][i]
+                # Convert NaN to None (which becomes null in JSON)
+                node_data[col] = None if pd.isna(value) else value
+
+        nodes.append(node_data)
+    
+    print(nodes)
 
     return nodes
 

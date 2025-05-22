@@ -495,16 +495,59 @@
             d3.select(this).attr('fill', darkerColor.toString());
           }
         }
+
+        // Build tooltip content
+        let tooltipContent = `
+          <strong>Genome:</strong> ${d.genome_name}<br>
+          <strong>Protein:</strong> ${d.protein_name}<br>
+          ${d.gene_type ? `<strong>Domain:</strong> ${d.gene_type}<br>` : ''}
+          <strong>Present:</strong> ${d.is_present === false ? 'NO' : 'YES'}<br>
+          <strong>Direction:</strong> ${d.direction === 'plus' ? '+' : '-'}<br>
+          <strong>Position:</strong> ${d.rel_position}
+        `;
+
+        // Add domain coordinates if they exist
+        const domainCoords = Object.entries(d)
+          .filter(([key]) => key.includes('domain') && (key.endsWith('_start') || key.endsWith('_end')))
+          .sort(([a], [b]) => a.localeCompare(b));
+
+        if (domainCoords.length > 0) {
+          tooltipContent += '<br><br><strong>Domain Coordinates:</strong><br>';
+          let currentDomain = '';
+          let startValue: number | null = null;
+          let endValue: number | null = null;
+          
+          domainCoords.forEach(([key, value]) => {
+            const parts = key.split('_');
+            const domainName = parts[1];
+            const coordType = parts[parts.length - 1];
+            
+            if (domainName !== currentDomain) {
+              if (currentDomain !== '') {
+                tooltipContent += `(${startValue ?? 'NA'}, ${endValue ?? 'NA'})<br>`;
+              }
+              currentDomain = domainName;
+              tooltipContent += `${domainName}: `;
+              startValue = null;
+              endValue = null;
+            }
+            
+            if (coordType === 'start') {
+              startValue = value as number;
+            } else if (coordType === 'end') {
+              endValue = value as number;
+            }
+          });
+          
+          // Handle the last domain
+          if (currentDomain !== '') {
+            tooltipContent += `(${startValue ?? 'NA'}, ${endValue ?? 'NA'})`;
+          }
+        }
+
         d3.select(tooltipEl)
           .style('opacity', 1)
-          .html(
-            `<strong>Genome:</strong> ${d.genome_name}<br>` +
-            `<strong>Protein:</strong> ${d.protein_name}<br>` +
-            (d.gene_type ? `<strong>Domain:</strong> ${d.gene_type}<br>` : '') +
-            `<strong>Present:</strong> ${d.is_present === false ? 'NO' : 'YES'}<br>` +
-            `<strong>Direction:</strong> ${d.direction === 'plus' ? '+' : '-'}<br>` +
-            `<strong>Position:</strong> ${d.rel_position}`
-          );
+          .html(tooltipContent);
       })
       .on('mousemove', function (event) {
         d3.select(tooltipEl).style('left', event.pageX + 10 + 'px').style('top', event.pageY + 10 + 'px');

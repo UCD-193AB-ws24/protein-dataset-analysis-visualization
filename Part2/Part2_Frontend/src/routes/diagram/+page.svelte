@@ -272,6 +272,7 @@
 
     // Update genomes in filtered graph
     filteredGraph.genomes = selectedGenomes;
+    filteredGraph.domain_name = selectedGraph.domain_name;  // Copy domain_name
 
     // Update nodes in filtered graph
     filteredGraph.nodes = selectedGraph.nodes.filter(node =>
@@ -311,16 +312,16 @@
   function handleDrop(e: DragEvent, targetGenome: string) {
     e.preventDefault();
     if (!draggedGenome || draggedGenome === targetGenome) return;
-    
+
     const fromIndex = selectedGenomes.indexOf(draggedGenome);
     const toIndex = selectedGenomes.indexOf(targetGenome);
-    
+
     selectedGenomes = selectedGenomes.map((genome, index) => {
       if (index === fromIndex) return targetGenome;
       if (index === toIndex) return draggedGenome!;
       return genome;
     });
-    
+
     draggedGenome = null;
   }
 </script>
@@ -585,8 +586,8 @@
       {showInconsistent}
       {showPartiallyConsistent}
     />
-    
-    <UploadModal 
+
+    <UploadModal
       isOpen={showUploadModal}
       onClose={() => showUploadModal = false}
       onUpload={handleUpload}

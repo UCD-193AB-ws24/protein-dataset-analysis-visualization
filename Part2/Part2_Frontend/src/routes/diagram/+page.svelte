@@ -142,16 +142,13 @@
   // Function to handle file uploads
   async function uploadFiles() {
     if (!uploadedCoordsFile || uploadedMatrixFiles.length === 0) {
-      alert('Please select the required files.');
-      return;
+      throw new Error('Please select the required files.');
     }
     if (!isDomainSpecific && uploadedMatrixFiles.length !== 1) {
-      alert('Exactly one matrix file is required for non-domain-specific graphs.');
-      return;
+      throw new Error('Exactly one matrix file is required for non-domain-specific graphs.');
     }
     if (isDomainSpecific && uploadedMatrixFiles.length > 3) {
-      alert('Up to three matrix files are supported for domain-specific graphs.');
-      return;
+      throw new Error('Up to three matrix files are supported for domain-specific graphs.');
     }
 
     const formData = new FormData();
@@ -183,8 +180,10 @@
       filteredGraph = { nodes: [], links: [], genomes: [] };
       loading = false;
     } catch (error) {
-      errorMessage = error instanceof Error ? error.message : "An error occurred.";
-      console.error('Detailed error:', error);
+      if (error instanceof TypeError && error.message === 'Failed to fetch') {
+        throw new Error('Network error: Unable to connect to the server. Please check your internet connection.');
+      }
+      throw error;
     }
   }
 
@@ -293,11 +292,17 @@
     console.log(selectedGraph)
   }
 
-  function handleUpload(coordinateFile: File | null, matrixFiles: File[], domainSpecific: boolean) {
+  async function handleUpload(coordinateFile: File | null, matrixFiles: File[], domainSpecific: boolean) {
     uploadedCoordsFile = coordinateFile;
     uploadedMatrixFiles = matrixFiles;
     isDomainSpecific = domainSpecific;
-    uploadFiles();
+    try {
+      await uploadFiles();
+      showUploadModal = false;
+    } catch (error) {
+      loading = false; // Reset loading state on error
+      throw error; // Pass the error back to the modal
+    }
   }
 
   function handleDragStart(genome: string) {
@@ -340,10 +345,12 @@
           <h3 class="text-xl font-semibold text-slate-800 mb-4">Download Files</h3>
           <div class="flex flex-col gap-3">
             {#if coordinateFile}
-              <a href={coordinateFile.url} target="_blank" rel="noopener noreferrer" class="inline-block">
-                <button class="inline-flex items-center px-4 py-2 text-sm font-medium text-white bg-green-600 rounded-lg hover:bg-green-700 transition-colors duration-200 cursor-pointer">
-                  Download Coordinate File ({coordinateFile.original_name})
-                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="ml-2">
+              <a href={coordinateFile.url} target="_blank" rel="noopener noreferrer" class="w-full">
+                <button class="w-full inline-flex items-center justify-between px-4 py-2 text-sm font-medium text-white bg-green-600 rounded-lg hover:bg-green-700 transition-colors duration-200 cursor-pointer">
+                  <span class="truncate mr-2" title={`Download Coordinate File (${coordinateFile.original_name})`}>
+                    Download Coordinate File ({coordinateFile.original_name})
+                  </span>
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="flex-shrink-0">
                     <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
                     <polyline points="7 10 12 15 17 10"/>
                     <line x1="12" y1="15" x2="12" y2="3"/>
@@ -352,10 +359,12 @@
               </a>
             {/if}
             {#each matrixFiles as file, index}
-              <a href={file.url} target="_blank" rel="noopener noreferrer" class="inline-block">
-                <button class="inline-flex items-center px-4 py-2 text-sm font-medium text-white bg-green-600 rounded-lg hover:bg-green-700 transition-colors duration-200 cursor-pointer">
-                  Download Matrix File {index + 1} ({file.original_name})
-                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="ml-2">
+              <a href={file.url} target="_blank" rel="noopener noreferrer" class="w-full">
+                <button class="w-full inline-flex items-center justify-between px-4 py-2 text-sm font-medium text-white bg-green-600 rounded-lg hover:bg-green-700 transition-colors duration-200 cursor-pointer">
+                  <span class="truncate mr-2" title={`Download Matrix File ${index + 1} (${file.original_name})`}>
+                    Download Matrix File {index + 1} ({file.original_name})
+                  </span>
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="flex-shrink-0">
                     <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
                     <polyline points="7 10 12 15 17 10"/>
                     <line x1="12" y1="15" x2="12" y2="3"/>

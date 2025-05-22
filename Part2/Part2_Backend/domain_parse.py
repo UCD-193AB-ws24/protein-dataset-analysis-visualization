@@ -4,6 +4,12 @@ from flask import jsonify
 import json
 import argparse
 import sys
+from file_utils import (
+    read_file,
+    validate_dataframe_basic, 
+    validate_dataframe_structure,
+    validate_coordinate_data_types
+)
 
 
 def validate_coordinate_dataframe_basic(df):
@@ -25,9 +31,18 @@ def validate_coordinate_dataframe_basic(df):
         raise ValueError("Found empty values in the orientation column")
 
 def validate_coordinate_data_types(df):
-    # Check if position is numeric
-    if not pd.to_numeric(df['position'], errors='coerce').notnull().all():
-        raise ValueError("Position column contains non-numeric values")
+    # Check if position is numeric or can be converted to numeric
+    try:
+        # First try direct numeric conversion
+        if not pd.to_numeric(df['position'], errors='coerce').notnull().all():
+            # If that fails, try converting strings to numeric
+            df['position'] = df['position'].astype(str).str.strip()
+            # Remove commas from numbers
+            df['position'] = df['position'].str.replace(',', '')
+            if not pd.to_numeric(df['position'], errors='coerce').notnull().all():
+                raise ValueError("Position column contains values that cannot be converted to numbers")
+    except Exception as e:
+        raise ValueError(f"Error validating position values: {str(e)}")
 
     valid_orientations = {'minus', 'plus', 'negative', 'positive', '+', '-'}
     if not df['orientation'].isin(valid_orientations).all():
@@ -44,11 +59,17 @@ def validate_coordinate_data_types(df):
 def process_name_field(df):
     try:
         if df['protein_name'].isnull().any() or df['genome'].isnull().any():
-            raise ValueError("Some names don't follow the expected format (should contain '_')")
-
+            raise ValueError("Some names are empty")
         return df
     except Exception as e:
         raise ValueError(f"Error processing name field: {str(e)}")
+
+def calculate_relative_positions(df):
+    try:
+        df['rel_position'] = df.groupby('genome')['position'].rank(method='first').astype(int)
+        return df
+    except Exception as e:
+        raise ValueError(f"Error calculating relative positions: {str(e)}")
 
 def process_domain_field(df):
     try:
@@ -91,18 +112,13 @@ def calculate_relative_positions(df):
 
 def parse_coordinates(coord_file):
     try:
-        # Read the Excel file
-        df = pd.read_excel(BytesIO(coord_file.read()), engine='openpyxl')
+        df = read_file(coord_file, 'coordinate')
 
         # Validate basic structure
         validate_coordinate_dataframe_basic(df)
 
-        print(df)
-
         # Validate data types
         validate_coordinate_data_types(df)
-
-        print(df)
 
         domain_names, domain_col_names = process_domain_field(df)
 
@@ -115,20 +131,17 @@ def parse_coordinates(coord_file):
         # Return only the required columns in the specified order
         required_columns = ['name', 'genome', 'protein_name', 'position', 'rel_position', 'orientation', 'gene_type']
         required_columns = required_columns + domain_col_names
-        #print(required_columns)
         if not all(col in df.columns for col in required_columns):
             raise ValueError("Missing one or more required columns after processing")
-
-        #print(df[required_columns])
 
         return df[required_columns]
 
     except pd.errors.EmptyDataError:
         raise ValueError("The coordinate file is empty or cannot be read")
-    except pd.errors.ParserError:
-        raise ValueError("Unable to parse the coordinate file. Please ensure it's a valid Excel file")
     except Exception as e:
-        raise ValueError(f"Error processing coordinate file: {str(e)}")
+        if not isinstance(e, ValueError):  # Don't wrap ValueError as it's already formatted
+            raise ValueError(f"Error processing coordinate file: {str(e)}")
+        raise
 
 def parse_filenames(file_names):
     domains = []
@@ -170,15 +183,15 @@ def validate_dataframe_structure(df):
 
 def prepare_dataframe(matrix_file):
     print("Parsing matrix file...")
-    df = pd.read_excel(BytesIO(matrix_file.read()), engine='openpyxl')
+    df = read_file(matrix_file, 'matrix')
     validate_dataframe_basic(df)
-
+    
     df = df.reset_index(drop=True)
     df = df.set_index(df.columns[0])
     df.index.name = None
     df = df.dropna(how='all')
     df = df.dropna(axis=1, how='all')
-
+    
     validate_dataframe_structure(df)
     return df
 

@@ -338,7 +338,7 @@
           <div class="p-2 bg-white border-b border-slate-200 flex justify-end shrink-0">
             <button
               on:click={() => isPanelCollapsed = !isPanelCollapsed}
-              class="p-1.5 hover:bg-slate-100 rounded-md transition-colors"
+              class="p-1.5 hover:bg-slate-100 rounded-md transition-colors cursor-pointer"
               aria-label={isPanelCollapsed ? "Expand panel" : "Collapse panel"}
             >
               <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class={`transition-transform ${isPanelCollapsed ? 'rotate-180' : ''}`}>
@@ -350,45 +350,101 @@
           <!-- Panel content - only show when not collapsed -->
           {#if !isPanelCollapsed}
             <div class="overflow-y-auto">
-              <div class="p-6 space-y-6">
-                <!-- Genome Selection -->
-                <div>
-                  <h3 class="text-lg font-semibold text-slate-800 mb-4">Select Genomes:</h3>
+              <div class="p-4 space-y-4">
+                <!-- Combined Genome Selection and Ordering -->
+                <div class="space-y-2">
+                  <h4 class="text-xs font-medium text-slate-800">Select and Arrange Genomes:</h4>
                   {#if selectedGraph.genomes}
                     <div class="space-y-2">
-                      {#each selectedGraph.genomes as genome}
-                        <label class="flex items-center gap-2 text-slate-700">
-                          <input
-                            type="checkbox"
-                            value={genome}
-                            on:change={() => toggleGenomeSelection(genome)}
-                            checked={selectedGenomes.includes(genome)}
-                            class="w-4 h-4 text-green-600 border-slate-300 rounded focus:ring-green-500"
-                          />
-                          {genome}
-                        </label>
-                      {/each}
+                      <!-- Selected Genomes Section -->
+                      <div class="bg-green-50 rounded-lg p-2.5">
+                        <h4 class="text-xs font-medium text-green-800 mb-1.5">Selected Genomes (drag to reorder)</h4>
+                        {#if selectedGenomes.length === 0}
+                          <p class="text-xs text-slate-500 italic">No genomes selected</p>
+                        {:else}
+                          <div class="space-y-1">
+                            {#each selectedGenomes as genome}
+                              <div
+                                class="py-1.5 px-2 bg-white border border-green-200 rounded-md shadow-sm cursor-move flex items-center gap-2 hover:border-green-500 transition-colors text-sm"
+                                draggable="true"
+                                on:dragstart={() => handleDragStart(genome)}
+                                on:dragover={handleDragOver}
+                                on:drop={(e) => handleDrop(e, genome)}
+                                role="button"
+                                tabindex="0"
+                              >
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-slate-400 shrink-0">
+                                  <line x1="8" y1="6" x2="21" y2="6"></line>
+                                  <line x1="8" y1="12" x2="21" y2="12"></line>
+                                  <line x1="8" y1="18" x2="21" y2="18"></line>
+                                  <line x1="3" y1="6" x2="3.01" y2="6"></line>
+                                  <line x1="3" y1="12" x2="3.01" y2="12"></line>
+                                  <line x1="3" y1="18" x2="3.01" y2="18"></line>
+                                </svg>
+                                <span class="flex-1 truncate">{genome}</span>
+                                <button
+                                  on:click={() => toggleGenomeSelection(genome)}
+                                  class="p-0.5 hover:bg-red-100 rounded-full transition-colors cursor-pointer"
+                                  title="Remove from selection"
+                                  aria-label="Remove from selection"
+                                >
+                                  <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-red-500">
+                                    <line x1="18" y1="6" x2="6" y2="18"></line>
+                                    <line x1="6" y1="6" x2="18" y2="18"></line>
+                                  </svg>
+                                </button>
+                              </div>
+                            {/each}
+                          </div>
+                        {/if}
+                      </div>
+
+                      <!-- Available Genomes Section -->
+                      <div class="bg-slate-100 rounded-lg p-2.5">
+                        <h4 class="text-xs font-medium text-slate-800 mb-1.5">Available Genomes</h4>
+                        <div class="space-y-1">
+                          {#each selectedGraph.genomes.filter(g => !selectedGenomes.includes(g)) as genome}
+                            <div
+                              class="py-1.5 px-2 bg-white border border-slate-200 rounded-md shadow-sm flex items-center gap-2 hover:border-green-500 transition-colors text-sm"
+                            >
+                              <span class="flex-1 truncate">{genome}</span>
+                              <button
+                                on:click={() => toggleGenomeSelection(genome)}
+                                class="p-0.5 hover:bg-green-100 rounded-full transition-colors cursor-pointer disabled:cursor-not-allowed"
+                                title="Add to selection"
+                                aria-label="Add to selection"
+                                disabled={selectedGenomes.length >= 3}
+                              >
+                                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-green-500">
+                                  <line x1="12" y1="5" x2="12" y2="19"></line>
+                                  <line x1="5" y1="12" x2="19" y2="12"></line>
+                                </svg>
+                              </button>
+                            </div>
+                          {/each}
+                        </div>
+                      </div>
+
+                      <button
+                        on:click={filterGraph}
+                        disabled={selectedGenomes.length !== 2 && selectedGenomes.length !== 3}
+                        class="w-full px-4 py-2 text-sm font-medium text-white bg-green-600 rounded-md hover:bg-green-700 transition-colors duration-200 cursor-pointer disabled:bg-green-300 disabled:cursor-not-allowed"
+                      >
+                        Confirm Selection
+                      </button>
                     </div>
                   {:else}
                     <p class="text-slate-600">Loading genomes...</p>
                   {/if}
-
-                  <button
-                    on:click={filterGraph}
-                    disabled={selectedGenomes.length !== 2 && selectedGenomes.length !== 3}
-                    class="mt-4 w-full px-4 py-2 text-sm font-medium text-white bg-green-600 rounded-lg hover:bg-green-700 transition-colors duration-200 cursor-pointer disabled:bg-green-300 disabled:cursor-not-allowed"
-                  >
-                    Confirm Selection
-                  </button>
                 </div>
 
                 <!-- Domain Selection -->
                 {#if graphs.length > 1}
-                  <div>
-                    <h3 class="text-lg font-semibold text-slate-800 mb-4">View Domain:</h3>
+                  <div class="bg-slate-100 rounded-lg p-2.5">
+                    <h4 class="text-xs font-medium text-slate-800 mb-1.5">View Domain:</h4>
                     <select
                       on:change={(e) => selectDomain((e.target as HTMLSelectElement).selectedIndex)}
-                      class="w-full px-4 py-2 bg-white border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
+                      class="w-full px-3 py-1.5 bg-white border border-slate-200 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-green-500 cursor-pointer"
                     >
                       {#each graphs as g, idx}
                         <option value={idx} selected={g === selectedGraph}>{g.domain_name}</option>
@@ -398,110 +454,80 @@
                 {/if}
 
                 <!-- Cutoff Slider -->
-                <div>
-                  <h3 class="text-lg font-semibold text-slate-800 mb-4">Adjust Cut-off:</h3>
-                  <div class="flex items-center gap-2">
+                <div class="bg-slate-100 rounded-lg p-2.5">
+                  <h4 class="text-xs font-medium text-slate-800 mb-1.5">Adjust Cut-off:</h4>
+                  <div class="flex items-center gap-3">
                     <input
                       type="range"
                       min="55"
                       max="100"
                       disabled={selectedGraph.domain_name === "ALL"}
                       bind:value={cutoff}
-                      class="flex-1"
+                      class="flex-1 h-1.5 bg-slate-200 rounded-lg appearance-none cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
                     />
-                    <span class="min-w-[3rem] text-center">{cutoff}%</span>
+                    <span class="text-sm text-slate-600 tabular-nums w-8 text-right">{cutoff}%</span>
                   </div>
                 </div>
 
                 <!-- Link Filters -->
-                <div>
-                  <h3 class="text-lg font-semibold text-slate-800 mb-4">Link Filters:</h3>
+                <div class="bg-slate-100 rounded-lg p-2.5">
+                  <h4 class="text-xs font-medium text-slate-800 mb-1.5">Link Filters:</h4>
                   {#if selectedGraph.domain_name === "ALL"}
-                    <div class="space-y-2">
-                      <label class="flex items-center gap-2 text-slate-700">
+                    <div class="space-y-1">
+                      <label class="flex items-center gap-2 text-sm text-slate-700">
                         <input
                           type="checkbox"
                           bind:checked={showConsistent}
-                          class="w-4 h-4 text-green-600 border-slate-300 rounded focus:ring-green-500"
+                          class="w-3.5 h-3.5 text-green-600 border-slate-300 rounded focus:ring-green-500 cursor-pointer"
                         />
                         Consistent Links
                       </label>
-                      <label class="flex items-center gap-2 text-slate-700">
+                      <label class="flex items-center gap-2 text-sm text-slate-700">
                         <input
                           type="checkbox"
                           bind:checked={showInconsistent}
-                          class="w-4 h-4 text-green-600 border-slate-300 rounded focus:ring-green-500"
+                          class="w-3.5 h-3.5 text-green-600 border-slate-300 rounded focus:ring-green-500 cursor-pointer"
                         />
                         Inconsistent Links
                       </label>
-                      <label class="flex items-center gap-2 text-slate-700">
+                      <label class="flex items-center gap-2 text-sm text-slate-700">
                         <input
                           type="checkbox"
                           bind:checked={showPartiallyConsistent}
-                          class="w-4 h-4 text-green-600 border-slate-300 rounded focus:ring-green-500"
+                          class="w-3.5 h-3.5 text-green-600 border-slate-300 rounded focus:ring-green-500 cursor-pointer"
                         />
                         Partially Consistent Links
                       </label>
-                      <label class="flex items-center gap-2 text-slate-700">
+                      <label class="flex items-center gap-2 text-sm text-slate-700">
                         <input
                           type="checkbox"
                           bind:checked={showNonReciprocal}
-                          class="w-4 h-4 text-green-600 border-slate-300 rounded focus:ring-green-500"
+                          class="w-3.5 h-3.5 text-green-600 border-slate-300 rounded focus:ring-green-500 cursor-pointer"
                         />
                         Non-Reciprocal Links
                       </label>
                     </div>
                   {:else}
-                    <div class="space-y-2">
-                      <label class="flex items-center gap-2 text-slate-700">
+                    <div class="space-y-1">
+                      <label class="flex items-center gap-2 text-sm text-slate-700">
                         <input
                           type="checkbox"
                           bind:checked={showReciprocal}
-                          class="w-4 h-4 text-green-600 border-slate-300 rounded focus:ring-green-500"
+                          class="w-3.5 h-3.5 text-green-600 border-slate-300 rounded focus:ring-green-500 cursor-pointer"
                         />
                         Reciprocal Links
                       </label>
-                      <label class="flex items-center gap-2 text-slate-700">
+                      <label class="flex items-center gap-2 text-sm text-slate-700">
                         <input
                           type="checkbox"
                           bind:checked={showNonReciprocal}
-                          class="w-4 h-4 text-green-600 border-slate-300 rounded focus:ring-green-500"
+                          class="w-3.5 h-3.5 text-green-600 border-slate-300 rounded focus:ring-green-500 cursor-pointer"
                         />
                         Non-Reciprocal Links
                       </label>
                     </div>
                   {/if}
                 </div>
-
-                <!-- Genome Order -->
-                {#if selectedGenomes.length === 3 || selectedGenomes.length === 2}
-                  <div>
-                    <h3 class="text-lg font-semibold text-slate-800 mb-4">Arrange Genome Order:</h3>
-                    <div class="space-y-2">
-                      {#each selectedGenomes as genome}
-                        <div
-                          class="p-3 bg-white border border-slate-200 rounded-lg shadow-sm cursor-move flex items-center gap-2"
-                          draggable="true"
-                          on:dragstart={() => handleDragStart(genome)}
-                          on:dragover={handleDragOver}
-                          on:drop={(e) => handleDrop(e, genome)}
-                          role="button"
-                          tabindex="0"
-                        >
-                          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-slate-400">
-                            <line x1="8" y1="6" x2="21" y2="6"></line>
-                            <line x1="8" y1="12" x2="21" y2="12"></line>
-                            <line x1="8" y1="18" x2="21" y2="18"></line>
-                            <line x1="3" y1="6" x2="3.01" y2="6"></line>
-                            <line x1="3" y1="12" x2="3.01" y2="12"></line>
-                            <line x1="3" y1="18" x2="3.01" y2="18"></line>
-                          </svg>
-                          {genome}
-                        </div>
-                      {/each}
-                    </div>
-                  </div>
-                {/if}
               </div>
             </div>
           {/if}

@@ -332,11 +332,10 @@
   <div class="flex gap-6">
     <!-- Collapsible side panel -->
     <div class={`transition-all duration-300 ${isPanelCollapsed ? 'w-12' : 'w-80'} shrink-0`}>
-      <div class="sticky top-[4.5rem] bg-white border border-slate-200 rounded-lg shadow-sm overflow-hidden">
-        <!-- Panel content -->
-        <div class="flex flex-col h-full">
+      <div class="sticky top-[5.5rem]">
+        <div class="bg-white border border-slate-200 rounded-lg shadow-sm overflow-hidden flex flex-col max-h-[calc(100vh-7rem)]">
           <!-- Toggle button container -->
-          <div class="p-2 bg-white border-b border-slate-200 flex justify-end">
+          <div class="p-2 bg-white border-b border-slate-200 flex justify-end shrink-0">
             <button
               on:click={() => isPanelCollapsed = !isPanelCollapsed}
               class="p-1.5 hover:bg-slate-100 rounded-md transition-colors"
@@ -350,7 +349,7 @@
 
           <!-- Panel content - only show when not collapsed -->
           {#if !isPanelCollapsed}
-            <div class="max-h-[calc(100vh-8rem)] overflow-y-auto">
+            <div class="overflow-y-auto">
               <div class="p-6 space-y-6">
                 <!-- Genome Selection -->
                 <div>

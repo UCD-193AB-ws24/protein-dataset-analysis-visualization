@@ -550,7 +550,7 @@
             <!-- After upload or when viewing existing group -->
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
               <!-- Group info section for authenticated users -->
-              <div class="bg-white rounded-lg shadow-sm border border-slate-200 p-6">
+              <div class="bg-white rounded-lg shadow-sm border border-slate-200 p-4">
                 <h3 class="text-xl font-semibold text-slate-800 mb-4">Group Information</h3>
                 <div class="space-y-4">
                   <input

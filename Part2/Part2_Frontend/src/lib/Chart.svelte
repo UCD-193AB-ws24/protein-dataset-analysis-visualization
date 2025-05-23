@@ -620,28 +620,48 @@
 <div bind:this={tooltipEl} class="tooltip"></div>
 <div class="controls">
   {#if graph.nodes.length > 0}
-    <button on:click={downloadSVG} class="control-btn">Download SVG</button>
+    <button on:click={downloadSVG} class="inline-flex items-center px-4 py-2 text-sm font-medium text-slate-700 bg-white border border-slate-300 rounded-lg hover:bg-slate-50 transition-colors duration-200 cursor-pointer">
+      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mr-2">
+        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+        <polyline points="7 10 12 15 17 10"/>
+        <line x1="12" y1="15" x2="12" y2="3"/>
+      </svg>
+      Download SVG
+    </button>
     <button
       on:click={toggleSelectionMode}
-      class="control-btn"
+      class="inline-flex items-center px-4 py-2 text-sm font-medium text-slate-700 bg-white border border-slate-300 rounded-lg hover:bg-slate-50 transition-colors duration-200 cursor-pointer"
       class:active={isSelectionMode}
     >
+      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mr-2">
+        <path d="M3 3l7.07 16.97 2.51-7.39 7.39-2.51L3 3z"/>
+        <path d="M13 13l6 6"/>
+      </svg>
       {isSelectionMode ? 'Exit Selection Mode' : 'Enter Selection Mode'}
     </button>
     {#if isSelectionMode && !isFocused}
       <button
         on:click={applyFocus}
-        class="control-btn"
+        class="inline-flex items-center px-4 py-2 text-sm font-medium text-white bg-green-600 rounded-lg hover:bg-green-700 transition-colors duration-200 cursor-pointer disabled:bg-green-300 disabled:cursor-not-allowed"
         disabled={selectedNodesCount === 0}
       >
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mr-2">
+          <circle cx="12" cy="12" r="10"/>
+          <line x1="12" y1="8" x2="12" y2="16"/>
+          <line x1="8" y1="12" x2="16" y2="12"/>
+        </svg>
         Focus Selected
       </button>
     {/if}
     {#if isFocused}
       <button
         on:click={exitFocus}
-        class="control-btn"
+        class="inline-flex items-center px-4 py-2 text-sm font-medium text-slate-700 bg-white border border-slate-300 rounded-lg hover:bg-slate-50 transition-colors duration-200 cursor-pointer"
       >
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mr-2">
+          <line x1="18" y1="6" x2="6" y2="18"/>
+          <line x1="6" y1="6" x2="18" y2="18"/>
+        </svg>
         Exit Focus
       </button>
     {/if}
@@ -681,25 +701,8 @@
     gap: 10px;
   }
 
-  .control-btn {
-    padding: 6px 12px;
-    background-color: #007bff;
-    color: white;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-  }
-
-  .control-btn:hover {
-    background-color: #0056b3;
-  }
-
-  .control-btn:disabled {
-    background-color: #cccccc;
-    cursor: not-allowed;
-  }
-
-  .control-btn.active {
-    background-color: #28a745;
+  .active {
+    background-color: #f8fafc !important;
+    border-color: #94a3b8 !important;
   }
 </style>

@@ -152,7 +152,7 @@
 </script>
 
 {#if isAuthenticated}
-<div class="container mx-auto px-4 py-8">
+<div class="w-[95%] max-w-[1600px] mx-auto py-8">
 	<div class="mb-8">
 		<h1 class="text-3xl font-bold text-slate-800 mb-2">Your Uploads</h1>
 		<p class="text-slate-600">Manage and analyze your protein sequence comparisons</p>

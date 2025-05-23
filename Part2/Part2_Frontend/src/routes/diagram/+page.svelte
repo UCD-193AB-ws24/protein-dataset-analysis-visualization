@@ -143,6 +143,7 @@
 
   // Function to handle file uploads
   async function uploadFiles() {
+    errorMessage = ""; // Clear any previous error messages
     if (!uploadedCoordsFile || uploadedMatrixFiles.length === 0) {
       alert('Please select the required files.');
       return;
@@ -544,47 +545,37 @@
         </div>
       {:else}
         <!-- Top section with max-width to prevent expansion -->
-        <div class="mb-8">
-          {#if !groupId}
-            <!-- Upload section when no group is selected -->
-            <div class="bg-white rounded-lg shadow-sm border border-slate-200 p-6">
-              <button
-                on:click={() => showUploadModal = true}
-                class="inline-flex items-center px-4 py-2 text-sm font-medium text-white bg-green-600 rounded-lg hover:bg-green-700 transition-colors duration-200 cursor-pointer disabled:bg-green-300 disabled:cursor-not-allowed"
-              >
-                Upload and Prepare Graph
-              </button>
-            </div>
-          {:else}
-            <!-- Group info section -->
+        {#if (isAuthenticated && graphs.length > 0) || (groupId && (matrixFiles.length > 0 || coordinateFile))}
+          <div class="mb-8">
+            <!-- After upload or when viewing existing group -->
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-              {#if isAuthenticated}
-                <div class="bg-white rounded-lg shadow-sm border border-slate-200 p-6">
-                  <h3 class="text-xl font-semibold text-slate-800 mb-4">Group Information</h3>
-                  <div class="space-y-4">
-                    <input
-                      type="text"
-                      placeholder="Title"
-                      bind:value={title}
-                      class="w-full px-4 py-2 bg-white border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
-                    />
-                    <textarea
-                      placeholder="Description"
-                      bind:value={description}
-                      class="w-full px-4 py-2 bg-white border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
-                      rows="3"
-                    ></textarea>
-                    <button
-                      on:click={saveGroup}
-                      class="inline-flex items-center px-4 py-2 text-sm font-medium text-white bg-green-600 rounded-lg hover:bg-green-700 transition-colors duration-200 cursor-pointer"
-                    >
-                      Save Group
-                    </button>
-                  </div>
+              <!-- Group info section for authenticated users -->
+              <div class="bg-white rounded-lg shadow-sm border border-slate-200 p-6">
+                <h3 class="text-xl font-semibold text-slate-800 mb-4">Group Information</h3>
+                <div class="space-y-4">
+                  <input
+                    type="text"
+                    placeholder="Title"
+                    bind:value={title}
+                    class="w-full px-4 py-2 bg-white border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
+                  />
+                  <textarea
+                    placeholder="Description"
+                    bind:value={description}
+                    class="w-full px-4 py-2 bg-white border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
+                    rows="3"
+                  ></textarea>
+                  <button
+                    on:click={saveGroup}
+                    class="inline-flex items-center px-4 py-2 text-sm font-medium text-white bg-green-600 rounded-lg hover:bg-green-700 transition-colors duration-200 cursor-pointer"
+                  >
+                    {groupId ? 'Update Group' : 'Save Group'}
+                  </button>
                 </div>
-              {/if}
+              </div>
 
-              {#if matrixFiles.length > 0 || coordinateFile}
+              {#if groupId && (matrixFiles.length > 0 || coordinateFile)}
+                <!-- Download section only shown for existing groups -->
                 <div class="bg-white rounded-lg shadow-sm border border-slate-200 p-4">
                   <h3 class="text-xl font-semibold text-slate-800 mb-3">Download Files</h3>
                   <div class="space-y-4">
@@ -607,7 +598,7 @@
                     {/if}
                     {#if matrixFiles.length > 0}
                       <div>
-                        <h4 class="text-lg font-medium text-slate-700 mb-2">Matrix Files</h4>
+                        <h4 class="text-lg font-medium text-slate-700 mb-2">Matrix File{matrixFiles.length > 1 ? 's' : ''}</h4>
                         <div class="flex flex-col gap-1.5">
                           {#each matrixFiles as file}
                             <a href={file.url} target="_blank" rel="noopener noreferrer" class="inline-block max-w-full">
@@ -628,26 +619,55 @@
                 </div>
               {/if}
             </div>
-          {/if}
-
-          {#if errorMessage}
-            <div class="mt-4">
-              <p class="text-red-600 bg-red-50 p-4 rounded-lg">{errorMessage}</p>
-            </div>
-          {/if}
-        </div>
+          </div>
+        {/if}
 
         <!-- Graph visualization container -->
         <div class="bg-white rounded-lg shadow-sm border border-slate-200 p-6 overflow-auto">
-          <Chart
-            graph={filteredGraph}
-            {cutoff}
-            {showReciprocal}
-            {showNonReciprocal}
-            {showConsistent}
-            {showInconsistent}
-            {showPartiallyConsistent}
-          />
+          {#if loading}
+            <div class="flex justify-center items-center py-8">
+              <div class="animate-spin rounded-full h-12 w-12 border-4 border-green-200"></div>
+              <div class="animate-spin rounded-full h-12 w-12 border-4 border-green-600 border-t-transparent absolute"></div>
+            </div>
+          {:else if errorMessage}
+            <div class="flex justify-center items-center py-8">
+              <div class="max-w-lg">
+                <p class="text-red-600 bg-red-50 p-4 rounded-lg text-center">{errorMessage}</p>
+                <div class="flex justify-center mt-4">
+                  <button
+                    on:click={() => showUploadModal = true}
+                    class="inline-flex items-center px-4 py-2 text-sm font-medium text-white bg-green-600 rounded-lg hover:bg-green-700 transition-colors duration-200 cursor-pointer"
+                  >
+                    Try Again
+                  </button>
+                </div>
+              </div>
+            </div>
+          {:else if !graphs.length}
+            <div class="flex flex-col items-center justify-center py-8">
+              <button
+                on:click={() => showUploadModal = true}
+                class="inline-flex items-center px-4 py-2 text-sm font-medium text-white bg-green-600 rounded-lg hover:bg-green-700 transition-colors duration-200 cursor-pointer mb-3"
+              >
+                Upload and Prepare Graph
+              </button>
+              <p class="text-slate-600 text-center">Upload your files to visualize protein relationships</p>
+            </div>
+          {:else if !filteredGraph.nodes.length}
+            <div class="flex justify-center items-center py-8">
+              <p class="text-slate-600 text-center">Select genomes from the left panel to view the graph</p>
+            </div>
+          {:else}
+            <Chart
+              graph={filteredGraph}
+              {cutoff}
+              {showReciprocal}
+              {showNonReciprocal}
+              {showConsistent}
+              {showInconsistent}
+              {showPartiallyConsistent}
+            />
+          {/if}
         </div>
       {/if}
     </div>

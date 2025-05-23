@@ -275,6 +275,7 @@
 
     // Update genomes in filtered graph
     filteredGraph.genomes = selectedGenomes;
+    filteredGraph.domain_name = selectedGraph.domain_name;  // Copy domain_name
 
     // Update nodes in filtered graph
     filteredGraph.nodes = selectedGraph.nodes.filter(node =>

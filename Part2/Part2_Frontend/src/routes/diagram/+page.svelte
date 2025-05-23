@@ -302,6 +302,10 @@
 
 			console.log('Shared group saved:', result);
 			alert('Shared group saved successfully!');
+			const newGroupId = result.group_id;
+			groupId = newGroupId; // Update groupId in the component state
+			await fetchGroupData(newGroupId); // Fetch the new group data
+			goto(`?groupId=${newGroupId}`);
 		} catch (error) {
 			console.error('Error in saveSharedGroup:', error);
 			alert('Failed to save shared group. Please try again.');
@@ -456,7 +460,7 @@
 			{/if}
 
 			<!-- Save group section -->
-			{#if selectedGraph.nodes.length > 0 && isAuthenticated && user?.profile?.sub == groupUserId}
+			{#if selectedGraph.nodes.length > 0 && isAuthenticated && (!groupUserId || user?.profile?.sub == groupUserId)}
 				<div class="p-6 bg-white rounded-lg shadow-sm border border-slate-200">
 					<h3 class="text-xl font-semibold text-slate-800 mb-4">Save Group</h3>
 					<div class="space-y-4">
@@ -482,7 +486,7 @@
 				</div>
 			{/if}
 
-			{#if isAuthenticated && user?.profile?.sub !== groupUserId}
+			{#if isAuthenticated && groupUserId &&user?.profile?.sub !== groupUserId}
 				<div class="p-6 bg-white rounded-lg shadow-sm border border-slate-200">
 					<h3 class="text-xl font-semibold text-slate-800 mb-4">Add Group</h3>
 					<p class="text-slate-600 mb-4">Add group to your account for easy access and tracking.</p>

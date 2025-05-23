@@ -337,19 +337,17 @@ def save_shared_group():
     access_claims = verify_token(access_token)
     user_id = access_claims['sub']
 
-    group_id = request.form.get('group_id')  # original group being shared
+    group_id = request.form.get('group_id')
     if not group_id:
         return jsonify({"error": "Missing group_id"}), 400
 
     session = SessionLocal()
 
     try:
-        # Get the user
         user = session.query(User).filter_by(id=user_id).first()
         if not user:
             return jsonify({"error": "User not found"}), 404
 
-        # Get the original group
         original_group = session.query(Group).filter_by(id=group_id).first()
         if not original_group:
             return jsonify({"error": "Invalid group_id provided"}), 400
@@ -365,19 +363,17 @@ def save_shared_group():
             num_domains=original_group.num_domains
         )
         session.add(new_group)
-        session.commit()  # commit first to get new_group.id
+        session.commit()
 
-        # Now associate files with the new group
-        files = session.query(File).filter(File.group_ids.any(original_group.id)).all()
+        # Safely update each associated file
+        files = session.query(File).filter(File.group_ids.any(original_group.id)).with_for_update().all()
 
         for file in files:
-            # Add new group_id to group_id array if not already there
-            if new_group.id not in file.group_ids:
-                file.group_ids.append(new_group.id)
-                flag_modified(file, "group_ids")  # <-- This is key!
+            current_groups = file.group_ids or []
 
-            # Increment the reference count
-            file.ref_count = (file.ref_count or 0) + 1
+            if new_group.id not in current_groups:
+                file.group_ids = current_groups + [new_group.id]
+                file.ref_count = (file.ref_count or 0) + 1
 
         session.commit()
 
@@ -393,6 +389,7 @@ def save_shared_group():
 
     finally:
         session.close()
+
 
 
 
@@ -506,6 +503,7 @@ def download_file():
     except Exception as e:
         return jsonify({"error": f"Failed to generate download URL: {str(e)}"}), 500
 
+
 @app.route('/delete_group', methods=['DELETE'])
 def delete_group():
     auth_header = request.headers.get('Authorization', '')
@@ -535,24 +533,33 @@ def delete_group():
         if not group:
             return jsonify({"error": "Group not found or unauthorized"}), 404
 
-        files = session.query(File).filter(File.group_ids.any(group_id)).all()
+        # Lock all affected files
+        files = session.query(File).filter(File.group_ids.any(group_id)).with_for_update().all()
+
+        to_delete = []
 
         for file in files:
-            if group_id in file.group_ids:
-                file.group_ids.remove(group_id)
-                flag_modified(file, "group_ids")  # this is essential!
+            group_ids = file.group_ids or []
+            if group_id in group_ids:
+                file.group_ids = [gid for gid in group_ids if gid != group_id]
+                flag_modified(file, "group_ids")  # critical for tracking list change
                 file.ref_count = max(0, (file.ref_count or 1) - 1)
+
+                # Mark for deletion if no groups reference it anymore
+                if file.ref_count == 0:
+                    to_delete.append(file)
 
         session.commit()
 
-        for file in files:
-            if file.ref_count == 0:
-                try:
-                    s3_client.delete_object(Bucket=os.getenv('S3_BUCKET_NAME'), Key=file.s3_key)
-                except Exception as e:
-                    print(f"Warning: Failed to delete from S3: {file.s3_key} — {e}")
-                session.delete(file)
+        # Now delete unreferenced files from S3 and DB
+        for file in to_delete:
+            try:
+                s3_client.delete_object(Bucket=os.getenv('S3_BUCKET_NAME'), Key=file.s3_key)
+            except Exception as e:
+                print(f"Warning: Failed to delete from S3: {file.s3_key} — {e}")
+            session.delete(file)
 
+        # Delete the group
         session.delete(group)
         session.commit()
 

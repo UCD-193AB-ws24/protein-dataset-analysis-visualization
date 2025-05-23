@@ -70,6 +70,8 @@
 
   let showUploadModal = false;
 
+  let isPanelCollapsed = false;
+
   onMount(async () => {
     try {
       user = await oidcClient.getUser();
@@ -311,288 +313,314 @@
   function handleDrop(e: DragEvent, targetGenome: string) {
     e.preventDefault();
     if (!draggedGenome || draggedGenome === targetGenome) return;
-    
+
     const fromIndex = selectedGenomes.indexOf(draggedGenome);
     const toIndex = selectedGenomes.indexOf(targetGenome);
-    
+
     selectedGenomes = selectedGenomes.map((genome, index) => {
       if (index === fromIndex) return targetGenome;
       if (index === toIndex) return draggedGenome!;
       return genome;
     });
-    
+
     draggedGenome = null;
   }
 </script>
 
-{#if loading}
-  <div class="flex justify-center items-center py-8">
-    <div class="animate-spin rounded-full h-12 w-12 border-4 border-green-200"></div>
-    <div class="animate-spin rounded-full h-12 w-12 border-4 border-green-600 border-t-transparent absolute"></div>
-  </div>
-{:else}
-  <div class="container mx-auto px-4 py-8">
-    <!-- File download and Save group sections side by side -->
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
-      <!-- File download section -->
-      {#if groupId && (matrixFiles.length > 0 || coordinateFile)}
-        <div class="p-6 bg-white rounded-lg shadow-sm border border-slate-200">
-          <h3 class="text-xl font-semibold text-slate-800 mb-4">Download Files</h3>
-          <div class="flex flex-col gap-3">
-            {#if coordinateFile}
-              <a href={coordinateFile.url} target="_blank" rel="noopener noreferrer" class="inline-block">
-                <button class="inline-flex items-center px-4 py-2 text-sm font-medium text-white bg-green-600 rounded-lg hover:bg-green-700 transition-colors duration-200 cursor-pointer">
-                  Download Coordinate File ({coordinateFile.original_name})
-                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="ml-2">
-                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
-                    <polyline points="7 10 12 15 17 10"/>
-                    <line x1="12" y1="15" x2="12" y2="3"/>
-                  </svg>
-                </button>
-              </a>
-            {/if}
-            {#each matrixFiles as file, index}
-              <a href={file.url} target="_blank" rel="noopener noreferrer" class="inline-block">
-                <button class="inline-flex items-center px-4 py-2 text-sm font-medium text-white bg-green-600 rounded-lg hover:bg-green-700 transition-colors duration-200 cursor-pointer">
-                  Download Matrix File {index + 1} ({file.original_name})
-                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="ml-2">
-                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
-                    <polyline points="7 10 12 15 17 10"/>
-                    <line x1="12" y1="15" x2="12" y2="3"/>
-                  </svg>
-                </button>
-              </a>
-            {/each}
-          </div>
-        </div>
-      {/if}
-
-      <!-- Save group section -->
-      {#if selectedGraph.nodes.length > 0 && isAuthenticated}
-        <div class="p-6 bg-white rounded-lg shadow-sm border border-slate-200">
-          <h3 class="text-xl font-semibold text-slate-800 mb-4">Save Group</h3>
-          <div class="space-y-4">
-            <input
-              type="text"
-              placeholder="Title"
-              bind:value={title}
-              class="w-full px-4 py-2 bg-white border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
-            />
-            <textarea
-              placeholder="Description"
-              bind:value={description}
-              class="w-full px-4 py-2 bg-white border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
-              rows="3"
-            ></textarea>
+<!-- Main layout container -->
+<div class="w-[95%] max-w-[1600px] mx-auto py-6">
+  <div class="flex gap-6">
+    <!-- Collapsible side panel -->
+    <div class={`transition-all duration-300 ${isPanelCollapsed ? 'w-12' : 'w-80'} shrink-0`}>
+      <div class="sticky top-[4.5rem] bg-white border border-slate-200 rounded-lg shadow-sm overflow-hidden">
+        <!-- Panel content -->
+        <div class="flex flex-col h-full">
+          <!-- Toggle button container -->
+          <div class="p-2 bg-white border-b border-slate-200 flex justify-end">
             <button
-              on:click={saveGroup}
-              class="inline-flex items-center px-4 py-2 text-sm font-medium text-white bg-green-600 rounded-lg hover:bg-green-700 transition-colors duration-200 cursor-pointer"
+              on:click={() => isPanelCollapsed = !isPanelCollapsed}
+              class="p-1.5 hover:bg-slate-100 rounded-md transition-colors"
             >
-              Save Group
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class={`transition-transform ${isPanelCollapsed ? 'rotate-180' : ''}`}>
+                <polyline points="15 18 9 12 15 6"></polyline>
+              </svg>
             </button>
           </div>
+
+          <!-- Panel content - only show when not collapsed -->
+          {#if !isPanelCollapsed}
+            <div class="max-h-[calc(100vh-8rem)] overflow-y-auto">
+              <div class="p-6 space-y-6">
+                <!-- Genome Selection -->
+                <div>
+                  <h3 class="text-lg font-semibold text-slate-800 mb-4">Select Genomes:</h3>
+                  {#if selectedGraph.genomes}
+                    <div class="space-y-2">
+                      {#each selectedGraph.genomes as genome}
+                        <label class="flex items-center gap-2 text-slate-700">
+                          <input
+                            type="checkbox"
+                            value={genome}
+                            on:change={() => toggleGenomeSelection(genome)}
+                            checked={selectedGenomes.includes(genome)}
+                            class="w-4 h-4 text-green-600 border-slate-300 rounded focus:ring-green-500"
+                          />
+                          {genome}
+                        </label>
+                      {/each}
+                    </div>
+                  {:else}
+                    <p class="text-slate-600">Loading genomes...</p>
+                  {/if}
+
+                  <button
+                    on:click={filterGraph}
+                    disabled={selectedGenomes.length !== 2 && selectedGenomes.length !== 3}
+                    class="mt-4 w-full px-4 py-2 text-sm font-medium text-white bg-green-600 rounded-lg hover:bg-green-700 transition-colors duration-200 cursor-pointer disabled:bg-green-300 disabled:cursor-not-allowed"
+                  >
+                    Confirm Selection
+                  </button>
+                </div>
+
+                <!-- Domain Selection -->
+                {#if graphs.length > 1}
+                  <div>
+                    <h3 class="text-lg font-semibold text-slate-800 mb-4">View Domain:</h3>
+                    <select
+                      on:change={(e) => selectDomain((e.target as HTMLSelectElement).selectedIndex)}
+                      class="w-full px-4 py-2 bg-white border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
+                    >
+                      {#each graphs as g, idx}
+                        <option value={idx} selected={g === selectedGraph}>{g.domain_name}</option>
+                      {/each}
+                    </select>
+                  </div>
+                {/if}
+
+                <!-- Cutoff Slider -->
+                <div>
+                  <h3 class="text-lg font-semibold text-slate-800 mb-4">Adjust Cut-off:</h3>
+                  <div class="flex items-center gap-2">
+                    <input
+                      type="range"
+                      min="55"
+                      max="100"
+                      disabled={selectedGraph.domain_name === "ALL"}
+                      bind:value={cutoff}
+                      class="flex-1"
+                    />
+                    <span class="min-w-[3rem] text-center">{cutoff}%</span>
+                  </div>
+                </div>
+
+                <!-- Link Filters -->
+                <div>
+                  <h3 class="text-lg font-semibold text-slate-800 mb-4">Link Filters:</h3>
+                  {#if selectedGraph.domain_name === "ALL"}
+                    <div class="space-y-2">
+                      <label class="flex items-center gap-2 text-slate-700">
+                        <input
+                          type="checkbox"
+                          bind:checked={showConsistent}
+                          class="w-4 h-4 text-green-600 border-slate-300 rounded focus:ring-green-500"
+                        />
+                        Consistent Links
+                      </label>
+                      <label class="flex items-center gap-2 text-slate-700">
+                        <input
+                          type="checkbox"
+                          bind:checked={showInconsistent}
+                          class="w-4 h-4 text-green-600 border-slate-300 rounded focus:ring-green-500"
+                        />
+                        Inconsistent Links
+                      </label>
+                      <label class="flex items-center gap-2 text-slate-700">
+                        <input
+                          type="checkbox"
+                          bind:checked={showPartiallyConsistent}
+                          class="w-4 h-4 text-green-600 border-slate-300 rounded focus:ring-green-500"
+                        />
+                        Partially Consistent Links
+                      </label>
+                      <label class="flex items-center gap-2 text-slate-700">
+                        <input
+                          type="checkbox"
+                          bind:checked={showNonReciprocal}
+                          class="w-4 h-4 text-green-600 border-slate-300 rounded focus:ring-green-500"
+                        />
+                        Non-Reciprocal Links
+                      </label>
+                    </div>
+                  {:else}
+                    <div class="space-y-2">
+                      <label class="flex items-center gap-2 text-slate-700">
+                        <input
+                          type="checkbox"
+                          bind:checked={showReciprocal}
+                          class="w-4 h-4 text-green-600 border-slate-300 rounded focus:ring-green-500"
+                        />
+                        Reciprocal Links
+                      </label>
+                      <label class="flex items-center gap-2 text-slate-700">
+                        <input
+                          type="checkbox"
+                          bind:checked={showNonReciprocal}
+                          class="w-4 h-4 text-green-600 border-slate-300 rounded focus:ring-green-500"
+                        />
+                        Non-Reciprocal Links
+                      </label>
+                    </div>
+                  {/if}
+                </div>
+
+                <!-- Genome Order -->
+                {#if selectedGenomes.length === 3 || selectedGenomes.length === 2}
+                  <div>
+                    <h3 class="text-lg font-semibold text-slate-800 mb-4">Arrange Genome Order:</h3>
+                    <div class="space-y-2">
+                      {#each selectedGenomes as genome}
+                        <div
+                          class="p-3 bg-white border border-slate-200 rounded-lg shadow-sm cursor-move flex items-center gap-2"
+                          draggable="true"
+                          on:dragstart={() => handleDragStart(genome)}
+                          on:dragover={handleDragOver}
+                          on:drop={(e) => handleDrop(e, genome)}
+                          role="button"
+                          tabindex="0"
+                        >
+                          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-slate-400">
+                            <line x1="8" y1="6" x2="21" y2="6"></line>
+                            <line x1="8" y1="12" x2="21" y2="12"></line>
+                            <line x1="8" y1="18" x2="21" y2="18"></line>
+                            <line x1="3" y1="6" x2="3.01" y2="6"></line>
+                            <line x1="3" y1="12" x2="3.01" y2="12"></line>
+                            <line x1="3" y1="18" x2="3.01" y2="18"></line>
+                          </svg>
+                          {genome}
+                        </div>
+                      {/each}
+                    </div>
+                  </div>
+                {/if}
+              </div>
+            </div>
+          {/if}
         </div>
-      {/if}
+      </div>
     </div>
 
-    <!-- File upload/data source section only available if not reviewing a specific group -->
-    {#if !groupId}
-      <!-- File upload section -->
-      <div class="mb-8 p-6 bg-white rounded-lg shadow-sm border border-slate-200">
-        <div class="inline-block">
-          <button
-            on:click={() => showUploadModal = true}
-            class="inline-flex items-center px-4 py-2 text-sm font-medium text-white bg-green-600 rounded-lg hover:bg-green-700 transition-colors duration-200 cursor-pointer disabled:bg-green-300 disabled:cursor-not-allowed"
-          >
-            Upload and Prepare Graph
-          </button>
+    <!-- Main content area -->
+    <div class="flex-1 min-w-0">
+      {#if loading}
+        <div class="flex justify-center items-center py-8">
+          <div class="animate-spin rounded-full h-12 w-12 border-4 border-green-200"></div>
+          <div class="animate-spin rounded-full h-12 w-12 border-4 border-green-600 border-t-transparent absolute"></div>
         </div>
-      </div>
-    {/if}
-
-    {#if errorMessage}
-      <div class="mb-8">
-        <p class="text-red-600 bg-red-50 p-4 rounded-lg">{errorMessage}</p>
-      </div>
-    {/if}
-
-    <!-- Genome selection and controls -->
-    <div class="mb-8 p-6 bg-white rounded-lg shadow-sm border border-slate-200">
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-6 items-center">
-        <div>
-          <h3 class="text-lg font-semibold text-slate-800 mb-4">Select Genomes:</h3>
-          {#if selectedGraph.genomes}
-            <div class="space-y-2">
-              {#each selectedGraph.genomes as genome}
-                <label class="flex items-center gap-2 text-slate-700">
-                  <input
-                    type="checkbox"
-                    value={genome}
-                    on:change={() => toggleGenomeSelection(genome)}
-                    checked={selectedGenomes.includes(genome)}
-                    class="w-4 h-4 text-green-600 border-slate-300 rounded focus:ring-green-500"
-                  />
-                  {genome}
-                </label>
-              {/each}
+      {:else}
+        <!-- Top section with max-width to prevent expansion -->
+        <div class="mb-8">
+          {#if !groupId}
+            <!-- Upload section when no group is selected -->
+            <div class="bg-white rounded-lg shadow-sm border border-slate-200 p-6">
+              <button
+                on:click={() => showUploadModal = true}
+                class="inline-flex items-center px-4 py-2 text-sm font-medium text-white bg-green-600 rounded-lg hover:bg-green-700 transition-colors duration-200 cursor-pointer disabled:bg-green-300 disabled:cursor-not-allowed"
+              >
+                Upload and Prepare Graph
+              </button>
             </div>
           {:else}
-            <p class="text-slate-600">Loading genomes...</p>
+            <!-- Group info section -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+              {#if isAuthenticated}
+                <div class="bg-white rounded-lg shadow-sm border border-slate-200 p-6">
+                  <h3 class="text-xl font-semibold text-slate-800 mb-4">Group Information</h3>
+                  <div class="space-y-4">
+                    <input
+                      type="text"
+                      placeholder="Title"
+                      bind:value={title}
+                      class="w-full px-4 py-2 bg-white border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
+                    />
+                    <textarea
+                      placeholder="Description"
+                      bind:value={description}
+                      class="w-full px-4 py-2 bg-white border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
+                      rows="3"
+                    ></textarea>
+                    <button
+                      on:click={saveGroup}
+                      class="inline-flex items-center px-4 py-2 text-sm font-medium text-white bg-green-600 rounded-lg hover:bg-green-700 transition-colors duration-200 cursor-pointer"
+                    >
+                      Save Group
+                    </button>
+                  </div>
+                </div>
+              {/if}
+
+              {#if matrixFiles.length > 0 || coordinateFile}
+                <div class="bg-white rounded-lg shadow-sm border border-slate-200 p-6">
+                  <h3 class="text-xl font-semibold text-slate-800 mb-4">Download Files</h3>
+                  <div class="flex flex-col gap-3">
+                    {#if coordinateFile}
+                      <a href={coordinateFile.url} target="_blank" rel="noopener noreferrer" class="inline-block">
+                        <button class="inline-flex items-center px-4 py-2 text-sm font-medium text-white bg-green-600 rounded-lg hover:bg-green-700 transition-colors duration-200 cursor-pointer">
+                          Download Coordinate File ({coordinateFile.original_name})
+                          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="ml-2">
+                            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                            <polyline points="7 10 12 15 17 10"/>
+                            <line x1="12" y1="15" x2="12" y2="3"/>
+                          </svg>
+                        </button>
+                      </a>
+                    {/if}
+                    {#each matrixFiles as file, index}
+                      <a href={file.url} target="_blank" rel="noopener noreferrer" class="inline-block">
+                        <button class="inline-flex items-center px-4 py-2 text-sm font-medium text-white bg-green-600 rounded-lg hover:bg-green-700 transition-colors duration-200 cursor-pointer">
+                          Download Matrix File {index + 1} ({file.original_name})
+                          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="ml-2">
+                            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                            <polyline points="7 10 12 15 17 10"/>
+                            <line x1="12" y1="15" x2="12" y2="3"/>
+                          </svg>
+                        </button>
+                      </a>
+                    {/each}
+                  </div>
+                </div>
+              {/if}
+            </div>
           {/if}
-        </div>
 
-        <div class="flex flex-col gap-4">
-          <div class="flex justify-center">
-            <button
-              on:click={filterGraph}
-              disabled={selectedGenomes.length !== 2 && selectedGenomes.length !== 3}
-              class="inline-flex items-center px-4 py-2 text-sm font-medium text-white bg-green-600 rounded-lg hover:bg-green-700 transition-colors duration-200 cursor-pointer disabled:bg-green-300 disabled:cursor-not-allowed"
-            >
-              Confirm Selection
-            </button>
-          </div>
-
-          {#if graphs.length > 1}
-            <div class="flex items-center gap-4">
-              <span class="text-lg font-semibold text-slate-800">View domain:</span>
-              <select
-                on:change={(e) => selectDomain((e.target as HTMLSelectElement).selectedIndex)}
-                class="px-4 py-2 bg-white border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
-              >
-                {#each graphs as g, idx}
-                  <option value={idx} selected={g === selectedGraph}>{g.domain_name}</option>
-                {/each}
-              </select>
+          {#if errorMessage}
+            <div class="mt-4">
+              <p class="text-red-600 bg-red-50 p-4 rounded-lg">{errorMessage}</p>
             </div>
           {/if}
         </div>
 
-        <div class="space-y-4">
-          <div>
-            <label class="flex items-center gap-4 text-slate-700">
-              <span class="text-lg font-semibold">Adjust Cut-off:</span>
-              <input
-                type="range"
-                min="55"
-                max="100"
-                disabled={selectedGraph.domain_name === "ALL"}
-                bind:value={cutoff}
-                class="w-full"
-              />
-              <span class="min-w-[3rem] text-center">{cutoff}%</span>
-            </label>
-          </div>
-
-          <!-- Link Filters -->
-          <div class="space-y-2">
-            <h3 class="text-lg font-semibold text-slate-800">Link Filters:</h3>
-            {#if selectedGraph.domain_name === "ALL"}
-              <div class="space-y-2">
-                <label class="flex items-center gap-2 text-slate-700">
-                  <input
-                    type="checkbox"
-                    bind:checked={showConsistent}
-                    class="w-4 h-4 text-green-600 border-slate-300 rounded focus:ring-green-500"
-                  />
-                  Consistent Links
-                </label>
-                <label class="flex items-center gap-2 text-slate-700">
-                  <input
-                    type="checkbox"
-                    bind:checked={showInconsistent}
-                    class="w-4 h-4 text-green-600 border-slate-300 rounded focus:ring-green-500"
-                  />
-                  Inconsistent Links
-                </label>
-                <label class="flex items-center gap-2 text-slate-700">
-                  <input
-                    type="checkbox"
-                    bind:checked={showPartiallyConsistent}
-                    class="w-4 h-4 text-green-600 border-slate-300 rounded focus:ring-green-500"
-                  />
-                  Partially Consistent Links
-                </label>
-                <label class="flex items-center gap-2 text-slate-700">
-                  <input
-                    type="checkbox"
-                    bind:checked={showNonReciprocal}
-                    class="w-4 h-4 text-green-600 border-slate-300 rounded focus:ring-green-500"
-                  />
-                  Non-Reciprocal Links
-                </label>
-              </div>
-            {:else}
-              <div class="space-y-2">
-                <label class="flex items-center gap-2 text-slate-700">
-                  <input
-                    type="checkbox"
-                    bind:checked={showReciprocal}
-                    class="w-4 h-4 text-green-600 border-slate-300 rounded focus:ring-green-500"
-                  />
-                  Reciprocal Links
-                </label>
-                <label class="flex items-center gap-2 text-slate-700">
-                  <input
-                    type="checkbox"
-                    bind:checked={showNonReciprocal}
-                    class="w-4 h-4 text-green-600 border-slate-300 rounded focus:ring-green-500"
-                  />
-                  Non-Reciprocal Links
-                </label>
-              </div>
-            {/if}
-          </div>
-        </div>
-      </div>
-
-      {#if selectedGenomes.length === 3 || selectedGenomes.length === 2}
-        <div class="mt-8 p-4 bg-slate-50 rounded-lg">
-          <h4 class="text-lg font-semibold text-slate-800 mb-4">Arrange Genome Order:</h4>
-          <div class="flex flex-col gap-2">
-            {#each selectedGenomes as genome}
-              <div
-                class="p-3 bg-white border border-slate-200 rounded-lg shadow-sm cursor-move flex items-center gap-2"
-                draggable="true"
-                on:dragstart={() => handleDragStart(genome)}
-                on:dragover={handleDragOver}
-                on:drop={(e) => handleDrop(e, genome)}
-                role="button"
-                tabindex="0"
-              >
-                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-slate-400">
-                  <line x1="8" y1="6" x2="21" y2="6"></line>
-                  <line x1="8" y1="12" x2="21" y2="12"></line>
-                  <line x1="8" y1="18" x2="21" y2="18"></line>
-                  <line x1="3" y1="6" x2="3.01" y2="6"></line>
-                  <line x1="3" y1="12" x2="3.01" y2="12"></line>
-                  <line x1="3" y1="18" x2="3.01" y2="18"></line>
-                </svg>
-                {genome}
-              </div>
-            {/each}
-          </div>
-          <p class="mt-2 text-sm text-slate-600">Drag to reorder the genomes. The order will affect how they appear in the visualization.</p>
+        <!-- Graph visualization container -->
+        <div class="bg-white rounded-lg shadow-sm border border-slate-200 p-6 overflow-auto">
+          <Chart
+            graph={filteredGraph}
+            {cutoff}
+            {showReciprocal}
+            {showNonReciprocal}
+            {showConsistent}
+            {showInconsistent}
+            {showPartiallyConsistent}
+          />
         </div>
       {/if}
     </div>
-
-    <Chart
-      graph={filteredGraph}
-      {cutoff}
-      {showReciprocal}
-      {showNonReciprocal}
-      {showConsistent}
-      {showInconsistent}
-      {showPartiallyConsistent}
-    />
-    
-    <UploadModal 
-      isOpen={showUploadModal}
-      onClose={() => showUploadModal = false}
-      onUpload={handleUpload}
-    />
   </div>
-{/if}
+</div>
+
+<UploadModal
+  isOpen={showUploadModal}
+  onClose={() => showUploadModal = false}
+  onUpload={handleUpload}
+/>
 
 <style>
   /* Empty style tag required for Tailwind processing */

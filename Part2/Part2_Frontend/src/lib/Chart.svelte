@@ -625,7 +625,7 @@
   {#if graph.nodes.length > 0}
     <button
       type="button"
-      class="legend-button"
+      class="absolute top-2 right-2 w-7 h-7 bg-white border border-slate-200 rounded-lg shadow-sm hover:bg-slate-50 transition-colors cursor-pointer flex items-center justify-center text-slate-600 hover:text-slate-800"
       on:click={() => showLegend = !showLegend}
       on:mouseenter={() => showLegend = true}
       on:mouseleave={() => showLegend = false}
@@ -633,78 +633,84 @@
       aria-expanded={showLegend}
       aria-label="Toggle legend"
     >
-      <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
         <circle cx="12" cy="12" r="10"/>
         <line x1="12" y1="16" x2="12" y2="12"/>
         <line x1="12" y1="8" x2="12.01" y2="8"/>
       </svg>
       {#if showLegend}
-        <div class="legend-popover" role="dialog" aria-label="Chart legend">
-          <div class="legend-section">
-            <h3>Nodes</h3>
-            <div class="legend-item">
-              <svg width="40" height="20" viewBox="-25 -15 50 30">
-                <path d="M -25,-15 L 10,-15 L 25,0 L 10,15 L -25,15 Z" fill="#1f77b4" />
-              </svg>
-              <span>Colored node: Belongs to a group of strongly related (reciprocally connected) nodes</span>
-            </div>
-            <div class="legend-item">
-              <svg width="40" height="20" viewBox="-25 -15 50 30">
-                <path d="M -25,-15 L 10,-15 L 25,0 L 10,15 L -25,15 Z" fill="#7f7f7f" />
-              </svg>
-              <span>Dark gray node: Not part of any group of related nodes</span>
-            </div>
-            {#if graph.domain_name === "ALL"}
-              <div class="legend-item">
-                <svg width="40" height="20" viewBox="-25 -15 50 30">
-                  <path d="M -25,-15 L 10,-15 L 25,0 L 10,15 L -25,15 Z" fill="#e6e6e6" />
-                </svg>
-                <span>Light gray node: Node doesn't exist in current domain but exists in other domains</span>
+        <div class="absolute top-full right-0 mt-1 w-72 bg-white border border-slate-200 rounded-lg shadow-lg p-3 z-10">
+          <div class="space-y-3">
+            <div class="space-y-1.5">
+              <h3 class="text-xs font-medium text-slate-800">Nodes</h3>
+              <div class="space-y-1.5">
+                <div class="flex items-center gap-2">
+                  <svg width="32" height="16" viewBox="-25 -15 50 30">
+                    <path d="M -25,-15 L 10,-15 L 25,0 L 10,15 L -25,15 Z" fill="#1f77b4" />
+                  </svg>
+                  <span class="text-xs text-slate-600">Colored: Strongly related nodes</span>
+                </div>
+                <div class="flex items-center gap-2">
+                  <svg width="32" height="16" viewBox="-25 -15 50 30">
+                    <path d="M -25,-15 L 10,-15 L 25,0 L 10,15 L -25,15 Z" fill="#7f7f7f" />
+                  </svg>
+                  <span class="text-xs text-slate-600">Gray: Unrelated nodes</span>
+                </div>
+                {#if graph.domain_name === "ALL"}
+                  <div class="flex items-center gap-2">
+                    <svg width="32" height="16" viewBox="-25 -15 50 30">
+                      <path d="M -25,-15 L 10,-15 L 25,0 L 10,15 L -25,15 Z" fill="#e6e6e6" />
+                    </svg>
+                    <span class="text-xs text-slate-600">Light gray: Missing in domain</span>
+                  </div>
+                {/if}
               </div>
-            {/if}
-          </div>
+            </div>
 
-          <div class="legend-section">
-            <h3>Links</h3>
-            {#if graph.domain_name === "ALL"}
-              <div class="legend-item">
-                <svg width="60" height="20" viewBox="0 0 60 20">
-                  <line x1="5" y1="10" x2="55" y2="10" stroke="#1f77b4" stroke-width="2" />
-                </svg>
-                <span>Solid colored: Consistently reciprocal connections across all domains</span>
+            <div class="space-y-1.5">
+              <h3 class="text-xs font-medium text-slate-800">Links</h3>
+              <div class="space-y-1.5">
+                {#if graph.domain_name === "ALL"}
+                  <div class="flex items-center gap-2">
+                    <svg width="48" height="16" viewBox="0 0 60 20">
+                      <line x1="5" y1="10" x2="45" y2="10" stroke="#1f77b4" stroke-width="2" />
+                    </svg>
+                    <span class="text-xs text-slate-600">Solid: Consistent across domains</span>
+                  </div>
+                  <div class="flex items-center gap-2">
+                    <svg width="48" height="16" viewBox="0 0 60 20">
+                      <line x1="5" y1="10" x2="45" y2="10" stroke="red" stroke-width="2" />
+                    </svg>
+                    <span class="text-xs text-slate-600">Red: Inconsistent across domains</span>
+                  </div>
+                  <div class="flex items-center gap-2">
+                    <svg width="48" height="16" viewBox="0 0 60 20">
+                      <line x1="5" y1="10" x2="45" y2="10" stroke="#1f77b4" stroke-width="2" stroke-dasharray="4,4" />
+                    </svg>
+                    <span class="text-xs text-slate-600">Dotted: Partially consistent</span>
+                  </div>
+                  <div class="flex items-center gap-2">
+                    <svg width="48" height="16" viewBox="0 0 60 20">
+                      <line x1="5" y1="10" x2="45" y2="10" stroke="#bbb" stroke-width="2" stroke-dasharray="4,4" />
+                    </svg>
+                    <span class="text-xs text-slate-600">Gray dotted: Non-reciprocal</span>
+                  </div>
+                {:else}
+                  <div class="flex items-center gap-2">
+                    <svg width="48" height="16" viewBox="0 0 60 20">
+                      <line x1="5" y1="10" x2="45" y2="10" stroke="#1f77b4" stroke-width="2" />
+                    </svg>
+                    <span class="text-xs text-slate-600">Solid: Reciprocal connection</span>
+                  </div>
+                  <div class="flex items-center gap-2">
+                    <svg width="48" height="16" viewBox="0 0 60 20">
+                      <line x1="5" y1="10" x2="45" y2="10" stroke="#bbb" stroke-width="2" stroke-dasharray="4,4" />
+                    </svg>
+                    <span class="text-xs text-slate-600">Dotted: Non-reciprocal</span>
+                  </div>
+                {/if}
               </div>
-              <div class="legend-item">
-                <svg width="60" height="20" viewBox="0 0 60 20">
-                  <line x1="5" y1="10" x2="55" y2="10" stroke="red" stroke-width="2" />
-                </svg>
-                <span>Solid red: Inconsistent connections across domains</span>
-              </div>
-              <div class="legend-item">
-                <svg width="60" height="20" viewBox="0 0 60 20">
-                  <line x1="5" y1="10" x2="55" y2="10" stroke="#1f77b4" stroke-width="2" stroke-dasharray="4,4" />
-                </svg>
-                <span>Dotted colored: Partially consistent reciprocal connections</span>
-              </div>
-              <div class="legend-item">
-                <svg width="60" height="20" viewBox="0 0 60 20">
-                  <line x1="5" y1="10" x2="55" y2="10" stroke="#bbb" stroke-width="2" stroke-dasharray="4,4" />
-                </svg>
-                <span>Dotted gray: Non-reciprocal connections</span>
-              </div>
-            {:else}
-              <div class="legend-item">
-                <svg width="60" height="20" viewBox="0 0 60 20">
-                  <line x1="5" y1="10" x2="55" y2="10" stroke="#1f77b4" stroke-width="2" />
-                </svg>
-                <span>Solid colored: Reciprocal connection between nodes</span>
-              </div>
-              <div class="legend-item">
-                <svg width="60" height="20" viewBox="0 0 60 20">
-                  <line x1="5" y1="10" x2="55" y2="10" stroke="#bbb" stroke-width="2" stroke-dasharray="4,4" />
-                </svg>
-                <span>Dotted gray: Non-reciprocal connection between nodes</span>
-              </div>
-            {/if}
+            </div>
           </div>
         </div>
       {/if}
@@ -799,72 +805,5 @@
   .active {
     background-color: #f8fafc !important;
     border-color: #94a3b8 !important;
-  }
-
-  .legend-button {
-    position: absolute;
-    top: 10px;
-    right: 10px;
-    width: 32px;
-    height: 32px;
-    background: white;
-    border: 1px solid #dee2e6;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    color: #495057;
-    z-index: 5;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    padding: 0;
-  }
-
-  .legend-button:hover {
-    background: #f8f9fa;
-    color: #212529;
-  }
-
-  .legend-popover {
-    position: absolute;
-    top: 100%;
-    right: 0;
-    margin-top: 8px;
-    width: 320px;
-    background: white;
-    border: 1px solid #dee2e6;
-    border-radius: 8px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-    padding: 16px;
-    z-index: 5;
-  }
-
-  .legend-section {
-    margin-bottom: 16px;
-  }
-
-  .legend-section h3 {
-    margin: 0 0 8px 0;
-    font-size: 14px;
-    color: #333;
-  }
-
-  .legend-item {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    margin-bottom: 8px;
-    min-height: 24px;
-  }
-
-  .legend-item svg {
-    flex-shrink: 0;
-  }
-
-  .legend-item span {
-    font-size: 12px;
-    color: #666;
-    line-height: 1.4;
-    flex-grow: 1;
   }
 </style>

@@ -406,10 +406,13 @@ def combine_graphs(all_domain_connections, all_domain_genes, domains):
 
         if not all(present_in_domains):
             # Check if connection is reciprocal in domains where it exists AND nodes don't exist in domains where connection is missing
-            if (all(dom_bool for u_key, _, dom_bool in unique_links if u_key == key or u_key == reverse_key) and
-                all(not (source in all_domain_genes[i] and target in all_domain_genes[i])
-                    for i, present in enumerate(present_in_domains) if not present)):
-                link_type = "solid_color"
+            if all(dom_bool for u_key, _, dom_bool in unique_links if u_key == key or u_key == reverse_key):
+                # Check if both nodes exist in any domain where the connection is missing
+                if any(source in all_domain_genes[i][domains[i]] and target in all_domain_genes[i][domains[i]]
+                      for i, present in enumerate(present_in_domains) if not present):
+                    link_type = "solid_red"
+                else:
+                    link_type = "solid_color"
             # At least one reciprocal
             elif any(dom_bool for u_key, _, dom_bool in unique_links if u_key == key or u_key == reverse_key):
                 link_type = "solid_red"
@@ -418,8 +421,10 @@ def combine_graphs(all_domain_connections, all_domain_genes, domains):
         else:
             if all(dom_bool for u_key, _, dom_bool in unique_links if u_key == key or u_key == reverse_key):
                 link_type = "solid_color"
-            else:
+            elif any(dom_bool for u_key, _, dom_bool in unique_links if u_key == key or u_key == reverse_key):
                 link_type = "dotted_color"
+            else:
+                link_type = "dotted_grey"
 
 
         # if not all(present_in_domains):
@@ -490,7 +495,11 @@ def domain_parse(matrix_files, coord_file, file_names):
 
     domain_graph_nodes = add_nodes(coords, total_gene_list)
     for node in domain_graph_nodes:
-        node["is_present"] = True
+        # Check if the node is present in all domain graphs
+        node["is_present"] = any(
+            any(n["id"] == node["id"] and n["is_present"] for n in graph["nodes"])
+            for graph in genomes_output
+        )
     domain_graph = {
         "domain_name": "ALL",
         "genomes": list(total_genomes),

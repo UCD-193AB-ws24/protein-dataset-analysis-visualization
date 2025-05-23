@@ -658,7 +658,7 @@
               <div class="animate-spin rounded-full h-12 w-12 border-4 border-green-200"></div>
               <div class="animate-spin rounded-full h-12 w-12 border-4 border-green-600 border-t-transparent absolute"></div>
             </div>
-          {:else if errorMessage}
+          <!-- {:else if errorMessage}
             <div class="flex justify-center items-center py-8">
               <div class="max-w-lg">
                 <p class="text-red-600 bg-red-50 p-4 rounded-lg text-center">{errorMessage}</p>
@@ -671,7 +671,7 @@
                   </button>
                 </div>
               </div>
-            </div>
+            </div> -->
           {:else if !graphs.length}
             <div class="flex flex-col items-center justify-center py-8">
               <button

@@ -555,38 +555,38 @@
           let currentDomain = '';
           let startValue: number | null = null;
           let endValue: number | null = null;
-          
+
           domainCoords.forEach(([key, value]) => {
             const parts = key.split('_');
             const domainName = parts[1];
             const coordType = parts[parts.length - 1];
-            
+
             if (domainName !== currentDomain) {
               if (currentDomain !== '') {
-                tooltipContent += `(${startValue ?? 'NA'}, ${endValue ?? 'NA'})<br>`;
+                tooltipContent += `(${startValue ?? 'N/A'}, ${endValue ?? 'N/A'})<br>`;
               }
               currentDomain = domainName;
               tooltipContent += `${domainName}: `;
               startValue = null;
               endValue = null;
             }
-            
+
             if (coordType === 'start') {
               startValue = value as number;
             } else if (coordType === 'end') {
               endValue = value as number;
             }
           });
-          
+
           // Handle the last domain
           if (currentDomain !== '') {
-            tooltipContent += `(${startValue ?? 'NA'}, ${endValue ?? 'NA'})`;
+            tooltipContent += `(${startValue ?? 'N/A'}, ${endValue ?? 'N/A'})`;
           }
         }
 
         d3.select(tooltipEl)
           .style('opacity', 1)
-          .style('left', `${event.clientX + 10}px`).style('top', `${event.clientY + 10}px`);
+          .style('left', `${event.clientX + 10}px`).style('top', `${event.clientY + 10}px`)
           .html(tooltipContent);
       })
       .on('mousemove', function (event) {
@@ -708,7 +708,7 @@
 
   function downloadModalSVG() {
     if (!modalSvg || !selectedItem) return;
-    
+
     // Create a new SVG that will contain both the shape and text
     const combinedSvg = d3.select(document.createElementNS('http://www.w3.org/2000/svg', 'svg'))
       .attr('width', 400)
@@ -731,7 +731,7 @@
         .attr('class', 'svg-text')
         .attr('text-anchor', 'middle')
         .text(`Genome: ${selectedItem.data.genome_name}`);
-      
+
       textGroup.append('text')
         .attr('x', 0)
         .attr('y', 20)
@@ -795,14 +795,14 @@
         .attr('class', 'svg-text')
         .attr('text-anchor', 'middle')
         .text(`Source: ${selectedItem.data.source}`);
-      
+
       textGroup.append('text')
         .attr('x', 0)
         .attr('y', 20)
         .attr('class', 'svg-text')
         .attr('text-anchor', 'middle')
         .text(`Target: ${selectedItem.data.target}`);
-      
+
       if ('score' in selectedItem.data) {
         textGroup.append('text')
           .attr('x', 0)
@@ -810,7 +810,7 @@
           .attr('class', 'svg-text')
           .attr('text-anchor', 'middle')
           .text(`Similarity: ${selectedItem.data.score}%`);
-        
+
         textGroup.append('text')
           .attr('x', 0)
           .attr('y', 60)
@@ -1032,7 +1032,7 @@
         <h3>{selectedItem.type === 'node' ? 'Node Properties' : 'Link Properties'}</h3>
         <button class="close-button" on:click={closeModal}>×</button>
       </div>
-      
+
       <div class="modal-body">
         <!-- SVG Preview -->
         <button class="svg-preview" on:click={downloadModalSVG} on:keydown={(e) => e.key === 'Enter' && downloadModalSVG()}>

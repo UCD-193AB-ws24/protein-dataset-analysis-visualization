@@ -634,7 +634,7 @@
     draw();
   }
 
-  function exitFocus() {
+  export function exitFocus() {
     isFocused = false;
     selectedNodes.clear();
     selectedNodesCount = 0;
@@ -647,6 +647,20 @@
     contextMenuY = event.clientY;
     selectedItem = item;
     showContextMenu = true;
+
+    // Add click listener to close menu when clicking outside
+    const closeMenuOnOutsideClick = (e: MouseEvent) => {
+      const contextMenu = document.querySelector('.context-menu');
+      if (contextMenu && !contextMenu.contains(e.target as HTMLElement)) {
+        closeContextMenu();
+        document.removeEventListener('click', closeMenuOnOutsideClick);
+      }
+    };
+
+    // Use setTimeout to avoid immediate trigger of the click event
+    setTimeout(() => {
+      document.addEventListener('click', closeMenuOnOutsideClick);
+    }, 0);
   }
 
   function closeContextMenu() {

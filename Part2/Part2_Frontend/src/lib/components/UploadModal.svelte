@@ -1,7 +1,7 @@
 <script lang="ts">
   export let isOpen = false;
   export let onClose: () => void;
-  export let onUpload: (coordinateFile: File | null, matrixFiles: File[], isDomainSpecific: boolean) => void;
+  export let onUpload: (coordinateFile: File | null, matrixFiles: File[], isDomainSpecific: boolean, closeFocus: boolean) => void;
 
   let isDomainSpecific = false;
   let coordinateFile: File | null = null;
@@ -102,7 +102,7 @@
     isUploading = true;
     errorMessage = '';
     try {
-      await onUpload(coordinateFile, matrixFiles, isDomainSpecific);
+      await onUpload(coordinateFile, matrixFiles, isDomainSpecific, true);
     } catch (error) {
       errorMessage = error instanceof Error ? error.message : 'An error occurred during upload';
       isUploading = false;
@@ -115,6 +115,8 @@
   }
 
   function handleClose() {
+    // Clear the graph by passing empty values and close focus
+    onUpload(null, [], false, true);
     onClose();
   }
 

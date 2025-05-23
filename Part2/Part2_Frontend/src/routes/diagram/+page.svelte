@@ -71,6 +71,8 @@
 
   let showUploadModal = false;
 
+  let chartComponent: Chart;
+
   onMount(async () => {
     try {
       user = await oidcClient.getUser();
@@ -297,12 +299,16 @@
     console.log(selectedGraph)
   }
 
-  async function handleUpload(coordinateFile: File | null, matrixFiles: File[], domainSpecific: boolean) {
+  async function handleUpload(coordinateFile: File | null, matrixFiles: File[], domainSpecific: boolean, closeFocus: boolean = false) {
     uploadedCoordsFile = coordinateFile;
     uploadedMatrixFiles = matrixFiles;
     isDomainSpecific = domainSpecific;
+    loading = true; // Set loading to true to clear the graph
     try {
       await uploadFiles();
+      if (closeFocus && chartComponent) {
+        chartComponent.exitFocus();
+      }
       showUploadModal = false;
     } catch (error) {
       loading = false; // Reset loading state on error
@@ -602,6 +608,7 @@
     </div>
 
     <Chart
+      bind:this={chartComponent}
       graph={filteredGraph}
       {cutoff}
       {showReciprocal}

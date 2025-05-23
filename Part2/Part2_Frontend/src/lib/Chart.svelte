@@ -33,6 +33,15 @@
   let focusedNodes = new Set<string>();
   let focusedLinks = new Set<string>();
 
+  // Calculate dynamic label width based on genome names
+  $: labelWidth = Math.min(
+    120, // max width
+    Math.max(
+      80, // min width
+      ...graph.genomes.map(name => name.length * 8) // approximate character width
+    )
+  );
+
   interface Node {
     id: string;
     genome_name: string;
@@ -66,11 +75,11 @@
   let chartSvgEl: SVGSVGElement;
   let tooltipEl: HTMLDivElement;
 
-  const labelWidth = 120;
   const viewportWidth = 1000;
-  const height = 600;
-  const margin = { top: 20, right: 40, bottom: 20, left: 20 };
-  const arrowHalf = 40;
+  // Calculate height based on number of rows (150px per row minimum)
+  $: height = (graph.genomes?.length || 0) * 150;
+  const margin = { top: 5, right: 20, bottom: 5, left: 10 };
+  const arrowHalf = 25;
 
   const strokeW = d3.scaleLinear<number, number>().domain([0, 100]).range([0.5, 3]);
 
@@ -298,11 +307,11 @@
 
     // scales
     const numRows = genomes.length > 2 ? genomes.length + 1 : genomes.length; // Updated so no extra line when there are only 2 genomes
-    const y = d3.scaleBand<number>().domain(d3.range(numRows)).range([0, height - margin.top - margin.bottom]).padding(0.6);
+    const y = d3.scaleBand<number>().domain(d3.range(numRows)).range([0, height]);
     const xExtent = d3.extent(nodes, (d) => d.rel_position) as [number, number];
     const spacing = 100;
-    const chartWidth = Math.max(viewportWidth, (xExtent[1] - xExtent[0]) * spacing + arrowHalf * 2 + margin.left + margin.right);
-    const x = d3.scaleLinear<number, number>().domain(xExtent).range([arrowHalf + margin.left, chartWidth - arrowHalf - margin.right]);
+    const chartWidth = (xExtent[1] - xExtent[0]) * spacing + arrowHalf * 2 + margin.left + margin.right;
+    const x = d3.scaleLinear<number, number>().domain(xExtent).range([arrowHalf + margin.left + 10, chartWidth - arrowHalf - margin.right - 10]);
 
     const nodeById = new Map(nodes.map((n) => [n.id, n]));
     const rowOf = (n: Node) => (n._dup ? genomes.length : genomes.indexOf(n.genome_name));
@@ -322,7 +331,13 @@
       .attr('dy', '0.35em')
       .attr('text-anchor', 'end')
       .style('font-size', '12px')
-      .text((d) => d);
+      .text((d) => {
+        // Truncate long genome names
+        if (d.length > 15) {
+          return d.slice(0, 12) + '...';
+        }
+        return d;
+      });
 
     // ── CHART ──
     const chartSvg = d3.select(chartSvgEl).attr('width', chartWidth).attr('height', height);

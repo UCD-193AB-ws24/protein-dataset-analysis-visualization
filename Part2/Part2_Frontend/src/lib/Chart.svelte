@@ -433,10 +433,15 @@
         } else {
           detail = 'Unknown Link Type';
         }
-        d3.select(tooltipEl).style('opacity', 1).html(`<strong>${n1.protein_name}</strong> ↔ <strong>${n2.protein_name}</strong><br>${detail}`);
+        const tooltip = d3.select(tooltipEl);
+        tooltip.style('opacity', 1).html(`<strong>${n1.protein_name}</strong> ↔ <strong>${n2.protein_name}</strong><br>${detail}`);
+
+        tooltip.style('left', `${event.clientX + 10}px`).style('top', `${event.clientY + 10}px`);
       })
       .on('mousemove', function (event) {
-        d3.select(tooltipEl).style('left', event.pageX + 10 + 'px').style('top', event.pageY + 10 + 'px');
+        d3.select(tooltipEl)
+          .style('left', `${event.clientX + 10}px`)
+          .style('top', `${event.clientY + 10}px`);
       })
       .on('mouseout', function (event, d) {
         d3.select(this).transition().duration(150).attr('stroke-width', strokeW('score' in d ? d.score : 100) * 2);
@@ -495,8 +500,8 @@
             d3.select(this).attr('fill', darkerColor.toString());
           }
         }
-        d3.select(tooltipEl)
-          .style('opacity', 1)
+        const tooltip = d3.select(tooltipEl);
+        tooltip.style('opacity', 1)
           .html(
             `<strong>Genome:</strong> ${d.genome_name}<br>` +
             `<strong>Protein:</strong> ${d.protein_name}<br>` +
@@ -505,9 +510,13 @@
             `<strong>Direction:</strong> ${d.direction === 'plus' ? '+' : '-'}<br>` +
             `<strong>Position:</strong> ${d.rel_position}`
           );
+
+        tooltip.style('left', `${event.clientX + 10}px`).style('top', `${event.clientY + 10}px`);
       })
       .on('mousemove', function (event) {
-        d3.select(tooltipEl).style('left', event.pageX + 10 + 'px').style('top', event.pageY + 10 + 'px');
+        d3.select(tooltipEl)
+          .style('left', `${event.clientX + 10}px`)
+          .style('top', `${event.clientY + 10}px`);
       })
       .on('mouseout', function (event, d) {
         if (isFocused && !focusedNodes.has(d.id)) {
@@ -639,7 +648,7 @@
     flex: 1 1 auto;
   }
   .tooltip {
-    position: absolute;
+    position: fixed;
     background: #fff;
     border: 1px solid #999;
     border-radius: 4px;
@@ -648,6 +657,7 @@
     pointer-events: none;
     opacity: 0;
     white-space: nowrap;
+    z-index: 1000;
   }
 
   .controls {

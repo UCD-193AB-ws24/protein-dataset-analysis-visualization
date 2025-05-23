@@ -415,7 +415,11 @@ def combine_graphs(all_domain_connections, all_domain_genes, domains):
                     link_type = "solid_color"
             # At least one reciprocal
             elif any(dom_bool for u_key, _, dom_bool in unique_links if u_key == key or u_key == reverse_key):
-                link_type = "solid_red"
+                if any(source in all_domain_genes[i][domains[i]] and target in all_domain_genes[i][domains[i]]
+                      for i, present in enumerate(present_in_domains) if not present):
+                    link_type = "solid_red"
+                else:
+                    link_type = "dotted_color"
             else:
                 link_type = "dotted_grey"
         else:

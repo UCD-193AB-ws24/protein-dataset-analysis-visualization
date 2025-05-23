@@ -340,6 +340,7 @@
             <button
               on:click={() => isPanelCollapsed = !isPanelCollapsed}
               class="p-1.5 hover:bg-slate-100 rounded-md transition-colors"
+              aria-label={isPanelCollapsed ? "Expand panel" : "Collapse panel"}
             >
               <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class={`transition-transform ${isPanelCollapsed ? 'rotate-180' : ''}`}>
                 <polyline points="15 18 9 12 15 6"></polyline>
@@ -559,33 +560,45 @@
               {/if}
 
               {#if matrixFiles.length > 0 || coordinateFile}
-                <div class="bg-white rounded-lg shadow-sm border border-slate-200 p-6">
-                  <h3 class="text-xl font-semibold text-slate-800 mb-4">Download Files</h3>
-                  <div class="flex flex-col gap-3">
+                <div class="bg-white rounded-lg shadow-sm border border-slate-200 p-4">
+                  <h3 class="text-xl font-semibold text-slate-800 mb-3">Download Files</h3>
+                  <div class="space-y-4">
                     {#if coordinateFile}
-                      <a href={coordinateFile.url} target="_blank" rel="noopener noreferrer" class="inline-block">
-                        <button class="inline-flex items-center px-4 py-2 text-sm font-medium text-white bg-green-600 rounded-lg hover:bg-green-700 transition-colors duration-200 cursor-pointer">
-                          Download Coordinate File ({coordinateFile.original_name})
-                          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="ml-2">
-                            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
-                            <polyline points="7 10 12 15 17 10"/>
-                            <line x1="12" y1="15" x2="12" y2="3"/>
-                          </svg>
-                        </button>
-                      </a>
+                      <div>
+                        <h4 class="text-lg font-medium text-slate-700 mb-2">Coordinate File</h4>
+                        <div class="flex flex-col gap-1.5">
+                          <a href={coordinateFile.url} target="_blank" rel="noopener noreferrer" class="inline-block max-w-full">
+                            <button class="inline-flex w-full items-center px-3 py-1.5 text-sm font-medium text-white bg-green-600 rounded-lg hover:bg-green-700 transition-colors duration-200 cursor-pointer">
+                              <span class="truncate flex-1 text-left">{coordinateFile.original_name}</span>
+                              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="ml-2 shrink-0">
+                                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                                <polyline points="7 10 12 15 17 10"/>
+                                <line x1="12" y1="15" x2="12" y2="3"/>
+                              </svg>
+                            </button>
+                          </a>
+                        </div>
+                      </div>
                     {/if}
-                    {#each matrixFiles as file, index}
-                      <a href={file.url} target="_blank" rel="noopener noreferrer" class="inline-block">
-                        <button class="inline-flex items-center px-4 py-2 text-sm font-medium text-white bg-green-600 rounded-lg hover:bg-green-700 transition-colors duration-200 cursor-pointer">
-                          Download Matrix File {index + 1} ({file.original_name})
-                          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="ml-2">
-                            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
-                            <polyline points="7 10 12 15 17 10"/>
-                            <line x1="12" y1="15" x2="12" y2="3"/>
-                          </svg>
-                        </button>
-                      </a>
-                    {/each}
+                    {#if matrixFiles.length > 0}
+                      <div>
+                        <h4 class="text-lg font-medium text-slate-700 mb-2">Matrix Files</h4>
+                        <div class="flex flex-col gap-1.5">
+                          {#each matrixFiles as file}
+                            <a href={file.url} target="_blank" rel="noopener noreferrer" class="inline-block max-w-full">
+                              <button class="inline-flex w-full items-center px-3 py-1.5 text-sm font-medium text-white bg-green-600 rounded-lg hover:bg-green-700 transition-colors duration-200 cursor-pointer">
+                                <span class="truncate flex-1 text-left">{file.original_name}</span>
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="ml-2 shrink-0">
+                                  <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                                  <polyline points="7 10 12 15 17 10"/>
+                                  <line x1="12" y1="15" x2="12" y2="3"/>
+                                </svg>
+                              </button>
+                            </a>
+                          {/each}
+                        </div>
+                      </div>
+                    {/if}
                   </div>
                 </div>
               {/if}

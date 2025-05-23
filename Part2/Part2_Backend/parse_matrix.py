@@ -1,6 +1,12 @@
 import pandas as pd
 from io import BytesIO
 from flask import jsonify
+from file_utils import (
+    read_file, 
+    validate_dataframe_basic, 
+    validate_dataframe_structure,
+    validate_coordinate_data_types
+)
 
 
 def validate_coordinate_dataframe_basic(df):
@@ -21,23 +27,6 @@ def validate_coordinate_dataframe_basic(df):
     if df['orientation'].isnull().any():
         raise ValueError("Found empty values in the orientation column")
 
-def validate_coordinate_data_types(df):
-    # Check if position is numeric
-    if not pd.to_numeric(df['position'], errors='coerce').notnull().all():
-        raise ValueError("Position column contains non-numeric values")
-        
-    valid_orientations = {'minus', 'plus', 'negative', 'positive', '+', '-'}
-    if not df['orientation'].isin(valid_orientations).all():
-        raise ValueError("Orientation column should only contain 'plus', 'minus', 'positive', 'negative', '+' or '-'")
-
-    # Convert each orientation individually
-    df['orientation'] = df['orientation'].map({
-        'positive': 'plus',
-        '+': 'plus',
-        'negative': 'minus',
-        '-': 'minus'
-    }).fillna(df['orientation'])  # Keep original value if not in mapping
-
 def process_name_field(df):
     try:
         if df['protein_name'].isnull().any() or df['genome'].isnull().any():
@@ -56,8 +45,7 @@ def calculate_relative_positions(df):
 
 def parse_coordinates(coord_file):
     try:
-        # Read the Excel file
-        df = pd.read_excel(BytesIO(coord_file.read()), engine='openpyxl')
+        df = read_file(coord_file, 'coordinate')
         
         # Validate basic structure
         validate_coordinate_dataframe_basic(df)
@@ -80,10 +68,10 @@ def parse_coordinates(coord_file):
         
     except pd.errors.EmptyDataError:
         raise ValueError("The coordinate file is empty or cannot be read")
-    except pd.errors.ParserError:
-        raise ValueError("Unable to parse the coordinate file. Please ensure it's a valid Excel file")
     except Exception as e:
-        raise ValueError(f"Error processing coordinate file: {str(e)}")
+        if not isinstance(e, ValueError):  # Don't wrap ValueError as it's already formatted
+            raise ValueError(f"Error processing coordinate file: {str(e)}")
+        raise
 
 
 def add_nodes(coords):
@@ -157,7 +145,7 @@ def validate_dataframe_structure(df):
 
 def prepare_dataframe(matrix_file):
     print("Parsing matrix file...")
-    df = pd.read_excel(BytesIO(matrix_file.read()), engine='openpyxl')
+    df = read_file(matrix_file, 'matrix')
     validate_dataframe_basic(df)
     
     df = df.reset_index(drop=True)

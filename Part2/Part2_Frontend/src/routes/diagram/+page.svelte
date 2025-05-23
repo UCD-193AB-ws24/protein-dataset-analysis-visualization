@@ -53,6 +53,7 @@
 
   let errorMessage = "";
   let loading = true;        // Loading state for file upload
+  let savingGroup = false;   // Loading state for saving group
   let cutoff = 55;           // slider value
 
   // Link filter states
@@ -71,6 +72,8 @@
   let showUploadModal = false;
 
   let isPanelCollapsed = false;
+
+  let chartComponent: Chart;
 
   onMount(async () => {
     try {
@@ -145,16 +148,13 @@
   async function uploadFiles() {
     errorMessage = ""; // Clear any previous error messages
     if (!uploadedCoordsFile || uploadedMatrixFiles.length === 0) {
-      alert('Please select the required files.');
-      return;
+      throw new Error('Please select the required files.');
     }
     if (!isDomainSpecific && uploadedMatrixFiles.length !== 1) {
-      alert('Exactly one matrix file is required for non-domain-specific graphs.');
-      return;
+      throw new Error('Exactly one matrix file is required for non-domain-specific graphs.');
     }
     if (isDomainSpecific && uploadedMatrixFiles.length > 3) {
-      alert('Up to three matrix files are supported for domain-specific graphs.');
-      return;
+      throw new Error('Up to three matrix files are supported for domain-specific graphs.');
     }
 
     const formData = new FormData();
@@ -186,8 +186,10 @@
       filteredGraph = { nodes: [], links: [], genomes: [] };
       loading = false;
     } catch (error) {
-      errorMessage = error instanceof Error ? error.message : "An error occurred.";
-      console.error('Detailed error:', error);
+      if (error instanceof TypeError && error.message === 'Failed to fetch') {
+        throw new Error('Network error: Unable to connect to the server. Please check your internet connection.');
+      }
+      throw error;
     }
   }
 
@@ -203,11 +205,13 @@
       return;
     }
 
+    savingGroup = true;
     const formData = new FormData();
     if (!groupId) {
       // For new groups, validate uploaded files
       if (!uploadedCoordsFile || uploadedMatrixFiles.length === 0) {
         alert('Please select at least one coordinate file and one matrix file to save.');
+        savingGroup = false;
         return;
       }
 
@@ -254,6 +258,8 @@
     } catch (error) {
       console.error('Error saving group:', error);
       alert('Failed to save group. Please try again.');
+    } finally {
+      savingGroup = false;
     }
   }
 
@@ -297,11 +303,21 @@
     console.log(selectedGraph)
   }
 
-  function handleUpload(coordinateFile: File | null, matrixFiles: File[], domainSpecific: boolean) {
+  async function handleUpload(coordinateFile: File | null, matrixFiles: File[], domainSpecific: boolean, closeFocus: boolean = false) {
     uploadedCoordsFile = coordinateFile;
     uploadedMatrixFiles = matrixFiles;
     isDomainSpecific = domainSpecific;
-    uploadFiles();
+    loading = true; // Set loading to true to clear the graph
+    try {
+      await uploadFiles();
+      if (closeFocus && chartComponent) {
+        chartComponent.exitFocus();
+      }
+      showUploadModal = false;
+    } catch (error) {
+      loading = false; // Reset loading state on error
+      throw error; // Pass the error back to the modal
+    }
   }
 
   function handleDragStart(genome: string) {
@@ -566,11 +582,23 @@
                     class="w-full px-4 py-2 bg-white border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
                     rows="3"
                   ></textarea>
+
                   <button
                     on:click={saveGroup}
-                    class="inline-flex items-center px-4 py-2 text-sm font-medium text-white bg-green-600 rounded-lg hover:bg-green-700 transition-colors duration-200 cursor-pointer"
+                    disabled={savingGroup}
+                    class="inline-flex items-center px-4 py-2 text-sm font-medium text-white bg-green-600 rounded-lg hover:bg-green-700 transition-colors duration-200 cursor-pointer disabled:bg-green-300 disabled:cursor-not-allowed"
                   >
-                    {groupId ? 'Update Group' : 'Save Group'}
+                    {#if savingGroup}
+                      <div class="flex items-center">
+                        <svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                          <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                          <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                        </svg>
+                        Saving...
+                      </div>
+                    {:else}
+                      {groupId ? 'Update Group' : 'Save Group'}
+                    {/if}
                   </button>
                 </div>
               </div>
@@ -660,6 +688,7 @@
             </div>
           {:else}
             <Chart
+              bind:this={chartComponent}
               graph={filteredGraph}
               {cutoff}
               {showReciprocal}

@@ -34,6 +34,15 @@
   let focusedNodes = new Set<string>();
   let focusedLinks = new Set<string>();
 
+  // Add new state variables for context menu and modal
+  let showContextMenu = false;
+  let contextMenuX = 0;
+  let contextMenuY = 0;
+  let showPropertiesModal = false;
+  let selectedItem: { type: 'node' | 'link', data: any } | null = null;
+  let modalSvg: SVGSVGElement;
+  let nodeColorMap = new Map<string, string>();
+
   let showLegend = false;
   let panelX = 20;
   let panelY = 20;
@@ -212,6 +221,7 @@
   // ────────────────────────────────────────────────────────────────
   function draw() {
     const { nodes, links, genomes, nodeColor, uf } = massage(graph);
+    nodeColorMap = nodeColor;
     if (!nodes.length) return;
 
     // apply cutoff filter
@@ -416,10 +426,10 @@
       .attr('stroke', d => {
         if (isFocused && !focusedLinks.has(`${d.source}-${d.target}`)) return '#e6e6e6';
         if (selectedLinks.has(`${d.source}-${d.target}`)) return '#000';
-        if ('is_reciprocal' in d) return d.is_reciprocal ? nodeColor?.get(d.source)! : '#bbb';
+        if ('is_reciprocal' in d) return d.is_reciprocal ? (nodeColorMap.get(d.source) || '#bbb') : '#bbb';
         if ('link_type' in d) {
           if (d.link_type === 'solid_red') return 'red';
-          return d.link_type.includes('color') ? nodeColor?.get(d.source)! : '#bbb';
+          return d.link_type.includes('color') ? (nodeColorMap.get(d.source) || '#bbb') : '#bbb';
         }
         return '#bbb';
       })
@@ -467,6 +477,9 @@
       .on('mouseout', function (event, d) {
         d3.select(this).transition().duration(150).attr('stroke-width', strokeW('score' in d ? d.score : 100) * 2);
         d3.select(tooltipEl).style('opacity', 0);
+      })
+      .on('contextmenu', function(event, d) {
+        handleContextMenu(event, { type: 'link', data: d });
       });
 
     // NODES
@@ -479,7 +492,7 @@
       .attr('d', (d) => arrowPath(d.direction))
       .attr('fill', (d) => {
         if (isFocused && !focusedNodes.has(d.id)) return '#e6e6e6';
-        return nodeColor?.get(d.id)!;
+        return nodeColorMap.get(d.id) || '#bbb';
       })
       .attr('stroke', (d) => selectedNodes.has(d.id) ? 'black' : 'none')
       .attr('stroke-width', (d) => selectedNodes.has(d.id) ? '2' : '0')
@@ -521,18 +534,60 @@
             d3.select(this).attr('fill', darkerColor.toString());
           }
         }
-        const tooltip = d3.select(tooltipEl);
-        tooltip.style('opacity', 1)
-          .html(
-            `<strong>Genome:</strong> ${d.genome_name}<br>` +
-            `<strong>Protein:</strong> ${d.protein_name}<br>` +
-            (d.gene_type ? `<strong>Domain:</strong> ${d.gene_type}<br>` : '') +
-            `<strong>Present:</strong> ${d.is_present === false ? 'NO' : 'YES'}<br>` +
-            `<strong>Direction:</strong> ${d.direction === 'plus' ? '+' : '-'}<br>` +
-            `<strong>Position:</strong> ${d.rel_position}`
-          );
 
-        tooltip.style('left', `${event.clientX + 10}px`).style('top', `${event.clientY + 10}px`);
+        // Build tooltip content
+        let tooltipContent = `
+          <strong>Genome:</strong> ${d.genome_name}<br>
+          <strong>Protein:</strong> ${d.protein_name}<br>
+          ${d.gene_type ? `<strong>Domain:</strong> ${d.gene_type}<br>` : ''}
+          <strong>Present:</strong> ${d.is_present === false ? 'NO' : 'YES'}<br>
+          <strong>Direction:</strong> ${d.direction === 'plus' ? '+' : '-'}<br>
+          <strong>Position:</strong> ${d.rel_position}
+        `;
+
+        // Add domain coordinates if they exist
+        const domainCoords = Object.entries(d)
+          .filter(([key]) => key.includes('domain') && (key.endsWith('_start') || key.endsWith('_end')))
+          .sort(([a], [b]) => a.localeCompare(b));
+
+        if (domainCoords.length > 0) {
+          tooltipContent += '<br><br><strong>Domain Coordinates:</strong><br>';
+          let currentDomain = '';
+          let startValue: number | null = null;
+          let endValue: number | null = null;
+          
+          domainCoords.forEach(([key, value]) => {
+            const parts = key.split('_');
+            const domainName = parts[1];
+            const coordType = parts[parts.length - 1];
+            
+            if (domainName !== currentDomain) {
+              if (currentDomain !== '') {
+                tooltipContent += `(${startValue ?? 'NA'}, ${endValue ?? 'NA'})<br>`;
+              }
+              currentDomain = domainName;
+              tooltipContent += `${domainName}: `;
+              startValue = null;
+              endValue = null;
+            }
+            
+            if (coordType === 'start') {
+              startValue = value as number;
+            } else if (coordType === 'end') {
+              endValue = value as number;
+            }
+          });
+          
+          // Handle the last domain
+          if (currentDomain !== '') {
+            tooltipContent += `(${startValue ?? 'NA'}, ${endValue ?? 'NA'})`;
+          }
+        }
+
+        d3.select(tooltipEl)
+          .style('opacity', 1)
+          .style('left', `${event.clientX + 10}px`).style('top', `${event.clientY + 10}px`);
+          .html(tooltipContent);
       })
       .on('mousemove', function (event) {
         d3.select(tooltipEl)
@@ -543,9 +598,12 @@
         if (isFocused && !focusedNodes.has(d.id)) {
           d3.select(this).attr('fill', '#e6e6e6');
         } else {
-          d3.select(this).attr('fill', nodeColor?.get(d.id)!);
+          d3.select(this).attr('fill', nodeColorMap.get(d.id) || '#bbb');
         }
         d3.select(tooltipEl).style('opacity', 0);
+      })
+      .on('contextmenu', function(event, d) {
+        handleContextMenu(event, { type: 'node', data: d });
       });
   }
 
@@ -605,11 +663,195 @@
     draw();
   }
 
-  function exitFocus() {
+  export function exitFocus() {
     isFocused = false;
     selectedNodes.clear();
     selectedNodesCount = 0;
     draw();
+  }
+
+  function handleContextMenu(event: MouseEvent, item: { type: 'node' | 'link', data: any }) {
+    event.preventDefault();
+    contextMenuX = event.clientX;
+    contextMenuY = event.clientY;
+    selectedItem = item;
+    showContextMenu = true;
+
+    // Add click listener to close menu when clicking outside
+    const closeMenuOnOutsideClick = (e: MouseEvent) => {
+      const contextMenu = document.querySelector('.context-menu');
+      if (contextMenu && !contextMenu.contains(e.target as HTMLElement)) {
+        closeContextMenu();
+        document.removeEventListener('click', closeMenuOnOutsideClick);
+      }
+    };
+
+    // Use setTimeout to avoid immediate trigger of the click event
+    setTimeout(() => {
+      document.addEventListener('click', closeMenuOnOutsideClick);
+    }, 0);
+  }
+
+  function closeContextMenu() {
+    showContextMenu = false;
+  }
+
+  function viewProperties() {
+    showContextMenu = false;
+    showPropertiesModal = true;
+  }
+
+  function closeModal() {
+    showPropertiesModal = false;
+    selectedItem = null;
+  }
+
+  function downloadModalSVG() {
+    if (!modalSvg || !selectedItem) return;
+    
+    // Create a new SVG that will contain both the shape and text
+    const combinedSvg = d3.select(document.createElementNS('http://www.w3.org/2000/svg', 'svg'))
+      .attr('width', 400)
+      .attr('height', 250);
+
+    // Clone the existing SVG content
+    const existingContent = modalSvg.querySelector('g');
+    if (existingContent) {
+      combinedSvg.node()?.appendChild(existingContent.cloneNode(true));
+    }
+
+    // Add text elements
+    const textGroup = combinedSvg.append('g')
+      .attr('transform', 'translate(200, 150)');
+
+    if (selectedItem.type === 'node') {
+      textGroup.append('text')
+        .attr('x', 0)
+        .attr('y', 0)
+        .attr('class', 'svg-text')
+        .attr('text-anchor', 'middle')
+        .text(`Genome: ${selectedItem.data.genome_name}`);
+      
+      textGroup.append('text')
+        .attr('x', 0)
+        .attr('y', 20)
+        .attr('class', 'svg-text')
+        .attr('text-anchor', 'middle')
+        .text(`Protein: ${selectedItem.data.protein_name}`);
+
+      if (selectedItem.data.gene_type) {
+        textGroup.append('text')
+          .attr('x', 0)
+          .attr('y', 40)
+          .attr('class', 'svg-text')
+          .attr('text-anchor', 'middle')
+          .text(`Domain: ${selectedItem.data.gene_type}`);
+      }
+
+      textGroup.append('text')
+        .attr('x', 0)
+        .attr('y', 60)
+        .attr('class', 'svg-text')
+        .attr('text-anchor', 'middle')
+        .text(`Present: ${selectedItem.data.is_present === false ? 'NO' : 'YES'}`);
+
+      textGroup.append('text')
+        .attr('x', 0)
+        .attr('y', 80)
+        .attr('class', 'svg-text')
+        .attr('text-anchor', 'middle')
+        .text(`Direction: ${selectedItem.data.direction === 'plus' ? '+' : '-'}`);
+
+      textGroup.append('text')
+        .attr('x', 0)
+        .attr('y', 100)
+        .attr('class', 'svg-text')
+        .attr('text-anchor', 'middle')
+        .text(`Position: ${selectedItem.data.rel_position}`);
+    } else {
+      // Update the line styling to match the visualization
+      const line = combinedSvg.select('line');
+      if (line.node()) {
+        line
+          .attr('stroke', (() => {
+            if ('link_type' in selectedItem.data) {
+              if (selectedItem.data.link_type === 'solid_red') return 'red';
+              return selectedItem.data.link_type.includes('color') ? (nodeColorMap.get(selectedItem.data.source) || '#bbb') : '#bbb';
+            }
+            return selectedItem.data.is_reciprocal ? (nodeColorMap.get(selectedItem.data.source) || '#bbb') : '#bbb';
+          })())
+          .attr('stroke-width', strokeW('score' in selectedItem.data ? selectedItem.data.score : 100) * 2)
+          .attr('stroke-dasharray', (() => {
+            if ('link_type' in selectedItem.data) {
+              return selectedItem.data.link_type.includes('dotted') ? '4,4' : null;
+            }
+            return selectedItem.data.is_reciprocal ? null : '4,4';
+          })())
+      }
+
+      textGroup.append('text')
+        .attr('x', 0)
+        .attr('y', 0)
+        .attr('class', 'svg-text')
+        .attr('text-anchor', 'middle')
+        .text(`Source: ${selectedItem.data.source}`);
+      
+      textGroup.append('text')
+        .attr('x', 0)
+        .attr('y', 20)
+        .attr('class', 'svg-text')
+        .attr('text-anchor', 'middle')
+        .text(`Target: ${selectedItem.data.target}`);
+      
+      if ('score' in selectedItem.data) {
+        textGroup.append('text')
+          .attr('x', 0)
+          .attr('y', 40)
+          .attr('class', 'svg-text')
+          .attr('text-anchor', 'middle')
+          .text(`Similarity: ${selectedItem.data.score}%`);
+        
+        textGroup.append('text')
+          .attr('x', 0)
+          .attr('y', 60)
+          .attr('class', 'svg-text')
+          .attr('text-anchor', 'middle')
+          .text(`Type: ${selectedItem.data.is_reciprocal ? 'Reciprocal' : 'Non-Reciprocal'}`);
+      } else {
+        textGroup.append('text')
+          .attr('x', 0)
+          .attr('y', 40)
+          .attr('class', 'svg-text')
+          .attr('text-anchor', 'middle')
+          .text(`Type: ${selectedItem.data.link_type}`);
+      }
+    }
+
+    // Add styles
+    const style = document.createElementNS('http://www.w3.org/2000/svg', 'style');
+    style.textContent = `
+      .svg-text {
+        font-family: Arial, sans-serif;
+        font-size: 12px;
+        fill: #333;
+      }
+    `;
+    const firstChild = combinedSvg.node()?.firstChild;
+    if (firstChild) {
+      combinedSvg.node()?.insertBefore(style, firstChild);
+    }
+
+    // Serialize and download
+    const svgData = new XMLSerializer().serializeToString(combinedSvg.node()!);
+    const svgBlob = new Blob([svgData], { type: 'image/svg+xml;charset=utf-8' });
+    const url = URL.createObjectURL(svgBlob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `${selectedItem.type}-properties.svg`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
   }
 
   onMount(draw);
@@ -768,6 +1010,111 @@
   {/if}
 </div>
 
+<!-- Add context menu -->
+{#if showContextMenu}
+  <div
+    class="context-menu"
+    style="left: {contextMenuX}px; top: {contextMenuY}px"
+    on:click|stopPropagation={closeContextMenu}
+    on:keydown={(e) => e.key === 'Escape' && closeContextMenu()}
+    role="menu"
+    tabindex="0"
+  >
+    <button on:click={viewProperties}>View Properties</button>
+  </div>
+{/if}
+
+<!-- Add properties modal -->
+{#if showPropertiesModal && selectedItem}
+  <div class="modal-backdrop" on:click={closeModal} role="dialog" aria-modal="true">
+    <div class="modal-content" on:click|stopPropagation on:keydown={(e) => e.key === 'Escape' && closeModal()} role="document">
+      <div class="modal-header">
+        <h3>{selectedItem.type === 'node' ? 'Node Properties' : 'Link Properties'}</h3>
+        <button class="close-button" on:click={closeModal}>×</button>
+      </div>
+      
+      <div class="modal-body">
+        <!-- SVG Preview -->
+        <button class="svg-preview" on:click={downloadModalSVG} on:keydown={(e) => e.key === 'Enter' && downloadModalSVG()}>
+          {#if selectedItem.type === 'node'}
+            <svg bind:this={modalSvg} width="400" height="150">
+              <g transform="translate(200,75)">
+                <path
+                  d={arrowPath(selectedItem.data.direction)}
+                  fill={nodeColorMap.get(selectedItem.data.id) || '#bbb'}
+                />
+              </g>
+            </svg>
+          {:else}
+            <svg bind:this={modalSvg} width="400" height="150">
+              <g transform="translate(100,75)">
+                <line
+                  x1="0"
+                  y1="0"
+                  x2="200"
+                  y2="0"
+                  stroke={(() => {
+                    if ('link_type' in selectedItem.data) {
+                      if (selectedItem.data.link_type === 'solid_red') return 'red';
+                      return selectedItem.data.link_type.includes('color') ? (nodeColorMap.get(selectedItem.data.source) || '#bbb') : '#bbb';
+                    }
+                    return selectedItem.data.is_reciprocal ? (nodeColorMap.get(selectedItem.data.source) || '#bbb') : '#bbb';
+                  })()}
+                  stroke-width={strokeW('score' in selectedItem.data ? selectedItem.data.score : 100) * 2}
+                  stroke-dasharray={(() => {
+                    if ('link_type' in selectedItem.data) {
+                      return selectedItem.data.link_type.includes('dotted') ? '4,4' : null;
+                    }
+                    return selectedItem.data.is_reciprocal ? null : '4,4';
+                  })()}
+                />
+              </g>
+            </svg>
+          {/if}
+        </button>
+
+        <!-- Properties -->
+        <div class="properties">
+          {#if selectedItem.type === 'node'}
+            <p><strong>Genome:</strong> {selectedItem.data.genome_name}</p>
+            <p><strong>Protein:</strong> {selectedItem.data.protein_name}</p>
+            {#if selectedItem.data.gene_type}
+              <p><strong>Domain:</strong> {selectedItem.data.gene_type}</p>
+            {/if}
+            <p><strong>Present:</strong> {selectedItem.data.is_present === false ? 'NO' : 'YES'}</p>
+            <p><strong>Direction:</strong> {selectedItem.data.direction === 'plus' ? '+' : '-'}</p>
+            <p><strong>Position:</strong> {selectedItem.data.rel_position}</p>
+
+            {#if Object.entries(selectedItem.data).some(([key]) => key.includes('domain'))}
+              <div class="domain-coordinates">
+                <p><strong>Domain Coordinates:</strong></p>
+                {#each Object.entries(selectedItem.data)
+                  .filter(([key]) => key.includes('domain') && (key.endsWith('_start') || key.endsWith('_end')))
+                  .sort(([a], [b]) => a.localeCompare(b)) as [key, value]}
+                  <p>{key}: {value}</p>
+                {/each}
+              </div>
+            {/if}
+          {:else}
+            <p><strong>Source:</strong> {selectedItem.data.source}</p>
+            <p><strong>Target:</strong> {selectedItem.data.target}</p>
+            {#if 'score' in selectedItem.data}
+              <p><strong>Similarity:</strong> {selectedItem.data.score}%</p>
+              <p><strong>Type:</strong> {selectedItem.data.is_reciprocal ? 'Reciprocal' : 'Non-Reciprocal'}</p>
+            {:else}
+              <p><strong>Type:</strong> {selectedItem.data.link_type}</p>
+            {/if}
+          {/if}
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <button class="download-button" on:click={downloadModalSVG}>Download SVG</button>
+      </div>
+    </div>
+  </div>
+{/if}
+
 <style>
   .wrapper {
     display: flex;
@@ -795,15 +1142,138 @@
     white-space: nowrap;
     z-index: 1000;
   }
-
   .controls {
     margin: 10px 40px;
     display: flex;
     gap: 10px;
   }
 
-  .active {
-    background-color: #f8fafc !important;
-    border-color: #94a3b8 !important;
+  .control-btn {
+    padding: 6px 12px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+
+  .control-btn:hover {
+    background-color: #0056b3;
+  }
+
+  .control-btn:disabled {
+    background-color: #cccccc;
+    cursor: not-allowed;
+  }
+
+  .control-btn.active {
+    background-color: #28a745;
+  }
+  .context-menu {
+    position: fixed;
+    background: white;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    padding: 4px 0;
+    box-shadow: 2px 2px 5px rgba(0,0,0,0.2);
+    z-index: 1000;
+  }
+  .context-menu button {
+    display: block;
+    width: 100%;
+    padding: 8px 16px;
+    border: none;
+    background: none;
+    text-align: left;
+    cursor: pointer;
+  }
+  .context-menu button:hover {
+    background: #f0f0f0;
+  }
+  .modal-backdrop {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0,0,0,0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+  }
+  .modal-content {
+    background: white;
+    border-radius: 8px;
+    padding: 20px;
+    width: 90%;
+    max-width: 600px;
+    max-height: 90vh;
+    overflow-y: auto;
+  }
+  .modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+  }
+  .close-button {
+    background: none;
+    border: none;
+    font-size: 24px;
+    cursor: pointer;
+    padding: 0;
+    color: #666;
+  }
+  .modal-body {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+  .svg-preview {
+    display: flex;
+    justify-content: center;
+    padding: 20px;
+    background: #f8f8f8;
+    border-radius: 4px;
+  }
+  .svg-preview:hover {
+    background: #f8f8f8;
+  }
+  .properties {
+    display: grid;
+    gap: 8px;
+  }
+  .domain-coordinates {
+    margin-top: 16px;
+    padding-top: 16px;
+    border-top: 1px solid #eee;
+  }
+  .modal-footer {
+    margin-top: 20px;
+    display: flex;
+    justify-content: flex-end;
+  }
+  .download-button {
+    padding: 8px 16px;
+    background: #007bff;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+  .download-button:hover {
+    background: #0056b3;
+  }
+  .svg-text {
+    font-family: Arial, sans-serif;
+    font-size: 12px;
+    color: #333;
+    text-align: left;
+    margin-top: 10px;
+    padding: 0 20px;
+  }
+  .svg-text p {
+    margin: 4px 0;
   }
 </style>

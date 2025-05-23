@@ -6,7 +6,7 @@
     }
 </script>
 
-<div class="container mx-auto px-4 py-8">
+<div class="w-[95%] max-w-[1600px] mx-auto py-8">
     <div class="max-w-3xl mx-auto text-center">
         <div class="bg-red-50 p-8 rounded-lg shadow-md">
             <h1 class="text-4xl font-bold text-red-600 mb-4">🔒 Access Denied</h1>

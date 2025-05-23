@@ -37,9 +37,16 @@
   let showLegend = false;
   let panelX = 20;
   let panelY = 20;
-  let isDragging = false;
-  let dragStartX = 0;
-  let dragStartY = 0;
+
+  // Calculate dynamic label width based on genome names
+  $: labelWidth = Math.min(
+    120, // max width
+    Math.max(
+      80, // min width
+      ...graph.genomes.map(name => name.length * 8) // approximate character width
+    )
+  );
+
 
   interface Node {
     id: string;
@@ -74,11 +81,11 @@
   let chartSvgEl: SVGSVGElement;
   let tooltipEl: HTMLDivElement;
 
-  const labelWidth = 120;
   const viewportWidth = 1000;
-  const height = 600;
-  const margin = { top: 20, right: 40, bottom: 20, left: 20 };
-  const arrowHalf = 40;
+  // Calculate height based on number of rows (150px per row minimum)
+  $: height = (graph.genomes?.length || 0) * 150;
+  const margin = { top: 5, right: 20, bottom: 5, left: 10 };
+  const arrowHalf = 25;
 
   const strokeW = d3.scaleLinear<number, number>().domain([0, 100]).range([0.5, 3]);
 
@@ -306,11 +313,11 @@
 
     // scales
     const numRows = genomes.length > 2 ? genomes.length + 1 : genomes.length; // Updated so no extra line when there are only 2 genomes
-    const y = d3.scaleBand<number>().domain(d3.range(numRows)).range([0, height - margin.top - margin.bottom]).padding(0.6);
+    const y = d3.scaleBand<number>().domain(d3.range(numRows)).range([0, height]);
     const xExtent = d3.extent(nodes, (d) => d.rel_position) as [number, number];
     const spacing = 100;
-    const chartWidth = Math.max(viewportWidth, (xExtent[1] - xExtent[0]) * spacing + arrowHalf * 2 + margin.left + margin.right);
-    const x = d3.scaleLinear<number, number>().domain(xExtent).range([arrowHalf + margin.left, chartWidth - arrowHalf - margin.right]);
+    const chartWidth = (xExtent[1] - xExtent[0]) * spacing + arrowHalf * 2 + margin.left + margin.right;
+    const x = d3.scaleLinear<number, number>().domain(xExtent).range([arrowHalf + margin.left + 10, chartWidth - arrowHalf - margin.right - 10]);
 
     const nodeById = new Map(nodes.map((n) => [n.id, n]));
     const rowOf = (n: Node) => (n._dup ? genomes.length : genomes.indexOf(n.genome_name));
@@ -330,7 +337,13 @@
       .attr('dy', '0.35em')
       .attr('text-anchor', 'end')
       .style('font-size', '12px')
-      .text((d) => d);
+      .text((d) => {
+        // Truncate long genome names
+        if (d.length > 15) {
+          return d.slice(0, 12) + '...';
+        }
+        return d;
+      });
 
     // ── CHART ──
     const chartSvg = d3.select(chartSvgEl).attr('width', chartWidth).attr('height', height);
@@ -441,10 +454,15 @@
         } else {
           detail = 'Unknown Link Type';
         }
-        d3.select(tooltipEl).style('opacity', 1).html(`<strong>${n1.protein_name}</strong> ↔ <strong>${n2.protein_name}</strong><br>${detail}`);
+        const tooltip = d3.select(tooltipEl);
+        tooltip.style('opacity', 1).html(`<strong>${n1.protein_name}</strong> ↔ <strong>${n2.protein_name}</strong><br>${detail}`);
+
+        tooltip.style('left', `${event.clientX + 10}px`).style('top', `${event.clientY + 10}px`);
       })
       .on('mousemove', function (event) {
-        d3.select(tooltipEl).style('left', event.pageX + 10 + 'px').style('top', event.pageY + 10 + 'px');
+        d3.select(tooltipEl)
+          .style('left', `${event.clientX + 10}px`)
+          .style('top', `${event.clientY + 10}px`);
       })
       .on('mouseout', function (event, d) {
         d3.select(this).transition().duration(150).attr('stroke-width', strokeW('score' in d ? d.score : 100) * 2);
@@ -503,8 +521,8 @@
             d3.select(this).attr('fill', darkerColor.toString());
           }
         }
-        d3.select(tooltipEl)
-          .style('opacity', 1)
+        const tooltip = d3.select(tooltipEl);
+        tooltip.style('opacity', 1)
           .html(
             `<strong>Genome:</strong> ${d.genome_name}<br>` +
             `<strong>Protein:</strong> ${d.protein_name}<br>` +
@@ -513,9 +531,13 @@
             `<strong>Direction:</strong> ${d.direction === 'plus' ? '+' : '-'}<br>` +
             `<strong>Position:</strong> ${d.rel_position}`
           );
+
+        tooltip.style('left', `${event.clientX + 10}px`).style('top', `${event.clientY + 10}px`);
       })
       .on('mousemove', function (event) {
-        d3.select(tooltipEl).style('left', event.pageX + 10 + 'px').style('top', event.pageY + 10 + 'px');
+        d3.select(tooltipEl)
+          .style('left', `${event.clientX + 10}px`)
+          .style('top', `${event.clientY + 10}px`);
       })
       .on('mouseout', function (event, d) {
         if (isFocused && !focusedNodes.has(d.id)) {
@@ -588,30 +610,6 @@
     selectedNodes.clear();
     selectedNodesCount = 0;
     draw();
-  }
-
-  function handleMouseDown(event: MouseEvent) {
-    if (event.target instanceof HTMLElement && event.target.closest('.legend-header')) {
-      isDragging = true;
-      dragStartX = event.clientX - panelX;
-      dragStartY = event.clientY - panelY;
-
-      const handleMouseMove = (e: MouseEvent) => {
-        if (isDragging) {
-          panelX = e.clientX - dragStartX;
-          panelY = e.clientY - dragStartY;
-        }
-      };
-
-      const handleMouseUp = () => {
-        isDragging = false;
-        document.removeEventListener('mousemove', handleMouseMove);
-        document.removeEventListener('mouseup', handleMouseUp);
-      };
-
-      document.addEventListener('mousemove', handleMouseMove);
-      document.addEventListener('mouseup', handleMouseUp);
-    }
   }
 
   onMount(draw);
@@ -716,28 +714,48 @@
 <div bind:this={tooltipEl} class="tooltip"></div>
 <div class="controls">
   {#if graph.nodes.length > 0}
-    <button on:click={downloadSVG} class="control-btn">Download SVG</button>
+    <button on:click={downloadSVG} class="inline-flex items-center px-4 py-2 text-sm font-medium text-slate-700 bg-white border border-slate-300 rounded-lg hover:bg-slate-50 transition-colors duration-200 cursor-pointer">
+      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mr-2">
+        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+        <polyline points="7 10 12 15 17 10"/>
+        <line x1="12" y1="15" x2="12" y2="3"/>
+      </svg>
+      Download SVG
+    </button>
     <button
       on:click={toggleSelectionMode}
-      class="control-btn"
+      class="inline-flex items-center px-4 py-2 text-sm font-medium text-slate-700 bg-white border border-slate-300 rounded-lg hover:bg-slate-50 transition-colors duration-200 cursor-pointer"
       class:active={isSelectionMode}
     >
+      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mr-2">
+        <path d="M3 3l7.07 16.97 2.51-7.39 7.39-2.51L3 3z"/>
+        <path d="M13 13l6 6"/>
+      </svg>
       {isSelectionMode ? 'Exit Selection Mode' : 'Enter Selection Mode'}
     </button>
     {#if isSelectionMode && !isFocused}
       <button
         on:click={applyFocus}
-        class="control-btn"
+        class="inline-flex items-center px-4 py-2 text-sm font-medium text-white bg-green-600 rounded-lg hover:bg-green-700 transition-colors duration-200 cursor-pointer disabled:bg-green-300 disabled:cursor-not-allowed"
         disabled={selectedNodesCount === 0}
       >
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mr-2">
+          <circle cx="12" cy="12" r="10"/>
+          <line x1="12" y1="8" x2="12" y2="16"/>
+          <line x1="8" y1="12" x2="16" y2="12"/>
+        </svg>
         Focus Selected
       </button>
     {/if}
     {#if isFocused}
       <button
         on:click={exitFocus}
-        class="control-btn"
+        class="inline-flex items-center px-4 py-2 text-sm font-medium text-slate-700 bg-white border border-slate-300 rounded-lg hover:bg-slate-50 transition-colors duration-200 cursor-pointer"
       >
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mr-2">
+          <line x1="18" y1="6" x2="6" y2="18"/>
+          <line x1="6" y1="6" x2="18" y2="18"/>
+        </svg>
         Exit Focus
       </button>
     {/if}
@@ -760,7 +778,7 @@
     flex: 1 1 auto;
   }
   .tooltip {
-    position: absolute;
+    position: fixed;
     background: #fff;
     border: 1px solid #999;
     border-radius: 4px;
@@ -769,6 +787,7 @@
     pointer-events: none;
     opacity: 0;
     white-space: nowrap;
+    z-index: 1000;
   }
 
   .controls {
@@ -777,26 +796,9 @@
     gap: 10px;
   }
 
-  .control-btn {
-    padding: 6px 12px;
-    background-color: #007bff;
-    color: white;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-  }
-
-  .control-btn:hover {
-    background-color: #0056b3;
-  }
-
-  .control-btn:disabled {
-    background-color: #cccccc;
-    cursor: not-allowed;
-  }
-
-  .control-btn.active {
-    background-color: #28a745;
+  .active {
+    background-color: #f8fafc !important;
+    border-color: #94a3b8 !important;
   }
 
   .legend-button {

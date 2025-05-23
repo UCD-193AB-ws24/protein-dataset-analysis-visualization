@@ -37,7 +37,7 @@
 	});
 </script>
 
-<div class="container mx-auto px-4 py-8">
+<div class="w-[95%] max-w-[1600px] mx-auto py-8">
     <div class="max-w-3xl mx-auto text-center">
         <div class="bg-white p-8 rounded-lg shadow-md">
             <div class="flex flex-col items-center gap-4">

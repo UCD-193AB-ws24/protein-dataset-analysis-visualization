@@ -37,7 +37,7 @@
 </script>
 
 <nav class="sticky top-0 z-10 bg-white shadow-sm">
-    <div class="container mx-auto px-4 py-4">
+    <div class="w-[95%] max-w-[1600px] mx-auto py-4">
         <div class="flex items-center justify-between">
             <!-- Left side -->
             <div class="flex items-center space-x-8">

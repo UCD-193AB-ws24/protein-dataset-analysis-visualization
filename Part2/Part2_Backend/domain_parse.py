@@ -263,7 +263,7 @@ def parse_matrix_data(matrix_file):
         # print(df)
 
         # Get data above cutoff
-        df_only_cutoffs = df_only_cutoffs = df[df > 55]
+        df_only_cutoffs = df_only_cutoffs = df[df > 1]
 
         # Extract subsections and create mappings
         subsections = extract_subsections(df_only_cutoffs)

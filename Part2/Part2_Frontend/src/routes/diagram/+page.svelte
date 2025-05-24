@@ -54,7 +54,7 @@
   let errorMessage = "";
   let loading = true;        // Loading state for file upload
   let savingGroup = false;   // Loading state for saving group
-  let cutoff = 55;           // slider value
+  let cutoff = 1;           // slider value
 
   // Link filter states
   let showReciprocal = true;
@@ -347,6 +347,32 @@
 
 <!-- Main layout container -->
 <div class="w-[95%] max-w-[1600px] mx-auto py-6">
+  <!-- Top navigation bar -->
+  <div class="flex justify-between items-center mb-6">
+    <a
+      href="/dashboard"
+      class="inline-flex items-center px-4 py-2 text-sm font-medium text-slate-700 bg-white border border-slate-300 rounded-lg hover:bg-slate-50 transition-colors duration-200 cursor-pointer"
+    >
+      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mr-2">
+        <path d="M19 12H5M12 19l-7-7 7-7"/>
+      </svg>
+      Back to Dashboard
+    </a>
+    {#if graphs.length > 0}
+      <button
+        on:click={() => showUploadModal = true}
+        class="inline-flex items-center px-4 py-2 text-sm font-medium text-white bg-green-600 rounded-lg hover:bg-green-700 transition-colors duration-200 cursor-pointer"
+      >
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mr-2">
+          <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+          <polyline points="17 8 12 3 7 8"/>
+          <line x1="12" y1="3" x2="12" y2="15"/>
+        </svg>
+        Upload New Files
+      </button>
+    {/if}
+  </div>
+
   <div class="flex gap-6">
     <!-- Collapsible side panel -->
     <div class={`transition-all duration-300 ${isPanelCollapsed ? 'w-12' : 'w-80'} shrink-0`}>
@@ -477,7 +503,7 @@
                   <div class="flex items-center gap-3">
                     <input
                       type="range"
-                      min="55"
+                      min="0"
                       max="100"
                       disabled={selectedGraph.domain_name === "ALL"}
                       bind:value={cutoff}
@@ -658,7 +684,7 @@
               <div class="animate-spin rounded-full h-12 w-12 border-4 border-green-200"></div>
               <div class="animate-spin rounded-full h-12 w-12 border-4 border-green-600 border-t-transparent absolute"></div>
             </div>
-          <!-- {:else if errorMessage}
+          {:else if errorMessage}
             <div class="flex justify-center items-center py-8">
               <div class="max-w-lg">
                 <p class="text-red-600 bg-red-50 p-4 rounded-lg text-center">{errorMessage}</p>
@@ -671,7 +697,7 @@
                   </button>
                 </div>
               </div>
-            </div> -->
+            </div>
           {:else if !graphs.length}
             <div class="flex flex-col items-center justify-center py-8">
               <button

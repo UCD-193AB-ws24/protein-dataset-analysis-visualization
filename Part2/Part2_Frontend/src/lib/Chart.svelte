@@ -14,7 +14,7 @@
     links: Link[];
     domain_name?: string;
   };
-  export let cutoff: number = 55;
+  export let cutoff: number = 1;
 
   // Link filter props
   export let showReciprocal = true;
@@ -223,6 +223,22 @@
     const { nodes, links, genomes, nodeColor, uf } = massage(graph);
     nodeColorMap = nodeColor;
     if (!nodes.length) return;
+
+    // Create a map of node IDs to their data for quick lookup
+    const nodeMap = new Map(nodes.map(node => [node.id, node]));
+
+    // Filter out links that reference non-existent nodes
+    const validLinks = links.filter(link => {
+        const sourceNode = nodeMap.get(link.source);
+        const targetNode = nodeMap.get(link.target);
+        return sourceNode && targetNode;
+    });
+
+    // Update the graph with only valid links
+    graph = {
+        ...graph,
+        links: validLinks
+    };
 
     // apply cutoff filter
     const visibleLinks = links.filter((l) => {

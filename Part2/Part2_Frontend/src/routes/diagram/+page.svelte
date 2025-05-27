@@ -349,15 +349,19 @@
 <div class="w-[95%] max-w-[1600px] mx-auto py-6">
   <!-- Top navigation bar -->
   <div class="flex justify-between items-center mb-6">
-    <a
-      href="/dashboard"
-      class="inline-flex items-center px-4 py-2 text-sm font-medium text-slate-700 bg-white border border-slate-300 rounded-lg hover:bg-slate-50 transition-colors duration-200 cursor-pointer"
-    >
-      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mr-2">
-        <path d="M19 12H5M12 19l-7-7 7-7"/>
-      </svg>
-      Back to Dashboard
-    </a>
+    {#if isAuthenticated}
+      <a
+        href="/dashboard"
+        class="inline-flex items-center px-4 py-2 text-sm font-medium text-slate-700 bg-white border border-slate-300 rounded-lg hover:bg-slate-50 transition-colors duration-200 cursor-pointer"
+      >
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mr-2">
+          <path d="M19 12H5M12 19l-7-7 7-7"/>
+        </svg>
+        Back to Dashboard
+      </a>
+    {:else}
+      <div></div> <!-- Empty div to maintain flex layout -->
+    {/if}
     {#if graphs.length > 0}
       <button
         on:click={() => showUploadModal = true}

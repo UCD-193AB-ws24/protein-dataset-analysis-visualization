@@ -258,6 +258,8 @@
 						<p>Genomes: {group.genomes.join(', ')}</p>
 						<p>Num Genes: {group.num_genes}</p>
 						<p>Num Domains: {group.num_domains}</p>
+						<p>Created: {new Date(group.created_at).toLocaleString()}</p>
+						<p>Last Updated: {new Date(group.last_updated_at).toLocaleString()}</p>
 					</div>
 					<div class="mt-4 flex items-center justify-between">
 						<span class={`text-xs px-2 py-1 rounded-full ${group.is_domain_specific ? 'bg-blue-100 text-blue-700' : 'bg-green-100 text-green-700'}`}>

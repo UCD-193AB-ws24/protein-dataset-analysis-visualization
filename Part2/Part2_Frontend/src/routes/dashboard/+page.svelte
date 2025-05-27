@@ -23,10 +23,10 @@
 	}
 
 	const sortOptions = [
-		{ label: 'Date Created (Newest)', value: 'created-desc' },
-		{ label: 'Date Created (Oldest)', value: 'created-asc' },
 		{ label: 'Last Updated (Most Recent)', value: 'updated-desc' },
-		{ label: 'Last Updated (Least Recent)', value: 'updated-asc' }
+		{ label: 'Last Updated (Least Recent)', value: 'updated-asc' },
+		{ label: 'Date Created (Newest)', value: 'created-desc' },
+		{ label: 'Date Created (Oldest)', value: 'created-asc' }
 	];
 
 	const filterOptions = [
@@ -204,7 +204,6 @@
 					bind:value={sortBy}
 					class="w-full px-4 py-2 bg-white border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
 				>
-					<option value="">Sort by</option>
 					{#each sortOptions as option}
 						<option value={option.value}>{option.label}</option>
 					{/each}

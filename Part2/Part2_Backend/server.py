@@ -165,11 +165,11 @@ def generate_graph():
                 matrix_io = BytesIO(matrix_bytes)
                 matrix_io.name = matrix_file.filename
                 matrix_ios.append(matrix_io)
-            
+
             coordinate_bytes = coordinate_file.read()
             coordinate_io = BytesIO(coordinate_bytes)
             coordinate_io.name = coordinate_file.filename
-            
+
             result = domain_parse(
                 matrix_ios,
                 coordinate_io,
@@ -339,26 +339,28 @@ def get_user_file_groups():
 
         # Get all file groups associated with user
         groups = session.query(Group).filter_by(user_id=user.id).all()
-
-        result = []
+        file_groups = []
         for group in groups:
             # Get files associated with the group
             files = session.query(File).filter_by(group_id=group.id).all()
-            file_list = [{"file_name": file.file_name, "file_type": file.file_type} for file in files]
 
             # Assemble group data
-            result.append({
+            file_groups.append({
                 "id": str(group.id),
                 "title": group.title,
                 "description": group.description,
-                "is_domain_specific": group.is_domain_specific,
                 "genomes": group.genomes,
                 "num_genes": group.num_genes,
                 "num_domains": group.num_domains,
-                "files": file_list
+                "is_domain_specific": group.is_domain_specific,
+                "created_at": group.created_at.isoformat() if group.created_at else None,
+                "last_updated_at": group.last_updated_at.isoformat() if group.last_updated_at else None,
+                "files": [{
+                    "file_name": file.file_name,
+                    "file_type": file.file_type
+                } for file in files]
             })
-
-        return jsonify({"file_groups": result}), 200
+        return jsonify({"file_groups": file_groups}), 200
 
     except Exception as e:
         session.rollback()

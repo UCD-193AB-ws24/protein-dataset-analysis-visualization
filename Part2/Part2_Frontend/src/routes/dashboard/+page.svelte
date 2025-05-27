@@ -18,14 +18,15 @@
 		num_domains: number;
 		is_domain_specific: boolean;
 		files: File[];
+		created_at: string;
+		last_updated_at: string;
 	}
 
 	const sortOptions = [
-		{ label: 'Not functional', value: 'not-functional' },
-		// { label: 'Date Uploaded (Newest)', value: 'uploaded-desc' },
-		// { label: 'Date Uploaded (Oldest)', value: 'uploaded-asc' },
-		// { label: 'Date Modified (Newest)', value: 'modified-desc' },
-		// { label: 'Date Modified (Oldest)', value: 'modified-asc' }
+		{ label: 'Date Created (Newest)', value: 'created-desc' },
+		{ label: 'Date Created (Oldest)', value: 'created-asc' },
+		{ label: 'Last Updated (Most Recent)', value: 'updated-desc' },
+		{ label: 'Last Updated (Least Recent)', value: 'updated-asc' }
 	];
 
 	const filterOptions = [
@@ -41,7 +42,7 @@
 	let isAuthenticated = false;
 	let user: any = null;
 	let searchQuery = '';
-	let sortBy = '';
+	let sortBy = 'updated-desc';
 	let filterBy = 'all';
 	let deletingGroupId: string | null = null;
 
@@ -143,9 +144,22 @@
 		// Apply sorting
 		if (sortBy) {
 			filteredFileGroups.sort((a, b) => {
-				// Add sorting logic based on sortBy value
-				// For now, just return 0 to maintain current order
-				return 0;
+				const isDescending = sortBy.endsWith('desc');
+				const isUpdatedSort = sortBy.startsWith('updated');
+
+				// Primary sort by the main timestamp
+				const primaryA = new Date(isUpdatedSort ? a.last_updated_at : a.created_at).getTime();
+				const primaryB = new Date(isUpdatedSort ? b.last_updated_at : b.created_at).getTime();
+
+				if (primaryA !== primaryB) {
+					return isDescending ? primaryB - primaryA : primaryA - primaryB;
+				}
+
+				// Secondary sort by the other timestamp
+				const secondaryA = new Date(isUpdatedSort ? a.created_at : a.last_updated_at).getTime();
+				const secondaryB = new Date(isUpdatedSort ? b.created_at : b.last_updated_at).getTime();
+
+				return isDescending ? secondaryB - secondaryA : secondaryA - secondaryB;
 			});
 		}
 	}

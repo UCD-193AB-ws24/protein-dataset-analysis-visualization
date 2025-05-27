@@ -302,7 +302,7 @@
 
 			console.log('Shared group saved:', result);
 			alert('Shared group saved successfully!');
-			const newGroupId = result.group_id;
+			const newGroupId = result.new_group_id;
 			groupId = newGroupId; // Update groupId in the component state
 			await fetchGroupData(newGroupId); // Fetch the new group data
 			goto(`?groupId=${newGroupId}`);

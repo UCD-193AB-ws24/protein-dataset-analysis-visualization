@@ -81,6 +81,11 @@ def get_group_graph():
     group_id = request.args.get('groupId')
     if not group_id:
         return jsonify({"error": "Missing groupId parameter"}), 400
+    
+    try:
+        group_id = UUID(group_id)
+    except ValueError:
+        return jsonify({"error": "Invalid UUID format for groupId"}), 400
 
     session = SessionLocal()
 

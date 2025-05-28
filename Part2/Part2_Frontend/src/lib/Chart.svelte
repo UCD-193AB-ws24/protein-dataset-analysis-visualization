@@ -133,18 +133,64 @@
     const links: Link[] = original.links.map((l) => {
       const gSrc = genomeOf.get(l.source);
       const gTgt = genomeOf.get(l.target);
-      if (!gSrc || !gTgt) return l;
+      if (!gSrc || !gTgt) {
+        console.warn('Link has missing genome mapping:', {
+          link: l,
+          sourceGenome: gSrc,
+          targetGenome: gTgt,
+          genomeMap: Object.fromEntries(genomeOf)
+        });
+        return l;
+      }
       const rowSrc = genomes.indexOf(gSrc);
       const rowTgt = genomes.indexOf(gTgt);
       if (Math.abs(rowSrc - rowTgt) > 1) {
-        return gSrc === firstGenome
-          ? { ...l, source: dupMap.get(l.source)! }
-          : { ...l, target: dupMap.get(l.target)! };
+        // Check if the source/target is already a duplicate
+        const sourceNode = nodes.find(n => n.id === l.source);
+        const targetNode = nodes.find(n => n.id === l.target);
+        
+        if (gSrc === firstGenome && !sourceNode?._dup) {
+          const newLink = { ...l, source: dupMap.get(l.source)! };
+          console.log('Link transformed for duplication (source):', {
+            original: l,
+            transformed: newLink,
+            sourceGenome: gSrc,
+            targetGenome: gTgt,
+            rowSrc,
+            rowTgt,
+            dupMap: Object.fromEntries(dupMap)
+          });
+          return newLink;
+        } else if (gTgt === firstGenome && !targetNode?._dup) {
+          const newLink = { ...l, target: dupMap.get(l.target)! };
+          console.log('Link transformed for duplication (target):', {
+            original: l,
+            transformed: newLink,
+            sourceGenome: gSrc,
+            targetGenome: gTgt,
+            rowSrc,
+            rowTgt,
+            dupMap: Object.fromEntries(dupMap)
+          });
+          return newLink;
+        }
       }
       return l;
     })
     // Exclude links between genes of the same genome
-    .filter((l) => genomeOf.get(l.source) !== genomeOf.get(l.target));
+    .filter((l) => {
+      const gSrc = genomeOf.get(l.source);
+      const gTgt = genomeOf.get(l.target);
+      const isSameGenome = gSrc === gTgt;
+      if (isSameGenome) {
+        console.log('Filtered out same-genome link:', {
+          link: l,
+          sourceGenome: gSrc,
+          targetGenome: gTgt
+        });
+      }
+      return !isSameGenome;
+    });
 
     // UnionFind to group connected components by color
     const uf = new UnionFind(nodes.map((n) => n.id));
@@ -412,24 +458,62 @@
       .enter()
       .append('line')
       .attr('x1', (d) => {
-        const sourceNode = nodeById.get(d.source)!;
+        const sourceNode = nodeById.get(d.source);
+        if (!sourceNode) {
+          console.error('Missing source node:', {
+            link: d,
+            source: d.source,
+            availableNodes: Array.from(nodeById.keys())
+          });
+          return 0;
+        }
         const xBase = x(sourceNode.rel_position);
         return xBase + (sourceNode.direction === 'plus' ? -5 : 5); // Offset based on direction
       })
       .attr('y1', (d) => {
-        const sourceRow = rowOf(nodeById.get(d.source)!);
-        const targetRow = rowOf(nodeById.get(d.target)!);
+        const sourceNode = nodeById.get(d.source);
+        const targetNode = nodeById.get(d.target);
+        if (!sourceNode || !targetNode) {
+          console.error('Missing node in y1 calculation:', {
+            link: d,
+            sourceNode: sourceNode ? 'exists' : 'missing',
+            targetNode: targetNode ? 'exists' : 'missing',
+            availableNodes: Array.from(nodeById.keys())
+          });
+          return 0;
+        }
+        const sourceRow = rowOf(sourceNode);
+        const targetRow = rowOf(targetNode);
         const yBase = y(sourceRow)! + y.bandwidth() / 2 + margin.top;
         return yBase + (targetRow > sourceRow ? 10 : -10); // Offset by 10 up or down
       })
       .attr('x2', (d) => {
-        const targetNode = nodeById.get(d.target)!;
+        const targetNode = nodeById.get(d.target);
+        if (!targetNode) {
+          console.error('Missing target node:', {
+            link: d,
+            target: d.target,
+            availableNodes: Array.from(nodeById.keys())
+          });
+          return 0;
+        }
         const xBase = x(targetNode.rel_position);
         return xBase + (targetNode.direction === 'plus' ? -5 : 5); // Offset based on direction
       })
       .attr('y2', (d) => {
-        const sourceRow = rowOf(nodeById.get(d.source)!);
-        const targetRow = rowOf(nodeById.get(d.target)!);
+        const sourceNode = nodeById.get(d.source);
+        const targetNode = nodeById.get(d.target);
+        if (!sourceNode || !targetNode) {
+          console.error('Missing node in y2 calculation:', {
+            link: d,
+            sourceNode: sourceNode ? 'exists' : 'missing',
+            targetNode: targetNode ? 'exists' : 'missing',
+            availableNodes: Array.from(nodeById.keys())
+          });
+          return 0;
+        }
+        const sourceRow = rowOf(sourceNode);
+        const targetRow = rowOf(targetNode);
         const yBase = y(targetRow)! + y.bandwidth() / 2 + margin.top;
         return yBase + (targetRow > sourceRow ? -10 : 10); // Offset by 10 up or down
       })
@@ -463,36 +547,75 @@
         draw();
       })
       .on('mouseover', function (event, d) {
-        d3.select(this).attr('stroke-width', strokeW('score' in d ? d.score : 100) * 4);
-        const n1 = nodeById.get(d.source)!;
-        const n2 = nodeById.get(d.target)!;
-        let detail = '';
-        if ('score' in d) {
-          detail = `Similarity: ${d.score}%` + (d.is_reciprocal ? ' (Reciprocal)' : ' (Non-Reciprocal)');
-        } else if (d.link_type === 'solid_red') {
-          detail = 'Inconsistent Across Domains';
-        } else if (d.link_type === 'solid_color') {
-          detail = 'Consistent Across Domains';
-        } else if (d.link_type === 'dotted_color') {
-          detail = 'Consistent, but May Have Missing Domains';
-        } else if (d.link_type === 'dotted_gray' || d.link_type === 'dotted_grey') {
-          detail = 'Non-Reciprocal Connection';
-        } else {
-          detail = 'Unknown Link Type';
-        }
-        const tooltip = d3.select(tooltipEl);
-        tooltip.style('opacity', 1).html(`<strong>${n1.protein_name}</strong> ↔ <strong>${n2.protein_name}</strong><br>${detail}`);
+        try {
+          d3.select(this).attr('stroke-width', strokeW('score' in d ? d.score : 100) * 4);
+          const n1 = nodeById.get(d.source)!;
+          const n2 = nodeById.get(d.target)!;
 
-        tooltip.style('left', `${event.clientX + 10}px`).style('top', `${event.clientY + 10}px`);
+          // Debug logging for link data
+          console.log('Link data:', {
+            source: d.source,
+            target: d.target,
+            score: 'score' in d ? d.score : undefined,
+            is_reciprocal: 'is_reciprocal' in d ? d.is_reciprocal : undefined,
+            link_type: 'link_type' in d ? d.link_type : undefined,
+            source_node: n1,
+            target_node: n2,
+            raw_data: d
+          });
+
+          let detail = '';
+          if ('score' in d) {
+            detail = `Similarity: ${d.score}%` + (d.is_reciprocal ? ' (Reciprocal)' : ' (Non-Reciprocal)');
+          } else if (d.link_type === 'solid_red') {
+            detail = 'Inconsistent Across Domains';
+          } else if (d.link_type === 'solid_color') {
+            detail = 'Consistent Across Domains';
+          } else if (d.link_type === 'dotted_color') {
+            detail = 'Consistent, but May Have Missing Domains';
+          } else if (d.link_type === 'dotted_gray' || d.link_type === 'dotted_grey') {
+            detail = 'Non-Reciprocal Connection';
+          } else {
+            detail = 'Unknown Link Type';
+          }
+
+          const tooltip = d3.select(tooltipEl);
+          tooltip.style('opacity', 1).html(`<strong>${n1.protein_name}</strong> ↔ <strong>${n2.protein_name}</strong><br>${detail}`);
+          tooltip.style('left', `${event.clientX + 10}px`).style('top', `${event.clientY + 10}px`);
+        } catch (error) {
+          console.error('Error in link mouseover handler:', {
+            error,
+            linkData: d,
+            event,
+            stack: error.stack
+          });
+        }
       })
       .on('mousemove', function (event) {
-        d3.select(tooltipEl)
-          .style('left', `${event.clientX + 10}px`)
-          .style('top', `${event.clientY + 10}px`);
+        try {
+          d3.select(tooltipEl)
+            .style('left', `${event.clientX + 10}px`)
+            .style('top', `${event.clientY + 10}px`);
+        } catch (error) {
+          console.error('Error in link mousemove handler:', {
+            error,
+            event,
+            stack: error.stack
+          });
+        }
       })
       .on('mouseout', function (event, d) {
-        d3.select(this).transition().duration(150).attr('stroke-width', strokeW('score' in d ? d.score : 100) * 2);
-        d3.select(tooltipEl).style('opacity', 0);
+        try {
+          d3.select(this).transition().duration(150).attr('stroke-width', strokeW('score' in d ? d.score : 100) * 2);
+          d3.select(tooltipEl).style('opacity', 0);
+        } catch (error) {
+          console.error('Error in link mouseout handler:', {
+            error,
+            linkData: d,
+            event,
+            stack: error.stack
+          });
+        }
       })
       .on('contextmenu', function(event, d) {
         handleContextMenu(event, { type: 'link', data: d });
@@ -543,80 +666,118 @@
         draw();
       })
       .on('mouseover', function (event, d) {
-        const currentColor = d3.select(this).attr('fill');
-        if (currentColor) {
-          const darkerColor = d3.color(currentColor)?.darker(0.3);
-          if (darkerColor) {
-            d3.select(this).attr('fill', darkerColor.toString());
+        try {
+          const currentColor = d3.select(this).attr('fill');
+          if (currentColor) {
+            const darkerColor = d3.color(currentColor)?.darker(0.3);
+            if (darkerColor) {
+              d3.select(this).attr('fill', darkerColor.toString());
+            }
           }
-        }
 
-        // Build tooltip content
-        let tooltipContent = `
-          <strong>Genome:</strong> ${d.genome_name}<br>
-          <strong>Protein:</strong> ${d.protein_name}<br>
-          ${d.gene_type ? `<strong>Domain:</strong> ${d.gene_type}<br>` : ''}
-          <strong>Present:</strong> ${d.is_present === false ? 'NO' : 'YES'}<br>
-          <strong>Direction:</strong> ${d.direction === 'plus' ? '+' : '-'}<br>
-          <strong>Position:</strong> ${d.rel_position}
-        `;
-
-        // Add domain coordinates if they exist
-        const domainCoords = Object.entries(d)
-          .filter(([key]) => key.includes('domain') && (key.endsWith('_start') || key.endsWith('_end')))
-          .sort(([a], [b]) => a.localeCompare(b));
-
-        if (domainCoords.length > 0) {
-          tooltipContent += '<br><br><strong>Domain Coordinates:</strong><br>';
-          let currentDomain = '';
-          let startValue: number | null = null;
-          let endValue: number | null = null;
-
-          domainCoords.forEach(([key, value]) => {
-            const parts = key.split('_');
-            const domainName = parts[1];
-            const coordType = parts[parts.length - 1];
-
-            if (domainName !== currentDomain) {
-              if (currentDomain !== '') {
-                tooltipContent += `(${startValue ?? 'N/A'}, ${endValue ?? 'N/A'})<br>`;
-              }
-              currentDomain = domainName;
-              tooltipContent += `${domainName}: `;
-              startValue = null;
-              endValue = null;
-            }
-
-            if (coordType === 'start') {
-              startValue = value as number;
-            } else if (coordType === 'end') {
-              endValue = value as number;
-            }
+          // Debug logging for node data
+          console.log('Node data:', {
+            id: d.id,
+            genome_name: d.genome_name,
+            protein_name: d.protein_name,
+            gene_type: d.gene_type,
+            is_present: d.is_present,
+            direction: d.direction,
+            rel_position: d.rel_position,
+            raw_data: d
           });
 
-          // Handle the last domain
-          if (currentDomain !== '') {
-            tooltipContent += `(${startValue ?? 'N/A'}, ${endValue ?? 'N/A'})`;
-          }
-        }
+          // Build tooltip content
+          let tooltipContent = `
+            <strong>Genome:</strong> ${d.genome_name}<br>
+            <strong>Protein:</strong> ${d.protein_name}<br>
+            ${d.gene_type ? `<strong>Domain:</strong> ${d.gene_type}<br>` : ''}
+            <strong>Present:</strong> ${d.is_present === false ? 'NO' : 'YES'}<br>
+            <strong>Direction:</strong> ${d.direction === 'plus' ? '+' : '-'}<br>
+            <strong>Position:</strong> ${d.rel_position}
+          `;
 
-        d3.select(tooltipEl)
-          .style('opacity', 1)
-          .style('left', `${event.clientX + 10}px`).style('top', `${event.clientY + 10}px`)
-          .html(tooltipContent);
+          // Add domain coordinates if they exist
+          const domainCoords = Object.entries(d)
+            .filter(([key]) => key.includes('domain') && (key.endsWith('_start') || key.endsWith('_end')))
+            .sort(([a], [b]) => a.localeCompare(b));
+
+          if (domainCoords.length > 0) {
+            tooltipContent += '<br><br><strong>Domain Coordinates:</strong><br>';
+            let currentDomain = '';
+            let startValue: number | null = null;
+            let endValue: number | null = null;
+
+            domainCoords.forEach(([key, value]) => {
+              const parts = key.split('_');
+              const domainName = parts[1];
+              const coordType = parts[parts.length - 1];
+
+              if (domainName !== currentDomain) {
+                if (currentDomain !== '') {
+                  tooltipContent += `(${startValue ?? 'N/A'}, ${endValue ?? 'N/A'})<br>`;
+                }
+                currentDomain = domainName;
+                tooltipContent += `${domainName}: `;
+                startValue = null;
+                endValue = null;
+              }
+
+              if (coordType === 'start') {
+                startValue = value as number;
+              } else if (coordType === 'end') {
+                endValue = value as number;
+              }
+            });
+
+            // Handle the last domain
+            if (currentDomain !== '') {
+              tooltipContent += `(${startValue ?? 'N/A'}, ${endValue ?? 'N/A'})`;
+            }
+          }
+
+          d3.select(tooltipEl)
+            .style('opacity', 1)
+            .style('left', `${event.clientX + 10}px`).style('top', `${event.clientY + 10}px`)
+            .html(tooltipContent);
+        } catch (error) {
+          console.error('Error in node mouseover handler:', {
+            error,
+            nodeData: d,
+            event,
+            stack: error.stack
+          });
+        }
       })
       .on('mousemove', function (event) {
-        d3.select(tooltipEl)
-          .style('left', `${event.clientX + 10}px`)
-          .style('top', `${event.clientY + 10}px`);
+        try {
+          d3.select(tooltipEl)
+            .style('left', `${event.clientX + 10}px`)
+            .style('top', `${event.clientY + 10}px`);
+        } catch (error) {
+          console.error('Error in node mousemove handler:', {
+            error,
+            event,
+            stack: error.stack
+          });
+        }
       })
       .on('mouseout', function (event, d) {
-        if (isFocused && !focusedNodes.has(d.id)) {
-          d3.select(this).attr('fill', '#e6e6e6');
-        } else {
-          d3.select(this).attr('fill', nodeColorMap.get(d.id) || '#bbb');
+        try {
+          if (isFocused && !focusedNodes.has(d.id)) {
+            d3.select(this).attr('fill', '#e6e6e6');
+          } else {
+            d3.select(this).attr('fill', nodeColorMap.get(d.id) || '#bbb');
+          }
+          d3.select(tooltipEl).style('opacity', 0);
+        } catch (error) {
+          console.error('Error in node mouseout handler:', {
+            error,
+            nodeData: d,
+            event,
+            stack: error.stack
+          });
         }
-        d3.select(tooltipEl).style('opacity', 0);
       })
       .on('contextmenu', function(event, d) {
         handleContextMenu(event, { type: 'node', data: d });

@@ -46,6 +46,7 @@ def calculate_relative_positions(df):
 def parse_coordinates(coord_file):
     try:
         df = read_file(coord_file, 'coordinate')
+        print(df)
         
         # Validate basic structure
         validate_coordinate_dataframe_basic(df)
@@ -88,7 +89,7 @@ def add_nodes(coords):
 
     return nodes
 
-def add_links(df_only_cutoffs, row_max, col_max, subsections):
+def add_links(df_only_cutoffs, row_max, col_max, genomes):
     links = []
 
     for row in df_only_cutoffs.index:
@@ -111,7 +112,7 @@ def add_links(df_only_cutoffs, row_max, col_max, subsections):
             else:
                 continue  # skip non-max values
 
-            if any((genome in source) and (genome in target) for genome in subsections):
+            if any((genome in source) and (genome in target) for genome in genomes):
                 continue
 
 
@@ -157,37 +158,32 @@ def prepare_dataframe(matrix_file):
     validate_dataframe_structure(df)
     return df
 
-def extract_subsections(df_only_cutoffs):
-    subsections = df_only_cutoffs.index.to_series().str.split("_").str[1]
-    if subsections.isnull().any():
-        raise ValueError("Some row names don't follow the expected format (should contain '_')")
-    return subsections.unique()
 
-def create_subsection_mappings(df_only_cutoffs, subsections):
+def create_genome_mappings(df_only_cutoffs, genomes):
     row_to_subsection = pd.Series(index=df_only_cutoffs.index, dtype="object")
     col_to_subsection = pd.Series(index=df_only_cutoffs.columns, dtype="object")
 
     # Helper function to get subsection from full name
     def get_subsection(name):
-        try:
-            return name.split('_')[1]
-        except IndexError:
-            return None
+        # Check if any of our genome names are in the matrix index/column name
+        for genome in genomes:
+            if genome in name:
+                return genome
+        return None
 
-    for section in subsections:
-        # Map rows using the second token
-        row_subsections = df_only_cutoffs.index.map(get_subsection)
-        matching_rows = row_subsections == section
-        if not matching_rows.any():
-            raise ValueError(f"Subsection {section} has no matching rows")
-        row_to_subsection.loc[matching_rows] = section
+    # Get all unique subsections from the index and columns
+    all_row_subsections = df_only_cutoffs.index.map(get_subsection)
+    all_col_subsections = df_only_cutoffs.columns.map(get_subsection)
 
-        # Map columns using the second token
-        col_subsections = df_only_cutoffs.columns.map(get_subsection)
-        matching_cols = col_subsections == section
-        if not matching_cols.any():
-            raise ValueError(f"Subsection {section} has no matching columns")
-        col_to_subsection.loc[matching_cols] = section
+    # For each genome in our list of unique values
+    for genome in genomes:
+        # Find rows and columns that match this genome
+        matching_rows = all_row_subsections == genome
+        matching_cols = all_col_subsections == genome
+
+        # Update the mappings
+        row_to_subsection.loc[matching_rows] = genome
+        col_to_subsection.loc[matching_cols] = genome
 
     return row_to_subsection, col_to_subsection
 
@@ -217,7 +213,7 @@ def calculate_row_maxes(df_only_cutoffs, col_to_subsection):
     
     return row_max
 
-def parse_matrix_data(matrix_file):
+def parse_matrix_data(matrix_file, genomes):
     try:
         # Read and prepare the dataframe
         df = prepare_dataframe(matrix_file)
@@ -226,9 +222,7 @@ def parse_matrix_data(matrix_file):
         # Get data above cutoff
         df_only_cutoffs = df[df > 1]
         
-        # Extract subsections and create mappings
-        subsections = extract_subsections(df_only_cutoffs)
-        row_to_subsection, col_to_subsection = create_subsection_mappings(df_only_cutoffs, subsections)
+        row_to_subsection, col_to_subsection = create_genome_mappings(df_only_cutoffs, genomes)
         
         # Calculate maxes
         col_max = calculate_column_maxes(df_only_cutoffs, row_to_subsection)
@@ -237,8 +231,7 @@ def parse_matrix_data(matrix_file):
         return {
             'df_only_cutoffs': df_only_cutoffs,
             'row_max': row_max,
-            'col_max': col_max,
-            'subsections': subsections
+            'col_max': col_max
         }
         
     except pd.errors.EmptyDataError:
@@ -250,13 +243,13 @@ def parse_matrix_data(matrix_file):
 
 
 def create_output(matrix_data, coords):
-    output = {"genomes": matrix_data['subsections'].tolist()}
+    output = {"genomes": coords['genome'].unique().tolist()}
     output["nodes"] = add_nodes(coords)
-    output["links"] = add_links(matrix_data['df_only_cutoffs'], matrix_data['row_max'], matrix_data['col_max'], matrix_data['subsections'])
+    output["links"] = add_links(matrix_data['df_only_cutoffs'], matrix_data['row_max'], matrix_data['col_max'], coords['genome'].unique().tolist())
     return output
 
 # Update the original parse_matrix function to use the new functions
 def parse_matrix(matrix_file, coord_file):
-    matrix_data = parse_matrix_data(matrix_file)
     coords = parse_coordinates(coord_file)
+    matrix_data = parse_matrix_data(matrix_file, coords['genome'].unique().tolist())
     return create_output(matrix_data, coords)

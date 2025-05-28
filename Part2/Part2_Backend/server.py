@@ -11,7 +11,7 @@ from datetime import datetime
 import boto3
 import uuid
 
-from models import Base, User, Group, File
+from models import Base, User, Group, File, Inbox
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.pool import NullPool
@@ -594,6 +594,74 @@ def delete_group():
 
     finally:
         session.close()
+
+
+@app.route('/get_messages', methods=['GET'])
+def search_inbox():
+    access_token = request.args.get('token')
+    if not access_token:
+        return jsonify({"error": "Not Signed In"}), 400
+    try:
+        access_claims = verify_token(access_token)
+        user_id = access_claims['sub']
+    except:
+          return jsonify({"error": "Invalid Token"}), 400
+    try:
+        session = SessionLocal()
+        # Find user first
+        user = session.query(User).filter_by(id=user_id).first()
+        if not user:
+            return jsonify({"error": "User not found"}), 404
+        messages = session.query(Inbox).filter_by(to=user.email).all()
+        messages = [
+            {
+                "id": str(msg.id),
+                "sender": msg.sender,
+                "group_id": str(msg.group_id) if msg.group_id else None,
+            }
+            for msg in messages
+        ]
+        return jsonify({"message": "Messages Fetched Successfully", "Messages": messages}), 200
+    except:
+        return jsonify({"message": "Unable to fetch messages"}), 500
+    finally:
+        session.close()
+    
+@app.route('/post_inbox', methods=['POST'])
+def save_message():
+    auth_header = request.headers.get('Authorization', '')
+    access_token = auth_header.replace('Bearer ', '')
+    if not access_token:
+        return jsonify({"error": "Not Signed In"}), 400
+    try:
+        access_claims = verify_token(access_token)
+        user_id = access_claims['sub']
+    except:
+        return jsonify({"error": "Invalid Token"}), 400
+    reciever_email = request.form.get('reciever_email')
+    group_id = request.form.get('group_id')
+    try:
+        session = SessionLocal()
+        # Find user first
+        user = session.query(User).filter_by(id=user_id).first()
+        if not user:
+            return jsonify({"error": "User not found"}), 404
+        recipient = session.query(User).filter_by(email=reciever_email).first()
+        if not recipient:
+            return jsonify({"error": "Recipient not found"}), 404
+        new_message = Inbox(
+              sender=user.email,
+              to=reciever_email,
+              group_id=group_id
+        )
+        session.add(new_message)
+        session.commit()
+        return jsonify({"message": "Messages Saved Successfully"}), 200
+    except:
+        return jsonify({"message": "Unable To Save Messages"}), 500
+    finally:
+        session.close()
+     
 
 @app.route('/', methods=['GET'])
 def home():

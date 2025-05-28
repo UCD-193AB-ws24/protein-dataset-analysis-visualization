@@ -40,3 +40,11 @@ class File(Base):
     file_type = Column(String)
     uploaded_at = Column(TIMESTAMP(timezone=True), server_default=func.now())
     ref_count = Column(Integer, default=0)  # New field: reference count
+
+class Inbox(Base):
+    __tablename__ = "inbox"
+
+    id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
+    sender = Column(String, nullable=False)
+    to = Column(String, nullable=False)
+    group_id = Column(UUID(as_uuid=True), ForeignKey('groups.id'), nullable=True)

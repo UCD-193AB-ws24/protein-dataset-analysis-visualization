@@ -70,6 +70,7 @@
 	let numDomains = 1;
 
 	let showUploadModal = false;
+	let isSavingSharedGroup = false;
 
 	onMount(async () => {
 		try {
@@ -257,6 +258,7 @@
 	}
 
 	async function saveSharedGroup() {
+		isSavingSharedGroup = true;
 		if (!groupId) {
 			alert('Missing group ID for the shared group.');
 			return;
@@ -309,6 +311,8 @@
 		} catch (error) {
 			console.error('Error in saveSharedGroup:', error);
 			alert('Failed to save shared group. Please try again.');
+		} finally {
+			isSavingSharedGroup = false;
 		}
 	}
 
@@ -486,15 +490,20 @@
 				</div>
 			{/if}
 
-			{#if isAuthenticated && groupUserId &&user?.profile?.sub !== groupUserId}
+			{#if isAuthenticated && groupUserId && user?.profile?.sub !== groupUserId}
 				<div class="p-6 bg-white rounded-lg shadow-sm border border-slate-200">
 					<h3 class="text-xl font-semibold text-slate-800 mb-4">Add Group</h3>
 					<p class="text-slate-600 mb-4">Add group to your account for easy access and tracking.</p>
 					<button
 						on:click={saveSharedGroup}
+						disabled={isSavingSharedGroup}
 						class="inline-flex items-center px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-lg hover:bg-blue-700 transition-colors duration-200"
 					>
-						Add Group
+						{#if isSavingSharedGroup}
+							Saving...
+						{:else}
+							Add Group
+						{/if}
 					</button>
 				</div>
 			{/if}

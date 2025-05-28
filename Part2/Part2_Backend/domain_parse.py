@@ -195,38 +195,31 @@ def prepare_dataframe(matrix_file):
     validate_dataframe_structure(df)
     return df
 
-def extract_subsections(df_only_cutoffs):
-    subsections = df_only_cutoffs.index.to_series().str.split("_").str[1]
-    if subsections.isnull().any():
-        raise ValueError("Some row names don't follow the expected format (should contain '_')")
-    #print(subsections)
-    return subsections.unique()
-
-def create_subsection_mappings(df_only_cutoffs, subsections):
+def create_genome_mappings(df_only_cutoffs, genomes):
     row_to_subsection = pd.Series(index=df_only_cutoffs.index, dtype="object")
     col_to_subsection = pd.Series(index=df_only_cutoffs.columns, dtype="object")
 
     # Helper function to get subsection from full name
     def get_subsection(name):
-        try:
-            return name.split('_')[1]
-        except IndexError:
-            return None
+        # Check if any of our genome names are in the matrix index/column name
+        for genome in genomes:
+            if genome in name:
+                return genome
+        return None
 
-    for section in subsections:
-        # Map rows using the second token
-        row_subsections = df_only_cutoffs.index.map(get_subsection)
-        matching_rows = row_subsections == section
-        if not matching_rows.any():
-            raise ValueError(f"Subsection {section} has no matching rows")
-        row_to_subsection.loc[matching_rows] = section
+    # Get all unique subsections from the index and columns
+    all_row_subsections = df_only_cutoffs.index.map(get_subsection)
+    all_col_subsections = df_only_cutoffs.columns.map(get_subsection)
 
-        # Map columns using the second token
-        col_subsections = df_only_cutoffs.columns.map(get_subsection)
-        matching_cols = col_subsections == section
-        if not matching_cols.any():
-            raise ValueError(f"Subsection {section} has no matching columns")
-        col_to_subsection.loc[matching_cols] = section
+    # For each genome in our list of unique values
+    for genome in genomes:
+        # Find rows and columns that match this genome
+        matching_rows = all_row_subsections == genome
+        matching_cols = all_col_subsections == genome
+
+        # Update the mappings
+        row_to_subsection.loc[matching_rows] = genome
+        col_to_subsection.loc[matching_cols] = genome
 
     return row_to_subsection, col_to_subsection
 
@@ -256,18 +249,16 @@ def calculate_row_maxes(df_only_cutoffs, col_to_subsection):
 
     return row_max
 
-def parse_matrix_data(matrix_file):
+def parse_matrix_data(matrix_file, genomes):
     try:
         # Read and prepare the dataframe
         df = prepare_dataframe(matrix_file)
         # print(df)
 
         # Get data above cutoff
-        df_only_cutoffs = df_only_cutoffs = df[df > 55]
+        df_only_cutoffs = df_only_cutoffs = df[df > 1]
 
-        # Extract subsections and create mappings
-        subsections = extract_subsections(df_only_cutoffs)
-        row_to_subsection, col_to_subsection = create_subsection_mappings(df_only_cutoffs, subsections)
+        row_to_subsection, col_to_subsection = create_genome_mappings(df_only_cutoffs, genomes)
 
         # Calculate maxes
         col_max = calculate_column_maxes(df_only_cutoffs, row_to_subsection)
@@ -276,8 +267,7 @@ def parse_matrix_data(matrix_file):
         return {
             'df_only_cutoffs': df_only_cutoffs,
             'row_max': row_max,
-            'col_max': col_max,
-            'subsections': subsections
+            'col_max': col_max
         }
 
     except pd.errors.EmptyDataError:
@@ -313,11 +303,9 @@ def add_nodes(coords, cutoff_index):
 
         nodes.append(node_data)
     
-    print(nodes)
-
     return nodes
 
-def add_links(df_only_cutoffs, row_max, col_max, subsections, domain):
+def add_links(df_only_cutoffs, row_max, col_max, genomes, domain):
     links = []
     domain_connections = {}
     all_genes = {}
@@ -345,8 +333,8 @@ def add_links(df_only_cutoffs, row_max, col_max, subsections, domain):
 
             domain_connections[f'{source}#{target}'] = {domain: reciprocal_max}
 
-
-            if any((genome in source) and (genome in target) for genome in subsections):
+            # Skipping links that within the same genome
+            if any((genome in source) and (genome in target) for genome in genomes):
                 continue
 
 
@@ -360,11 +348,11 @@ def add_links(df_only_cutoffs, row_max, col_max, subsections, domain):
     return links, domain_connections, all_genes
 
 def create_output(matrix_data, coords, domain):
-
-    genomes = matrix_data['subsections'].tolist()
+    genomes = coords['genome'].unique().tolist()  # Convert numpy array to list
+    print(genomes)
     nodes = add_nodes(coords, matrix_data['df_only_cutoffs'].index)
-    links, domain_connections, domain_genes = add_links(matrix_data['df_only_cutoffs'], matrix_data['row_max'], matrix_data['col_max'], matrix_data['subsections'], domain)
-    return genomes, nodes, links, domain_connections, domain_genes, matrix_data['df_only_cutoffs'].index
+    links, domain_connections, domain_genes = add_links(matrix_data['df_only_cutoffs'], matrix_data['row_max'], matrix_data['col_max'], genomes, domain)
+    return nodes, links, domain_connections, domain_genes, matrix_data['df_only_cutoffs'].index
 
 def combine_graphs(all_domain_connections, all_domain_genes, domains):
     #for each connection in domain 1 check if the connection exists in domains 2/3 and if those are reciprocal
@@ -429,26 +417,6 @@ def combine_graphs(all_domain_connections, all_domain_genes, domains):
                 link_type = "dotted_color"
             else:
                 link_type = "dotted_grey"
-
-
-        # if not all(present_in_domains):
-        #     # Nodes don't exist in domains where connection is missing
-        #     if all(not (source in all_domain_genes[i] and target in all_domain_genes[i])
-        #             for i, present in enumerate(present_in_domains) if not present):
-        #         # Check if all existing connections are reciprocal
-        #         if (all(dom_bool for u_key, _, dom_bool in unique_links if u_key == key or u_key == reverse_key)):
-        #             link_type = "solid_color"
-        #         # If some connections are reciprocal and others are not
-        #         elif any(dom_bool for u_key, _, dom_bool in unique_links if u_key == key or u_key == reverse_key):
-        #             link_type = "dotted_color"
-        #         else:
-        #             link_type = "dotted_grey"
-        # else:
-        #     if all(dom_bool for u_key, _, dom_bool in unique_links if u_key == key or u_key == reverse_key):
-        #         link_type = "solid_color"
-        #     else:
-        #         link_type = "dotted_color"
-
         
         # # Optionally, collect which domains it's missing from
         # # missing_domains = [i for i, present in enumerate(present_in_domains) if not present]
@@ -473,6 +441,7 @@ def combine_graphs(all_domain_connections, all_domain_genes, domains):
 def domain_parse(matrix_files, coord_file, file_names):
     coords = parse_coordinates(coord_file)
     domains = parse_filenames(file_names)
+    genomes = coords['genome'].unique().tolist()
 
     all_outputs = {}
 
@@ -485,7 +454,7 @@ def domain_parse(matrix_files, coord_file, file_names):
     for idx, matrix_file in enumerate(matrix_files, 1):
         graph_output = {"domain_name": domains[idx - 1]}
         matrix_file.seek(0)
-        genomes, nodes, links, domain_connections, domain_genes, total_gene_list = create_output(parse_matrix_data(matrix_file), coords, domains[idx - 1])
+        nodes, links, domain_connections, domain_genes, total_gene_list = create_output(parse_matrix_data(matrix_file, genomes), coords, domains[idx - 1])
         all_domain_connections.append(domain_connections)
         all_domain_genes.append(domain_genes)
         total_genomes.update(genomes)

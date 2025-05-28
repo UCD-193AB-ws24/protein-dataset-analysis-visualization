@@ -4,6 +4,12 @@ from flask import jsonify
 import json
 import argparse
 import sys
+from file_utils import (
+    read_file,
+    validate_dataframe_basic, 
+    validate_dataframe_structure,
+    validate_coordinate_data_types
+)
 
 
 def validate_coordinate_dataframe_basic(df):
@@ -25,9 +31,18 @@ def validate_coordinate_dataframe_basic(df):
         raise ValueError("Found empty values in the orientation column")
 
 def validate_coordinate_data_types(df):
-    # Check if position is numeric
-    if not pd.to_numeric(df['position'], errors='coerce').notnull().all():
-        raise ValueError("Position column contains non-numeric values")
+    # Check if position is numeric or can be converted to numeric
+    try:
+        # First try direct numeric conversion
+        if not pd.to_numeric(df['position'], errors='coerce').notnull().all():
+            # If that fails, try converting strings to numeric
+            df['position'] = df['position'].astype(str).str.strip()
+            # Remove commas from numbers
+            df['position'] = df['position'].str.replace(',', '')
+            if not pd.to_numeric(df['position'], errors='coerce').notnull().all():
+                raise ValueError("Position column contains values that cannot be converted to numbers")
+    except Exception as e:
+        raise ValueError(f"Error validating position values: {str(e)}")
 
     valid_orientations = {'minus', 'plus', 'negative', 'positive', '+', '-'}
     if not df['orientation'].isin(valid_orientations).all():
@@ -44,11 +59,17 @@ def validate_coordinate_data_types(df):
 def process_name_field(df):
     try:
         if df['protein_name'].isnull().any() or df['genome'].isnull().any():
-            raise ValueError("Some names don't follow the expected format (should contain '_')")
-
+            raise ValueError("Some names are empty")
         return df
     except Exception as e:
         raise ValueError(f"Error processing name field: {str(e)}")
+
+def calculate_relative_positions(df):
+    try:
+        df['rel_position'] = df.groupby('genome')['position'].rank(method='first').astype(int)
+        return df
+    except Exception as e:
+        raise ValueError(f"Error calculating relative positions: {str(e)}")
 
 def process_domain_field(df):
     try:
@@ -91,18 +112,13 @@ def calculate_relative_positions(df):
 
 def parse_coordinates(coord_file):
     try:
-        # Read the Excel file
-        df = pd.read_excel(BytesIO(coord_file.read()), engine='openpyxl')
+        df = read_file(coord_file, 'coordinate')
 
         # Validate basic structure
         validate_coordinate_dataframe_basic(df)
 
-        print(df)
-
         # Validate data types
         validate_coordinate_data_types(df)
-
-        print(df)
 
         domain_names, domain_col_names = process_domain_field(df)
 
@@ -115,20 +131,17 @@ def parse_coordinates(coord_file):
         # Return only the required columns in the specified order
         required_columns = ['name', 'genome', 'protein_name', 'position', 'rel_position', 'orientation', 'gene_type']
         required_columns = required_columns + domain_col_names
-        #print(required_columns)
         if not all(col in df.columns for col in required_columns):
             raise ValueError("Missing one or more required columns after processing")
-
-        #print(df[required_columns])
 
         return df[required_columns]
 
     except pd.errors.EmptyDataError:
         raise ValueError("The coordinate file is empty or cannot be read")
-    except pd.errors.ParserError:
-        raise ValueError("Unable to parse the coordinate file. Please ensure it's a valid Excel file")
     except Exception as e:
-        raise ValueError(f"Error processing coordinate file: {str(e)}")
+        if not isinstance(e, ValueError):  # Don't wrap ValueError as it's already formatted
+            raise ValueError(f"Error processing coordinate file: {str(e)}")
+        raise
 
 def parse_filenames(file_names):
     domains = []
@@ -170,15 +183,15 @@ def validate_dataframe_structure(df):
 
 def prepare_dataframe(matrix_file):
     print("Parsing matrix file...")
-    df = pd.read_excel(BytesIO(matrix_file.read()), engine='openpyxl')
+    df = read_file(matrix_file, 'matrix')
     validate_dataframe_basic(df)
-
+    
     df = df.reset_index(drop=True)
     df = df.set_index(df.columns[0])
     df.index.name = None
     df = df.dropna(how='all')
     df = df.dropna(axis=1, how='all')
-
+    
     validate_dataframe_structure(df)
     return df
 
@@ -280,16 +293,27 @@ def add_nodes(coords, cutoff_index):
 
     for i in range(len(coords)):
         present = coords['name'][i] in cutoff_index
-        nodes.append({
-            "id" : coords['name'][i],
+        node_data = {
+            "id": coords['name'][i],
             "genome_name": coords['genome'][i],
             "protein_name": coords['protein_name'][i],
             "direction": coords['orientation'][i],
             "rel_position": int(coords['rel_position'][i]),
             "gene_type": coords['gene_type'][i],
             "is_present": present
-            # Extra flag "inconsistent": T/F
-        })
+        }
+
+        # Add domain coordinates if they exist
+        domain_cols = [col for col in coords.columns if 'domain' in col]
+        for col in domain_cols:
+            if col.endswith('_start') or col.endswith('_end'):
+                value = coords[col][i]
+                # Convert NaN to None (which becomes null in JSON)
+                node_data[col] = None if pd.isna(value) else value
+
+        nodes.append(node_data)
+    
+    print(nodes)
 
     return nodes
 
@@ -382,20 +406,50 @@ def combine_graphs(all_domain_connections, all_domain_genes, domains):
 
         if not all(present_in_domains):
             # Check if connection is reciprocal in domains where it exists AND nodes don't exist in domains where connection is missing
-            if (all(dom_bool for u_key, _, dom_bool in unique_links if u_key == key or u_key == reverse_key) and
-                all(not (source in all_domain_genes[i] and target in all_domain_genes[i])
-                    for i, present in enumerate(present_in_domains) if not present)):
-                link_type = "solid_color"
+            if all(dom_bool for u_key, _, dom_bool in unique_links if u_key == key or u_key == reverse_key):
+                # Check if both nodes exist in any domain where the connection is missing
+                if any(source in all_domain_genes[i][domains[i]] and target in all_domain_genes[i][domains[i]]
+                      for i, present in enumerate(present_in_domains) if not present):
+                    link_type = "solid_red"
+                else:
+                    link_type = "solid_color"
             # At least one reciprocal
             elif any(dom_bool for u_key, _, dom_bool in unique_links if u_key == key or u_key == reverse_key):
-                link_type = "solid_red"
+                if any(source in all_domain_genes[i][domains[i]] and target in all_domain_genes[i][domains[i]]
+                      for i, present in enumerate(present_in_domains) if not present):
+                    link_type = "solid_red"
+                else:
+                    link_type = "dotted_color"
             else:
                 link_type = "dotted_grey"
         else:
             if all(dom_bool for u_key, _, dom_bool in unique_links if u_key == key or u_key == reverse_key):
                 link_type = "solid_color"
-            else:
+            elif any(dom_bool for u_key, _, dom_bool in unique_links if u_key == key or u_key == reverse_key):
                 link_type = "dotted_color"
+            else:
+                link_type = "dotted_grey"
+
+
+        # if not all(present_in_domains):
+        #     # Nodes don't exist in domains where connection is missing
+        #     if all(not (source in all_domain_genes[i] and target in all_domain_genes[i])
+        #             for i, present in enumerate(present_in_domains) if not present):
+        #         # Check if all existing connections are reciprocal
+        #         if (all(dom_bool for u_key, _, dom_bool in unique_links if u_key == key or u_key == reverse_key)):
+        #             link_type = "solid_color"
+        #         # If some connections are reciprocal and others are not
+        #         elif any(dom_bool for u_key, _, dom_bool in unique_links if u_key == key or u_key == reverse_key):
+        #             link_type = "dotted_color"
+        #         else:
+        #             link_type = "dotted_grey"
+        # else:
+        #     if all(dom_bool for u_key, _, dom_bool in unique_links if u_key == key or u_key == reverse_key):
+        #         link_type = "solid_color"
+        #     else:
+        #         link_type = "dotted_color"
+
+        
         # # Optionally, collect which domains it's missing from
         # # missing_domains = [i for i, present in enumerate(present_in_domains) if not present]
 
@@ -445,7 +499,11 @@ def domain_parse(matrix_files, coord_file, file_names):
 
     domain_graph_nodes = add_nodes(coords, total_gene_list)
     for node in domain_graph_nodes:
-        node["is_present"] = True
+        # Check if the node is present in all domain graphs
+        node["is_present"] = any(
+            any(n["id"] == node["id"] and n["is_present"] for n in graph["nodes"])
+            for graph in genomes_output
+        )
     domain_graph = {
         "domain_name": "ALL",
         "genomes": list(total_genomes),

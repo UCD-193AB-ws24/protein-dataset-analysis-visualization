@@ -1,4 +1,4 @@
-<div class="container mx-auto px-4 py-8">
+<div class="w-[95%] max-w-[1600px] mx-auto py-8">
     <div class="max-w-3xl mx-auto">
         <h1 class="text-4xl font-bold text-slate-800 mb-6">About LocusCGVT</h1>
         <div class="prose prose-lg">

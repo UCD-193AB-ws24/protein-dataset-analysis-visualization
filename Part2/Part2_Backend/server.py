@@ -166,15 +166,33 @@ def generate_graph():
 
     try:
         if is_domain_specific:
+            # Create BytesIO objects with filenames for all files
+            matrix_ios = []
+            for matrix_file in matrix_files:
+                matrix_bytes = matrix_file.read()
+                matrix_io = BytesIO(matrix_bytes)
+                matrix_io.name = matrix_file.filename
+                matrix_ios.append(matrix_io)
+            
+            coordinate_bytes = coordinate_file.read()
+            coordinate_io = BytesIO(coordinate_bytes)
+            coordinate_io.name = coordinate_file.filename
+            
             result = domain_parse(
-                matrix_files,
-                coordinate_file,
+                matrix_ios,
+                coordinate_io,
                 [m.filename for m in matrix_files],
             )
         else:
-            matrix_bytes = matrix_files[0].read()
+            matrix_file = matrix_files[0]
+            matrix_bytes = matrix_file.read()
             coordinate_bytes = coordinate_file.read()
-            graph = parse_matrix(BytesIO(matrix_bytes), BytesIO(coordinate_bytes))
+            # Create BytesIO objects with filename attributes
+            matrix_io = BytesIO(matrix_bytes)
+            matrix_io.name = matrix_file.filename
+            coordinate_io = BytesIO(coordinate_bytes)
+            coordinate_io.name = coordinate_file.filename
+            graph = parse_matrix(matrix_io, coordinate_io)
             result = [{**graph, "domain_name": "general"}]
 
         combined = next(g for g in result if (g["domain_name"] == "ALL" or g["domain_name"] == "general"))

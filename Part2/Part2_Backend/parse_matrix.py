@@ -13,6 +13,9 @@ def validate_coordinate_dataframe_basic(df):
     if df.empty:
         raise ValueError("The coordinate file is empty")
         
+    # Clean column names by stripping whitespace
+    df.columns = df.columns.str.strip()
+        
     required_columns = ['name', 'protein_name', 'genome', 'position', 'orientation']
     missing_columns = [col for col in required_columns if col not in df.columns]
     if missing_columns:
@@ -46,8 +49,14 @@ def calculate_relative_positions(df):
 def parse_coordinates(coord_file):
     try:
         df = read_file(coord_file, 'coordinate')
-        print(df)
+        # Clean column names by stripping whitespace
+        df.columns = df.columns.str.strip()
         
+        # Clean up spaces in all string columns
+        for col in df.columns:
+            if df[col].dtype == "object":
+                df[col] = df[col].astype(str).str.strip()
+                
         # Validate basic structure
         validate_coordinate_dataframe_basic(df)
         
@@ -152,6 +161,14 @@ def prepare_dataframe(matrix_file):
     df = df.reset_index(drop=True)
     df = df.set_index(df.columns[0])
     df.index.name = None
+    
+    # Clean up spaces in index and column names
+    df.index = df.index.str.strip()
+    df.columns = df.columns.str.strip()
+    
+    # Clean up spaces in all values
+    df = df.apply(lambda x: x.str.strip() if x.dtype == "object" else x)
+    
     df = df.dropna(how='all')
     df = df.dropna(axis=1, how='all')
     
@@ -215,9 +232,12 @@ def calculate_row_maxes(df_only_cutoffs, col_to_subsection):
 
 def parse_matrix_data(matrix_file, genomes):
     try:
+        print(matrix_file)
         # Read and prepare the dataframe
         df = prepare_dataframe(matrix_file)
-        #print(df)
+
+        print("PRINTING DATAFRAME \n\n\n\n\n\n")
+        print(df)
         
         # Get data above cutoff
         df_only_cutoffs = df[df > 1]
@@ -253,3 +273,32 @@ def parse_matrix(matrix_file, coord_file):
     coords = parse_coordinates(coord_file)
     matrix_data = parse_matrix_data(matrix_file, coords['genome'].unique().tolist())
     return create_output(matrix_data, coords)
+
+if __name__ == "__main__":
+    import argparse
+    import sys
+    import json
+
+    parser = argparse.ArgumentParser(description='Parse matrix and coordinate files for genome visualization')
+    parser.add_argument('matrix_file', type=str, help='Path to matrix Excel file')
+    parser.add_argument('coord_file', type=str, help='Path to the coordinate Excel file')
+    parser.add_argument('--output', '-o', type=str, help='Output JSON file path (optional, defaults to stdout)')
+
+    args = parser.parse_args()
+
+    try:
+        # Open matrix file and coordinate file
+        with open(args.matrix_file, 'rb') as matrix_file, open(args.coord_file, 'rb') as coord_file:
+            result_obj = parse_matrix(matrix_file, coord_file)
+            output_json = json.dumps(result_obj, indent=2)
+
+            if args.output:
+                with open(args.output, 'w') as f:
+                    f.write(output_json)
+                print(f"Results written to {args.output}")
+            else:
+                print(output_json)
+
+    except Exception as e:
+        print(f"Error: {str(e)}", file=sys.stderr)
+        sys.exit(1)

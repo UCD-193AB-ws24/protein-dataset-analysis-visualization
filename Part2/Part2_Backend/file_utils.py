@@ -64,6 +64,9 @@ def validate_dataframe_structure(df: pd.DataFrame) -> None:
         raise ValueError("Data contains non-numeric values") 
     
 def validate_coordinate_data_types(df):
+    # Clean column names by stripping whitespace
+    df.columns = df.columns.str.strip()
+    
     # Check if position is numeric or can be converted to numeric
     try:
         # First try direct numeric conversion
@@ -77,6 +80,9 @@ def validate_coordinate_data_types(df):
     except Exception as e:
         raise ValueError(f"Error validating position values: {str(e)}")
 
+    # Strip whitespace from orientation values
+    df['orientation'] = df['orientation'].astype(str).str.strip()
+    
     valid_orientations = {'minus', 'plus', 'negative', 'positive', '+', '-'}
     if not df['orientation'].isin(valid_orientations).all():
         raise ValueError("Orientation column should only contain 'plus', 'minus', 'positive', 'negative', '+' or '-'")

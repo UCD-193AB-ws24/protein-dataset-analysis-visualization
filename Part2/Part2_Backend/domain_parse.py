@@ -114,6 +114,9 @@ def parse_coordinates(coord_file):
     try:
         df = read_file(coord_file, 'coordinate')
 
+        # Clean column names by stripping whitespace
+        df.columns = df.columns.str.strip()
+
         # Validate basic structure
         validate_coordinate_dataframe_basic(df)
 
@@ -254,6 +257,9 @@ def parse_matrix_data(matrix_file, genomes):
         # Read and prepare the dataframe
         df = prepare_dataframe(matrix_file)
         # print(df)
+
+        # Clean column names by stripping whitespace
+        df.columns = df.columns.str.strip()
 
         # Get data above cutoff
         df_only_cutoffs = df_only_cutoffs = df[df > 1]

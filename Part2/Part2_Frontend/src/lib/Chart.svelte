@@ -1079,7 +1079,17 @@
               <div class="space-y-1.5">
                 <div class="flex items-center gap-2">
                   <svg width="32" height="16" viewBox="-25 -15 50 30">
-                    <path d="M -25,-15 L 10,-15 L 25,0 L 10,15 L -25,15 Z" fill="#1f77b4" />
+                    <defs>
+                      <linearGradient id="rainbow-node" x1="0%" y1="0%" x2="100%" y2="0%">
+                        <stop offset="0%" style="stop-color:#ff8800"/>
+                        <stop offset="20%" style="stop-color:#ffff00"/>
+                        <stop offset="40%" style="stop-color:#00ff00"/>
+                        <stop offset="60%" style="stop-color:#0088ff"/>
+                        <stop offset="80%" style="stop-color:#4400ff"/>
+                        <stop offset="100%" style="stop-color:#8800ff"/>
+                      </linearGradient>
+                    </defs>
+                    <path d="M -25,-15 L 10,-15 L 25,0 L 10,15 L -25,15 Z" fill="url(#rainbow-node)" />
                   </svg>
                   <span class="text-xs text-slate-600">Colored: Strongly related nodes</span>
                 </div>
@@ -1106,9 +1116,17 @@
                 {#if graph.domain_name === "ALL"}
                   <div class="flex items-center gap-2">
                     <svg width="48" height="16" viewBox="0 0 60 20">
-                      <line x1="5" y1="10" x2="45" y2="10" stroke="#1f77b4" stroke-width="2" />
+                      <!-- Multiple colored segments for rainbow effect, same total length as others -->
+                      <line x1="5" y1="10" x2="13" y2="10" stroke="#ff8800" stroke-width="2" />
+                      <line x1="13" y1="10" x2="21" y2="10" stroke="#ffdd00" stroke-width="2" />
+                      <line x1="21" y1="10" x2="29" y2="10" stroke="#88ff00" stroke-width="2" />
+                      <line x1="29" y1="10" x2="37" y2="10" stroke="#00ccff" stroke-width="2" />
+                      <line x1="37" y1="10" x2="45" y2="10" stroke="#8866ff" stroke-width="2" />
                     </svg>
-                    <span class="text-xs text-slate-600">Solid: Consistent across domains</span>
+                    <div class="text-xs text-slate-600">
+                      <div>Colored solid: Consistently</div>
+                      <div>reciprocal* across domains</div>
+                    </div>
                   </div>
                   <div class="flex items-center gap-2">
                     <svg width="48" height="16" viewBox="0 0 60 20">
@@ -1118,9 +1136,13 @@
                   </div>
                   <div class="flex items-center gap-2">
                     <svg width="48" height="16" viewBox="0 0 60 20">
-                      <line x1="5" y1="10" x2="45" y2="10" stroke="#1f77b4" stroke-width="2" stroke-dasharray="4,4" />
+                      <line x1="5" y1="10" x2="13" y2="10" stroke="#ff8800" stroke-width="2" stroke-dasharray="4,4" />
+                      <line x1="13" y1="10" x2="21" y2="10" stroke="#ffdd00" stroke-width="2" stroke-dasharray="4,4" />
+                      <line x1="21" y1="10" x2="29" y2="10" stroke="#88ff00" stroke-width="2" stroke-dasharray="4,4" />
+                      <line x1="29" y1="10" x2="37" y2="10" stroke="#00ccff" stroke-width="2" stroke-dasharray="4,4" />
+                      <line x1="37" y1="10" x2="45" y2="10" stroke="#8866ff" stroke-width="2" stroke-dasharray="4,4" />
                     </svg>
-                    <span class="text-xs text-slate-600">Dotted: Partially consistent</span>
+                    <span class="text-xs text-slate-600">Colored dotted: Partially consistent</span>
                   </div>
                   <div class="flex items-center gap-2">
                     <svg width="48" height="16" viewBox="0 0 60 20">
@@ -1131,17 +1153,31 @@
                 {:else}
                   <div class="flex items-center gap-2">
                     <svg width="48" height="16" viewBox="0 0 60 20">
-                      <line x1="5" y1="10" x2="45" y2="10" stroke="#1f77b4" stroke-width="2" />
+                      <!-- Multiple colored segments for rainbow effect, same total length as others -->
+                      <line x1="5" y1="10" x2="13" y2="10" stroke="#ff8800" stroke-width="2" />
+                      <line x1="13" y1="10" x2="21" y2="10" stroke="#ffdd00" stroke-width="2" />
+                      <line x1="21" y1="10" x2="29" y2="10" stroke="#88ff00" stroke-width="2" />
+                      <line x1="29" y1="10" x2="37" y2="10" stroke="#00ccff" stroke-width="2" />
+                      <line x1="37" y1="10" x2="45" y2="10" stroke="#8866ff" stroke-width="2" />
                     </svg>
-                    <span class="text-xs text-slate-600">Solid: Reciprocal connection</span>
+                    <span class="text-xs text-slate-600">Colored solid: Reciprocal* connection</span>
                   </div>
                   <div class="flex items-center gap-2">
                     <svg width="48" height="16" viewBox="0 0 60 20">
                       <line x1="5" y1="10" x2="45" y2="10" stroke="#bbb" stroke-width="2" stroke-dasharray="4,4" />
                     </svg>
-                    <span class="text-xs text-slate-600">Dotted: Non-reciprocal</span>
+                    <span class="text-xs text-slate-600">Gray dotted: Non-reciprocal</span>
                   </div>
                 {/if}
+              </div>
+            </div>
+
+            <div class="space-y-1">
+              <div class="text-xs text-slate-500 border-t border-slate-100 pt-2">
+                <p><strong>*Reciprocal:</strong> Both proteins are each other's best match</p>
+                <p class="mt-1 text-slate-400">
+                  <a href="/help" class="hover:text-slate-600 underline">See help page for detailed explanations</a>
+                </p>
               </div>
             </div>
           </div>

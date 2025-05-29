@@ -44,6 +44,7 @@
   let nodeColorMap = new Map<string, string>();
 
   let showLegend = false;
+  let legendPinned = false;
   let panelX = 20;
   let panelY = 20;
 
@@ -148,7 +149,7 @@
         // Check if the source/target is already a duplicate
         const sourceNode = nodes.find(n => n.id === l.source);
         const targetNode = nodes.find(n => n.id === l.target);
-        
+
         if (gSrc === firstGenome && !sourceNode?._dup) {
           const newLink = { ...l, source: dupMap.get(l.source)! };
           console.log('Link transformed for duplication (source):', {
@@ -1045,12 +1046,25 @@
     <button
       type="button"
       class="absolute top-2 right-2 w-7 h-7 bg-white border border-slate-200 rounded-lg shadow-sm hover:bg-slate-50 transition-colors cursor-pointer flex items-center justify-center text-slate-600 hover:text-slate-800"
-      on:click={() => showLegend = !showLegend}
-      on:mouseenter={() => showLegend = true}
-      on:mouseleave={() => showLegend = false}
-      on:keydown={(e) => e.key === 'Enter' && (showLegend = !showLegend)}
+      on:click={() => {
+        legendPinned = !legendPinned;
+        showLegend = legendPinned;
+      }}
+      on:mouseenter={() => {
+        if (!legendPinned) showLegend = true;
+      }}
+      on:mouseleave={() => {
+        if (!legendPinned) showLegend = false;
+      }}
+      on:keydown={(e) => {
+        if (e.key === 'Enter') {
+          legendPinned = !legendPinned;
+          showLegend = legendPinned;
+        }
+      }}
       aria-expanded={showLegend}
       aria-label="Toggle legend"
+      class:pinned={legendPinned}
     >
       <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
         <circle cx="12" cy="12" r="10"/>
@@ -1452,5 +1466,11 @@
   }
   .svg-text p {
     margin: 4px 0;
+  }
+
+  /* Add styling for pinned legend button */
+  .pinned {
+    background-color: #e2e8f0 !important;
+    border-color: #64748b !important;
   }
 </style>

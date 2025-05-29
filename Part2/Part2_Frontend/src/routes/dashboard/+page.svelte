@@ -132,7 +132,8 @@
 		filteredFileGroups = userFileGroups.filter(group => {
 			const matchesSearch = searchQuery === '' ||
 				group.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-				group.description.toLowerCase().includes(searchQuery.toLowerCase());
+				group.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
+				group.genomes.some(genome => genome.toLowerCase().includes(searchQuery.toLowerCase()));
 
 			const matchesFilter = filterBy === 'all' ||
 				(filterBy === 'domain' && group.is_domain_specific) ||

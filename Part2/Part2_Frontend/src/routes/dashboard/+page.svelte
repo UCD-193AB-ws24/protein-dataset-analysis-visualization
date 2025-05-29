@@ -185,8 +185,8 @@
 	</div>
 
 	<div class="flex flex-col md:flex-row gap-4 mb-6">
-		<div class="md:w-1/3">
-			<div class="relative">
+		<div class="md:w-1/3 flex items-end">
+			<div class="relative w-full">
 				<input
 					type="text"
 					bind:value={searchQuery}
@@ -212,7 +212,9 @@
 		</div>
 		<div class="flex gap-4 md:ml-auto">
 			<div class="w-48">
+				<label for="sort-select" class="block text-xs font-medium text-slate-700 mb-1">Sort by:</label>
 				<select
+					id="sort-select"
 					bind:value={sortBy}
 					class="w-full px-4 py-2 bg-white border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
 				>
@@ -222,7 +224,9 @@
 				</select>
 			</div>
 			<div class="w-48">
+				<label for="filter-select" class="block text-xs font-medium text-slate-700 mb-1">Filter by:</label>
 				<select
+					id="filter-select"
 					bind:value={filterBy}
 					class="w-full px-4 py-2 bg-white border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
 				>
@@ -233,6 +237,23 @@
 			</div>
 		</div>
 	</div>
+
+	{#if !loading && filteredFileGroups.length >= 0}
+		<div class="mb-4">
+			<p class="text-sm text-slate-600">
+				Showing {filteredFileGroups.length} of {userFileGroups.length} group{userFileGroups.length !== 1 ? 's' : ''}
+				{#if searchQuery || filterBy !== 'all'}
+					{#if searchQuery && filterBy !== 'all'}
+						for "{searchQuery}" in {filterOptions.find(f => f.value === filterBy)?.label.toLowerCase()}
+					{:else if searchQuery}
+						for "{searchQuery}"
+					{:else if filterBy !== 'all'}
+						in {filterOptions.find(f => f.value === filterBy)?.label.toLowerCase()}
+					{/if}
+				{/if}
+			</p>
+		</div>
+	{/if}
 
 	{#if loading}
 		<div class="flex justify-center items-center py-8">

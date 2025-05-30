@@ -86,7 +86,7 @@ def get_group_graph():
         # Fetch group information
         group = session.query(Group).filter_by(id=group_id).first()
         if not group:
-            return jsonify({"error": "Group not found"}), 404
+            return jsonify({"error": "Project not found"}), 404
 
         # Fetch associated files
         files = session.query(File).filter_by(group_id=group_id).all()
@@ -117,7 +117,7 @@ def get_group_graph():
                 graph_s3_key = file.s3_key
 
         if not (matrix_files and coordinate_file and graph_s3_key):
-            return jsonify({"error": "Matrix/coordinate/graph file not found for this group"}), 400
+            return jsonify({"error": "Matrix/coordinate/graph file not found for this project"}), 400
 
         graph_str = s3_client.get_object(
             Bucket=os.getenv('S3_BUCKET_NAME'), Key=graph_s3_key)["Body"].read().decode()
@@ -272,11 +272,11 @@ def save_files():
             group.description = description
             session.commit()
 
-            return jsonify({"message": "Group updated successfully", "group_id": group_id}), 200
+            return jsonify({"message": "Project updated successfully", "group_id": group_id}), 200
 
         # Handle new group creation
         if not coordinate_file or not matrix_files:
-            return jsonify({"error": "Coordinate file and at least one matrix file are required for new groups"}), 400
+            return jsonify({"error": "Coordinate file and at least one matrix file are required for new projects"}), 400
 
         new_group = Group(
             user_id=user.id,
@@ -311,7 +311,7 @@ def save_files():
 
         session.commit()
 
-        return jsonify({"message": "Files and group saved successfully", "group_id": group_id}), 200
+        return jsonify({"message": "Files and project saved successfully", "group_id": group_id}), 200
 
     except Exception as e:
         session.rollback()
@@ -364,7 +364,7 @@ def get_user_file_groups():
 
     except Exception as e:
         session.rollback()
-        return jsonify({"error": f"Failed to retrieve file groups: {str(e)}"}), 500
+        return jsonify({"error": f"Failed to retrieve projects: {str(e)}"}), 500
 
     finally:
         session.close()
@@ -457,7 +457,7 @@ def delete_group():
         # Find group and verify ownership
         group = session.query(Group).filter_by(id=group_id, user_id=user.id).first()
         if not group:
-            return jsonify({"error": "Group not found or unauthorized"}), 404
+            return jsonify({"error": "Project not found"}), 404
 
         # Get all files associated with the group
         files = session.query(File).filter_by(group_id=group_id).all()
@@ -481,11 +481,11 @@ def delete_group():
         session.delete(group)
         session.commit()
 
-        return jsonify({"message": "Group and associated files deleted successfully"}), 200
+        return jsonify({"message": "Project and associated files deleted successfully"}), 200
 
     except Exception as e:
         session.rollback()
-        return jsonify({"error": f"Failed to delete group: {str(e)}"}), 500
+        return jsonify({"error": f"Failed to delete project: {str(e)}"}), 500
 
     finally:
         session.close()

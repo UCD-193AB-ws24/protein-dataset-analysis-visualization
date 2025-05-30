@@ -84,7 +84,7 @@
 			});
 
 			if (!response.ok) {
-				throw new Error(`Error fetching file groups: ${response.statusText}`);
+				throw new Error(`Error fetching projects: ${response.statusText}`);
 			}
 
 			const data = await response.json();
@@ -170,7 +170,7 @@
 <div class="w-[95%] max-w-[1600px] mx-auto py-8">
 	<div class="mb-8 flex items-start justify-between">
 		<div>
-			<h1 class="text-3xl font-bold text-slate-800 mb-2">Your Uploads</h1>
+			<h1 class="text-3xl font-bold text-slate-800 mb-2">Your Projects</h1>
 			<p class="text-slate-600">Manage and analyze your protein sequence comparisons</p>
 		</div>
 		<a
@@ -190,7 +190,7 @@
 				<input
 					type="text"
 					bind:value={searchQuery}
-					placeholder="Search groups..."
+					placeholder="Search projects..."
 					class="w-full pl-10 pr-4 py-2 bg-white border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
 				/>
 				<svg
@@ -241,7 +241,7 @@
 	{#if !loading && filteredFileGroups.length >= 0}
 		<div class="mb-4">
 			<p class="text-sm text-slate-600">
-				Showing {filteredFileGroups.length} of {userFileGroups.length} group{userFileGroups.length !== 1 ? 's' : ''}
+				Showing {filteredFileGroups.length} of {userFileGroups.length} project{userFileGroups.length !== 1 ? 's' : ''}
 				{#if searchQuery || filterBy !== 'all'}
 					{#if searchQuery && filterBy !== 'all'}
 						for "{searchQuery}" in {filterOptions.find(f => f.value === filterBy)?.label.toLowerCase()}
@@ -326,7 +326,7 @@
 		</div>
 	{:else if !loading}
 		<div class="text-center py-8">
-			<p class="text-slate-600">No file groups found.</p>
+			<p class="text-slate-600">No projects found.</p>
 		</div>
 	{/if}
 </div>

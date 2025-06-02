@@ -82,21 +82,19 @@ def get_group_graph():
     if not group_id:
         return jsonify({"error": "Missing groupId parameter"}), 400
     
-    try:
-        group_id = UUID(group_id)
-    except ValueError:
-        return jsonify({"error": "Invalid UUID format for groupId"}), 400
+    # try:
+    #     group_id = UUID(group_id)
+    # except ValueError:
+    #     return jsonify({"error": "Invalid UUID format for groupId"}), 400
 
     session = SessionLocal()
-
     try:
-        # Fetch group information
+        # Fetch the group and its files via relationship
         group = session.query(Group).filter_by(id=group_id).first()
         if not group:
             return jsonify({"error": "Group not found"}), 404
 
-        # Fetch files where group_id is in the file's group_id array
-        files = session.query(File).filter(File.group_ids.any(group_id)).all()
+        files = group.files  # Uses join_group_files relationship
         if not files:
             return jsonify({"error": "No files associated with this group"}), 404
 
@@ -126,6 +124,7 @@ def get_group_graph():
         if not (matrix_files and coordinate_file and graph_s3_key):
             return jsonify({"error": "Matrix/coordinate/graph file not found for this group"}), 400
 
+        # Load graph file from S3
         graph_str = s3_client.get_object(
             Bucket=os.getenv('S3_BUCKET_NAME'), Key=graph_s3_key)["Body"].read().decode()
 
@@ -148,6 +147,7 @@ def get_group_graph():
 
     finally:
         session.close()
+
 
 
 
@@ -241,6 +241,7 @@ def upload_to_s3(file_obj):
 
     return unique_filename, original_filename  # Return the S3 object key (not full URL)
 
+
 @app.route('/save', methods=['POST'])
 def save_files():
     auth_header = request.headers.get('Authorization', '')
@@ -270,7 +271,7 @@ def save_files():
         if not user:
             return jsonify({"error": "User not found"}), 404
 
-        # Handle existing group
+        # Handle update
         if group_id:
             group = session.query(Group).filter_by(id=group_id).first()
             if not group:
@@ -282,10 +283,11 @@ def save_files():
 
             return jsonify({"message": "Group updated successfully", "group_id": group_id}), 200
 
-        # Handle new group creation
+        # Validate inputs
         if not coordinate_file or not matrix_files:
             return jsonify({"error": "Coordinate file and at least one matrix file are required for new groups"}), 400
 
+        # Create new group
         new_group = Group(
             user_id=user.id,
             title=title,
@@ -297,50 +299,47 @@ def save_files():
         )
         session.add(new_group)
         session.commit()
-        group_id = new_group.id
 
-        # Upload files to S3
+        # Upload and save coordinate + graph files
         coordinate_s3_key, coordinate_filename = upload_to_s3(coordinate_file)
         graph_file = BytesIO(graph_data.encode('utf-8'))
         timestamp = datetime.now().strftime("%Y%m%d%H%M%S")
         graph_file.filename = f"graph_{timestamp}.json"
         graph_s3_key, graph_filename = upload_to_s3(graph_file)
 
-        # Insert coordinate and graph file records into database
-        session.add_all([
-            File(
-                group_ids=[group_id],  # Array of group_id
-                user_id=user.id,
-                file_name=coordinate_filename,
-                s3_key=coordinate_s3_key,
-                file_type="coordinate",
-                ref_count=1
-            ),
-            File(
-                group_ids=[group_id],  # Array of group_id
-                user_id=user.id,
-                file_name=graph_filename,
-                s3_key=graph_s3_key,
-                file_type="graph",
-                ref_count=1
-            )
-        ])
+        coordinate_file_record = File(
+            user_id=user.id,
+            file_name=coordinate_filename,
+            s3_key=coordinate_s3_key,
+            file_type="coordinate"
+        )
+        graph_file_record = File(
+            user_id=user.id,
+            file_name=graph_filename,
+            s3_key=graph_s3_key,
+            file_type="graph"
+        )
 
-        # Insert matrix file records into database
+        # Upload and create matrix file records
+        matrix_file_records = []
         for matrix_file in matrix_files:
             matrix_s3_key, matrix_filename = upload_to_s3(matrix_file)
-            session.add(File(
-                group_ids=[group_id],  # Array of group_id
+            matrix_file_records.append(File(
                 user_id=user.id,
                 file_name=matrix_filename,
                 s3_key=matrix_s3_key,
-                file_type="matrix",
-                ref_count=1
+                file_type="matrix"
             ))
 
+        # Associate all files with the new group
+        all_files = [coordinate_file_record, graph_file_record] + matrix_file_records
+        for file in all_files:
+            new_group.files.append(file)
+
+        session.add_all(all_files)
         session.commit()
 
-        return jsonify({"message": "Files and group saved successfully", "group_id": group_id}), 200
+        return jsonify({"message": "Files and group saved successfully", "group_id": new_group.id}), 200
 
     except Exception as e:
         session.rollback()
@@ -348,6 +347,7 @@ def save_files():
 
     finally:
         session.close()
+
 
 
 @app.route('/save_shared', methods=['POST'])
@@ -367,15 +367,16 @@ def save_shared_group():
     session = SessionLocal()
 
     try:
+        # Validate user and group
         user = session.query(User).filter_by(id=user_id).first()
         if not user:
             return jsonify({"error": "User not found"}), 404
 
         original_group = session.query(Group).filter_by(id=group_id).first()
         if not original_group:
-            return jsonify({"error": "Invalid group_id provided"}), 400
+            return jsonify({"error": "Original group not found"}), 404
 
-        # Duplicate the group for the new user
+        # Create a new group
         new_group = Group(
             user_id=user.id,
             title=original_group.title,
@@ -388,22 +389,16 @@ def save_shared_group():
         session.add(new_group)
         session.commit()
 
-        # Safely update each associated file
-        files = session.query(File).filter(File.group_ids.any(original_group.id)).with_for_update().all()
-
-        for file in files:
-            current_groups = file.group_ids or []
-
-            if new_group.id not in current_groups:
-                file.group_ids = current_groups + [new_group.id]
-                file.ref_count = (file.ref_count or 0) + 1
+        # Copy file relationships from the original group to the new group
+        for file in original_group.files:
+            new_group.files.append(file)
 
         session.commit()
 
         return jsonify({
             "message": "Shared group saved successfully",
             "new_group_id": str(new_group.id),
-            "linked_file_count": len(files)
+            "linked_file_count": len(original_group.files)
         }), 200
 
     except Exception as e:
@@ -412,6 +407,7 @@ def save_shared_group():
 
     finally:
         session.close()
+
 
 
 
@@ -427,21 +423,24 @@ def get_user_file_groups():
 
     session = SessionLocal()
     try:
-        # Get user first
+        # Get user
         user = session.query(User).filter_by(id=user_id).first()
         if not user:
             return jsonify({"error": "User not found"}), 404
 
-        # Get all file groups associated with user
+        # Get all groups owned by this user
         groups = session.query(Group).filter_by(user_id=user.id).all()
 
         result = []
         for group in groups:
-            # Get files associated with the group
-            files = session.query(File).filter(File.group_ids.any(group.id)).all()
-            file_list = [{"file_name": file.file_name, "file_type": file.file_type} for file in files]
+            file_list = [
+                {
+                    "file_name": file.file_name,
+                    "file_type": file.file_type,
+                }
+                for file in group.files  # ← comes from the relationship
+            ]
 
-            # Assemble group data
             result.append({
                 "id": str(group.id),
                 "title": group.title,
@@ -461,6 +460,7 @@ def get_user_file_groups():
 
     finally:
         session.close()
+
 
 
 @app.route('/verify_user')
@@ -537,14 +537,14 @@ def delete_group():
     access_claims = verify_token(access_token)
     user_id = access_claims['sub']
 
-    group_id_str = request.args.get('groupId')
-    if not group_id_str:
+    group_id = request.args.get('groupId')
+    if not group_id:
         return jsonify({"error": "Missing groupId parameter"}), 400
 
-    try:
-        group_id = UUID(group_id_str)
-    except ValueError:
-        return jsonify({"error": "Invalid UUID format for groupId"}), 400
+    # try:
+    #     group_id = UUID(group_id_str)
+    # except ValueError:
+    #     return jsonify({"error": "Invalid UUID format for groupId"}), 400
 
     session = SessionLocal()
     try:
@@ -556,37 +556,30 @@ def delete_group():
         if not group:
             return jsonify({"error": "Group not found or unauthorized"}), 404
 
-        # Lock all affected files
-        files = session.query(File).filter(File.group_ids.any(group_id)).with_for_update().all()
-
-        to_delete = []
-
-        for file in files:
-            group_ids = file.group_ids or []
-            if group_id in group_ids:
-                file.group_ids = [gid for gid in group_ids if gid != group_id]
-                flag_modified(file, "group_ids")  # critical for tracking list change
-                file.ref_count = max(0, (file.ref_count or 1) - 1)
-
-                # Mark for deletion if no groups reference it anymore
-                if file.ref_count == 0:
-                    to_delete.append(file)
-
-        session.commit()
-
-        # Now delete unreferenced files from S3 and DB
-        for file in to_delete:
-            try:
-                s3_client.delete_object(Bucket=os.getenv('S3_BUCKET_NAME'), Key=file.s3_key)
-            except Exception as e:
-                print(f"Warning: Failed to delete from S3: {file.s3_key} — {e}")
-            session.delete(file)
-
-        # Delete the group
+        # Step 1: Delete the group — triggers join table deletion
         session.delete(group)
         session.commit()
 
-        return jsonify({"message": "Group and associated unreferenced files deleted successfully"}), 200
+        # Step 2: Fetch all files marked for deletion after the trigger
+        orphan_files = session.query(File).filter_by(marked_for_deletion=True).all()
+        deleted_count = 0
+
+        for file in orphan_files:
+            try:
+                s3_client.delete_object(Bucket=os.getenv('S3_BUCKET_NAME'), Key=file.s3_key)
+                print(f"Deleted from S3: {file.s3_key}")
+            except Exception as e:
+                print(f"Warning: Failed to delete from S3: {file.s3_key} — {e}")
+                continue  # Skip DB deletion if S3 fails
+
+            session.delete(file)
+            deleted_count += 1
+
+        session.commit()
+
+        return jsonify({
+            "message": f"Group deleted successfully. {deleted_count} orphaned files also removed."
+        }), 200
 
     except Exception as e:
         session.rollback()
@@ -594,6 +587,7 @@ def delete_group():
 
     finally:
         session.close()
+
 
 
 @app.route('/get_messages', methods=['GET'])

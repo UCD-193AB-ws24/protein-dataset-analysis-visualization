@@ -250,7 +250,7 @@
     ];
     const colorScale = d3.scaleOrdinal(customColors).domain(colorRoots);
     // const colorScale = d3.scaleOrdinal([...d3.schemeSet3]).domain(colorRoots);
-    // Gray-out CCs not associated with colorRoots
+    // Grey-out CCs not associated with colorRoots
     const nodeColor = new Map(
       nodes.map((n) => {
         if (n.is_present === false) return [n.id, '#e6e6e6']
@@ -1097,14 +1097,14 @@
                   <svg width="32" height="16" viewBox="-25 -15 50 30">
                     <path d="M -25,-15 L 10,-15 L 25,0 L 10,15 L -25,15 Z" fill="#7f7f7f" />
                   </svg>
-                  <span class="text-xs text-slate-600">Gray: Unrelated nodes</span>
+                  <span class="text-xs text-slate-600">Grey: Unrelated nodes</span>
                 </div>
                 {#if graph.domain_name === "ALL"}
                   <div class="flex items-center gap-2">
                     <svg width="32" height="16" viewBox="-25 -15 50 30">
                       <path d="M -25,-15 L 10,-15 L 25,0 L 10,15 L -25,15 Z" fill="#e6e6e6" />
                     </svg>
-                    <span class="text-xs text-slate-600">Light gray: Missing in domain</span>
+                    <span class="text-xs text-slate-600">Light grey: Missing in domain</span>
                   </div>
                 {/if}
               </div>
@@ -1148,7 +1148,7 @@
                     <svg width="48" height="16" viewBox="0 0 60 20">
                       <line x1="5" y1="10" x2="45" y2="10" stroke="#bbb" stroke-width="2" stroke-dasharray="4,4" />
                     </svg>
-                    <span class="text-xs text-slate-600">Gray dotted: Non-reciprocal</span>
+                    <span class="text-xs text-slate-600">Grey dotted: Non-reciprocal</span>
                   </div>
                 {:else}
                   <div class="flex items-center gap-2">

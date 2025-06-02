@@ -166,13 +166,6 @@ def prepare_dataframe(matrix_file):
     df = df.set_index(df.columns[0])
     df.index.name = None
     
-    # Clean up spaces in index and column names
-    df.index = df.index.str.strip()
-    df.columns = df.columns.str.strip()
-    
-    # Clean up spaces in all values
-    df = df.apply(lambda x: x.str.strip() if x.dtype == "object" else x)
-    
     df = df.dropna(how='all')
     df = df.dropna(axis=1, how='all')
     

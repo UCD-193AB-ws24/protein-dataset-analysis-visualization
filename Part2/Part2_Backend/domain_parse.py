@@ -243,9 +243,6 @@ def parse_matrix_data(matrix_file, genomes, coord_df):
         df = prepare_dataframe(matrix_file)
         # print(df)
 
-        # Clean column names by stripping whitespace
-        df.columns = df.columns.str.strip()
-
         # Validate matrix indices against coordinate names
         validate_matrix_coordinate_mapping(df, coord_df)
 

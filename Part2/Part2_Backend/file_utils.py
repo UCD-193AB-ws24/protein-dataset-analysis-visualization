@@ -13,6 +13,27 @@ def validate_file_extension(filename: str, file_type: str) -> None:
             ", ".join(ext.upper() for ext in valid_extensions[file_type])
         )
 
+def clean_dataframe_whitespace(df: pd.DataFrame) -> pd.DataFrame:
+    """Clean whitespace from DataFrame index, columns, and string values."""
+    # Clean index and column names
+    if df.index.dtype == "object":
+        df.index = df.index.str.strip()
+    df.columns = df.columns.str.strip()
+    
+    # Clean string values in all columns
+    for col in df.columns:
+        if df[col].dtype == "object":
+            # Convert to string first, then strip
+            df[col] = df[col].astype(str).str.strip()
+            # Convert back to original type if possible
+            try:
+                if df[col].str.isnumeric().all():
+                    df[col] = pd.to_numeric(df[col])
+            except:
+                pass  # Keep as string if conversion fails
+    
+    return df
+
 def read_file(file, file_type: str) -> pd.DataFrame:
     """Read a file into a pandas DataFrame based on its extension."""
     # Handle both file objects and BytesIO objects
@@ -31,6 +52,10 @@ def read_file(file, file_type: str) -> pd.DataFrame:
             df = pd.read_csv(BytesIO(file.read()), sep='\t', encoding='utf-8')
         else:  # Excel file
             df = pd.read_excel(BytesIO(file.read()), engine='openpyxl')
+            
+        # Clean whitespace from the DataFrame
+        df = clean_dataframe_whitespace(df)
+            
     except UnicodeDecodeError:
         raise ValueError("File encoding error. Please ensure the file is UTF-8 encoded.")
     except pd.errors.ParserError as e:

@@ -1166,7 +1166,7 @@
                     <svg width="48" height="16" viewBox="0 0 60 20">
                       <line x1="5" y1="10" x2="45" y2="10" stroke="#bbb" stroke-width="2" stroke-dasharray="4,4" />
                     </svg>
-                    <span class="text-xs text-slate-600">Gray dotted: Non-reciprocal</span>
+                    <span class="text-xs text-slate-600">Grey dotted: Non-reciprocal</span>
                   </div>
                 {/if}
               </div>

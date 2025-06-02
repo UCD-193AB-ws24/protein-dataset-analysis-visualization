@@ -51,6 +51,9 @@
                         <a href="/dashboard" class={`${isActive('/dashboard')} text-sm leading-none py-2`}>
                             Dashboard
                         </a>
+                        <a href="/inbox" class= "text-sm leading-none py-2">
+                            Inbox
+                        </a>
                     {/if}
                     <a href="/diagram" class={`${isActive('/diagram')} text-sm leading-none py-2`}>
                         Visualize

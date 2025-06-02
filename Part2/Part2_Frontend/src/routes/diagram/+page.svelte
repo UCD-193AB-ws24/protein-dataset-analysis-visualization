@@ -54,7 +54,7 @@
   let errorMessage = "";
   let loading = true;        // Loading state for file upload
   let savingGroup = false;   // Loading state for saving group
-  let cutoff = 1;           // slider value
+  let cutoff = 25;           // slider value
 
   // Link filter states
   let showReciprocal = true;
@@ -289,11 +289,16 @@
     );
 
     // Update links in filtered graph
-    filteredGraph.links = selectedGraph.links.filter(link =>
-      // Both link.source and link.target should be associated with (contain the name of) genomes in selectedGenomes
-      selectedGenomes.some(genome => link.source.includes(genome)) &&
-      selectedGenomes.some(genome => link.target.includes(genome))
-    );
+    filteredGraph.links = selectedGraph.links.filter(link => {
+      const sourceNode = selectedGraph.nodes.find(n => n.id === link.source);
+      const targetNode = selectedGraph.nodes.find(n => n.id === link.target);
+
+      if (!sourceNode || !targetNode) return false;
+
+      // Check if both nodes belong to selected genomes
+      return selectedGenomes.includes(sourceNode.genome_name) &&
+             selectedGenomes.includes(targetNode.genome_name);
+    });
   }
 
   // Select domain/graph to focus on
@@ -477,7 +482,7 @@
                   <div class="flex items-center gap-3">
                     <input
                       type="range"
-                      min="0"
+                      min="25"
                       max="100"
                       disabled={selectedGraph.domain_name === "ALL"}
                       bind:value={cutoff}

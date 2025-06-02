@@ -13,6 +13,27 @@ def validate_file_extension(filename: str, file_type: str) -> None:
             ", ".join(ext.upper() for ext in valid_extensions[file_type])
         )
 
+def clean_dataframe_whitespace(df: pd.DataFrame) -> pd.DataFrame:
+    """Clean whitespace from DataFrame index, columns, and string values."""
+    # Clean index and column names
+    if df.index.dtype == "object":
+        df.index = df.index.str.strip()
+    df.columns = df.columns.str.strip()
+    
+    # Clean string values in all columns
+    for col in df.columns:
+        if df[col].dtype == "object":
+            # Convert to string first, then strip
+            df[col] = df[col].astype(str).str.strip()
+            # Convert back to original type if possible
+            try:
+                if df[col].str.isnumeric().all():
+                    df[col] = pd.to_numeric(df[col])
+            except:
+                pass  # Keep as string if conversion fails
+    
+    return df
+
 def read_file(file, file_type: str) -> pd.DataFrame:
     """Read a file into a pandas DataFrame based on its extension."""
     # Handle both file objects and BytesIO objects
@@ -31,6 +52,10 @@ def read_file(file, file_type: str) -> pd.DataFrame:
             df = pd.read_csv(BytesIO(file.read()), sep='\t', encoding='utf-8')
         else:  # Excel file
             df = pd.read_excel(BytesIO(file.read()), engine='openpyxl')
+            
+        # Clean whitespace from the DataFrame
+        df = clean_dataframe_whitespace(df)
+            
     except UnicodeDecodeError:
         raise ValueError("File encoding error. Please ensure the file is UTF-8 encoded.")
     except pd.errors.ParserError as e:
@@ -61,9 +86,22 @@ def validate_dataframe_structure(df: pd.DataFrame) -> None:
     if df.empty:
         raise ValueError("Data is empty after removing NA values")
     if not df.dtypes.apply(lambda x: pd.api.types.is_numeric_dtype(x)).all():
-        raise ValueError("Data contains non-numeric values") 
+        raise ValueError("Data contains non-numeric values")
+    
+    # Check index and column lengths
+    if any(len(str(idx)) > 100 for idx in df.index):
+        raise ValueError("Matrix contains row identifiers longer than 100 characters")
+    if any(len(str(col)) > 100 for col in df.columns):
+        raise ValueError("Matrix contains column names longer than 100 characters")
     
 def validate_coordinate_data_types(df):
+    # Clean column names by stripping whitespace
+    df.columns = df.columns.str.strip()
+    
+    # # Check name column length
+    # if 'name' in df.columns and any(len(str(name)) > 100 for name in df['name']):
+    #     raise ValueError("Coordinate file contains names longer than 100 characters")
+    
     # Check if position is numeric or can be converted to numeric
     try:
         # First try direct numeric conversion
@@ -77,6 +115,9 @@ def validate_coordinate_data_types(df):
     except Exception as e:
         raise ValueError(f"Error validating position values: {str(e)}")
 
+    # Strip whitespace from orientation values
+    df['orientation'] = df['orientation'].astype(str).str.strip()
+    
     valid_orientations = {'minus', 'plus', 'negative', 'positive', '+', '-'}
     if not df['orientation'].isin(valid_orientations).all():
         raise ValueError("Orientation column should only contain 'plus', 'minus', 'positive', 'negative', '+' or '-'")
@@ -88,3 +129,15 @@ def validate_coordinate_data_types(df):
         'negative': 'minus',
         '-': 'minus'
     }).fillna(df['orientation'])  # Keep original value if not in mapping
+
+def validate_matrix_coordinate_mapping(matrix_df: pd.DataFrame, coord_df: pd.DataFrame) -> None:
+    """Validate that all matrix indices exist in the coordinate file's name column."""
+    matrix_indices = set(matrix_df.index)
+    coord_names = set(coord_df['name'])
+    
+    missing_names = matrix_indices - coord_names
+    if missing_names:
+        raise ValueError(
+            f"Matrix contains {len(missing_names)} identifiers not found in coordinate file: " + 
+            ", ".join(sorted(missing_names))
+        )

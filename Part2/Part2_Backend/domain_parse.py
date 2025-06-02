@@ -8,7 +8,8 @@ from file_utils import (
     read_file,
     validate_dataframe_basic, 
     validate_dataframe_structure,
-    validate_coordinate_data_types
+    validate_coordinate_data_types,
+    validate_matrix_coordinate_mapping
 )
 
 
@@ -114,6 +115,9 @@ def parse_coordinates(coord_file):
     try:
         df = read_file(coord_file, 'coordinate')
 
+        # Clean column names by stripping whitespace
+        df.columns = df.columns.str.strip()
+
         # Validate basic structure
         validate_coordinate_dataframe_basic(df)
 
@@ -146,19 +150,14 @@ def parse_coordinates(coord_file):
 def parse_filenames(file_names):
     domains = []
     for name in file_names:
-        parts = name.split('domain') # ['2_NBS.xlsx']
+        # Split by underscore and get the last part
+        parts = name.split('_')
         if len(parts) > 1:
-            after_domain = parts[1]
-            tokens = after_domain.split('_') # ['2','NBS.xlsx']
-            if len(tokens) > 1:
-                try:
-                    domain_num = int(tokens[0])
-                    domain_name = tokens[1].split('.')[0]
-                    domains.append((domain_num, domain_name))
-                except Exception as e:
-                    raise ValueError(f"File name is in invalid format: {str(e)}")
+            # Get the last part and remove the extension
+            domain_name = parts[-1].split('.')[0]
+            domains.append(domain_name)
 
-    return [name for _, name in domains]
+    return domains
 
 
 
@@ -195,31 +194,20 @@ def prepare_dataframe(matrix_file):
     validate_dataframe_structure(df)
     return df
 
-def create_genome_mappings(df_only_cutoffs, genomes):
+def create_genome_mappings(df_only_cutoffs, coords):
+    # Create a mapping of gene names to their genomes
+    gene_to_genome = dict(zip(coords['name'], coords['genome']))
+    
+    # Create the mappings using the gene_to_genome dictionary
     row_to_subsection = pd.Series(index=df_only_cutoffs.index, dtype="object")
     col_to_subsection = pd.Series(index=df_only_cutoffs.columns, dtype="object")
 
-    # Helper function to get subsection from full name
-    def get_subsection(name):
-        # Check if any of our genome names are in the matrix index/column name
-        for genome in genomes:
-            if genome in name:
-                return genome
-        return None
-
-    # Get all unique subsections from the index and columns
-    all_row_subsections = df_only_cutoffs.index.map(get_subsection)
-    all_col_subsections = df_only_cutoffs.columns.map(get_subsection)
-
-    # For each genome in our list of unique values
-    for genome in genomes:
-        # Find rows and columns that match this genome
-        matching_rows = all_row_subsections == genome
-        matching_cols = all_col_subsections == genome
-
-        # Update the mappings
-        row_to_subsection.loc[matching_rows] = genome
-        col_to_subsection.loc[matching_cols] = genome
+    # Map each row and column to its genome using the gene_to_genome dictionary
+    for idx in df_only_cutoffs.index:
+        row_to_subsection[idx] = gene_to_genome.get(idx)
+    
+    for col in df_only_cutoffs.columns:
+        col_to_subsection[col] = gene_to_genome.get(col)
 
     return row_to_subsection, col_to_subsection
 
@@ -249,16 +237,19 @@ def calculate_row_maxes(df_only_cutoffs, col_to_subsection):
 
     return row_max
 
-def parse_matrix_data(matrix_file, genomes):
+def parse_matrix_data(matrix_file, genomes, coord_df):
     try:
         # Read and prepare the dataframe
         df = prepare_dataframe(matrix_file)
         # print(df)
 
-        # Get data above cutoff
-        df_only_cutoffs = df_only_cutoffs = df[df > 1]
+        # Validate matrix indices against coordinate names
+        validate_matrix_coordinate_mapping(df, coord_df)
 
-        row_to_subsection, col_to_subsection = create_genome_mappings(df_only_cutoffs, genomes)
+        # Get data above cutoff
+        df_only_cutoffs = df[df >= 25]
+
+        row_to_subsection, col_to_subsection = create_genome_mappings(df_only_cutoffs, coord_df)
 
         # Calculate maxes
         col_max = calculate_column_maxes(df_only_cutoffs, row_to_subsection)
@@ -313,6 +304,10 @@ def add_links(df_only_cutoffs, row_max, col_max, genomes, domain):
 
     for row in df_only_cutoffs.index:
         for col in df_only_cutoffs.columns:
+            # Skip links between genes in the same genome
+            if any((genome in row) and (genome in col) for genome in genomes):
+                continue
+
             is_col_max = pd.notna(col_max.at[row, col])
             is_row_max = pd.notna(row_max.at[row, col])
 
@@ -332,11 +327,6 @@ def add_links(df_only_cutoffs, row_max, col_max, genomes, domain):
                 continue  # skip non-max values
 
             domain_connections[f'{source}#{target}'] = {domain: reciprocal_max}
-
-            # Skipping links that within the same genome
-            if any((genome in source) and (genome in target) for genome in genomes):
-                continue
-
 
             links.append({
                 "source": source,
@@ -454,7 +444,7 @@ def domain_parse(matrix_files, coord_file, file_names):
     for idx, matrix_file in enumerate(matrix_files, 1):
         graph_output = {"domain_name": domains[idx - 1]}
         matrix_file.seek(0)
-        nodes, links, domain_connections, domain_genes, total_gene_list = create_output(parse_matrix_data(matrix_file, genomes), coords, domains[idx - 1])
+        nodes, links, domain_connections, domain_genes, total_gene_list = create_output(parse_matrix_data(matrix_file, genomes, coords), coords, domains[idx - 1])
         all_domain_connections.append(domain_connections)
         all_domain_genes.append(domain_genes)
         total_genomes.update(genomes)

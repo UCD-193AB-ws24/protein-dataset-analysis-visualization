@@ -14,7 +14,7 @@
     links: Link[];
     domain_name?: string;
   };
-  export let cutoff: number = 1;
+  export let cutoff: number = 25;
 
   // Link filter props
   export let showReciprocal = true;
@@ -143,40 +143,29 @@
         });
         return l;
       }
-      const rowSrc = genomes.indexOf(gSrc);
-      const rowTgt = genomes.indexOf(gTgt);
-      if (Math.abs(rowSrc - rowTgt) > 1) {
-        // Check if the source/target is already a duplicate
-        const sourceNode = nodes.find(n => n.id === l.source);
-        const targetNode = nodes.find(n => n.id === l.target);
 
-        if (gSrc === firstGenome && !sourceNode?._dup) {
-          const newLink = { ...l, source: dupMap.get(l.source)! };
-          console.log('Link transformed for duplication (source):', {
-            original: l,
-            transformed: newLink,
-            sourceGenome: gSrc,
-            targetGenome: gTgt,
-            rowSrc,
-            rowTgt,
-            dupMap: Object.fromEntries(dupMap)
-          });
-          return newLink;
-        } else if (gTgt === firstGenome && !targetNode?._dup) {
-          const newLink = { ...l, target: dupMap.get(l.target)! };
-          console.log('Link transformed for duplication (target):', {
-            original: l,
-            transformed: newLink,
-            sourceGenome: gSrc,
-            targetGenome: gTgt,
-            rowSrc,
-            rowTgt,
-            dupMap: Object.fromEntries(dupMap)
-          });
-          return newLink;
+      // Keep the original link
+      const originalLink = { ...l };
+
+      // If we need to duplicate (more than 2 genomes and first genome is involved)
+      if (genomes.length > 2) {
+        const rowSrc = genomes.indexOf(gSrc);
+        const rowTgt = genomes.indexOf(gTgt);
+        
+        if (Math.abs(rowSrc - rowTgt) > 1) {
+          // Check if the source/target is already a duplicate
+          const sourceNode = nodes.find(n => n.id === l.source);
+          const targetNode = nodes.find(n => n.id === l.target);
+          
+          if (gSrc === firstGenome && !sourceNode?._dup) {
+            return { ...l, source: dupMap.get(l.source)! };
+          } else if (gTgt === firstGenome && !targetNode?._dup) {
+            return { ...l, target: dupMap.get(l.target)! };
+          }
         }
       }
-      return l;
+
+      return originalLink;
     })
     // Exclude links between genes of the same genome
     .filter((l) => {
@@ -692,7 +681,7 @@
           let tooltipContent = `
             <strong>Genome:</strong> ${d.genome_name}<br>
             <strong>Protein:</strong> ${d.protein_name}<br>
-            ${d.gene_type ? `<strong>Domain:</strong> ${d.gene_type}<br>` : ''}
+            ${d.gene_type ? `<strong>Gene Type:</strong> ${d.gene_type}<br>` : ''}
             <strong>Present:</strong> ${d.is_present === false ? 'NO' : 'YES'}<br>
             <strong>Direction:</strong> ${d.direction === 'plus' ? '+' : '-'}<br>
             <strong>Position:</strong> ${d.rel_position}

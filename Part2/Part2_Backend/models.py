@@ -27,6 +27,7 @@ class Group(Base):
     num_domains = Column(Integer)
     genomes = Column(ARRAY(String))
     created_at = Column(TIMESTAMP(timezone=True), server_default=func.now())
+    last_updated_at = Column(TIMESTAMP(timezone=True), server_default=func.now(), onupdate=func.now())
 
 class File(Base):
     __tablename__ = "files"

@@ -61,11 +61,21 @@ def validate_dataframe_structure(df: pd.DataFrame) -> None:
     if df.empty:
         raise ValueError("Data is empty after removing NA values")
     if not df.dtypes.apply(lambda x: pd.api.types.is_numeric_dtype(x)).all():
-        raise ValueError("Data contains non-numeric values") 
+        raise ValueError("Data contains non-numeric values")
+    
+    # Check index and column lengths
+    if any(len(str(idx)) > 100 for idx in df.index):
+        raise ValueError("Matrix contains row identifiers longer than 100 characters")
+    if any(len(str(col)) > 100 for col in df.columns):
+        raise ValueError("Matrix contains column names longer than 100 characters")
     
 def validate_coordinate_data_types(df):
     # Clean column names by stripping whitespace
     df.columns = df.columns.str.strip()
+    
+    # # Check name column length
+    # if 'name' in df.columns and any(len(str(name)) > 100 for name in df['name']):
+    #     raise ValueError("Coordinate file contains names longer than 100 characters")
     
     # Check if position is numeric or can be converted to numeric
     try:
@@ -94,3 +104,15 @@ def validate_coordinate_data_types(df):
         'negative': 'minus',
         '-': 'minus'
     }).fillna(df['orientation'])  # Keep original value if not in mapping
+
+def validate_matrix_coordinate_mapping(matrix_df: pd.DataFrame, coord_df: pd.DataFrame) -> None:
+    """Validate that all matrix indices exist in the coordinate file's name column."""
+    matrix_indices = set(matrix_df.index)
+    coord_names = set(coord_df['name'])
+    
+    missing_names = matrix_indices - coord_names
+    if missing_names:
+        raise ValueError(
+            f"Matrix contains {len(missing_names)} identifiers not found in coordinate file: " + 
+            ", ".join(sorted(missing_names))
+        )

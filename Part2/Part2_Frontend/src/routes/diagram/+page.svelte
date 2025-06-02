@@ -54,7 +54,7 @@
   let errorMessage = "";
   let loading = true;        // Loading state for file upload
   let savingGroup = false;   // Loading state for saving group
-  let cutoff = 1;           // slider value
+  let cutoff = 25;           // slider value
 
   // Link filter states
   let showReciprocal = true;
@@ -289,11 +289,16 @@
     );
 
     // Update links in filtered graph
-    filteredGraph.links = selectedGraph.links.filter(link =>
-      // Both link.source and link.target should be associated with (contain the name of) genomes in selectedGenomes
-      selectedGenomes.some(genome => link.source.includes(genome)) &&
-      selectedGenomes.some(genome => link.target.includes(genome))
-    );
+    filteredGraph.links = selectedGraph.links.filter(link => {
+      const sourceNode = selectedGraph.nodes.find(n => n.id === link.source);
+      const targetNode = selectedGraph.nodes.find(n => n.id === link.target);
+      
+      if (!sourceNode || !targetNode) return false;
+      
+      // Check if both nodes belong to selected genomes
+      return selectedGenomes.includes(sourceNode.genome_name) && 
+             selectedGenomes.includes(targetNode.genome_name);
+    });
   }
 
   // Select domain/graph to focus on
@@ -331,16 +336,16 @@
   function handleDrop(e: DragEvent, targetGenome: string) {
     e.preventDefault();
     if (!draggedGenome || draggedGenome === targetGenome) return;
-
+    
     const fromIndex = selectedGenomes.indexOf(draggedGenome);
     const toIndex = selectedGenomes.indexOf(targetGenome);
-
+    
     selectedGenomes = selectedGenomes.map((genome, index) => {
       if (index === fromIndex) return targetGenome;
       if (index === toIndex) return draggedGenome!;
       return genome;
     });
-
+    
     draggedGenome = null;
   }
 </script>
@@ -507,7 +512,7 @@
                   <div class="flex items-center gap-3">
                     <input
                       type="range"
-                      min="0"
+                      min="25"
                       max="100"
                       disabled={selectedGraph.domain_name === "ALL"}
                       bind:value={cutoff}
@@ -585,12 +590,12 @@
 
     <!-- Main content area -->
     <div class="flex-1 min-w-0">
-      {#if loading}
-        <div class="flex justify-center items-center py-8">
-          <div class="animate-spin rounded-full h-12 w-12 border-4 border-green-200"></div>
-          <div class="animate-spin rounded-full h-12 w-12 border-4 border-green-600 border-t-transparent absolute"></div>
-        </div>
-      {:else}
+{#if loading}
+  <div class="flex justify-center items-center py-8">
+    <div class="animate-spin rounded-full h-12 w-12 border-4 border-green-200"></div>
+    <div class="animate-spin rounded-full h-12 w-12 border-4 border-green-600 border-t-transparent absolute"></div>
+  </div>
+{:else}
         <!-- Top section with max-width to prevent expansion -->
         {#if (isAuthenticated && graphs.length > 0) || (groupId && (matrixFiles.length > 0 || coordinateFile))}
           <div class="mb-8">
@@ -599,39 +604,39 @@
               <!-- Group info section for authenticated users -->
               <div class="bg-white rounded-lg shadow-sm border border-slate-200 p-4">
                 <h3 class="text-xl font-semibold text-slate-800 mb-4">Group Information</h3>
-                <div class="space-y-4">
-                  <input
-                    type="text"
-                    placeholder="Title"
-                    bind:value={title}
-                    class="w-full px-4 py-2 bg-white border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
-                  />
-                  <textarea
-                    placeholder="Description"
-                    bind:value={description}
-                    class="w-full px-4 py-2 bg-white border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
-                    rows="3"
-                  ></textarea>
+          <div class="space-y-4">
+            <input
+              type="text"
+              placeholder="Title"
+              bind:value={title}
+              class="w-full px-4 py-2 bg-white border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
+            />
+            <textarea
+              placeholder="Description"
+              bind:value={description}
+              class="w-full px-4 py-2 bg-white border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
+              rows="3"
+            ></textarea>
 
-                  <button
-                    on:click={saveGroup}
-                    disabled={savingGroup}
-                    class="inline-flex items-center px-4 py-2 text-sm font-medium text-white bg-green-600 rounded-lg hover:bg-green-700 transition-colors duration-200 cursor-pointer disabled:bg-green-300 disabled:cursor-not-allowed"
-                  >
-                    {#if savingGroup}
-                      <div class="flex items-center">
-                        <svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                          <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-                          <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                        </svg>
-                        Saving...
-                      </div>
-                    {:else}
-                      {groupId ? 'Update Group' : 'Save Group'}
-                    {/if}
-                  </button>
+            <button
+              on:click={saveGroup}
+              disabled={savingGroup}
+              class="inline-flex items-center px-4 py-2 text-sm font-medium text-white bg-green-600 rounded-lg hover:bg-green-700 transition-colors duration-200 cursor-pointer disabled:bg-green-300 disabled:cursor-not-allowed"
+            >
+              {#if savingGroup}
+                <div class="flex items-center">
+                  <svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                    <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                  </svg>
+                  Saving...
                 </div>
-              </div>
+              {:else}
+                      {groupId ? 'Update Group' : 'Save Group'}
+              {/if}
+            </button>
+          </div>
+    </div>
 
               {#if groupId && (matrixFiles.length > 0 || coordinateFile)}
                 <!-- Download section only shown for existing groups -->
@@ -650,13 +655,13 @@
                                 <polyline points="7 10 12 15 17 10"/>
                                 <line x1="12" y1="15" x2="12" y2="3"/>
                               </svg>
-                            </button>
+          </button>
                           </a>
-                        </div>
-                      </div>
-                    {/if}
+        </div>
+      </div>
+    {/if}
                     {#if matrixFiles.length > 0}
-                      <div>
+        <div>
                         <h4 class="text-lg font-medium text-slate-700 mb-2">Matrix File{matrixFiles.length > 1 ? 's' : ''}</h4>
                         <div class="flex flex-col gap-1.5">
                           {#each matrixFiles as file}
@@ -670,15 +675,15 @@
                                 </svg>
                               </button>
                             </a>
-                          {/each}
-                        </div>
-                      </div>
-                    {/if}
-                  </div>
-                </div>
-              {/if}
+              {/each}
             </div>
+            </div>
+          {/if}
+        </div>
+              </div>
+            {/if}
           </div>
+        </div>
         {/if}
 
         <!-- Graph visualization container -->
@@ -687,7 +692,7 @@
             <div class="flex justify-center items-center py-8">
               <div class="animate-spin rounded-full h-12 w-12 border-4 border-green-200"></div>
               <div class="animate-spin rounded-full h-12 w-12 border-4 border-green-600 border-t-transparent absolute"></div>
-            </div>
+      </div>
           {:else if errorMessage}
             <div class="flex justify-center items-center py-8">
               <div class="max-w-lg">
@@ -701,7 +706,7 @@
                   </button>
                 </div>
               </div>
-            </div>
+          </div>
           {:else if !graphs.length}
             <div class="flex flex-col items-center justify-center py-8">
               <button
@@ -711,34 +716,34 @@
                 Upload and Prepare Graph
               </button>
               <p class="text-slate-600 text-center">Upload your files to visualize protein relationships</p>
-            </div>
+        </div>
           {:else if !filteredGraph.nodes.length}
             <div class="flex justify-center items-center py-8">
               <p class="text-slate-600 text-center">Select genomes from the left panel to view the graph</p>
-            </div>
+    </div>
           {:else}
-            <Chart
+    <Chart
               bind:this={chartComponent}
-              graph={filteredGraph}
-              {cutoff}
-              {showReciprocal}
-              {showNonReciprocal}
-              {showConsistent}
-              {showInconsistent}
-              {showPartiallyConsistent}
-            />
+      graph={filteredGraph}
+      {cutoff}
+      {showReciprocal}
+      {showNonReciprocal}
+      {showConsistent}
+      {showInconsistent}
+      {showPartiallyConsistent}
+    />
           {/if}
         </div>
       {/if}
     </div>
   </div>
 </div>
-
-<UploadModal
-  isOpen={showUploadModal}
-  onClose={() => showUploadModal = false}
-  onUpload={handleUpload}
-/>
+    
+    <UploadModal 
+      isOpen={showUploadModal}
+      onClose={() => showUploadModal = false}
+      onUpload={handleUpload}
+    />
 
 <style>
   /* Empty style tag required for Tailwind processing */

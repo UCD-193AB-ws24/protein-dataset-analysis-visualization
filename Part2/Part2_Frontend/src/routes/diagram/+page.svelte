@@ -201,14 +201,14 @@
     }
 
     if (!isAuthenticated) {
-      alert('Please log in to save groups.');
+      alert('Please log in to save projects.');
       return;
     }
 
     savingGroup = true;
     const formData = new FormData();
     if (!groupId) {
-      // For new groups, validate uploaded files
+      // For new projects, validate uploaded files
       if (!uploadedCoordsFile || uploadedMatrixFiles.length === 0) {
         alert('Please select at least one coordinate file and one matrix file to save.');
         savingGroup = false;
@@ -240,13 +240,13 @@
       if (!response.ok) {
         const errorResponse = await response.json();
         const errorMessage = errorResponse.error || 'Unknown error';
-        console.error('Error saving group:', errorMessage);
-        throw new Error(`Failed to save group: ${response.statusText}`);
+        console.error('Error saving project:', errorMessage);
+        throw new Error(`Failed to save project: ${response.statusText}`);
       }
 
       const result = await response.json();
-      console.log('Group saved successfully:', result);
-      alert('Group updated successfully!');
+      console.log('Project saved successfully:', result);
+      alert('Project updated successfully!');
 
       if (!groupId) {
         // Transition to the view with the new groupId
@@ -256,8 +256,8 @@
         goto(`?groupId=${newGroupId}`);
       }
     } catch (error) {
-      console.error('Error saving group:', error);
-      alert('Failed to save group. Please try again.');
+      console.error('Error saving project:', error);
+      alert('Failed to save project. Please try again.');
     } finally {
       savingGroup = false;
     }
@@ -602,7 +602,7 @@
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
               <!-- Group info section for authenticated users -->
               <div class="bg-white rounded-lg shadow-sm border border-slate-200 p-4">
-                <h3 class="text-xl font-semibold text-slate-800 mb-4">Group Information</h3>
+                <h3 class="text-xl font-semibold text-slate-800 mb-4">Project Information</h3>
                 <div class="space-y-4">
                   <input
                     type="text"
@@ -631,14 +631,14 @@
                         Saving...
                       </div>
                     {:else}
-                      {groupId ? 'Update Group' : 'Save Group'}
+                      {groupId ? 'Update Project' : 'Save Project'}
                     {/if}
                   </button>
                 </div>
               </div>
 
               {#if groupId && (matrixFiles.length > 0 || coordinateFile)}
-                <!-- Download section only shown for existing groups -->
+                <!-- Download section only shown for existing projects -->
                 <div class="bg-white rounded-lg shadow-sm border border-slate-200 p-4">
                   <h3 class="text-xl font-semibold text-slate-800 mb-3">Download Files</h3>
                   <div class="space-y-4">

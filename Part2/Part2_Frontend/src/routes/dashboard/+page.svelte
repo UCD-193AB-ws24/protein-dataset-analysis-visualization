@@ -84,7 +84,7 @@
 			});
 
 			if (!response.ok) {
-				throw new Error(`Error fetching file groups: ${response.statusText}`);
+				throw new Error(`Error fetching projects: ${response.statusText}`);
 			}
 
 			const data = await response.json();
@@ -132,7 +132,8 @@
 		filteredFileGroups = userFileGroups.filter(group => {
 			const matchesSearch = searchQuery === '' ||
 				group.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-				group.description.toLowerCase().includes(searchQuery.toLowerCase());
+				group.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
+				group.genomes.some(genome => genome.toLowerCase().includes(searchQuery.toLowerCase()));
 
 			const matchesFilter = filterBy === 'all' ||
 				(filterBy === 'domain' && group.is_domain_specific) ||
@@ -167,18 +168,29 @@
 
 {#if isAuthenticated}
 <div class="w-[95%] max-w-[1600px] mx-auto py-8">
-	<div class="mb-8">
-		<h1 class="text-3xl font-bold text-slate-800 mb-2">Your Uploads</h1>
-		<p class="text-slate-600">Manage and analyze your protein sequence comparisons</p>
+	<div class="mb-8 flex items-start justify-between">
+		<div>
+			<h1 class="text-3xl font-bold text-slate-800 mb-2">Your Projects</h1>
+			<p class="text-slate-600">Manage and analyze your protein sequence comparisons</p>
+		</div>
+		<a
+			href="/diagram"
+			class="inline-flex items-center px-4 py-2 text-sm font-medium text-white bg-green-600 rounded-lg hover:bg-green-700 transition-colors duration-200 cursor-pointer"
+		>
+			<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mr-2">
+				<path d="M12 5v14M5 12h14"/>
+			</svg>
+			Create New Diagram
+		</a>
 	</div>
 
 	<div class="flex flex-col md:flex-row gap-4 mb-6">
-		<div class="md:w-1/3">
-			<div class="relative">
+		<div class="md:w-1/3 flex items-end">
+			<div class="relative w-full">
 				<input
 					type="text"
 					bind:value={searchQuery}
-					placeholder="Search groups..."
+					placeholder="Search projects..."
 					class="w-full pl-10 pr-4 py-2 bg-white border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
 				/>
 				<svg
@@ -200,7 +212,9 @@
 		</div>
 		<div class="flex gap-4 md:ml-auto">
 			<div class="w-48">
+				<label for="sort-select" class="block text-xs font-medium text-slate-700 mb-1">Sort by:</label>
 				<select
+					id="sort-select"
 					bind:value={sortBy}
 					class="w-full px-4 py-2 bg-white border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
 				>
@@ -210,7 +224,9 @@
 				</select>
 			</div>
 			<div class="w-48">
+				<label for="filter-select" class="block text-xs font-medium text-slate-700 mb-1">Filter by:</label>
 				<select
+					id="filter-select"
 					bind:value={filterBy}
 					class="w-full px-4 py-2 bg-white border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
 				>
@@ -221,6 +237,23 @@
 			</div>
 		</div>
 	</div>
+
+	{#if !loading && filteredFileGroups.length >= 0}
+		<div class="mb-4">
+			<p class="text-sm text-slate-600">
+				Showing {filteredFileGroups.length} of {userFileGroups.length} project{userFileGroups.length !== 1 ? 's' : ''}
+				{#if searchQuery || filterBy !== 'all'}
+					{#if searchQuery && filterBy !== 'all'}
+						for "{searchQuery}" in {filterOptions.find(f => f.value === filterBy)?.label.toLowerCase()}
+					{:else if searchQuery}
+						for "{searchQuery}"
+					{:else if filterBy !== 'all'}
+						in {filterOptions.find(f => f.value === filterBy)?.label.toLowerCase()}
+					{/if}
+				{/if}
+			</p>
+		</div>
+	{/if}
 
 	{#if loading}
 		<div class="flex justify-center items-center py-8">
@@ -236,30 +269,32 @@
 	{#if filteredFileGroups.length > 0}
 		<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
 			{#each filteredFileGroups as group}
-				<div class="bg-white rounded-lg shadow-sm border border-slate-200 p-4 hover:shadow-md transition-shadow">
-					<div class="flex items-start justify-between mb-2">
-						<div class="flex items-center">
-							<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-slate-400 mr-2">
-								<circle cx="6" cy="8" r="2"/>
-								<circle cx="18" cy="8" r="2"/>
-								<circle cx="6" cy="16" r="2"/>
-								<circle cx="18" cy="16" r="2"/>
-								<line x1="6" y1="8" x2="18" y2="8"/>
-								<line x1="6" y1="16" x2="18" y2="16"/>
-								<line x1="6" y1="8" x2="18" y2="16"/>
-							</svg>
-							<h3 class="font-medium text-slate-800">{group.title}</h3>
+				<div class="bg-white rounded-lg shadow-sm border border-slate-200 p-4 hover:shadow-md transition-shadow flex flex-col h-full">
+					<div class="flex-1">
+						<div class="flex items-start justify-between mb-2">
+							<div class="flex items-center">
+								<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-slate-400 mr-2">
+									<circle cx="6" cy="8" r="2"/>
+									<circle cx="18" cy="8" r="2"/>
+									<circle cx="6" cy="16" r="2"/>
+									<circle cx="18" cy="16" r="2"/>
+									<line x1="6" y1="8" x2="18" y2="8"/>
+									<line x1="6" y1="16" x2="18" y2="16"/>
+									<line x1="6" y1="8" x2="18" y2="16"/>
+								</svg>
+								<h3 class="font-medium text-slate-800">{group.title}</h3>
+							</div>
 						</div>
-					</div>
-					<div class="mb-3">
-						<p class="text-sm text-slate-600 line-clamp-2">{group.description}</p>
-					</div>
-					<div class="space-y-2 text-sm text-slate-600">
-						<p>Genomes: {group.genomes.join(', ')}</p>
-						<p>Num Genes: {group.num_genes}</p>
-						<p>Num Domains: {group.num_domains}</p>
-						<p>Created: {new Date(group.created_at).toLocaleString()}</p>
-						<p>Last Updated: {new Date(group.last_updated_at).toLocaleString()}</p>
+						<div class="mb-3">
+							<p class="text-sm text-slate-600 line-clamp-2">{group.description}</p>
+						</div>
+						<div class="space-y-2 text-sm text-slate-600">
+							<p>Genomes: {group.genomes.join(', ')}</p>
+							<p>Num Genes: {group.num_genes}</p>
+							<p>Num Domains: {group.num_domains}</p>
+							<p>Created: {new Date(group.created_at).toLocaleString()}</p>
+							<p>Last Updated: {new Date(group.last_updated_at).toLocaleString()}</p>
+						</div>
 					</div>
 					<div class="mt-4 flex items-center justify-between">
 						<span class={`text-xs px-2 py-1 rounded-full ${group.is_domain_specific ? 'bg-blue-100 text-blue-700' : 'bg-green-100 text-green-700'}`}>
@@ -291,7 +326,7 @@
 		</div>
 	{:else if !loading}
 		<div class="text-center py-8">
-			<p class="text-slate-600">No file groups found.</p>
+			<p class="text-slate-600">No projects found.</p>
 		</div>
 	{/if}
 </div>

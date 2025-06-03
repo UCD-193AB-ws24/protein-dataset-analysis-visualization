@@ -86,7 +86,7 @@ def validate_dataframe_structure(df: pd.DataFrame) -> None:
     if df.empty:
         raise ValueError("Data is empty after removing NA values")
     if not df.dtypes.apply(lambda x: pd.api.types.is_numeric_dtype(x)).all():
-        raise ValueError("Data contains non-numeric values")
+        raise ValueError("Data contains non-numeric values") 
     
     # Check index and column lengths
     if any(len(str(idx)) > 100 for idx in df.index):
@@ -117,7 +117,7 @@ def validate_coordinate_data_types(df):
 
     # Strip whitespace from orientation values
     df['orientation'] = df['orientation'].astype(str).str.strip()
-    
+
     valid_orientations = {'minus', 'plus', 'negative', 'positive', '+', '-'}
     if not df['orientation'].isin(valid_orientations).all():
         raise ValueError("Orientation column should only contain 'plus', 'minus', 'positive', 'negative', '+' or '-'")

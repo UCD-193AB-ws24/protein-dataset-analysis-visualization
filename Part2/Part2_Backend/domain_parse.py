@@ -92,13 +92,20 @@ def process_domain_field(df):
                 domain_name = parts[-1]
             domain_names.add(domain_name)
 
+        # Group columns by domain name
+        domain_cols = {}
         for domain in domain_names:
-            test_domain_cols = [col for col in domain_columns if domain in col]
-            has_start = any(col for col in test_domain_cols if col.endswith('_start'))
-            has_end = any(col for col in test_domain_cols if col.endswith('_end')) 
+            domain_cols[domain] = [col for col in domain_columns if domain in col]
 
-            if (has_start or has_end) and not (has_start and has_end):
-                raise ValueError(f"Domain {domain} is missing start or end position")
+        # Validate each domain's columns
+        for domain, cols in domain_cols.items():
+            has_start = any(col.endswith('_start') for col in cols)
+            has_end = any(col.endswith('_end') for col in cols)
+
+            # If domain has start/end positions, they must be in the same file
+            if has_start or has_end:
+                if not (has_start and has_end):
+                    raise ValueError(f"Domain {domain} must have both start and end positions in the same file")
 
         return list(domain_names), list(domain_col_names)
     except Exception as e:

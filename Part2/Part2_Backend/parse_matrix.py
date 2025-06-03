@@ -57,7 +57,7 @@ def parse_coordinates(coord_file):
         for col in df.columns:
             if df[col].dtype == "object":
                 df[col] = df[col].astype(str).str.strip()
-                
+        
         # Validate basic structure
         validate_coordinate_dataframe_basic(df)
         

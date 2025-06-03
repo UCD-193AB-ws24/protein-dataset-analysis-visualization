@@ -64,13 +64,15 @@
 			</div>
 
 			<!-- Actual screenshot of the tool -->
-			<div class="max-w-5xl mx-auto">
+			<div class="max-w-2xl mx-auto">
 				<div class="bg-white rounded-lg shadow-md p-4">
-					<img
-						src="/images/locuscgvt-diagram.png"
-						alt="LocusCGVT genomic visualization showing gene relationships across multiple genomes"
-						class="w-full h-auto rounded-md"
-					/>
+					<div class="max-w-lg mx-auto">
+						<img
+							src="/images/home-page-diagram.png"
+							alt="LocusCGVT genomic visualization showing gene relationships across multiple genomes"
+							class="w-full h-auto rounded-md"
+						/>
+					</div>
 				</div>
 				<p class="text-center text-sm text-slate-500 mt-4">
 					Interactive visualization showing gene relationships across multiple genomes with customizable filtering and analysis options

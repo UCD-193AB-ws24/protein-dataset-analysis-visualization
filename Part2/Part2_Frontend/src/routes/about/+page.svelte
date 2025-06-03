@@ -162,36 +162,59 @@
 							We're presenting LocusCGVT at the <strong>Engineering Design Showcase</strong> on June 5th, 2025 - come check us out!
 						</p>
 					</div>
-
-					<div class="space-y-3">
-						<h4 class="text-lg font-semibold text-slate-800">Team Members</h4>
-						<div class="grid grid-cols-2 gap-2 text-slate-600">
-							<div class="flex items-center">
-								<span class="w-2 h-2 bg-green-600 rounded-full mr-3"></span>
-								KB K.
-							</div>
-							<div class="flex items-center">
-								<span class="w-2 h-2 bg-green-600 rounded-full mr-3"></span>
-								Vishal K.
-							</div>
-							<div class="flex items-center">
-								<span class="w-2 h-2 bg-green-600 rounded-full mr-3"></span>
-								Gurpreet S.
-							</div>
-							<div class="flex items-center">
-								<span class="w-2 h-2 bg-green-600 rounded-full mr-3"></span>
-								Balint S.
-							</div>
-						</div>
-					</div>
 				</div>
 
-				<!-- Image - Right Side -->
+				<!-- Team Photos Grid - Right Side -->
 				<div class="flex justify-center">
-					<div class="bg-green-50 rounded-lg p-8 text-center max-w-lg w-full">
-						<div class="bg-white rounded-lg shadow-md p-6 mb-4">
-							<div class="h-48 bg-gradient-to-br from-green-100 to-green-200 rounded-md flex items-center justify-center">
-								<p class="text-green-600 font-medium">Team Photo</p>
+					<div class="bg-green-50 rounded-lg p-8 max-w-lg w-full">
+						<h4 class="text-xl font-semibold text-slate-800 mb-6 text-center">Meet Our Team</h4>
+						<div class="grid grid-cols-2 gap-6">
+							<!-- KB K. -->
+							<div class="text-center">
+								<div class="bg-white rounded-lg shadow-md overflow-hidden">
+									<img
+										src="/images/AggieCard_Profile_Pic.jpg"
+										alt="KB K. - Team Member"
+										class="w-full h-48 object-cover"
+									/>
+								</div>
+								<p class="mt-2 text-sm font-medium text-slate-700">KB K.</p>
+							</div>
+
+							<!-- Vishal K. -->
+							<div class="text-center">
+								<div class="bg-white rounded-lg shadow-md overflow-hidden">
+									<img
+										src="/images/Vishal_Koppuru_Resized.jpg"
+										alt="Vishal K. - Team Member"
+										class="w-full h-48 object-cover"
+									/>
+								</div>
+								<p class="mt-2 text-sm font-medium text-slate-700">Vishal K.</p>
+							</div>
+
+							<!-- Gurpreet S. -->
+							<div class="text-center">
+								<div class="bg-white rounded-lg shadow-md overflow-hidden">
+									<img
+										src="/images/business_casual_photo_1.jpeg"
+										alt="Gurpreet S. - Team Member"
+										class="w-full h-48 object-cover object-[center_30%]"
+									/>
+								</div>
+								<p class="mt-2 text-sm font-medium text-slate-700">Gurpreet S.</p>
+							</div>
+
+							<!-- Balint S. -->
+							<div class="text-center">
+								<div class="bg-white rounded-lg shadow-md overflow-hidden">
+									<img
+										src="/images/Balint_Szigeti_Csucs_Personal_Photo.jpeg"
+										alt="Balint S. - Team Member"
+										class="w-full h-48 object-cover object-top"
+									/>
+								</div>
+								<p class="mt-2 text-sm font-medium text-slate-700">Balint S.</p>
 							</div>
 						</div>
 					</div>

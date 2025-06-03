@@ -64,9 +64,9 @@
 			</div>
 
 			<!-- Actual screenshot of the tool -->
-			<div class="max-w-2xl mx-auto">
+			<div class="max-w-4xl mx-auto">
 				<div class="bg-white rounded-lg shadow-md p-4">
-					<div class="max-w-lg mx-auto">
+					<div class="max-w-2xl mx-auto">
 						<img
 							src="/images/home-page-diagram.png"
 							alt="LocusCGVT genomic visualization showing gene relationships across multiple genomes"

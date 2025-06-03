@@ -6,161 +6,184 @@
 	}
 </script>
 
+<svelte:head>
+	<title>LocusCGVT - Locus Comparative Genomics Visualization Tool</title>
+	<meta name="description" content="Combine phylogenetic and syntenic information to visualize genes/proteins in genomic regions and their relationships across genotypes or species." />
+</svelte:head>
+
 <div class="w-full bg-white">
 	<!-- Hero Section -->
-	<section class="w-full py-24 relative overflow-hidden">
-		<div class="absolute inset-0 bg-green-50/80"></div>
-		<div class="absolute inset-0 bg-gradient-to-br from-green-50/0 via-green-100/40 to-green-50/0 animate-gradient"></div>
-		<div class="absolute inset-0 bg-gradient-to-tr from-green-50/0 via-green-100/30 to-green-50/0 animate-gradient-reverse"></div>
-		<div class="max-w-5xl mx-auto px-8 relative">
-			<div class="max-w-3xl mx-auto text-center">
-				<h1 class="text-4xl md:text-5xl font-bold text-green-800 mb-6">
-					Visualize lettuce protein similarity like never before.
+	<section class="w-full py-20 relative overflow-hidden">
+		<div class="absolute inset-0 bg-gradient-to-br from-green-50 via-white to-green-50"></div>
+		<div class="max-w-6xl mx-auto px-8 relative">
+			<div class="max-w-4xl mx-auto text-center">
+				<h1 class="text-5xl md:text-6xl font-bold text-green-800 mb-6">
+					LocusCGVT
 				</h1>
-				<p class="text-lg md:text-xl text-slate-600 mb-10">
-					Upload, analyze, and compare genomic datasets across multiple
-					genotypes. Gain insights through interactive, domain-specific
-					visualizations.
+				<p class="text-xl md:text-2xl text-green-700 font-medium mb-4">
+					Locus Comparative Genomics Visualization Tool
 				</p>
-				<a href="/diagram" class="inline-flex items-center px-8 py-4 text-base font-medium text-white bg-green-600 rounded-lg hover:bg-green-700 transition-colors duration-200 shadow-md hover:shadow-lg">
-					Start Visualizing
-					<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="ml-2"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
-				</a>
+				<p class="text-lg md:text-xl text-slate-600 mb-10 max-w-3xl mx-auto">
+					Visualize genes/proteins in genomic regions and their relationships across genotypes or species,
+					enabling identification of homologs/orthologs and gene diversification events.
+				</p>
+				<div class="flex flex-col sm:flex-row gap-4 justify-center items-center">
+					<a href="/diagram" class="inline-flex items-center px-8 py-4 text-base font-medium text-white bg-green-600 rounded-lg hover:bg-green-700 transition-colors duration-200 shadow-md hover:shadow-lg cursor-pointer">
+						Start Analyzing
+						<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="ml-2">
+							<path d="M5 12h14"/>
+							<path d="m12 5 7 7-7 7"/>
+						</svg>
+					</a>
+					<button
+						on:click={startLogin}
+						class="inline-flex items-center px-8 py-4 text-base font-medium text-green-600 bg-white border-2 border-green-600 rounded-lg hover:bg-green-50 transition-colors duration-200 cursor-pointer"
+					>
+						<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mr-2">
+							<path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/>
+							<circle cx="12" cy="7" r="4"/>
+						</svg>
+						Sign Up to Save Projects
+					</button>
+				</div>
 			</div>
 		</div>
 	</section>
 
-	<!-- Content Sections -->
-	<section class="py-24 bg-white">
+	<!-- Visualization Showcase -->
+	<section class="py-16 bg-slate-50">
 		<div class="max-w-6xl mx-auto px-8">
-			<!-- Section 1 -->
-			<div class="flex flex-col md:flex-row items-center gap-16 mb-24">
-				<div class="md:w-1/2">
-					<h2 class="text-2xl md:text-3xl font-bold text-green-800 mb-6">
-						Why Protein Comparison?
-					</h2>
-					<p class="text-slate-600 mb-4">
-						Traditional DNA tools fall short when studying
-						resistance-related proteins in lettuce. Our tool fills that gap
-						by providing specialized visualizations for protein sequence
-						analysis.
-					</p>
-					<p class="text-slate-600">
-						LocusCGVT enables researchers to identify patterns and
-						relationships that may not be apparent through conventional
-						genomic analysis methods.
-					</p>
-				</div>
-				<div class="md:w-1/2">
-					<div class="bg-green-50 rounded-xl p-10 flex items-center justify-center aspect-square max-w-[400px] mx-auto">
-						<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-green-600"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"/><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/></svg>
-					</div>
-				</div>
+			<div class="text-center mb-12">
+				<h2 class="text-3xl md:text-4xl font-bold text-slate-800 mb-4">
+					See Your Data Come to Life
+				</h2>
+				<p class="text-lg text-slate-600 max-w-3xl mx-auto">
+					LocusCGVT transforms complex genomic similarity matrices into intuitive visualizations
+					that reveal patterns and relationships across genomes.
+				</p>
 			</div>
 
-			<!-- Section 2 -->
-			<div class="flex flex-col md:flex-row-reverse items-center gap-16 mb-24">
-				<div class="md:w-1/2">
-					<h2 class="text-2xl md:text-3xl font-bold text-green-800 mb-6">
-						Multiple Comparison Modes
-					</h2>
-					<p class="text-slate-600 mb-4">
-						Use general or domain-specific analysis to uncover consistent or
-						conflicting connections between protein sequences across
-						different lettuce genotypes.
-					</p>
-					<p class="text-slate-600">
-						Our visualization engine highlights relationships and
-						inconsistencies, making it easier to identify patterns relevant
-						to your research.
-					</p>
+			<!-- Actual screenshot of the tool -->
+			<div class="max-w-5xl mx-auto">
+				<div class="bg-white rounded-lg shadow-md p-4">
+					<img
+						src="/images/locuscgvt-diagram.png"
+						alt="LocusCGVT genomic visualization showing gene relationships across multiple genomes"
+						class="w-full h-auto rounded-md"
+					/>
 				</div>
-				<div class="md:w-1/2">
-					<div class="bg-green-50 rounded-xl p-10 flex items-center justify-center aspect-square max-w-[400px] mx-auto">
-						<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-green-600">
-							<path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/>
-							<circle cx="12" cy="12" r="3"/>
-						</svg>
-					</div>
-				</div>
+				<p class="text-center text-sm text-slate-500 mt-4">
+					Interactive visualization showing gene relationships across multiple genomes with customizable filtering and analysis options
+				</p>
+			</div>
+		</div>
+	</section>
+
+	<!-- Main Features -->
+	<section class="py-20 bg-white">
+		<div class="max-w-6xl mx-auto px-8">
+			<div class="text-center mb-16">
+				<h2 class="text-3xl md:text-4xl font-bold text-slate-800 mb-4">
+					Powerful Analysis Modes
+				</h2>
 			</div>
 
-			<!-- Section 3 -->
-			<div class="flex flex-col md:flex-row items-center gap-16">
-				<div class="md:w-1/2">
-					<h2 class="text-2xl md:text-3xl font-bold text-green-800 mb-6">
-						No Account Required
-					</h2>
-					<p class="text-slate-600 mb-4">
-						Use the visualization tool freely. Save data only when you're
-						ready. Get started immediately without registration barriers.
-					</p>
-					<p class="text-slate-600">
-						When you're ready to save your work, create an account to store
-						and manage your analyses.
-					</p>
-				</div>
-				<div class="md:w-1/2">
-					<div class="bg-green-50 rounded-xl p-10 flex items-center justify-center aspect-square max-w-[400px] mx-auto">
-						<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-green-600"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+			<div class="grid md:grid-cols-2 gap-12 items-start">
+				<!-- General Analysis -->
+				<div class="space-y-6">
+					<div class="flex items-center gap-4 mb-6">
+						<div class="w-16 h-16 bg-green-100 rounded-xl flex items-center justify-center">
+							<!-- Single document icon -->
+							<svg fill="none" height="32" viewBox="0 0 66 86" width="25" xmlns="http://www.w3.org/2000/svg" class="text-green-600">
+								<rect height="80" rx="2" stroke="currentColor" stroke-width="6" width="60" x="3" y="3"/>
+								<path d="M15 27H50" stroke="currentColor" stroke-linecap="round" stroke-width="4"/>
+								<path d="M15 55H37" stroke="currentColor" stroke-linecap="round" stroke-width="4"/>
+								<path d="M15 41H50" stroke="currentColor" stroke-linecap="round" stroke-width="4"/>
+							</svg>
+						</div>
+						<h3 class="text-2xl font-bold text-slate-800">General Analysis</h3>
 					</div>
+					<p class="text-slate-600 text-lg leading-relaxed">
+						LocusCGVT displays the similarity between the genes/proteins from one locus
+						and the genes from the same region in other organisms (accession/genotype/species).
+						Homologs or orthologs between different genomes are displayed as reciprocal connections.
+					</p>
+					<p class="text-slate-600 text-lg leading-relaxed">
+						LocusCGVT enables researchers to identify patterns and relationships that may not be
+						apparent through conventional comparative genomic analysis, and allows the fast
+						identification of gene duplications, deletions, and rearrangements.
+					</p>
 				</div>
+
+				<!-- Domain-Specific Analysis -->
+				<div class="space-y-6">
+					<div class="flex items-center gap-4 mb-6">
+						<div class="w-16 h-16 bg-blue-100 rounded-xl flex items-center justify-center">
+							<!-- Stacked documents icon -->
+							<svg fill="none" height="32" viewBox="0 0 85 106" width="25" xmlns="http://www.w3.org/2000/svg" class="text-blue-600">
+								<rect height="80" rx="2" stroke="currentColor" stroke-width="6" width="60" x="3" y="23"/>
+								<path d="M15 47H50" stroke="currentColor" stroke-linecap="round" stroke-width="4"/>
+								<path d="M15 75H37" stroke="currentColor" stroke-linecap="round" stroke-width="4"/>
+								<path d="M15 61H50" stroke="currentColor" stroke-linecap="round" stroke-width="4"/>
+								<path d="M12 23V13" stroke="currentColor" stroke-linecap="round" stroke-width="6"/>
+								<path d="M72 93H64" stroke="currentColor" stroke-linecap="round" stroke-width="6"/>
+								<path d="M12 13H72" stroke="currentColor" stroke-linecap="round" stroke-width="6"/>
+								<path d="M72.9219 92.9946L72 12.9999" stroke="currentColor" stroke-linecap="round" stroke-width="6"/>
+								<path d="M21 13V3" stroke="currentColor" stroke-linecap="round" stroke-width="6"/>
+								<path d="M81 83H73" stroke="currentColor" stroke-linecap="round" stroke-width="6"/>
+								<path d="M21 3H81" stroke="currentColor" stroke-linecap="round" stroke-width="6"/>
+								<path d="M81.9219 82.9946L81 2.99994" stroke="currentColor" stroke-linecap="round" stroke-width="6"/>
+							</svg>
+						</div>
+						<h3 class="text-2xl font-bold text-slate-800">Domain-Specific Analysis</h3>
+					</div>
+					<p class="text-slate-600 text-lg leading-relaxed">
+						The domain-specific analysis mode is an innovative tool for visualizing regions
+						containing genes with canonical domains, such as NLRs and RLKs. By combining
+						domain-specific inputs, LocusCGVT can quickly display domain fusion and duplications.
+					</p>
+					<p class="text-slate-600 text-lg leading-relaxed">
+						This mode highlights domain shuffling events (inconsistencies between domain
+						relationships from a protein), making it easier to identify complex evolutionary
+						patterns in multi-domain proteins.
+					</p>
+				</div>
+			</div>
+		</div>
+	</section>
+
+	<!-- Call to Action -->
+	<section class="py-20 bg-green-600">
+		<div class="max-w-4xl mx-auto px-8 text-center">
+			<h2 class="text-3xl md:text-4xl font-bold text-white mb-6">
+				Ready to Visualize Your Genomic Data?
+			</h2>
+			<p class="text-xl text-green-100 mb-8 max-w-2xl mx-auto">
+				Start analyzing immediately with no account required. Create an account when you're ready to save and manage your analyses.
+			</p>
+			<div class="flex flex-col sm:flex-row gap-4 justify-center items-center">
+				<a href="/diagram" class="inline-flex items-center px-8 py-4 text-lg font-medium text-green-600 bg-white rounded-lg hover:bg-slate-50 transition-colors duration-200 shadow-lg cursor-pointer">
+					Start Analysis
+					<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="ml-2">
+						<path d="M5 12h14"/>
+						<path d="m12 5 7 7-7 7"/>
+					</svg>
+				</a>
+				<button
+					on:click={startLogin}
+					class="inline-flex items-center px-8 py-4 text-lg font-medium text-white border-2 border-white rounded-lg hover:bg-green-700 transition-colors duration-200 cursor-pointer"
+				>
+					<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mr-2">
+						<path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/>
+						<circle cx="12" cy="7" r="4"/>
+					</svg>
+					Create Account
+				</button>
 			</div>
 		</div>
 	</section>
 </div>
 
 <style>
-	@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
-
-	@keyframes fadeIn {
-		from {
-			opacity: 0;
-			transform: scale(0.95);
-		}
-		to {
-			opacity: 1;
-			transform: scale(1);
-		}
-	}
-
-	@keyframes gradient {
-		0% {
-			background-position: 0% 50%;
-		}
-		50% {
-			background-position: 100% 50%;
-		}
-		100% {
-			background-position: 0% 50%;
-		}
-	}
-
-	@keyframes gradient-reverse {
-		0% {
-			background-position: 100% 50%;
-		}
-		50% {
-			background-position: 0% 50%;
-		}
-		100% {
-			background-position: 100% 50%;
-		}
-	}
-
-	.animate-gradient {
-		background-size: 300% 300%;
-		animation: gradient 8s ease infinite;
-	}
-
-	.animate-gradient-reverse {
-		background-size: 300% 300%;
-		animation: gradient-reverse 12s ease infinite;
-	}
-
-	p {
-		font-size: 1.25rem;
-		color: #555;
-		margin-bottom: 1.5rem;
-	}
+	@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
 </style>

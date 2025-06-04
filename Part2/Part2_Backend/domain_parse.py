@@ -308,9 +308,15 @@ def add_links(df_only_cutoffs, row_max, col_max, genomes, domain):
     domain_connections = {}
     all_genes = {}
     all_genes[domain] = df_only_cutoffs.index.tolist()
+    processed_pairs = set()  # Keep track of processed gene pairs
 
     for row in df_only_cutoffs.index:
         for col in df_only_cutoffs.columns:
+            # Skip if we've already processed this pair of genes
+            pair = tuple(sorted([row, col]))
+            if pair in processed_pairs:
+                continue
+
             # Skip links between genes in the same genome
             if any((genome in row) and (genome in col) for genome in genomes):
                 continue
@@ -341,6 +347,9 @@ def add_links(df_only_cutoffs, row_max, col_max, genomes, domain):
                 "score": float(df_only_cutoffs.at[row, col]),
                 "is_reciprocal": reciprocal_max
             })
+            
+            # Mark this pair as processed
+            processed_pairs.add(pair)
 
     return links, domain_connections, all_genes
 
@@ -361,22 +370,25 @@ def combine_graphs(all_domain_connections, all_domain_genes, domains):
     # Collect all unique connections across all domains
     all_keys = set()
     unique_links = set()
-    # print(all_keys)
-    # print(unique_links)
+    processed_pairs = set()  # Keep track of processed gene pairs
+    combined = []
+    num_domains = len(domains)
+
     for domain_dict in all_domain_connections:
         for key, value in domain_dict.items():
             all_keys.add(key)
-            # unique_links.add((key, value)) # ("src_tgt", {'TIR': True})
             for key_1, key_2 in value.items():
-                 unique_links.add((key, key_1, key_2)) # ("src_tgt", 'TIR', True})
-            #         unique_links.add((key, item)) # ("source_target", "TIR")
-
-    combined = []
-    num_domains = len(domains)
+                unique_links.add((key, key_1, key_2))
 
     for key in all_keys:
         source, target = key.split('#', 1)
         reverse_key = f"{target}#{source}"
+        
+        # Skip if we've already processed this pair
+        pair = tuple(sorted([source, target]))
+        if pair in processed_pairs:
+            continue
+
         # Check if this key exists in all domain dicts
 
         present_in_domains = [
@@ -430,7 +442,9 @@ def combine_graphs(all_domain_connections, all_domain_genes, domains):
             "link_type": link_type
             # Change to 1 enum with the different types of connection possible: "Solid Red", "Solid Color", "Dotted Color", "Dotted Gray"
         })
-    # print(combined)
+        
+        # Mark this pair as processed
+        processed_pairs.add(pair)
 
     return combined
 

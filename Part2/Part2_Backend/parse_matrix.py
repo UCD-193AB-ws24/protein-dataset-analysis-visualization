@@ -101,12 +101,18 @@ def add_nodes(coords):
 
 def add_links(df_only_cutoffs, row_max, col_max, coords):
     links = []
+    processed_pairs = set()  # Keep track of processed gene pairs
     
     # Create a mapping of gene names to their genomes
     gene_to_genome = dict(zip(coords['name'], coords['genome']))
 
     for row in df_only_cutoffs.index:
         for col in df_only_cutoffs.columns:
+            # Skip if we've already processed this pair of genes
+            pair = tuple(sorted([row, col]))
+            if pair in processed_pairs:
+                continue
+                
             # Skip links between genes in the same genome using the mapping
             if gene_to_genome.get(row) == gene_to_genome.get(col):
                 continue
@@ -135,6 +141,9 @@ def add_links(df_only_cutoffs, row_max, col_max, coords):
                 "score": float(df_only_cutoffs.at[row, col]),
                 "is_reciprocal": reciprocal_max
             })
+            
+            # Mark this pair as processed
+            processed_pairs.add(pair)
 
     return links
 

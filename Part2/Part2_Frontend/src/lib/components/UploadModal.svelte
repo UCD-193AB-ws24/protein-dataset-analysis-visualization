@@ -299,6 +299,7 @@
             on:click={handleSubmit}
             class="px-4 sm:px-6 py-2 bg-green-600 hover:bg-green-700 text-white rounded-md disabled:bg-green-300 disabled:cursor-not-allowed text-sm sm:text-base"
             disabled={!coordinateFile || matrixFiles.length === 0 || isUploading}
+            data-testid="modal-upload-btn"
           >
             {#if isUploading}
               <div class="flex items-center">

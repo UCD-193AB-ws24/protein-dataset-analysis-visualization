@@ -326,5 +326,8 @@
 {/if}
 
 <style>
-  /* Empty style tag required for Tailwind processing */
+  /* Global styles */
+  :global(.error-message) {
+    scroll-margin-top: 1rem;
+  }
 </style> 

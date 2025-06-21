@@ -1,0 +1,24 @@
+FROM python:3.11-slim
+
+WORKDIR /app
+
+# Install system dependencies with security updates
+RUN apt-get update && apt-get upgrade -y && apt-get install -y \
+    gcc \
+    && apt-get clean \
+    && rm -rf /var/lib/apt/lists/*
+
+# Copy requirements first for better caching
+COPY Part2_Backend/requirements.txt .
+
+# Install Python dependencies
+RUN pip install --no-cache-dir -r requirements.txt
+
+# Copy the backend code
+COPY Part2_Backend/ .
+
+# Expose the port Flask runs on
+EXPOSE 3050
+
+# Run the Flask app with hot reloading
+CMD ["flask", "--app", "server.py", "run", "--host=0.0.0.0", "--port=3050", "--debug"]

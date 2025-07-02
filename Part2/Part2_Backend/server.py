@@ -1,65 +1,23 @@
 from flask import Flask, request, jsonify
 from flask_cors import CORS
 import json
-# from io import BytesIO
-# from datetime import datetime
-# from dotenv import load_dotenv
-# import os
-# from parse_matrix import parse_matrix
-# from domain_parse import domain_parse
-# # import requests
-# import boto3
-# import uuid
 
-# from models import Base, User, Group, File
-# from sqlalchemy import create_engine
-# from sqlalchemy.orm import sessionmaker
-# from sqlalchemy.pool import NullPool
 from auth_utils import verify_token
 
 from controllers.group.controller import get_group_graph
 from controllers.group.controller import save_group
-from controllers.graph.controller import generate_graph
-from controllers.graph.controller import download
 from controllers.group.controller import get_user_file_groups
 from controllers.group.controller import delete_group
+from controllers.graph.controller import generate_graph
+from controllers.graph.controller import download
 from controllers.auth.controller import login
 from controllers.auth.controller import verify
 
-# import traceback
-
-# # Load environment variables
-# load_dotenv()
 
 # Initialize Flask app
 app = Flask(__name__)
 CORS(app)
 
-# # Configure AWS S3
-# s3_client = boto3.client(
-#     's3',
-#     aws_access_key_id=os.getenv("S3_AWS_ACCESS_KEY_ID"),
-#     aws_secret_access_key=os.getenv("S3_AWS_SECRET_ACCESS_KEY"),
-#     region_name=os.getenv("AWS_REGION")
-# )
-
-# # Configure sqlalchemy
-# if os.getenv("ENV") == "production":
-#     engine = create_engine(
-#         os.getenv("DATABASE_URL"),
-#         poolclass=NullPool,
-#         pool_pre_ping=True
-#     )
-# else:
-#     engine = create_engine(
-#         os.getenv("DATABASE_URL"),
-#         pool_size=5,
-#         max_overflow=10,
-#         pool_recycle=300,
-#         pool_pre_ping=True
-#     )
-
-# SessionLocal = sessionmaker(bind=engine)
 
 @app.route('/login', methods=['POST'])
 def controller_login():

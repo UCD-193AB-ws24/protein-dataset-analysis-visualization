@@ -1,4 +1,4 @@
-from .models import Group, File
+from .models import User, Group, File
 
 def create_group(session, user_id, title, description, is_domain_specific, genomes, num_genes, num_domains):
     group = Group(
@@ -13,6 +13,12 @@ def create_group(session, user_id, title, description, is_domain_specific, genom
     session.add(group)
     session.flush() 
     return group
+
+def create_user(session, user_id, email):
+    user = User(id=user_id, email=email)
+    session.add(user)
+    session.flush()
+    return user
 
 def add_file(session, group_id, user_id, file_name, s3_key, file_format):
     file = File(

@@ -1,14 +1,11 @@
 from flask import jsonify
 
 
-from database.models import Base, User, Group, File
+from database.models import User
 
 from database import session_scope
 from database.crud import get_first_or_none
 from database.crud import create_user
-
-
-from auth_utils import verify_token
 
 
 def login(username, password):
@@ -23,18 +20,9 @@ def login(username, password):
         return jsonify({'error': str(e)}), 500
 
 
-def verify(access_token, id_token=None):
+def verify_user_entry(user_id, email):
     try:
         with session_scope() as session:
-            access_claims = verify_token(access_token)
-            user_id = access_claims['sub']
-
-            id_claims = None
-            email = None
-            if id_token:
-                id_claims = verify_token(id_token, access_token=access_token)
-                email = id_claims['email']
-
             #check if user exists
             user = get_first_or_none(session, User, id=user_id)
             #if not, create new user

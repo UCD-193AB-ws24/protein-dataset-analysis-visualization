@@ -2,7 +2,7 @@ from flask import Flask, request, jsonify
 from flask_cors import CORS
 import json
 
-from auth_utils import verify_token
+from auth_utils import authenticate_user
 
 from controllers.group.controller import get_group_graph
 from controllers.group.controller import save_group
@@ -11,7 +11,9 @@ from controllers.group.controller import delete_group
 from controllers.graph.controller import generate_graph
 from controllers.graph.controller import download
 from controllers.auth.controller import login
-from controllers.auth.controller import verify
+from controllers.auth.controller import verify_user_entry
+
+from exception_templates.auth_exception import AuthenticationError
 
 
 # Initialize Flask app
@@ -47,11 +49,10 @@ def controller_generate_graph():
 
 @app.route('/save', methods=['POST'])
 def controller_save_group():
-    auth_header = request.headers.get('Authorization', '')
-    access_token = auth_header.replace('Bearer ', '')
-    if not access_token:
-        return jsonify({"error": "Not Signed In"}), 400
-    access_claims = verify_token(access_token)
+    try:
+        access_claims, _ = authenticate_user(request)
+    except AuthenticationError as e:
+        return jsonify({"error": e.message}), e.status_code
     user_id = access_claims['sub']
 
     title = request.form.get('title')
@@ -70,21 +71,24 @@ def controller_save_group():
 
 @app.route('/get_user_file_groups', methods=['POST'])
 def controller_get_user_file_groups():
-    auth_header = request.headers.get('Authorization', '')
-    access_token = auth_header.replace('Bearer ', '')
-    if not access_token:
-        return jsonify({"error": "Not Signed In"}), 400
-    access_claims = verify_token(access_token)
+    try:
+        access_claims, _ = authenticate_user(request)
+    except AuthenticationError as e:
+        return jsonify({"error": e.message}), e.status_code
     user_id = access_claims['sub']
     return get_user_file_groups(user_id)
 
 
 @app.route('/verify_user')
 def controller_verify_user():
-    auth_header = request.headers.get('Authorization', '')
-    access_token = auth_header.replace('Bearer ', '')
-    id_token = request.headers.get('X-ID-Token', '')
-    return verify(access_token, id_token)
+    try:
+        access_claims, id_claims = authenticate_user(request)
+    except AuthenticationError as e:
+        return jsonify({"error": e.message}), e.status_code
+    user_id = access_claims['sub']
+    email = None
+    email = id_claims['email']
+    return verify_user_entry(user_id, email)
 
 
 @app.route('/pokemon', methods=['GET'])
@@ -102,14 +106,11 @@ def controller_download_file():
 
 @app.route('/delete_group', methods=['DELETE'])
 def controller_delete_group():
-    auth_header = request.headers.get('Authorization', '')
-    access_token = auth_header.replace('Bearer ', '')
-    if not access_token:
-        return jsonify({"error": "Not Signed In"}), 400
-
-    access_claims = verify_token(access_token)
+    try:
+        access_claims, _ =  authenticate_user(request)
+    except AuthenticationError as e:
+        return jsonify({"error": e.message}), e.status_code
     user_id = access_claims['sub']
-
     group_id = request.args.get('groupId')
     if not group_id:
         return jsonify({"error": "Missing groupId parameter"}), 400

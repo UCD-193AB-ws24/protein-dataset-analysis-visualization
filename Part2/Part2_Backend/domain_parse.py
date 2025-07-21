@@ -5,72 +5,19 @@ import json
 import argparse
 import sys
 from file_utils import (
-    read_file,
-    validate_dataframe_basic, 
-    validate_dataframe_structure,
-    validate_coordinate_data_types,
-    validate_matrix_coordinate_mapping
+    parse_coordinates,
+    parse_matrix_data,
+    validate_matrix_coordinate_mapping, 
+    create_genome_mappings, 
+    calculate_column_maxes, 
+    calculate_row_maxes
 )
-
-
-def validate_coordinate_dataframe_basic(df):
-    if df.empty:
-        raise ValueError("The coordinate file is empty")
-
-    required_columns = ['name', 'protein_name', 'genome', 'gene_type', 'orientation']
-    missing_columns = [col for col in required_columns if col not in df.columns]
-    if missing_columns:
-        raise ValueError(f"Missing required columns: {', '.join(missing_columns)}")
-
-    if df['name'].isnull().any():
-        raise ValueError("Found empty values in the name column")
-
-    if df['position'].isnull().any():
-        raise ValueError("Found empty values in the position column")
-
-    if df['orientation'].isnull().any():
-        raise ValueError("Found empty values in the orientation column")
-
-def validate_coordinate_data_types(df):
-    # Check if position is numeric or can be converted to numeric
-    try:
-        # First try direct numeric conversion
-        if not pd.to_numeric(df['position'], errors='coerce').notnull().all():
-            # If that fails, try converting strings to numeric
-            df['position'] = df['position'].astype(str).str.strip()
-            # Remove commas from numbers
-            df['position'] = df['position'].str.replace(',', '')
-            if not pd.to_numeric(df['position'], errors='coerce').notnull().all():
-                raise ValueError("Position column contains values that cannot be converted to numbers")
-    except Exception as e:
-        raise ValueError(f"Error validating position values: {str(e)}")
-
-    valid_orientations = {'minus', 'plus', 'negative', 'positive', '+', '-'}
-    if not df['orientation'].isin(valid_orientations).all():
-        raise ValueError("Orientation column should only contain 'plus', 'minus', 'positive', 'negative', '+' or '-'")
-
-    # Convert each orientation individually
-    df['orientation'] = df['orientation'].map({
-        'positive': 'plus',
-        '+': 'plus',
-        'negative': 'minus',
-        '-': 'minus'
-    }).fillna(df['orientation'])  # Keep original value if not in mapping
-
-def process_name_field(df):
-    try:
-        if df['protein_name'].isnull().any() or df['genome'].isnull().any():
-            raise ValueError("Some names are empty")
-        return df
-    except Exception as e:
-        raise ValueError(f"Error processing name field: {str(e)}")
-
-def calculate_relative_positions(df):
-    try:
-        df['rel_position'] = df.groupby('genome')['position'].rank(method='first').astype(int)
-        return df
-    except Exception as e:
-        raise ValueError(f"Error calculating relative positions: {str(e)}")
+from data_structures import (
+    MatrixFile, 
+    CoordinateFile, 
+    FileProcessingConfig,
+    parse_comma_separated_number
+)
 
 def process_domain_field(df):
     try:
@@ -111,49 +58,6 @@ def process_domain_field(df):
     except Exception as e:
         raise ValueError(f"Error processing domain field: {str(e)}")
 
-def calculate_relative_positions(df):
-    try:
-        df['rel_position'] = df.groupby('genome')['position'].rank(method='first').astype(int)
-        return df
-    except Exception as e:
-        raise ValueError(f"Error calculating relative positions: {str(e)}")
-
-def parse_coordinates(coord_file):
-    try:
-        df = read_file(coord_file, 'coordinate')
-
-        # Clean column names by stripping whitespace
-        df.columns = df.columns.str.strip()
-
-        # Validate basic structure
-        validate_coordinate_dataframe_basic(df)
-
-        # Validate data types
-        validate_coordinate_data_types(df)
-
-        domain_names, domain_col_names = process_domain_field(df)
-
-        # Process name field
-        df = process_name_field(df)
-
-        # Calculate relative positions
-        df = calculate_relative_positions(df)
-
-        # Return only the required columns in the specified order
-        required_columns = ['name', 'genome', 'protein_name', 'position', 'rel_position', 'orientation', 'gene_type']
-        required_columns = required_columns + domain_col_names
-        if not all(col in df.columns for col in required_columns):
-            raise ValueError("Missing one or more required columns after processing")
-
-        return df[required_columns]
-
-    except pd.errors.EmptyDataError:
-        raise ValueError("The coordinate file is empty or cannot be read")
-    except Exception as e:
-        if not isinstance(e, ValueError):  # Don't wrap ValueError as it's already formatted
-            raise ValueError(f"Error processing coordinate file: {str(e)}")
-        raise
-
 def parse_filenames(file_names):
     domains = []
     for name in file_names:
@@ -165,115 +69,6 @@ def parse_filenames(file_names):
             domains.append(domain_name)
 
     return domains
-
-
-
-def validate_dataframe_basic(df):
-    if df.empty:
-        raise ValueError("The matrix file is empty")
-    if len(df.columns) < 2 or len(df.index) < 2:
-        raise ValueError("Matrix must have at least 2 rows and 2 columns")
-    if len(df.columns) == 0:
-        raise ValueError("Matrix file must have at least one column for index")
-
-def validate_dataframe_structure(df):
-    if df.index.duplicated().any():
-        raise ValueError("Matrix contains duplicate row identifiers")
-    if df.columns.duplicated().any():
-        raise ValueError("Matrix contains duplicate column names")
-    if df.empty:
-        raise ValueError("Matrix is empty after removing NA values")
-    if not df.dtypes.apply(lambda x: pd.api.types.is_numeric_dtype(x)).all():
-        raise ValueError("Matrix contains non-numeric values")
-
-
-def prepare_dataframe(matrix_file):
-    print("Parsing matrix file...")
-    df = read_file(matrix_file, 'matrix')
-    validate_dataframe_basic(df)
-    
-    df = df.reset_index(drop=True)
-    df = df.set_index(df.columns[0])
-    df.index.name = None
-    df = df.dropna(how='all')
-    df = df.dropna(axis=1, how='all')
-    
-    validate_dataframe_structure(df)
-    return df
-
-def create_genome_mappings(df_only_cutoffs, coords):
-    # Create a mapping of gene names to their genomes
-    gene_to_genome = dict(zip(coords['name'], coords['genome']))
-    
-    # Create the mappings using the gene_to_genome dictionary
-    row_to_subsection = pd.Series(index=df_only_cutoffs.index, dtype="object")
-    col_to_subsection = pd.Series(index=df_only_cutoffs.columns, dtype="object")
-
-    # Map each row and column to its genome using the gene_to_genome dictionary
-    for idx in df_only_cutoffs.index:
-        row_to_subsection[idx] = gene_to_genome.get(idx)
-    
-    for col in df_only_cutoffs.columns:
-        col_to_subsection[col] = gene_to_genome.get(col)
-
-    return row_to_subsection, col_to_subsection
-
-def calculate_column_maxes(df_only_cutoffs, row_to_subsection):
-    col_max = pd.DataFrame(index=df_only_cutoffs.index, columns=df_only_cutoffs.columns)
-
-    for col in df_only_cutoffs.columns:
-        temp = pd.DataFrame({
-            'value': df_only_cutoffs[col],
-            'subsection': row_to_subsection
-        })
-        max_vals = temp.groupby('subsection')['value'].transform('max')
-        col_max[col] = df_only_cutoffs[col].where(df_only_cutoffs[col] == max_vals)
-
-    return col_max
-
-def calculate_row_maxes(df_only_cutoffs, col_to_subsection):
-    row_max = pd.DataFrame(index=df_only_cutoffs.index, columns=df_only_cutoffs.columns, dtype=float)
-
-    for idx, row in df_only_cutoffs.iterrows():
-        temp = pd.DataFrame({
-            'value': row,
-            'subsection': col_to_subsection
-        })
-        max_vals = temp.groupby('subsection')['value'].transform('max')
-        row_max.loc[idx] = row.where(row == max_vals)
-
-    return row_max
-
-def parse_matrix_data(matrix_file, genomes, coord_df):
-    try:
-        # Read and prepare the dataframe
-        df = prepare_dataframe(matrix_file)
-        # print(df)
-
-        # Validate matrix indices against coordinate names
-        validate_matrix_coordinate_mapping(df, coord_df)
-
-        # Get data above cutoff
-        df_only_cutoffs = df[df >= 25]
-
-        row_to_subsection, col_to_subsection = create_genome_mappings(df_only_cutoffs, coord_df)
-
-        # Calculate maxes
-        col_max = calculate_column_maxes(df_only_cutoffs, row_to_subsection)
-        row_max = calculate_row_maxes(df_only_cutoffs, col_to_subsection)
-
-        return {
-            'df_only_cutoffs': df_only_cutoffs,
-            'row_max': row_max,
-            'col_max': col_max
-        }
-
-    except pd.errors.EmptyDataError:
-        raise ValueError("The matrix file is empty or cannot be read")
-    except pd.errors.ParserError:
-        raise ValueError("Unable to parse the matrix file. Please ensure it's a valid Excel file")
-    except Exception as e:
-        raise ValueError(f"Error processing matrix file: {str(e)}")
 
 
 def add_nodes(coords, cutoff_index):
@@ -434,9 +229,36 @@ def combine_graphs(all_domain_connections, all_domain_genes, domains):
 
     return combined
 
-# Update the original parse_matrix function to use the new functions
 def domain_parse(matrix_files, coord_file, file_names):
-    coords = parse_coordinates(coord_file)
+    """
+    Parse domain-specific matrix files and coordinate file using both file_utils and data_structures.
+    
+    Args:
+        matrix_files: List of BytesIO objects containing matrix file data
+        coord_file: BytesIO object containing coordinate file data
+        file_names: List of filenames for domain identification
+    
+    Returns:
+        list: List of graph outputs for each domain plus combined graph
+    """
+    # Create configuration for enhanced validation
+    config = FileProcessingConfig(
+        parse_comma_separated_numbers=True,
+        clean_whitespace=True,
+        normalize_orientations=True,
+        handle_missing_values=True
+    )
+    
+    # Use data_structures for enhanced coordinate file validation and processing
+    coord_data_file = CoordinateFile(coord_file, config)
+    coord_data_file.load_data()
+    
+    # Validate coordinate file with enhanced validation
+    if not coord_data_file.validate():
+        raise ValueError(f"Coordinate file validation failed: {', '.join(coord_data_file.validation_errors)}")
+    
+    # Clean coordinate data with enhanced cleaning and domain columns
+    coords = coord_data_file.clean_with_domains()
     domains = parse_filenames(file_names)
     genomes = coords['genome'].unique().tolist()
 
@@ -449,6 +271,17 @@ def domain_parse(matrix_files, coord_file, file_names):
     total_gene_list = []
 
     for idx, matrix_file in enumerate(matrix_files, 1):
+        # Use data_structures for enhanced matrix validation
+        matrix_data_file = MatrixFile(matrix_file, config)
+        matrix_data_file.load_data()
+        
+        # Validate matrix file with enhanced validation
+        if not matrix_data_file.validate():
+            raise ValueError(f"Matrix file {idx} validation failed: {', '.join(matrix_data_file.validation_errors)}")
+        
+        # Clean matrix data with enhanced cleaning
+        matrix_data_file.clean()
+        
         graph_output = {"domain_name": domains[idx - 1]}
         matrix_file.seek(0)
         nodes, links, domain_connections, domain_genes, total_gene_list = create_output(parse_matrix_data(matrix_file, genomes, coords), coords, domains[idx - 1])

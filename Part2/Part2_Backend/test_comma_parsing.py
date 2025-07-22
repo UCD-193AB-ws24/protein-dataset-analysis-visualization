@@ -1,8 +1,3 @@
-#!/usr/bin/env python3
-"""
-Test script for comma-separated number parsing functionality.
-"""
-
 import pandas as pd
 from io import BytesIO
 from data_structures import parse_comma_separated_number, CoordinateFile, FileProcessingConfig

@@ -230,7 +230,35 @@ def combine_graphs(all_domain_connections, all_domain_genes, domains):
     return combined
 
 def domain_parse(matrix_files, coord_file, file_names):
-    coords = parse_coordinates(coord_file)
+    """
+    Parse domain-specific matrix files and coordinate file using both file_utils and data_structures.
+    
+    Args:
+        matrix_files: List of BytesIO objects containing matrix file data
+        coord_file: BytesIO object containing coordinate file data
+        file_names: List of filenames for domain identification
+    
+    Returns:
+        list: List of graph outputs for each domain plus combined graph
+    """
+    # Create configuration for enhanced validation
+    config = FileProcessingConfig(
+        parse_comma_separated_numbers=True,
+        clean_whitespace=True,
+        normalize_orientations=True,
+        handle_missing_values=True
+    )
+    
+    # Use data_structures for enhanced coordinate file validation and processing
+    coord_data_file = CoordinateFile(coord_file, config)
+    coord_data_file.load_data()
+    
+    # Validate coordinate file with enhanced validation
+    if not coord_data_file.validate():
+        raise ValueError(f"Coordinate file validation failed: {', '.join(coord_data_file.validation_errors)}")
+    
+    # Clean coordinate data with enhanced cleaning and domain columns
+    coords = coord_data_file.clean_with_domains()
     domains = parse_filenames(file_names)
     genomes = coords['genome'].unique().tolist()
 

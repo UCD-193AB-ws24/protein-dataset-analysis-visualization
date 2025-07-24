@@ -3,7 +3,7 @@
 	import { goto } from '$app/navigation';
 	import { API_BASE_URL } from '$lib/envs';
 	import { oidcClient } from '$lib/auth';
-	import ProjectCard from '$lib/components/ProjectCard.svelte';
+	import ProjectCard from './components/ProjectCard.svelte';
 
 	interface File {
 		file_name: string;
@@ -113,7 +113,7 @@
 					Authorization: `Bearer ${user.access_token}`
 				}
 			});
-
+			console.log(response)
 			if (!response.ok) {
 				throw new Error(`Error deleting group: ${response.statusText}`);
 			}

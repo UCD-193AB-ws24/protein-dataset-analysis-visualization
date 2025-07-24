@@ -120,12 +120,16 @@ class CoordinateFileStructure:
         """Get all required columns including computed ones."""
         return self.required_columns + self.computed_columns
     
-    def validate_column_structure(self, df: pd.DataFrame) -> List[str]:
+    def validate_column_structure(self, df: pd.DataFrame, validation_mode: str = "general") -> List[str]:
         """Validate that DataFrame has required column structure."""
         errors = []
         
         # Check required columns
-        missing_columns = set(self.required_columns) - set(df.columns)
+        required_cols_for_validation = self.required_columns.copy()
+        if validation_mode == "general":
+            required_cols_for_validation.remove('gene_type')
+        
+        missing_columns = set(required_cols_for_validation) - set(df.columns)
         if missing_columns:
             errors.append(f"Missing required columns: {', '.join(missing_columns)}")
         
@@ -261,6 +265,9 @@ class FileProcessingConfig:
     strict_validation: bool = True
     allow_partial_processing: bool = False
     
+    # Validation mode settings
+    validation_mode: str = "general"  # "general" or "domain"
+    
     # Coordinate file specific settings
     coordinate_structure: CoordinateFileStructure = field(default_factory=CoordinateFileStructure)
     
@@ -327,17 +334,21 @@ class CoordinateFile(DataFile):
             return False
         
         # Basic structure validation
-        structure_errors = self.structure.validate_column_structure(self.data)
+        structure_errors = self.structure.validate_column_structure(self.data, self.config.validation_mode)
         self.validation_errors.extend(structure_errors)
         
-        # Domain column validation
-        self.domain_columns = self.structure.get_domain_columns(self.data)
-        domain_errors = self.structure.validate_domain_columns(self.domain_columns)
-        self.validation_errors.extend(domain_errors)
+        # Domain column validation (only for domain mode)
+        if self.config.validation_mode == "domain":
+            self.domain_columns = self.structure.get_domain_columns(self.data)
+            domain_errors = self.structure.validate_domain_columns(self.domain_columns)
+            self.validation_errors.extend(domain_errors)
         
         # Data type validation
         for col, spec in self.structure.column_specifications.items():
             if col in self.data.columns:
+                # Skip gene_type validation for general mode
+                if col == 'gene_type' and self.config.validation_mode == "general":
+                    continue
                 col_errors = self._validate_column(col, spec)
                 self.validation_errors.extend(col_errors)
         

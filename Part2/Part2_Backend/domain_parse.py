@@ -243,6 +243,7 @@ def domain_parse(matrix_files, coord_file, file_names):
     """
     # Create configuration for enhanced validation
     config = FileProcessingConfig(
+        validation_mode="domain",
         parse_comma_separated_numbers=True,
         clean_whitespace=True,
         normalize_orientations=True,
@@ -276,7 +277,7 @@ def domain_parse(matrix_files, coord_file, file_names):
         matrix_data_file.load_data()
         
         # Validate matrix file with enhanced validation
-        if not matrix_data_file.validate():
+        if not matrix_data_file.validate(domain_case=True):
             raise ValueError(f"Matrix file {idx} validation failed: {', '.join(matrix_data_file.validation_errors)}")
         
         # Clean matrix data with enhanced cleaning

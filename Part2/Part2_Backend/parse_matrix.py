@@ -91,6 +91,7 @@ def parse_matrix(matrix_file, coord_file):
     """
     # Create configuration for enhanced validation
     config = FileProcessingConfig(
+        validation_mode="general",
         parse_comma_separated_numbers=True,
         clean_whitespace=True,
         normalize_orientations=True,

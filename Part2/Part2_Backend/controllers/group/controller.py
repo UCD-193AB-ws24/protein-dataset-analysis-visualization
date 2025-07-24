@@ -136,10 +136,10 @@ def delete_group(user_id, group_id):
 
             # Delete file records from database
             for file in files:
-                delete(file)
+                delete(session, file)
 
             # Delete the group
-            delete(group)
+            delete(session, group)
 
             return jsonify({"message": "Project and associated files deleted successfully"}), 200
 

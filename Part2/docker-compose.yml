@@ -1,0 +1,56 @@
+services:
+  db:
+    image: postgres:15
+    container_name: protein_db
+    environment:
+      POSTGRES_DB: protein_db
+      POSTGRES_USER: protein_user
+      POSTGRES_PASSWORD: protein_password
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./init-db:/docker-entrypoint-initdb.d
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U protein_user -d protein_db"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile.backend
+    container_name: protein_backend
+    ports:
+      - "3050:3050"
+    environment:
+      - DATABASE_URL=postgresql://protein_user:protein_password@db:5432/protein_db
+      - ENV=development
+    volumes:
+      - ./Part2_Backend:/app
+    depends_on:
+      db:
+        condition: service_healthy
+    restart: unless-stopped
+
+  frontend:
+    build:
+      context: .
+      dockerfile: Dockerfile.frontend
+    container_name: protein_frontend
+    ports:
+      - "5173:5173"
+    environment:
+      - VITE_API_URL=http://localhost:3050
+      - VITE_REDIRECT_URI=http://localhost:5173/callback
+      - VITE_LOGOUT_URI=http://localhost:5173
+    volumes:
+      - ./Part2_Frontend:/app
+      - /app/node_modules
+    depends_on:
+      - backend
+    restart: unless-stopped
+
+volumes:
+  postgres_data:

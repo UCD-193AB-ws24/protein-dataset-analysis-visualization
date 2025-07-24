@@ -2,18 +2,12 @@ import pandas as pd
 from io import BytesIO
 from flask import jsonify
 from file_utils import (
-    parse_coordinates,
-    parse_matrix_data,
-    validate_matrix_coordinate_mapping, 
-    create_genome_mappings, 
-    calculate_column_maxes, 
-    calculate_row_maxes
+    parse_matrix_data
 )
 from data_structures import (
     MatrixFile, 
     CoordinateFile, 
     FileProcessingConfig,
-    parse_comma_separated_number
 )
 
 

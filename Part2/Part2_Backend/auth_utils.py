@@ -1,7 +1,11 @@
 # auth_utils.py
+from flask import jsonify
 from jose import jwt
 import requests
 import time
+
+from exception_templates.auth_exception import MissingTokenError
+from exception_templates.auth_exception import TokenVerificationError
 
 # Constants
 COGNITO_REGION = 'us-east-1'
@@ -44,8 +48,11 @@ def get_public_key(kid):
     raise Exception('Public key not found after refresh.')
 
 def verify_token(token, access_token=None):
-    headers = jwt.get_unverified_header(token)
-    key = get_public_key(headers['kid'])
+    try:
+        headers = jwt.get_unverified_header(token)
+        key = get_public_key(headers['kid'])
+    except Exception:
+        raise TokenVerificationError()
     options = {"verify_at_hash": bool(access_token)}
     return jwt.decode(
         token,
@@ -56,3 +63,19 @@ def verify_token(token, access_token=None):
         access_token=access_token,
         options=options
     )
+
+
+def authenticate_user(request):
+    auth_header = request.headers.get('Authorization', '')
+    access_token = auth_header.replace('Bearer ', '')
+    id_token = request.headers.get('X-ID-Token', '')
+    if not access_token:
+        raise MissingTokenError()
+    try:
+        access_claims = verify_token(access_token)
+        id_claims = None
+        if id_token:
+            id_claims = verify_token(id_token, access_token=access_token)
+    except TokenVerificationError:
+        raise TokenVerificationError()
+    return access_claims, id_claims

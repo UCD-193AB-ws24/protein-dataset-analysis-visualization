@@ -4,53 +4,12 @@ from flask import jsonify
 import json
 import argparse
 import sys
-from file_utils import (
-    parse_matrix_data
-)
-from data_structures import (
-    MatrixFile, 
-    CoordinateFile, 
-    FileProcessingConfig,
-)
-
-def process_domain_field(df):
-    try:
-        domain_columns = [col for col in df.columns if 'domain' in col]
-        if len(domain_columns) == 0:
-            raise ValueError("No domain columns found (should be in format 'domainX_NAME_start/end/NA)")
-
-        domain_names = set()
-        domain_col_names = set()
-        for col in domain_columns:
-            domain_col_names.add(col)
-            parts = col.split('_')
-            if len(parts) < 2:
-                raise ValueError(f"Invalid domain format, needs underscore: {col}")
-
-            if len(parts) == 3:
-                domain_name = '_'.join(parts[1:-1]) # Also handles cases where domain names have underscores
-            elif len(parts) == 2:
-                domain_name = parts[-1]
-            domain_names.add(domain_name)
-
-        # Group columns by domain name
-        domain_cols = {}
-        for domain in domain_names:
-            domain_cols[domain] = [col for col in domain_columns if domain in col]
-
-        # Validate each domain's columns
-        for domain, cols in domain_cols.items():
-            has_start = any(col.endswith('_start') for col in cols)
-            has_end = any(col.endswith('_end') for col in cols)
-
-            # If domain has start/end positions, they must be in the same file
-            if has_start or has_end:
-                if not (has_start and has_end):
-                    raise ValueError(f"Domain {domain} must have both start and end positions in the same file")
-
-        return list(domain_names), list(domain_col_names)
-    except Exception as e:
-        raise ValueError(f"Error processing domain field: {str(e)}")
+from parsing.file_utils import parse_matrix_data
+from core.matrix_file import MatrixFile
+from core.coordinate_file import CoordinateFile
+from core.config import FileProcessingConfig
+from parsing.graph_utils import add_nodes, add_links
+from parsing.domain_utils import process_domain_field
 
 def parse_filenames(file_names):
     domains = []
@@ -65,79 +24,18 @@ def parse_filenames(file_names):
     return domains
 
 
-def add_nodes(coords, cutoff_index):
-    nodes = []
-
-    for i in range(len(coords)):
-        present = coords['name'][i] in cutoff_index
-        node_data = {
-            "id": coords['name'][i],
-            "genome_name": coords['genome'][i],
-            "protein_name": coords['protein_name'][i],
-            "direction": coords['orientation'][i],
-            "rel_position": int(coords['rel_position'][i]),
-            "gene_type": coords['gene_type'][i],
-            "is_present": present
-        }
-
-        # Add domain coordinates if they exist
-        domain_cols = [col for col in coords.columns if 'domain' in col]
-        for col in domain_cols:
-            if col.endswith('_start') or col.endswith('_end'):
-                value = coords[col][i]
-                # Convert NaN to None (which becomes null in JSON)
-                node_data[col] = None if pd.isna(value) else value
-
-        nodes.append(node_data)
-    
-    return nodes
-
-def add_links(df_only_cutoffs, row_max, col_max, genomes, domain):
-    links = []
-    domain_connections = {}
-    all_genes = {}
-    all_genes[domain] = df_only_cutoffs.index.tolist()
-
-    for row in df_only_cutoffs.index:
-        for col in df_only_cutoffs.columns:
-            # Skip links between genes in the same genome
-            if any((genome in row) and (genome in col) for genome in genomes):
-                continue
-
-            is_col_max = pd.notna(col_max.at[row, col])
-            is_row_max = pd.notna(row_max.at[row, col])
-
-            if is_row_max and is_col_max:
-                source = row
-                target = col
-                reciprocal_max = True
-            elif is_row_max:
-                source = row
-                target = col
-                reciprocal_max = False
-            elif is_col_max:
-                source = col
-                target = row
-                reciprocal_max = False
-            else:
-                continue  # skip non-max values
-
-            domain_connections[f'{source}#{target}'] = {domain: reciprocal_max}
-
-            links.append({
-                "source": source,
-                "target": target,
-                "score": float(df_only_cutoffs.at[row, col]),
-                "is_reciprocal": reciprocal_max
-            })
-
-    return links, domain_connections, all_genes
-
 def create_output(matrix_data, coords, domain):
     genomes = coords['genome'].unique().tolist()  # Convert numpy array to list
-    print(genomes)
-    nodes = add_nodes(coords, matrix_data['df_only_cutoffs'].index)
-    links, domain_connections, domain_genes = add_links(matrix_data['df_only_cutoffs'], matrix_data['row_max'], matrix_data['col_max'], genomes, domain)
+    nodes = add_nodes(coords, cutoff_index=matrix_data['df_only_cutoffs'].index, include_gene_type=True, include_domains=True)
+    links, domain_connections, domain_genes = add_links(
+        matrix_data['df_only_cutoffs'],
+        matrix_data['row_max'],
+        matrix_data['col_max'],
+        coords,
+        genomes=genomes,
+        domain=domain,
+        return_connections=True
+    )
     return nodes, links, domain_connections, domain_genes, matrix_data['df_only_cutoffs'].index
 
 def combine_graphs(all_domain_connections, all_domain_genes, domains):
@@ -271,7 +169,7 @@ def domain_parse(matrix_files, coord_file, file_names):
         matrix_data_file.load_data()
         
         # Validate matrix file with enhanced validation
-        if not matrix_data_file.validate(domain_case=True):
+        if not matrix_data_file.validate():
             raise ValueError(f"Matrix file {idx} validation failed: {', '.join(matrix_data_file.validation_errors)}")
         
         # Clean matrix data with enhanced cleaning
@@ -291,7 +189,7 @@ def domain_parse(matrix_files, coord_file, file_names):
     
     #print(total_genomes)
 
-    domain_graph_nodes = add_nodes(coords, total_gene_list)
+    domain_graph_nodes = add_nodes(coords, cutoff_index=total_gene_list, include_gene_type=True, include_domains=True)
     for node in domain_graph_nodes:
         # Check if the node is present in all domain graphs
         node["is_present"] = any(

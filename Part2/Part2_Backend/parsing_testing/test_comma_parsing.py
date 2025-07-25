@@ -1,6 +1,7 @@
 import pandas as pd
 from io import BytesIO
-from data_structures import parse_comma_separated_number, CoordinateFile, FileProcessingConfig
+from utils import parse_comma_separated_number, FileProcessingConfig
+from coordinate_file import CoordinateFile
 
 def test_parse_comma_separated_number():
     """Test the parse_comma_separated_number function."""

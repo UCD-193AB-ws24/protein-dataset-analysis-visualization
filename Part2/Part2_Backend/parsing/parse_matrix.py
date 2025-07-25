@@ -1,68 +1,11 @@
 import pandas as pd
 from io import BytesIO
 from flask import jsonify
-from file_utils import (
-    parse_matrix_data
-)
-from data_structures import (
-    MatrixFile, 
-    CoordinateFile, 
-    FileProcessingConfig,
-)
-
-
-def add_nodes(coords):
-    nodes = []
-
-    for i in range(len(coords)):
-        nodes.append({
-            "id" : coords['name'][i],
-            "genome_name": coords['genome'][i],
-            "protein_name": coords['protein_name'][i],
-            "direction": coords['orientation'][i],
-            "rel_position": int(coords['rel_position'][i]),
-        })
-
-    return nodes
-
-def add_links(df_only_cutoffs, row_max, col_max, coords):
-    links = []
-    
-    # Create a mapping of gene names to their genomes
-    gene_to_genome = dict(zip(coords['name'], coords['genome']))
-
-    for row in df_only_cutoffs.index:
-        for col in df_only_cutoffs.columns:
-            # Skip links between genes in the same genome using the mapping
-            if gene_to_genome.get(row) == gene_to_genome.get(col):
-                continue
-
-            is_col_max = pd.notna(col_max.at[row, col])
-            is_row_max = pd.notna(row_max.at[row, col])
-
-            if is_row_max and is_col_max:
-                source = row
-                target = col
-                reciprocal_max = True
-            elif is_row_max:
-                source = row
-                target = col
-                reciprocal_max = False
-            elif is_col_max:
-                source = col
-                target = row
-                reciprocal_max = False
-            else:
-                continue  # skip non-max values
-
-            links.append({
-                "source": source,
-                "target": target,
-                "score": float(df_only_cutoffs.at[row, col]),
-                "is_reciprocal": reciprocal_max
-            })
-
-    return links
+from parsing.file_utils import parse_matrix_data
+from core.matrix_file import MatrixFile
+from core.coordinate_file import CoordinateFile
+from core.config import FileProcessingConfig
+from parsing.graph_utils import add_nodes, add_links
 
 
 def create_output(matrix_data, coords):

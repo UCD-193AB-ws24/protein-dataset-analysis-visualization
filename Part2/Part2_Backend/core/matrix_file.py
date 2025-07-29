@@ -53,16 +53,12 @@ class MatrixFile(DataFile):
         
         # Clean whitespace
         if self.config.clean_whitespace:
-            cleaned_data = self._clean_whitespace(cleaned_data)
+            cleaned_data = clean_dataframe_whitespace(cleaned_data)
         
         # Apply cutoff
         cleaned_data = self.structure.apply_cutoff(cleaned_data)
         
         return cleaned_data
-    
-    def _clean_whitespace(self, df: pd.DataFrame) -> pd.DataFrame:
-        """Clean whitespace from DataFrame."""
-        return clean_dataframe_whitespace(df)
     
     def get_processed_data(self) -> Dict[str, pd.DataFrame]:
         """Get processed matrix data with max calculations."""

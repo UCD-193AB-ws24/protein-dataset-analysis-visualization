@@ -1,6 +1,52 @@
 import pandas as pd
 
 
+def create_output(matrix_data, coords, domain=None):
+    """
+    Create graph output from matrix and coordinate data.
+    
+    Args:
+        matrix_data: Dictionary containing 'df_only_cutoffs', 'row_max', 'col_max'
+        coords: DataFrame with coordinate data
+        domain: Optional domain name for domain-specific processing
+    
+    Returns:
+        For general case: dict with 'genomes', 'nodes', 'links'
+        For domain case: tuple of (nodes, links, domain_connections, domain_genes, cutoff_index)
+    """
+    genomes = coords['genome'].unique().tolist()
+    
+    if domain is None:
+        # General case
+        output = {"genomes": genomes}
+        output["nodes"] = add_nodes(coords)
+        output["links"] = add_links(
+            matrix_data['df_only_cutoffs'], 
+            matrix_data['row_max'], 
+            matrix_data['col_max'], 
+            coords
+        )
+        return output
+    else:
+        # Domain case
+        nodes = add_nodes(
+            coords, 
+            cutoff_index=matrix_data['df_only_cutoffs'].index, 
+            include_gene_type=True, 
+            include_domains=True
+        )
+        links, domain_connections, domain_genes = add_links(
+            matrix_data['df_only_cutoffs'],
+            matrix_data['row_max'],
+            matrix_data['col_max'],
+            coords,
+            genomes=genomes,
+            domain=domain,
+            return_connections=True
+        )
+        return nodes, links, domain_connections, domain_genes, matrix_data['df_only_cutoffs'].index
+
+
 def add_nodes(coords, cutoff_index=None, include_gene_type=False, include_domains=False):
     """
     Create node dictionaries for graph output.

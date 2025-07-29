@@ -8,34 +8,8 @@ from parsing.file_utils import parse_matrix_data
 from core.matrix_file import MatrixFile
 from core.coordinate_file import CoordinateFile
 from core.config import FileProcessingConfig
-from parsing.graph_utils import add_nodes, add_links
-
-def parse_filenames(file_names):
-    domains = []
-    for name in file_names:
-        # Split by underscore and get the last part
-        parts = name.split('_')
-        if len(parts) > 1:
-            # Get the last part and remove the extension
-            domain_name = parts[-1].split('.')[0]
-            domains.append(domain_name)
-
-    return domains
-
-
-def create_output(matrix_data, coords, domain):
-    genomes = coords['genome'].unique().tolist()  # Convert numpy array to list
-    nodes = add_nodes(coords, cutoff_index=matrix_data['df_only_cutoffs'].index, include_gene_type=True, include_domains=True)
-    links, domain_connections, domain_genes = add_links(
-        matrix_data['df_only_cutoffs'],
-        matrix_data['row_max'],
-        matrix_data['col_max'],
-        coords,
-        genomes=genomes,
-        domain=domain,
-        return_connections=True
-    )
-    return nodes, links, domain_connections, domain_genes, matrix_data['df_only_cutoffs'].index
+from parsing.graph_utils import create_output, add_nodes
+from parsing.io_utils import parse_filenames
 
 def combine_graphs(all_domain_connections, all_domain_genes, domains):
     #for each connection in domain 1 check if the connection exists in domains 2/3 and if those are reciprocal

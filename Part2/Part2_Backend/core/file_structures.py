@@ -79,45 +79,8 @@ class CoordinateFileStructure:
         
         return errors
     
-    def get_domain_columns(self, df: pd.DataFrame) -> List[DomainColumn]:
-        """Extract domain columns from DataFrame."""
-        domain_columns = []
-        for col in df.columns:
-            if 'domain' in col.lower():
-                try:
-                    domain_col = DomainColumn.from_column_name(col)
-                    domain_columns.append(domain_col)
-                except ValueError as e:
-                    # Log warning but don't fail - some columns might not follow pattern
-                    continue
-        return domain_columns
-    
-    def validate_domain_columns(self, domain_columns: List[DomainColumn]) -> List[str]:
-        """Validate domain column structure."""
-        errors = []
-        
-        if not domain_columns:
-            errors.append("No domain columns found (should be in format 'domainX_NAME_start/end/NA')")
-            return errors
-        
-        # Group by domain name
-        domain_groups = {}
-        for col in domain_columns:
-            if col.domain_name not in domain_groups:
-                domain_groups[col.domain_name] = []
-            domain_groups[col.domain_name].append(col)
-        
-        # Validate each domain group
-        for domain_name, cols in domain_groups.items():
-            has_start = any(col.column_type == 'start' for col in cols)
-            has_end = any(col.column_type == 'end' for col in cols)
-            
-            # If domain has start/end positions, they must be in the same file
-            if has_start or has_end:
-                if not (has_start and has_end):
-                    errors.append(f"Domain {domain_name} must have both start and end positions in the same file")
-        
-        return errors
+    # Domain column processing is now handled by DomainProcessor class
+    # Removed duplicate get_domain_columns and validate_domain_columns methods
 
 
 @dataclass

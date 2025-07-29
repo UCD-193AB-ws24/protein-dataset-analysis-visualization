@@ -38,9 +38,13 @@ class CoordinateFile(DataFile):
         
         # Domain column validation (only for domain mode)
         if self.config.validation_mode == "domain":
-            self.domain_columns = self.structure.get_domain_columns(self.data)
-            domain_errors = self.structure.validate_domain_columns(self.domain_columns)
-            self.validation_errors.extend(domain_errors)
+            processor = DomainProcessor()
+            try:
+                domain_names, domain_col_names = processor.process_domain_field(self.data)
+                # Store domain columns for later use
+                self.domain_columns = processor._extract_domain_columns(self.data)
+            except ValueError as e:
+                self.validation_errors.append(str(e))
         
         # Data type validation
         for col, spec in self.structure.column_specifications.items():
@@ -106,7 +110,7 @@ class CoordinateFile(DataFile):
         
         # Clean whitespace
         if self.config.clean_whitespace:
-            cleaned_data = self._clean_whitespace(cleaned_data)
+            cleaned_data = clean_dataframe_whitespace(cleaned_data)
         
         # Normalize orientations
         if self.config.normalize_orientations and 'orientation' in cleaned_data.columns:
@@ -141,10 +145,6 @@ class CoordinateFile(DataFile):
             )
         
         return df
-    
-    def _clean_whitespace(self, df: pd.DataFrame) -> pd.DataFrame:
-        """Clean whitespace from DataFrame."""
-        return clean_dataframe_whitespace(df)
     
     def _handle_missing_values(self, df: pd.DataFrame) -> pd.DataFrame:
         """Handle missing values with appropriate defaults."""

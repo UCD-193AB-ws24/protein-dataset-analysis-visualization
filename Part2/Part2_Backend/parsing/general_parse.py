@@ -5,14 +5,7 @@ from parsing.file_utils import parse_matrix_data
 from core.matrix_file import MatrixFile
 from core.coordinate_file import CoordinateFile
 from core.config import FileProcessingConfig
-from parsing.graph_utils import add_nodes, add_links
-
-
-def create_output(matrix_data, coords):
-    output = {"genomes": coords['genome'].unique().tolist()}
-    output["nodes"] = add_nodes(coords)
-    output["links"] = add_links(matrix_data['df_only_cutoffs'], matrix_data['row_max'], matrix_data['col_max'], coords)
-    return output
+from parsing.graph_utils import create_output
 
 
 def parse_matrix(matrix_file, coord_file):

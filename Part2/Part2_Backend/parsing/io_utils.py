@@ -1,6 +1,18 @@
 import pandas as pd
 from io import BytesIO
 
+def parse_filenames(file_names):
+    domains = []
+    for name in file_names:
+        # Split by underscore and get the last part
+        parts = name.split('_')
+        if len(parts) > 1:
+            # Get the last part and remove the extension
+            domain_name = parts[-1].split('.')[0]
+            domains.append(domain_name)
+
+    return domains
+
 def validate_file_extension(filename: str, file_type: str) -> None:
     valid_extensions = {
         'matrix': ['.xlsx', '.csv', '.tsv'],

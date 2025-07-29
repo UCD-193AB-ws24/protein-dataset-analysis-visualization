@@ -5,10 +5,9 @@ from core.base_file import DataFile
 from core.config import FileProcessingConfig
 from core.enums import OrientationType
 from core.domain_types import DomainColumn
+from core.domain_processor import DomainProcessor
 from parsing.io_utils import read_file
 from parsing.dataframe_utils import clean_dataframe_whitespace, parse_comma_separated_number
-# Import here to avoid circular import
-from parsing.domain_utils import process_domain_field
 
 
 class CoordinateFile(DataFile):
@@ -163,7 +162,8 @@ class CoordinateFile(DataFile):
         # Import here to avoid circular import
         domain_columns = [col for col in cleaned_data.columns if 'domain' in col]
         if domain_columns:
-            domain_names, domain_col_names = process_domain_field(cleaned_data)
+            processor = DomainProcessor()
+            domain_names, domain_col_names = processor.process_domain_field(cleaned_data)
             required_columns = ['name', 'genome', 'protein_name', 'position', 'rel_position', 'orientation', 'gene_type'] + domain_col_names
             if not all(col in cleaned_data.columns for col in required_columns):
                 raise ValueError("Missing one or more required columns after processing")

@@ -2,7 +2,7 @@ import pandas as pd
 from core.coordinate_file import CoordinateFile
 from core.matrix_file import MatrixFile
 from core.config import FileProcessingConfig
-from parsing.domain_utils import process_domain_field
+from core.domain_processor import DomainProcessor
 
 
 def validate_matrix_coordinate_mapping(matrix_df: pd.DataFrame, coord_df: pd.DataFrame) -> None:
@@ -89,8 +89,9 @@ def parse_coordinates(coord_file, include_domains=False):
         cleaned_data = coord_file_obj.clean()
         
         if include_domains:
-            # Process domain fields (this is specific to domain parsing)
-            domain_names, domain_col_names = process_domain_field(cleaned_data)
+            # Process domain fields using DomainProcessor directly
+            processor = DomainProcessor()
+            domain_names, domain_col_names = processor.process_domain_field(cleaned_data)
             
             # Return only the required columns in the specified order
             required_columns = ['name', 'genome', 'protein_name', 'position', 'rel_position', 'orientation', 'gene_type']

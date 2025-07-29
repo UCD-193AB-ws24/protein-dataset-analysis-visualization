@@ -9,7 +9,6 @@ from core.matrix_file import MatrixFile
 from core.coordinate_file import CoordinateFile
 from core.config import FileProcessingConfig
 from parsing.graph_utils import add_nodes, add_links
-from parsing.domain_utils import process_domain_field
 
 def parse_filenames(file_names):
     domains = []

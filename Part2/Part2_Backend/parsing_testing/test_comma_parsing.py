@@ -1,7 +1,11 @@
 import pandas as pd
 from io import BytesIO
-from utils import parse_comma_separated_number, FileProcessingConfig
-from coordinate_file import CoordinateFile
+import sys
+import os
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+from parsing.dataframe_utils import parse_comma_separated_number
+from core.config import FileProcessingConfig
+from core.coordinate_file import CoordinateFile
 
 def test_parse_comma_separated_number():
     """Test the parse_comma_separated_number function."""

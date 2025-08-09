@@ -21,17 +21,6 @@ app = Flask(__name__)
 CORS(app)
 
 
-@app.route('/login', methods=['POST'])
-def controller_login():
-    req = request.get_json()
-    username = req.get('username')
-    password = req.get('password')
-
-    if not username or not password:
-        return jsonify({"error": "Username and password are required"}), 400
-    return login(username, password)
-
-
 # Expects a query parameter 'groupId' in the URL; e.g., /get_group_graph?groupId=123
 @app.route('/get_group_graph', methods=['GET'])
 def controller_get_group_graph():

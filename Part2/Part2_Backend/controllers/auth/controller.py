@@ -8,18 +8,6 @@ from database.crud import get_first_or_none
 from database.crud import create_user
 
 
-def login(username, password):
-    try:
-        with session_scope() as session:
-            user = get_first_or_none(session, User, username=username)
-            if user and user.password_hash == password:
-                return jsonify({"msg": "login success"}), 200
-            else:
-                return jsonify({"msg": "login failed"}), 400
-    except Exception as e:
-        return jsonify({'error': str(e)}), 500
-
-
 def verify_user_entry(user_id, email):
     try:
         with session_scope() as session:

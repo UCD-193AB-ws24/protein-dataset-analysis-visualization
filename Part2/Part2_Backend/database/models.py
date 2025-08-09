@@ -12,8 +12,10 @@ class User(Base):
 
     id = Column(UUID(as_uuid=True), primary_key=True)
     email = Column(String, unique=True, nullable=True)
-    username = Column(String, unique=True, nullable=True)
-    password_hash = Column(String, nullable=True)
+    # TODO: REMOVE AFTER DOCKER ADJUSTMENTS - Legacy authentication fields
+    # These fields are not used by the current OIDC authentication flow
+    # username = Column(String, unique=True, nullable=True)
+    # password_hash = Column(String, nullable=True)
 
 class Group(Base):
     __tablename__ = "groups"

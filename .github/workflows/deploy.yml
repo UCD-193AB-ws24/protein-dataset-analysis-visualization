@@ -62,12 +62,16 @@ jobs:
              --arg aws_region "${{ secrets.AWS_DEFAULT_REGION }}" \
              --arg db_url "${{ secrets.DATABASE_URL }}" \
              --arg s3_bucket "${{ secrets.S3_BUCKET_NAME }}" \
+             --arg cognito_user_pool_id "${{ secrets.COGNITO_USER_POOL_ID }}" \
+             --arg cognito_client_id "${{ secrets.COGNITO_APP_CLIENT_ID }}" \
              '.dev.environment_variables.ENV = $env |
               .dev.environment_variables.S3_AWS_ACCESS_KEY_ID = $s3_key |
               .dev.environment_variables.S3_AWS_SECRET_ACCESS_KEY = $s3_secret |
-              .dev.environment_variables.S3_AWS_REGION = $aws_region |
+              .dev.environment_variables.S3_BUCKET_NAME = $s3_bucket |
               .dev.environment_variables.DATABASE_URL = $db_url |
-              .dev.environment_variables.S3_BUCKET_NAME = $s3_bucket' \
+              .dev.environment_variables.AWS_REGION = $aws_region |
+              .dev.environment_variables.COGNITO_USER_POOL_ID = $cognito_user_pool_id |
+              .dev.environment_variables.COGNITO_APP_CLIENT_ID = $cognito_client_id' \
              zappa_settings.json > tmp && mv tmp zappa_settings.json
 
       - name: Create virtualenv, install packages, and deploy with Zappa

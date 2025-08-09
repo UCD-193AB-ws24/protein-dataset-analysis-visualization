@@ -3,14 +3,15 @@ from flask import jsonify
 from jose import jwt
 import requests
 import time
+import os
 
 from exception_templates.auth_exception import MissingTokenError
 from exception_templates.auth_exception import TokenVerificationError
 
-# Constants
-COGNITO_REGION = 'us-east-1'
-USER_POOL_ID = 'us-east-1_Bep0PJNNp'
-APP_CLIENT_ID = '6s0tgt4tnp6s02o1j8tmhgqnem'
+# Constants from environment variables
+COGNITO_REGION = os.getenv('AWS_REGION')
+USER_POOL_ID = os.getenv('COGNITO_USER_POOL_ID')
+APP_CLIENT_ID = os.getenv('COGNITO_APP_CLIENT_ID')
 COGNITO_ISSUER = f"https://cognito-idp.{COGNITO_REGION}.amazonaws.com/{USER_POOL_ID}"
 JWKS_URL = f"{COGNITO_ISSUER}/.well-known/jwks.json"
 

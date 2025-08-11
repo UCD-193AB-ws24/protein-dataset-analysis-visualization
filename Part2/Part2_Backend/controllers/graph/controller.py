@@ -1,6 +1,6 @@
 from flask import jsonify
-from parse_matrix import parse_matrix
-from domain_parse import domain_parse
+from parsing.general_parse import parse_matrix
+from parsing.domain_parse import domain_parse
 from io import BytesIO
 
 from services.s3_service import get_file_url
@@ -60,7 +60,7 @@ def generate_graph(coordinate_file, matrix_files, is_domain_specific):
 
     except Exception as e:
         return jsonify({"error": f"Failed to generate graph: {str(e)}"}), 500
-    
+
 
 
 def download(s3_key):

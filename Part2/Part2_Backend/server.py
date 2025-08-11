@@ -11,7 +11,6 @@ from controllers.group.controller import get_user_file_groups
 from controllers.group.controller import delete_group
 from controllers.graph.controller import generate_graph
 from controllers.graph.controller import download
-from controllers.auth.controller import login
 from controllers.auth.controller import verify_user_entry
 
 from exception_templates.auth_exception import AuthenticationError

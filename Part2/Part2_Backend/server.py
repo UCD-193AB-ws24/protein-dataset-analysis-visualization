@@ -2,8 +2,8 @@ import os
 from flask import Flask, request, jsonify
 from dotenv import load_dotenv
 from flask_cors import CORS
-from parse_matrix import parse_matrix
-from domain_parse import domain_parse
+from parsing.general_parse import parse_matrix
+from parsing.domain_parse import domain_parse
 import json
 from io import BytesIO
 from datetime import datetime

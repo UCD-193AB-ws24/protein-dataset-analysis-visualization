@@ -1,5 +1,6 @@
 from flask import Flask, request, jsonify
 from flask_cors import CORS
+
 import json
 
 from auth_utils import authenticate_user
@@ -108,7 +109,7 @@ def controller_delete_group():
 
 @app.route('/', methods=['GET'])
 def home():
-    return "Hello World"
+    return "Hello World!!!"
 
 
 if __name__ == '__main__':

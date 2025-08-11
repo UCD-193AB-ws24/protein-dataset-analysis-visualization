@@ -1,12 +1,17 @@
 # auth_utils.py
+from flask import jsonify
 from jose import jwt
 import requests
 import time
+import os
 
-# Constants
-COGNITO_REGION = 'us-east-1'
-USER_POOL_ID = 'us-east-1_Bep0PJNNp'
-APP_CLIENT_ID = '6s0tgt4tnp6s02o1j8tmhgqnem'
+from exception_templates.auth_exception import MissingTokenError
+from exception_templates.auth_exception import TokenVerificationError
+
+# Constants from environment variables
+COGNITO_REGION = os.getenv('AWS_REGION')
+USER_POOL_ID = os.getenv('COGNITO_USER_POOL_ID')
+APP_CLIENT_ID = os.getenv('COGNITO_APP_CLIENT_ID')
 COGNITO_ISSUER = f"https://cognito-idp.{COGNITO_REGION}.amazonaws.com/{USER_POOL_ID}"
 JWKS_URL = f"{COGNITO_ISSUER}/.well-known/jwks.json"
 
@@ -44,8 +49,11 @@ def get_public_key(kid):
     raise Exception('Public key not found after refresh.')
 
 def verify_token(token, access_token=None):
-    headers = jwt.get_unverified_header(token)
-    key = get_public_key(headers['kid'])
+    try:
+        headers = jwt.get_unverified_header(token)
+        key = get_public_key(headers['kid'])
+    except Exception:
+        raise TokenVerificationError()
     options = {"verify_at_hash": bool(access_token)}
     return jwt.decode(
         token,
@@ -56,3 +64,19 @@ def verify_token(token, access_token=None):
         access_token=access_token,
         options=options
     )
+
+
+def authenticate_user(request):
+    auth_header = request.headers.get('Authorization', '')
+    access_token = auth_header.replace('Bearer ', '')
+    id_token = request.headers.get('X-ID-Token', '')
+    if not access_token:
+        raise MissingTokenError()
+    try:
+        access_claims = verify_token(access_token)
+        id_claims = None
+        if id_token:
+            id_claims = verify_token(id_token, access_token=access_token)
+    except TokenVerificationError:
+        raise TokenVerificationError()
+    return access_claims, id_claims

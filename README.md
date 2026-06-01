@@ -65,17 +65,6 @@ For domain-specific mode, additional columns are required:
 
 A symmetric matrix of pairwise similarity scores (0–100) between genes. Row and column headers are gene identifiers matching the coordinate file's `name` column.
 
-See [`examples/`](examples/) for sample input files.
-
-## Example Data
-
-The `examples/` directory contains small datasets from *Lactuca sativa* (lettuce) genotypes:
-
-- **`examples/general/`** — Single-matrix comparison of two genotypes (CobhamGreen, GreenTowers)
-- **`examples/domain/`** — Multi-domain comparison with NBS and LRR domain matrices across two genotypes (Salinas, Dandie)
-
-To try them: open the app, click "Visualize", upload the coordinate file and matrix file(s) from either directory.
-
 ## Architecture
 
 ```

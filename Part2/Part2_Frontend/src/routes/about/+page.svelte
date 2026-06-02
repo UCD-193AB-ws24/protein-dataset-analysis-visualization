@@ -28,13 +28,13 @@
 						About the Tool
 					</h2>
 					<p class="text-lg text-slate-600 leading-relaxed">
-						LocusCGVT combines phylogenetic and syntenic information to visualize
+						LocusCGVT combines sequence alignment and syntenic information to visualize
 						genes/proteins in genomic regions and their relationships between different
 						genotypes or species, enabling identification of homologs/orthologs and
 						gene diversification events.
 					</p>
 
-					<p class="text-slate-600 leading-relaxed">
+					<p class="text-lg text-slate-600 leading-relaxed">
 						The tool displays similarity between genes/proteins from one locus and genes
 						from the same region in other organisms, with homologs or orthologs shown
 						as reciprocal connections. This enables researchers to quickly identify
@@ -43,11 +43,21 @@
 					</p>
 
 					<div class="bg-green-50 p-6 rounded-lg">
-						<h4 class="text-lg font-semibold text-green-800 mb-2">File Format Support</h4>
-						<p class="text-green-700">
-							We accept CSV, TSV, and Excel files containing gene distance matrices and
-							gene information including chromosome position, gene type, and orientation.
+						<h4 class="text-lg font-semibold text-green-800 mb-3">Required Input Files</h4>
+						<ol class="list-decimal list-inside text-green-700 space-y-2 mb-3">
+							<li>Sequence alignment of all genes/proteins within a locus from one to multiple genotypes exported as an identity matrix (CSV or Excel files)</li>
+							<li>Tabulated file with gene/protein information, including chromosome position, gene type, and orientation</li>
+						</ol>
+						<p class="text-green-700 mb-2">
+							For the domain-specific analysis, the same inputs are required, but individual files must be generated for each protein domain.
 						</p>
+						<p class="text-green-700 mb-3">
+							For a gene to be considered absent, it must be missing from the corresponding matrix file, not just the coordinates file.
+						</p>
+						<div class="text-green-700 space-y-1">
+							<p><a href="/downloads/general_analysis_examples.zip" download class="underline hover:text-green-900">Example input files for general analysis</a></p>
+							<p><a href="/downloads/domain_specific_analysis_examples.zip" download class="underline hover:text-green-900">Example input files for domain-specific analysis</a></p>
+						</div>
 					</div>
 				</div>
 
@@ -132,93 +142,76 @@
 
 	<!-- About Us Section -->
 	<section class="py-16 bg-white">
-		<div class="max-w-6xl mx-auto px-8">
-			<div class="grid lg:grid-cols-2 gap-8 items-center">
-				<!-- Text Content - Left Side -->
-				<div class="space-y-6">
-					<h2 class="text-3xl md:text-4xl font-bold text-slate-800 mb-6">
-						About Our Development Team
-					</h2>
-					<p class="text-lg text-slate-600 leading-relaxed">
-						As part of the Capstone Project Class (ECS 193) at UC Davis, our team
-						developed LocusCGVT to bridge the gap between complex matrix comparison
-						outputs from existing bioinformatics programs and researchers seeking
-						intuitive ways to understand their genomic data.
-					</p>
+		<div class="max-w-5xl mx-auto px-8">
+			<div class="text-center mb-10">
+				<h2 class="text-3xl md:text-4xl font-bold text-slate-800 mb-4">
+					About Our Development Team
+				</h2>
+				<p class="text-lg text-slate-600 leading-relaxed max-w-2xl mx-auto">
+					LocusCGVT was developed by a team of computer science students from UC Davis who
+					were passionate about using computer science and software engineering to help
+					biologists analyze complex datasets.
+				</p>
+			</div>
 
-					<div class="space-y-4">
-						<h3 class="text-xl font-semibold text-slate-800">Our Mission</h3>
-						<p class="text-slate-600 leading-relaxed">
-							We're passionate about the intersection of computer science, software
-							engineering, and biology. Our goal was to build a tool that's both
-							easy for researchers to use and genuinely valuable for advancing
-							genomic research.
-						</p>
+			<div class="bg-green-50 rounded-lg p-8">
+				<h3 class="text-xl font-semibold text-slate-800 mb-6 text-center">Meet Our Team</h3>
+				<div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6">
+				<div class="text-center">
+					<div class="bg-white rounded-lg shadow-md overflow-hidden">
+						<img
+							src="/images/AggieCard_Profile_Pic.jpg"
+							alt="Kyungbong Ko"
+							class="w-full h-48 object-cover"
+						/>
 					</div>
-
-					<div class="bg-green-50 p-6 rounded-lg">
-						<h4 class="text-lg font-semibold text-green-800 mb-3">Join Us at the Showcase!</h4>
-						<p class="text-green-700">
-							We're presenting LocusCGVT at the <strong>Engineering Design Showcase</strong> on June 5th, 2025 - come check us out!
-						</p>
-					</div>
+					<p class="mt-3 text-sm font-medium text-slate-700">Kyungbong Ko</p>
 				</div>
 
-				<!-- Team Photos Grid - Right Side -->
-				<div class="flex justify-center">
-					<div class="bg-green-50 rounded-lg p-8 max-w-lg w-full">
-						<h4 class="text-xl font-semibold text-slate-800 mb-6 text-center">Meet Our Team</h4>
-						<div class="grid grid-cols-2 gap-6">
-							<!-- KB K. -->
-							<div class="text-center">
-								<div class="bg-white rounded-lg shadow-md overflow-hidden">
-									<img
-										src="/images/AggieCard_Profile_Pic.jpg"
-										alt="KB K. - Team Member"
-										class="w-full h-48 object-cover"
-									/>
-								</div>
-								<p class="mt-2 text-sm font-medium text-slate-700">KB K.</p>
-							</div>
-
-							<!-- Vishal K. -->
-							<div class="text-center">
-								<div class="bg-white rounded-lg shadow-md overflow-hidden">
-									<img
-										src="/images/Vishal_Koppuru_Resized.jpg"
-										alt="Vishal K. - Team Member"
-										class="w-full h-48 object-cover"
-									/>
-								</div>
-								<p class="mt-2 text-sm font-medium text-slate-700">Vishal K.</p>
-							</div>
-
-							<!-- Gurpreet S. -->
-							<div class="text-center">
-								<div class="bg-white rounded-lg shadow-md overflow-hidden">
-									<img
-										src="/images/business_casual_photo_1.jpeg"
-										alt="Gurpreet S. - Team Member"
-										class="w-full h-48 object-cover object-[center_30%]"
-									/>
-								</div>
-								<p class="mt-2 text-sm font-medium text-slate-700">Gurpreet S.</p>
-							</div>
-
-							<!-- Balint S. -->
-							<div class="text-center">
-								<div class="bg-white rounded-lg shadow-md overflow-hidden">
-									<img
-										src="/images/Balint_Szigeti_Csucs_Personal_Photo.jpeg"
-										alt="Balint S. - Team Member"
-										class="w-full h-48 object-cover object-top"
-									/>
-								</div>
-								<p class="mt-2 text-sm font-medium text-slate-700">Balint S.</p>
-							</div>
-						</div>
+				<div class="text-center">
+					<div class="bg-white rounded-lg shadow-md overflow-hidden">
+						<img
+							src="/images/Vishal_Koppuru_Resized.jpg"
+							alt="Vishal Koppuru"
+							class="w-full h-48 object-cover"
+						/>
 					</div>
+					<p class="mt-3 text-sm font-medium text-slate-700">Vishal Koppuru</p>
 				</div>
+
+				<div class="text-center">
+					<div class="bg-white rounded-lg shadow-md overflow-hidden">
+						<img
+							src="/images/business_casual_photo_1.jpeg"
+							alt="Gurpreet Singh"
+							class="w-full h-48 object-cover object-[center_30%]"
+						/>
+					</div>
+					<p class="mt-3 text-sm font-medium text-slate-700">Gurpreet Singh</p>
+				</div>
+
+				<div class="text-center">
+					<div class="bg-white rounded-lg shadow-md overflow-hidden">
+						<img
+							src="/images/Balint_Szigeti_Csucs_Personal_Photo.jpeg"
+							alt="Balint Szigeti Csucs"
+							class="w-full h-48 object-cover object-top"
+						/>
+					</div>
+					<p class="mt-3 text-sm font-medium text-slate-700">Balint Szigeti Csucs</p>
+				</div>
+
+				<div class="text-center">
+					<div class="bg-white rounded-lg shadow-md overflow-hidden">
+						<img
+							src="/images/Arnav_Akula.jpg"
+							alt="Arnav Akula"
+							class="w-full h-48 object-cover"
+						/>
+					</div>
+					<p class="mt-3 text-sm font-medium text-slate-700">Arnav Akula</p>
+				</div>
+			</div>
 			</div>
 		</div>
 	</section>

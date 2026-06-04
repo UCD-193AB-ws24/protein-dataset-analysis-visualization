@@ -45,7 +45,7 @@
                     <li>The protein_name” column will contain the name of the protein.</li>
                     <li>The “Chromosome” column contains what chromosome the gene is located in.</li>
                     <li>The “position” column contains the position of the gene within its chromosome. This column should only contain numeric values.</li>
-                    <li>The “orientation” column contains the direction of the gene. Only the words “plus” or “minus” should be entered into this column. This will determine if a gene is facing left or right on the visualization.</li>
+                    <li>The “orientation” column contains the direction of the gene. Only the words “positive” or “negative” should be entered into this column. This will determine if a gene is facing left or right on the visualization.</li>
                 </ol>
             </div>
   </ul>

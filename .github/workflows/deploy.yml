@@ -92,7 +92,16 @@ jobs:
         run: |
           source venv/bin/activate
           status_output=$(zappa status -s zappa_settings.json dev 2>&1)
-          url=$(echo "$status_output" | grep -o 'https://[^ ]*' | tr -d '\n\r')
+          # Extract ONLY the API Gateway URL. The previous grep matched every
+          # https:// URL in the status output (including Zappa's github.com
+          # banner) and tr concatenated them into one corrupt URL.
+          url=$(echo "$status_output" | grep -oE 'https://[a-z0-9]+\.execute-api\.[a-z0-9-]+\.amazonaws\.com/[a-zA-Z0-9]+' | head -n1)
+          if [ -z "$url" ]; then
+            echo "ERROR: could not extract API Gateway URL from zappa status output:" >&2
+            echo "$status_output" >&2
+            exit 1
+          fi
+          echo "Resolved API URL: $url"
           encoded=$(printf "%s" "$url" | base64 -w 0)
           echo "url_b64=$encoded" >> $GITHUB_OUTPUT
 
